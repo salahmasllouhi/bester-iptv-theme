@@ -368,13 +368,15 @@ class IPTV_Content_Settings
         if ($featured_image_alt) {
             $prompt .= "7. Translate the featured image alt text to $target_language (keep it SEO-friendly)\n";
         }
-        $prompt .= "\nReturn ONLY a JSON object with these exact keys:\n";
+        $prompt .= "\nReturn ONLY a valid JSON object (no markdown, no code blocks).\n";
+        $prompt .= "IMPORTANT: Escape all newlines as \\n and all quotes. Make sure the JSON is valid.\n";
+        $prompt .= "Use these exact keys:\n";
         $prompt .= "{\n";
         $prompt .= '  "focus_keyword": "native keyword in ' . $target_language . '",';
         $prompt .= "\n";
         $prompt .= '  "title": "post title",';
         $prompt .= "\n";
-        $prompt .= '  "content": "full post content",';
+        $prompt .= '  "content": "full post content (escape newlines as \\n)",';
         $prompt .= "\n";
         $prompt .= '  "meta_title": "SEO title",';
         $prompt .= "\n";
