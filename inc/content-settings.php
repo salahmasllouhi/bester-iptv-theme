@@ -400,7 +400,7 @@ class IPTV_Content_Settings
                     array('role' => 'user', 'content' => $prompt)
                 ),
                 'temperature' => 0.7,
-                'max_tokens' => 4000, // Increased for full content
+                'max_tokens' => 16000, // Increased to handle large content (up to 100k available)
             )),
         ));
 
