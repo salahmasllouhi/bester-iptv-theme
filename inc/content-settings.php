@@ -340,19 +340,35 @@ class IPTV_Content_Settings
 
         $target_language = isset($lang_map[$target_lang]) ? $lang_map[$target_lang] : 'English';
 
+        // Get featured image and alt text
+        $featured_image_id = get_post_thumbnail_id($post_id);
+        $featured_image_url = '';
+        $featured_image_alt = '';
+
+        if ($featured_image_id) {
+            $featured_image_url = wp_get_attachment_url($featured_image_id);
+            $featured_image_alt = get_post_meta($featured_image_id, '_wp_attachment_image_alt', true);
+        }
+
         // Build prompt for OpenAI
         $prompt = "You are an SEO expert specializing in content localization.\n\n";
         $prompt .= "Original content:\n";
         $prompt .= "Title: " . $post->post_title . "\n";
-        $prompt .= "Content: " . wp_strip_all_tags($post->post_content) . "\n\n";
-        $prompt .= "Task:\n";
+        $prompt .= "Content: " . wp_strip_all_tags($post->post_content) . "\n";
+        if ($featured_image_alt) {
+            $prompt .= "Featured Image Alt Text: " . $featured_image_alt . "\n";
+        }
+        $prompt .= "\nTask:\n";
         $prompt .= "1. Analyze the search intent of this content\n";
         $prompt .= "2. Generate a NEW native focus keyword for $target_language (do NOT just translate)\n";
         $prompt .= "3. Rewrite the title optimized for the new keyword\n";
         $prompt .= "4. Rewrite the content optimized for the new keyword in $target_language\n";
         $prompt .= "5. Create an SEO meta title (max 60 chars)\n";
-        $prompt .= "6. Create an SEO meta description (max 155 chars)\n\n";
-        $prompt .= "Return ONLY a JSON object with these exact keys:\n";
+        $prompt .= "6. Create an SEO meta description (max 155 chars)\n";
+        if ($featured_image_alt) {
+            $prompt .= "7. Translate the featured image alt text to $target_language (keep it SEO-friendly)\n";
+        }
+        $prompt .= "\nReturn ONLY a JSON object with these exact keys:\n";
         $prompt .= "{\n";
         $prompt .= '  "focus_keyword": "native keyword in ' . $target_language . '",';
         $prompt .= "\n";
@@ -363,6 +379,10 @@ class IPTV_Content_Settings
         $prompt .= '  "meta_title": "SEO title",';
         $prompt .= "\n";
         $prompt .= '  "meta_description": "SEO description"';
+        if ($featured_image_alt) {
+            $prompt .= ",\n";
+            $prompt .= '  "image_alt": "translated alt text"';
+        }
         $prompt .= "\n}\n";
 
         // Call OpenAI
@@ -386,6 +406,12 @@ class IPTV_Content_Settings
             wp_send_json_error('Failed to parse OpenAI response: ' . $result);
         }
 
+        // Add featured image info to response
+        if ($featured_image_id) {
+            $data['featured_image_url'] = $featured_image_url;
+            $data['featured_image_id'] = $featured_image_id;
+        }
+
         wp_send_json_success($data);
     }
 
@@ -407,6 +433,8 @@ class IPTV_Content_Settings
         $focus_keyword = sanitize_text_field($_POST['focus_keyword']);
         $meta_title = sanitize_text_field($_POST['meta_title']);
         $meta_description = sanitize_textarea_field($_POST['meta_description']);
+        $image_alt = isset($_POST['image_alt']) ? sanitize_text_field($_POST['image_alt']) : '';
+        $featured_image_id = isset($_POST['featured_image_id']) ? intval($_POST['featured_image_id']) : 0;
 
         // Get original post type
         $original_post = get_post($original_post_id);
@@ -450,6 +478,65 @@ class IPTV_Content_Settings
                 restore_current_blog();
             }
             wp_send_json_error('Failed to create post');
+        }
+
+        // Copy featured image to target subsite
+        if ($featured_image_id) {
+            // Switch back to main blog to get image
+            if (is_multisite()) {
+                restore_current_blog();
+                switch_to_blog(1); // Main site
+            }
+
+            $image_url = wp_get_attachment_url($featured_image_id);
+            $image_path = get_attached_file($featured_image_id);
+
+            if ($image_path && file_exists($image_path)) {
+                // Switch to target blog
+                if (is_multisite()) {
+                    restore_current_blog();
+                    switch_to_blog($target_blog_id);
+                }
+
+                // Upload image to target site's media library
+                require_once(ABSPATH . 'wp-admin/includes/file.php');
+                require_once(ABSPATH . 'wp-admin/includes/media.php');
+                require_once(ABSPATH . 'wp-admin/includes/image.php');
+
+                $upload_file = wp_upload_bits(basename($image_path), null, file_get_contents($image_path));
+
+                if (!$upload_file['error']) {
+                    $wp_filetype = wp_check_filetype($upload_file['file'], null);
+
+                    $attachment_data = array(
+                        'post_mime_type' => $wp_filetype['type'],
+                        'post_title' => sanitize_file_name(pathinfo($upload_file['file'], PATHINFO_FILENAME)),
+                        'post_content' => '',
+                        'post_status' => 'inherit'
+                    );
+
+                    $attach_id = wp_insert_attachment($attachment_data, $upload_file['file']);
+
+                    if ($attach_id) {
+                        // Generate attachment metadata
+                        $attach_data = wp_generate_attachment_metadata($attach_id, $upload_file['file']);
+                        wp_update_attachment_metadata($attach_id, $attach_data);
+
+                        // Set localized alt text
+                        if ($image_alt) {
+                            update_post_meta($attach_id, '_wp_attachment_image_alt', $image_alt);
+                        }
+
+                        // Set as featured image
+                        set_post_thumbnail($new_post_id, $attach_id);
+                    }
+                }
+            }
+        }
+
+        // Ensure we're on target blog for meta updates
+        if (is_multisite() && get_current_blog_id() != $target_blog_id) {
+            switch_to_blog($target_blog_id);
         }
 
         // Add Rank Math meta
