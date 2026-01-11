@@ -228,7 +228,7 @@ class IPTV_Content_Settings
     {
         add_menu_page(
             'Front Page Content',
-            '📝 Content',
+            '🌍 Content Localizing',
             'manage_options',
             'iptv-content-settings',
             array($this, 'render_settings_page'),
@@ -868,7 +868,59 @@ class IPTV_Content_Settings
             5 => array('name' => 'Finland 🇫🇮', 'lang' => 'fi'),
             6 => array('name' => 'Iceland 🇮🇸', 'lang' => 'is')
         );
-        $this->render_localizer_content($posts, 'Posts', 'post', $subsites);
+        ?>
+        <div class="post-localizer-wrapper">
+            <p>Localize posts from Main Site to subsites with AI-powered SEO optimization.</p>
+
+            <div style="margin: 20px 0; background: #f0f0f1; padding: 15px; border-radius: 5px;">
+                <label><strong>Target Subsite:</strong></label>
+                <select id="target-subsite" style="padding: 5px 10px; font-size: 14px; margin-left: 10px;">
+                    <?php foreach ($subsites as $blog_id => $site): ?>
+                        <option value="<?php echo $blog_id; ?>" data-lang="<?php echo $site['lang']; ?>">
+                            <?php echo $site['name']; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <!-- Posts Section -->
+            <div class="content-section">
+                <div style="margin: 10px 0;">
+                    <button class="button" id="select-all-posts">Select All</button>
+                    <button class="button button-primary" id="clone-posts-to-network">Clone Selected to Network</button>
+                    <button class="button" id="remove-posts-from-network"
+                        style="background: #dc3545; color: white; border-color: #dc3545;">Remove Selected from Network</button>
+                </div>
+
+                <table class="wp-list-table widefat fixed striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 40px;"><input type="checkbox" id="check-all-posts" /></th>
+                            <th>Title</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($posts as $post): ?>
+                            <tr>
+                                <td><input type="checkbox" class="post-checkbox" value="<?php echo $post->ID; ?>" /></td>
+                                <td><strong><?php echo esc_html($post->post_title); ?></strong></td>
+                                <td><?php echo date('Y-m-d', strtotime($post->post_date)); ?></td>
+                                <td>
+                                    <button class="button button-primary localize-btn" data-post-id="<?php echo $post->ID; ?>">
+                                        Localize
+                                    </button>
+                                    <span class="localize-status-<?php echo $post->ID; ?>" style="margin-left: 10px;"></span>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <?php
+        $this->render_localizer_modal_and_script();
     }
 
     /**
@@ -957,6 +1009,16 @@ class IPTV_Content_Settings
             </div>
         </div>
         <?php
+        $this->render_localizer_modal();
+        $this->render_localizer_script();
+    }
+
+    /**
+     * Render shared modal and JavaScript for both Posts and Pages tabs
+     */
+    private function render_localizer_modal_and_script()
+    {
+        // This method will call the existing modal rendering below
         $this->render_localizer_modal();
         $this->render_localizer_script();
     }
