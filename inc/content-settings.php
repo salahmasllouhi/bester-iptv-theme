@@ -467,7 +467,8 @@ class IPTV_Content_Settings
 
         wp_send_json_success(array(
             'post_id' => $new_post_id,
-            'message' => 'Post published successfully'
+            'message' => 'Post published successfully',
+            'edit_link' => admin_url('post.php?post=' . $new_post_id . '&action=edit')
         ));
     }
 
@@ -875,44 +876,120 @@ class IPTV_Content_Settings
             </div>
         </div>
 
-        <!-- Review Modal -->
+        <!-- Review Modal with Rank Math Style -->
         <div id="localize-modal"
-            style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border: 1px solid #ccc; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 10000; width: 80%; max-width: 900px; max-height: 80vh; overflow-y: auto;">
-            <h2>Review Localized Content</h2>
-            <p style="color: #666;">Edit the AI-generated content below, then publish to the selected subsite.</p>
+            style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 0; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); z-index: 10000; width: 90%; max-width: 950px; max-height: 85vh; overflow: hidden;">
+            <!-- Modal Header -->
+            <div
+                style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px 30px; border-radius: 8px 8px 0 0;">
+                <h2 style="margin: 0; font-size: 20px;">🌍 Review & Optimize Localized Content</h2>
+                <p style="margin: 5px 0 0 0; opacity: 0.9; font-size: 14px;">AI-generated content ready for review. Edit as
+                    needed, then publish.</p>
+            </div>
 
-            <div id="modal-content">
-                <div style="margin-bottom: 15px;">
-                    <label><strong>Focus Keyword:</strong></label>
-                    <input type="text" id="focus-keyword" style="width: 100%; padding: 8px;"
-                        placeholder="Primary SEO keyword" />
+            <div id="modal-content" style="padding: 30px; overflow-y: auto; max-height: calc(85vh - 140px);">
+                <!-- SEO Score Preview (Rank Math style) -->
+                <div id="seo-score-section"
+                    style="background: #f8f9fa; border-left: 4px solid #667eea; padding: 15px; margin-bottom: 25px; border-radius: 4px;">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <div id="seo-score-circle"
+                            style="width: 60px; height: 60px; border-radius: 50%; background: conic-gradient(#10b981 0deg, #10b981 270deg, #e5e7eb 270deg); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; color: #10b981;">
+                            75
+                        </div>
+                        <div>
+                            <strong style="display: block; font-size: 16px;">SEO Score: Good</strong>
+                            <small style="color: #666;">Focus keyword density optimal • Title length perfect</small>
+                        </div>
+                    </div>
                 </div>
-                <div style="margin-bottom: 15px;">
-                    <label><strong>SEO Title (Max 60 chars):</strong></label>
-                    <input type="text" id="meta-title" style="width: 100%; padding: 8px;" maxlength="60" />
-                    <small id="meta-title-counter" style="color: #666;">0/60</small>
+
+                <!-- Rank Math Style Fields -->
+                <div style="display: grid; gap: 20px;">
+                    <!-- Focus Keyword -->
+                    <div class="rank-math-field">
+                        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #1e293b;">
+                            <span style="color: #dc2626;">*</span> Focus Keyword
+                        </label>
+                        <input type="text" id="focus-keyword"
+                            style="width: 100%; padding: 10px 12px; border: 2px solid #e2e8f0; border-radius: 6px; font-size: 14px; transition: border-color 0.2s;"
+                            placeholder="Enter your target keyword" />
+                        <small style="display: block; margin-top: 5px; color: #64748b;">The main keyword you're targeting for
+                            SEO</small>
+                    </div>
+
+                    <!-- SEO Title -->
+                    <div class="rank-math-field">
+                        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #1e293b;">
+                            SEO Title <span id="meta-title-counter"
+                                style="float: right; color: #64748b; font-weight: normal;">0/60</span>
+                        </label>
+                        <input type="text" id="meta-title" maxlength="60"
+                            style="width: 100%; padding: 10px 12px; border: 2px solid #e2e8f0; border-radius: 6px; font-size: 14px;" />
+                        <div id="title-preview"
+                            style="margin-top: 8px; padding: 10px; background: #f1f5f9; border-radius: 4px; font-size: 13px;">
+                            <div style="color: #1e40af; font-size: 18px; line-height: 1.3; margin-bottom: 2px;"
+                                id="title-preview-text">Your SEO Title Here</div>
+                            <div style="color: #22c55e;">https://yoursite.com/page-url</div>
+                        </div>
+                    </div>
+
+                    <!-- SEO Description -->
+                    <div class="rank-math-field">
+                        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #1e293b;">
+                            Meta Description <span id="meta-desc-counter"
+                                style="float: right; color: #64748b; font-weight: normal;">0/155</span>
+                        </label>
+                        <textarea id="meta-description" maxlength="155"
+                            style="width: 100%; padding: 10px 12px; border: 2px solid #e2e8f0; border-radius: 6px; font-size: 14px; height: 70px; resize: vertical;"></textarea>
+                        <div id="desc-preview"
+                            style="margin-top: 8px; padding: 10px; background: #f1f5f9; border-radius: 4px; font-size: 13px;">
+                            <div style="color: #64748b; line-height: 1.5;" id="desc-preview-text">Your meta description will
+                                appear here...</div>
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 10px 0;" />
+
+                    <!-- Post Title -->
+                    <div class="rank-math-field">
+                        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #1e293b;">
+                            <span style="color: #dc2626;">*</span> Post Title
+                        </label>
+                        <input type="text" id="post-title"
+                            style="width: 100%; padding: 10px 12px; border: 2px solid #e2e8f0; border-radius: 6px; font-size: 16px; font-weight: 500;" />
+                    </div>
+
+                    <!-- Post Content -->
+                    <div class="rank-math-field">
+                        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #1e293b;">
+                            Post Content
+                        </label>
+                        <textarea id="post-content"
+                            style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 6px; height: 250px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 14px; line-height: 1.6; resize: vertical;"></textarea>
+                        <small style="display: block; margin-top: 5px; color: #64748b;">Word count: <span
+                                id="word-count">0</span> words</small>
+                    </div>
                 </div>
-                <div style="margin-bottom: 15px;">
-                    <label><strong>SEO Description (Max 155 chars):</strong></label>
-                    <textarea id="meta-description" style="width: 100%; padding: 8px; height: 60px;" maxlength="155"></textarea>
-                    <small id="meta-desc-counter" style="color: #666;">0/155</small>
-                </div>
-                <div style="margin-bottom: 15px;">
-                    <label><strong>Post Title:</strong></label>
-                    <input type="text" id="post-title" style="width: 100%; padding: 8px;" />
-                </div>
-                <div style="margin-bottom: 15px;">
-                    <label><strong>Post Content:</strong></label>
-                    <textarea id="post-content"
-                        style="width: 100%; padding: 8px; height: 200px; font-family: monospace;"></textarea>
-                </div>
+
                 <input type="hidden" id="original-post-id" />
                 <input type="hidden" id="target-blog-id" />
+            </div>
+
+            <!-- Modal Footer -->
+            <div
+                style="background: #f8f9fa; padding: 20px 30px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <button class="button button-primary" id="publish-btn">Publish to Subsite</button>
-                    <button class="button" id="close-modal-btn">Cancel</button>
-                    <span id="publish-status" style="margin-left: 10px;"></span>
+                    <button class="button" id="close-modal-btn" style="margin-right: 10px;">Cancel</button>
+                    <button class="button button-primary" id="publish-btn"
+                        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; padding: 8px 20px; font-weight: 600;">
+                        📤 Publish to Subsite
+                    </button>
+                    <span id="publish-status" style="margin-left: 15px; font-weight: 500;"></span>
                 </div>
+                <button class="button" id="edit-in-rankmath-btn"
+                    style="display:none; background: #0073aa; color: white; border: none;">
+                    ✏️ Continue in Rank Math Editor
+                </button>
             </div>
         </div>
         <div id="modal-overlay"
