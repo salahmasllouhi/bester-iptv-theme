@@ -572,26 +572,32 @@ class IPTV_Content_Settings
 
         $content = get_option('iptv_content', array());
         $current_lang = isset($_GET['lang']) ? sanitize_text_field($_GET['lang']) : 'en';
-        $current_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'content';
+        $current_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'homepage';
         ?>
         <div class="wrap">
             <!-- Main Tabs -->
-            <h1>📝 Content Management</h1>
+            <h1>🌍 Content Localizing</h1>
             <div class="nav-tab-wrapper" style="margin-bottom: 20px;">
-                <a href="?page=iptv-content-settings&tab=content"
-                    class="nav-tab <?php echo $current_tab === 'content' ? 'nav-tab-active' : ''; ?>">
-                    Content Editor
+                <a href="?page=iptv-content-settings&tab=homepage"
+                    class="nav-tab <?php echo $current_tab === 'homepage' ? 'nav-tab-active' : ''; ?>">
+                    🏠 Home Page
                 </a>
-                <a href="?page=iptv-content-settings&tab=localizer"
-                    class="nav-tab <?php echo $current_tab === 'localizer' ? 'nav-tab-active' : ''; ?>">
-                    Post Localizer 🌍
+                <a href="?page=iptv-content-settings&tab=posts"
+                    class="nav-tab <?php echo $current_tab === 'posts' ? 'nav-tab-active' : ''; ?>">
+                    📝 Posts
+                </a>
+                <a href="?page=iptv-content-settings&tab=pages"
+                    class="nav-tab <?php echo $current_tab === 'pages' ? 'nav-tab-active' : ''; ?>">
+                    📄 Pages
                 </a>
             </div>
 
-            <?php if ($current_tab === 'localizer'): ?>
-                <?php $this->render_post_localizer_tab(); ?>
+            <?php if ($current_tab === 'posts'): ?>
+                <?php $this->render_posts_localizer_tab(); ?>
+            <?php elseif ($current_tab === 'pages'): ?>
+                <?php $this->render_pages_localizer_tab(); ?>
             <?php else: ?>
-                <!-- Original Content Editor Tab -->
+                <!-- Home Page Content Editor Tab -->
                 <p>Manage all translatable text on your front page. Edit English content, then use OpenAI to auto-translate to other
                     languages.</p>
 
@@ -833,11 +839,11 @@ class IPTV_Content_Settings
     }
 
     /**
-     * Render the Post Localizer tab (simplified version)
+     * Render the Posts Localizer tab
      */
-    private function render_post_localizer_tab()
+    private function render_posts_localizer_tab()
     {
-        // Get posts and pages separately from Main Site
+        // Get posts from Main Site
         if (is_multisite()) {
             switch_to_blog(1);
         }
@@ -849,6 +855,31 @@ class IPTV_Content_Settings
             'orderby' => 'date',
             'order' => 'DESC'
         ));
+
+        if (is_multisite()) {
+            restore_current_blog();
+        }
+
+        // Subsite mapping
+        $subsites = array(
+            2 => array('name' => 'Sweden 🇸🇪', 'lang' => 'sv'),
+            3 => array('name' => 'Norway 🇳🇴', 'lang' => 'no'),
+            4 => array('name' => 'Denmark 🇩🇰', 'lang' => 'da'),
+            5 => array('name' => 'Finland 🇫🇮', 'lang' => 'fi'),
+            6 => array('name' => 'Iceland 🇮🇸', 'lang' => 'is')
+        );
+        $this->render_localizer_content($posts, 'Posts', 'post', $subsites);
+    }
+
+    /**
+     * Render the Pages Localizer tab
+     */
+    private function render_pages_localizer_tab()
+    {
+        // Get pages from Main Site
+        if (is_multisite()) {
+            switch_to_blog(1);
+        }
 
         $pages = get_posts(array(
             'post_type' => 'page',
@@ -863,6 +894,78 @@ class IPTV_Content_Settings
         }
 
         // Subsite mapping
+        $subsites = array(
+            2 => array('name' => 'Sweden 🇸🇪', 'lang' => 'sv'),
+            3 => array('name' => 'Norway 🇳🇴', 'lang' => 'no'),
+            4 => array('name' => 'Denmark 🇩🇰', 'lang' => 'da'),
+            5 => array('name' => 'Finland 🇫🇮', 'lang' => 'fi'),
+            6 => array('name' => 'Iceland 🇮🇸', 'lang' => 'is')
+        );
+        ?>
+        <div class="post-localizer-wrapper">
+            <p>Localize pages from Main Site to subsites with AI-powered SEO optimization.</p>
+
+            <div style="margin: 20px 0; background: #f0f0f1; padding: 15px; border-radius: 5px;">
+                <label><strong>Target Subsite:</strong></label>
+                <select id="target-subsite" style="padding: 5px 10px; font-size: 14px; margin-left: 10px;">
+                    <?php foreach ($subsites as $blog_id => $site): ?>
+                        <option value="<?php echo $blog_id; ?>" data-lang="<?php echo $site['lang']; ?>">
+                            <?php echo $site['name']; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <!-- Pages Section -->
+            <div class="content-section">
+                <div style="margin: 10px 0;">
+                    <button class="button" id="select-all-pages">Select All</button>
+                    <button class="button button-primary" id="clone-pages-to-network">Clone Selected to Network</button>
+                    <button class="button" id="remove-pages-from-network"
+                        style="background: #dc3545; color: white; border-color: #dc3545;">Remove Selected from Network</button>
+                </div>
+
+                <table class="wp-list-table widefat fixed striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 40px;"><input type="checkbox" id="check-all-pages" /></th>
+                            <th>Title</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($pages as $page): ?>
+                            <tr>
+                                <td><input type="checkbox" class="page-checkbox" value="<?php echo $page->ID; ?>" /></td>
+                                <td><strong>
+                                        <?php echo esc_html($page->post_title); ?>
+                                    </strong></td>
+                                <td>
+                                    <?php echo date('Y-m-d', strtotime($page->post_date)); ?>
+                                </td>
+                                <td>
+                                    <button class="button button-primary localize-btn" data-post-id="<?php echo $page->ID; ?>">
+                                        Localize
+                                    </button>
+                                    <span class="localize-status-<?php echo $page->ID; ?>" style="margin-left: 10px;"></span>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <?php
+        $this->render_localizer_modal();
+        $this->render_localizer_script();
+    }
+
+    /**
+     * Shared localizer modal HTML
+     */
+    private function render_localizer_modal()
+    {
         $subsites = array(
             2 => array('name' => 'Sweden 🇸🇪', 'lang' => 'sv'),
             3 => array('name' => 'Norway 🇳🇴', 'lang' => 'no'),
