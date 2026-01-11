@@ -395,15 +395,21 @@ class IPTV_Content_Settings
 
         // Try to parse JSON from result
         $result = trim($result);
-        // Remove markdown code blocks if present
-        $result = preg_replace('/```json\s*(.*?)\s*```/s', '$1', $result);
-        $result = preg_replace('/```\s*(.*?)\s*```/s', '$1', $result);
+
+        // Remove markdown code blocks if present (be more aggressive)
+        if (strpos($result, '```') !== false) {
+            // Remove ```json and ``` markers
+            $result = preg_replace('/^```json\s*/s', '', $result);
+            $result = preg_replace('/^```\s*/s', '', $result);
+            $result = preg_replace('/\s*```$/s', '', $result);
+            $result = trim($result);
+        }
 
         $data = json_decode($result, true);
 
         if (!$data || !isset($data['focus_keyword'])) {
-            // If JSON parsing failed, return raw result
-            wp_send_json_error('Failed to parse OpenAI response: ' . $result);
+            // If JSON parsing failed, return raw result for debugging
+            wp_send_json_error('Failed to parse OpenAI response. Raw: ' . substr($result, 0, 200));
         }
 
         // Add featured image info to response
