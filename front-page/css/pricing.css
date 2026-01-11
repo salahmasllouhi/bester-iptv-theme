@@ -1,0 +1,170 @@
+/* Pricing Section Styles - Configurator */
+.pricing {
+    padding: 5rem 0;
+    background: var(--bg-alt);
+}
+
+.pricing-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.pricing-header h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--dark);
+}
+
+.pricing-header h2 span {
+    color: var(--blue-600);
+}
+
+/* Pricing Configurator */
+.configurator {
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--white);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    box-shadow: var(--shadow-lg);
+}
+
+.config-section {
+    background: var(--bg);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.config-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 1rem;
+}
+
+.config-title svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--blue-600);
+}
+
+/* Card Grid - Devices & Durations */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+.select-card {
+    position: relative;
+    background: var(--white);
+    border: 2px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 1.25rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.select-card:hover {
+    border-color: var(--blue-500);
+}
+
+.select-card.active {
+    border-color: var(--blue-600);
+    background: var(--blue-50);
+}
+
+.select-card .num {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--dark);
+}
+
+/* Duration Card Specifics */
+.duration-card {
+    padding-top: 1.5rem;
+}
+
+.duration-header {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.duration-price {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--blue-600);
+    margin-bottom: 0.25rem;
+}
+
+.duration-per {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.duration-savings {
+    font-size: 0.75rem;
+    color: var(--green-500);
+    font-weight: 600;
+    margin-top: 0.5rem;
+}
+
+/* Trust Badges */
+.trust-badges {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.trust-badges>div {
+    background: var(--bg);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .configurator {
+        padding: 1rem;
+        border-radius: 1rem;
+    }
+
+    .config-section {
+        padding: 1rem;
+    }
+
+    .config-title {
+        white-space: nowrap;
+        font-size: 0.9rem;
+    }
+
+    .card-grid {
+        gap: 0.5rem;
+    }
+
+    .select-card {
+        padding: 0.875rem 0.5rem;
+    }
+
+    .select-card .num {
+        font-size: 0.9rem;
+    }
+
+    .duration-price {
+        font-size: 1.25rem;
+    }
+
+    .duration-header {
+        font-size: 0.75rem;
+    }
+}

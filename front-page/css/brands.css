@@ -1,0 +1,155 @@
+/* Channels & Posters Section - Stacked Layout */
+.channels-posters {
+    padding: 5rem 0;
+    background: #0F172A;
+    overflow: hidden;
+}
+
+/* Centered Header */
+.channels-posters-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 0 1.5rem;
+}
+
+.channels-posters-header h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: 0.75rem;
+}
+
+.channels-posters-header p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.125rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* 3D Poster Carousel - Main Feature */
+.posters-carousel {
+    position: relative;
+    padding: 2rem 0 3rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.swiper-posters {
+    width: 100%;
+    padding: 2rem 0;
+}
+
+.swiper-posters .swiper-slide {
+    width: auto;
+    height: auto;
+    max-width: 350px;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s;
+}
+
+.swiper-posters .swiper-slide img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.swiper-posters .swiper-slide-active {
+    transform: scale(1.05);
+}
+
+/* Navigation Arrows - Hidden */
+.swiper-button-next,
+.swiper-button-prev {
+    display: none;
+}
+
+/* Pagination Dots */
+.swiper-pagination-bullet {
+    background: rgba(255, 255, 255, 0.4);
+    width: 10px;
+    height: 10px;
+    opacity: 1;
+}
+
+.swiper-pagination-bullet-active {
+    background: var(--white);
+}
+
+/* Channel Logo Carousel - Below Posters */
+.channel-carousel-wrapper {
+    padding: 2rem 0;
+    overflow: hidden;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 2rem;
+}
+
+.channel-carousel {
+    display: flex;
+    gap: 4rem;
+    animation: scroll-channels 25s linear infinite;
+    width: max-content;
+}
+
+@keyframes scroll-channels {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.channel-logo-item {
+    flex-shrink: 0;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    opacity: 0.6;
+    transition: opacity 0.3s;
+}
+
+.channel-logo-item:hover {
+    opacity: 1;
+}
+
+.channel-logo-item img {
+    height: 100%;
+    width: auto;
+    max-width: 120px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .channels-posters-header h2 {
+        font-size: 1.75rem;
+    }
+
+    .swiper-posters .swiper-slide {
+        width: 260px;
+        height: auto;
+    }
+
+    .channel-carousel {
+        gap: 2.5rem;
+    }
+
+    .channel-logo-item {
+        height: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .channels-posters-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .swiper-posters .swiper-slide {
+        width: 220px;
+        height: auto;
+    }
+}

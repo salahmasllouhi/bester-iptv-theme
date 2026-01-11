@@ -1,0 +1,285 @@
+/* Dark CTA Section - Nordic Comparison Cards */
+.nordic-dark-section {
+    background-color: #0f172a;
+    padding: 80px 20px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #ffffff;
+}
+
+.nd-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Header Styling */
+.nd-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.nd-header h2 {
+    font-size: 36px;
+    font-weight: 800;
+    margin: 0 0 12px 0;
+    color: #ffffff;
+}
+
+.nd-header .highlight-green {
+    color: #4ade80;
+}
+
+.nd-header p {
+    font-size: 16px;
+    color: #94a3b8;
+    margin-top: 10px;
+}
+
+/* Grid Layout */
+.nd-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+/* Common Card Styles */
+.nd-card {
+    border-radius: 20px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* LEFT CARD: The Struggle (Negative) */
+.card-negative {
+    background-color: #1e293b;
+    border: 1px solid #334155;
+}
+
+.card-negative .card-header {
+    border-bottom: 1px solid #334155;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.icon-box-red {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(239, 68, 68, 0.2);
+    border: 1px solid #ef4444;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ef4444;
+}
+
+.card-negative h3 {
+    font-size: 20px;
+    color: #f87171;
+    margin: 0;
+}
+
+.card-negative .sub-text {
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 400;
+    display: block;
+    margin-top: 4px;
+}
+
+/* RIGHT CARD: Nordic Solution (Positive) */
+.card-positive {
+    background-color: #111827;
+    border: 2px solid #4ade80;
+    box-shadow: 0 0 30px -10px rgba(74, 222, 128, 0.15);
+}
+
+.card-positive .card-header {
+    border-bottom: 1px solid rgba(74, 222, 128, 0.3);
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.icon-box-green {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(74, 222, 128, 0.2);
+    border: 1px solid #4ade80;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4ade80;
+}
+
+.card-positive h3 {
+    font-size: 20px;
+    color: #ffffff;
+    margin: 0;
+}
+
+/* List Items */
+.list-item {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.list-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Number Circles */
+.num-circle {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+}
+
+.num-negative {
+    background-color: #334155;
+    color: #94a3b8;
+}
+
+.num-positive {
+    background-color: #4ade80;
+    color: #064e3b;
+}
+
+/* Text Content */
+.list-content .content h4 {
+    margin: 0 0 6px 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #e2e8f0;
+}
+
+.list-content .content p {
+    margin: 0;
+    font-size: 14px;
+    color: #94a3b8;
+    line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 850px) {
+    .nd-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .nd-header h2 {
+        font-size: 28px;
+    }
+
+    .nd-card {
+        padding: 25px;
+    }
+}
+
+@media (max-width: 480px) {
+    .nd-header h2 {
+        font-size: 22px;
+    }
+}
+
+/* ===== UNLOCK SECTION STYLES ===== */
+.unlock {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+    color: var(--white);
+}
+
+.unlock-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+}
+
+.unlock h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.unlock p {
+    font-size: 1.125rem;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+}
+
+.unlock .btn-primary {
+    display: inline-block;
+    padding: 1rem 2rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.unlock .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.unlock-features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.unlock-feature {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 1rem 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 500;
+    backdrop-filter: blur(10px);
+}
+
+.unlock-feature svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+    .unlock-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .unlock h2 {
+        font-size: 1.75rem;
+    }
+
+    .unlock-features {
+        justify-content: center;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .unlock-features {
+        grid-template-columns: 1fr;
+    }
+}

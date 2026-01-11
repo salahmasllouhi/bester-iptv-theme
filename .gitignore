@@ -1,0 +1,14 @@
+# WordPress Theme - Ignore unnecessary files
+*.log
+*.swp
+*.DS_Store
+.env
+node_modules/
+vendor/
+.vscode/
+.idea/
+
+# Keep source files, ignore compiled/minified
+# (uncomment if you compile assets)
+# *.min.js
+# *.min.css

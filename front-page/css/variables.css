@@ -1,0 +1,44 @@
+/* CSS Variables - Neo-Streamer Palette */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+    /* Core Colors */
+    --white: #ffffff;
+    --bg: #FFFFFF;
+    --bg-alt: #F5F3FF;
+    --dark: #0f172a;
+    --dark-alt: #1e293b;
+
+    /* Text Colors */
+    --text: #1F2937;
+    --text-secondary: #4B5563;
+    --text-muted: #9CA3AF;
+    --border: #e2e8f0;
+
+    /* Vivid Violet - Primary Accent */
+    --violet-500: #7C3AED;
+    --violet-600: #6D28D9;
+    --violet-700: #5B21B6;
+
+    /* Amber/Gold - Secondary Accent */
+    --amber-400: #FBBF24;
+    --amber-500: #F59E0B;
+
+    /* Legacy blue (kept for compatibility) */
+    --blue-50: #eff6ff;
+    --blue-100: #dbeafe;
+    --blue-500: #7C3AED;
+    --blue-600: #6D28D9;
+    --blue-700: #5B21B6;
+
+    /* Status Colors */
+    --green-500: #22c55e;
+    --green-100: #dcfce7;
+    --orange-500: #f97316;
+    --orange-100: #ffedd5;
+
+    /* Shadows */
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 25px -5px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+}

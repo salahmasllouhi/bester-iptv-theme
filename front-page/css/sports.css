@@ -1,0 +1,129 @@
+/* Sports Section Styles - Carousel */
+.ultimate-experience {
+    padding: 4rem 0;
+    background: var(--white);
+}
+
+.sports-grid {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    padding: 1rem 0;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    cursor: grab;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.sports-grid::-webkit-scrollbar {
+    display: none;
+}
+
+.sports-grid.active {
+    cursor: grabbing;
+}
+
+.sport-card {
+    flex: 0 0 280px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.sport-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--blue-500);
+}
+
+.sport-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.sport-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--blue-50);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sport-icon svg {
+    width: 24px;
+    height: 24px;
+    color: var(--blue-600);
+}
+
+.sport-name h3 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--dark);
+}
+
+.sport-name span {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.sport-features {
+    list-style: none;
+    margin-top: 1rem;
+}
+
+.sport-features li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.sport-features li svg {
+    width: 16px;
+    height: 16px;
+    color: var(--green-500);
+}
+
+/* Live Badge */
+.live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--green-500);
+    padding: 0.375rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 1rem;
+}
+
+.live-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--green-500);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}

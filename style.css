@@ -1,0 +1,35 @@
+/*
+Theme Name: My IPTV Theme
+Theme URI: https://example.com
+Author: Your Name
+Author URI: https://example.com
+Description: A modern IPTV streaming subscription theme with pricing configurator.
+Version: 1.0.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: my-iptv-theme
+*/
+
+/* Base reset - additional styles are in template files */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #f8fafc;
+    color: #111827;
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}

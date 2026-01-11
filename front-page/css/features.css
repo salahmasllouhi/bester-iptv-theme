@@ -1,0 +1,102 @@
+/* Features Section Styles - "Nordic Premium" Design */
+.nordic-features-section {
+    padding: 5rem 0;
+    background: #f9fafb;
+}
+
+.nordic-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.nordic-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.nordic-header h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 1rem;
+}
+
+.nordic-header h2 .text-highlight {
+    background: linear-gradient(135deg, #7c3aed, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.nordic-header p {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.nordic-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+/* Feature Card - White with Premium Hover */
+.feature-card {
+    background: var(--white);
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    padding: 2rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px -15px rgba(124, 58, 237, 0.15);
+    border-color: rgba(124, 58, 237, 0.2);
+}
+
+/* Icon Wrapper - Light Purple Circle with Hover Animation */
+.feature-card .icon-wrapper {
+    width: 64px;
+    height: 64px;
+    background: #f3e8ff;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.feature-card .icon-wrapper svg {
+    width: 28px;
+    height: 28px;
+    stroke: var(--violet-500);
+    stroke-width: 1.5;
+    transition: all 0.4s;
+}
+
+/* Icon Hover - Solid Purple Background, White Icon */
+.feature-card:hover .icon-wrapper {
+    background: #7c3aed;
+    transform: scale(1.05);
+}
+
+.feature-card:hover .icon-wrapper svg {
+    stroke: white;
+}
+
+.feature-card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 0.75rem;
+}
+
+.feature-card p {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+}
