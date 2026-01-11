@@ -381,8 +381,8 @@ class IPTV_Content_Settings
 
         // Call OpenAI API directly (not translate() which has token limits)
         $translator = new Theme_OpenAI_Translator();
-        $api_key = get_option('iptv_openai_api_key');
-        $model = get_option('iptv_openai_model', 'gpt-4o');
+        $api_key = get_option('openai_api_key');
+        $model = get_option('openai_model', 'gpt-4o-mini');
 
         if (empty($api_key)) {
             wp_send_json_error('OpenAI API key not configured');
