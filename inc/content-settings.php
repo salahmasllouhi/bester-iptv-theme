@@ -351,39 +351,31 @@ class IPTV_Content_Settings
         }
 
         // Build prompt for OpenAI
-        $prompt = "You are an SEO expert specializing in content localization.\n\n";
-        $prompt .= "Original content:\n";
+        $prompt = "Localize this content to $target_language with SEO optimization.\n\n";
+        $prompt .= "Original:\n";
         $prompt .= "Title: " . $post->post_title . "\n";
         $prompt .= "Content: " . wp_strip_all_tags($post->post_content) . "\n";
         if ($featured_image_alt) {
-            $prompt .= "Featured Image Alt Text: " . $featured_image_alt . "\n";
+            $prompt .= "Image Alt: " . $featured_image_alt . "\n";
         }
-        $prompt .= "\nTask:\n";
-        $prompt .= "1. Analyze the search intent of this content\n";
-        $prompt .= "2. Generate a NEW native focus keyword for $target_language (do NOT just translate)\n";
-        $prompt .= "3. Rewrite the title optimized for the new keyword\n";
-        $prompt .= "4. Rewrite the content optimized for the new keyword in $target_language\n";
-        $prompt .= "5. Create an SEO meta title (max 60 chars)\n";
-        $prompt .= "6. Create an SEO meta description (max 155 chars)\n";
-        if ($featured_image_alt) {
-            $prompt .= "7. Translate the featured image alt text to $target_language (keep it SEO-friendly)\n";
-        }
-        $prompt .= "\nReturn ONLY a valid JSON object (no markdown, no code blocks).\n";
-        $prompt .= "IMPORTANT: Escape all newlines as \\n and all quotes. Make sure the JSON is valid.\n";
-        $prompt .= "Use these exact keys:\n";
+
+        $prompt .= "\nGenerate a native $target_language focus keyword (not just a translation).\n";
+        $prompt .= "Rewrite the content and SEO metadata for $target_language audience.\n\n";
+
+        $prompt .= "Return as JSON:\n";
         $prompt .= "{\n";
-        $prompt .= '  "focus_keyword": "native keyword in ' . $target_language . '",';
+        $prompt .= '  "focus_keyword": "...",';
         $prompt .= "\n";
-        $prompt .= '  "title": "post title",';
+        $prompt .= '  "title": "...",';
         $prompt .= "\n";
-        $prompt .= '  "content": "full post content (escape newlines as \\n)",';
+        $prompt .= '  "content": "...",';
         $prompt .= "\n";
-        $prompt .= '  "meta_title": "SEO title",';
+        $prompt .= '  "meta_title": "...",';
         $prompt .= "\n";
-        $prompt .= '  "meta_description": "SEO description"';
+        $prompt .= '  "meta_description": "..."';
         if ($featured_image_alt) {
             $prompt .= ",\n";
-            $prompt .= '  "image_alt": "translated alt text"';
+            $prompt .= '  "image_alt": "..."';
         }
         $prompt .= "\n}\n";
 
