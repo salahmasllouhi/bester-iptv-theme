@@ -408,8 +408,12 @@ class IPTV_Content_Settings
         $data = json_decode($result, true);
 
         if (!$data || !isset($data['focus_keyword'])) {
-            // If JSON parsing failed, return raw result for debugging
-            wp_send_json_error('Failed to parse OpenAI response. Raw: ' . substr($result, 0, 200));
+            // Enhanced debugging
+            $error_msg = 'Failed to parse OpenAI response. ';
+            $error_msg .= 'JSON Error: ' . json_last_error_msg() . '. ';
+            $error_msg .= 'Length: ' . strlen($result) . '. ';
+            $error_msg .= 'First 300 chars: ' . substr($result, 0, 300);
+            wp_send_json_error($error_msg);
         }
 
         // Add featured image info to response
