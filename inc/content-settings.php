@@ -1018,9 +1018,8 @@ class IPTV_Content_Settings
      */
     private function render_localizer_modal_and_script()
     {
-        // This method will call the existing modal rendering below
+        // The modal method already includes the script, so just call it once
         $this->render_localizer_modal();
-        $this->render_localizer_script();
     }
 
     /**
