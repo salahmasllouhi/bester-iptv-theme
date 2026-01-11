@@ -399,7 +399,7 @@ class IPTV_Content_Settings
             'messages' => array(
                 array('role' => 'user', 'content' => $prompt)
             ),
-            'temperature' => 0.7,
+            'temperature' => (strpos($model, 'gpt-5') !== false || strpos($model, 'o1-') !== false) ? 1.0 : 0.7,
         );
         $body_args[$token_param] = 100000; // Maximum token limit
 
