@@ -390,8 +390,8 @@ class IPTV_Content_Settings
 
         // Determine token parameter based on model
         // GPT-5 and o1/preview models use max_completion_tokens
-        $token_param = (strpos($model, 'gpt-5') !== false || strpos($model, 'o1-') !== false) 
-            ? 'max_completion_tokens' 
+        $token_param = (strpos($model, 'gpt-5') !== false || strpos($model, 'o1-') !== false)
+            ? 'max_completion_tokens'
             : 'max_tokens';
 
         $body_args = array(
@@ -632,268 +632,268 @@ class IPTV_Content_Settings
         $current_lang = isset($_GET['lang']) ? sanitize_text_field($_GET['lang']) : 'en';
         $current_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'homepage';
         ?>
-        <div class="wrap">
-            <!-- Main Tabs -->
-            <h1>🌍 Content Localizing</h1>
-            <div class="nav-tab-wrapper" style="margin-bottom: 20px;">
-                <a href="?page=iptv-content-settings&tab=homepage"
-                    class="nav-tab <?php echo $current_tab === 'homepage' ? 'nav-tab-active' : ''; ?>">
-                    🏠 Home Page
-                </a>
-                <a href="?page=iptv-content-settings&tab=posts"
-                    class="nav-tab <?php echo $current_tab === 'posts' ? 'nav-tab-active' : ''; ?>">
-                    📝 Posts
-                </a>
-                <a href="?page=iptv-content-settings&tab=pages"
-                    class="nav-tab <?php echo $current_tab === 'pages' ? 'nav-tab-active' : ''; ?>">
-                    📄 Pages
-                </a>
-            </div>
-
-            <?php if ($current_tab === 'posts'): ?>
-                <?php $this->render_posts_localizer_tab(); ?>
-            <?php elseif ($current_tab === 'pages'): ?>
-                <?php $this->render_pages_localizer_tab(); ?>
-            <?php else: ?>
-                <!-- Home Page Content Editor Tab -->
-                <p>Manage all translatable text on your front page. Edit English content, then use OpenAI to auto-translate to other
-                    languages.</p>
-
-                <style>
-                    .lang-tabs {
-                        display: flex;
-                        gap: 5px;
-                        margin: 20px 0 0 0;
-                        border-bottom: 2px solid #2271b1;
-                    }
-
-                    .lang-tab {
-                        padding: 10px 20px;
-                        background: #f0f0f1;
-                        border: 1px solid #ddd;
-                        border-bottom: none;
-                        cursor: pointer;
-                        border-radius: 5px 5px 0 0;
-                        text-decoration: none;
-                        color: #1d2327;
-                    }
-
-                    .lang-tab.active {
-                        background: #2271b1;
-                        color: #fff;
-                        border-color: #2271b1;
-                    }
-
-                    .lang-tab:hover {
-                        background: #ddd;
-                    }
-
-                    .lang-tab.active:hover {
-                        background: #2271b1;
-                    }
-
-                    .content-section {
-                        background: #fff;
-                        padding: 20px;
-                        border: 1px solid #ddd;
-                        margin-bottom: 20px;
-                        border-radius: 8px;
-                    }
-
-                    .content-section h2 {
-                        margin-top: 0;
-                        border-bottom: 1px solid #eee;
-                        padding-bottom: 10px;
-                    }
-
-                    .field-row {
-                        margin-bottom: 15px;
-                    }
-
-                    .field-row label {
-                        display: block;
-                        font-weight: 600;
-                        margin-bottom: 5px;
-                    }
-
-                    .field-row input[type="text"] {
-                        width: 100%;
-                        padding: 8px;
-                    }
-
-                    .field-row textarea {
-                        width: 100%;
-                        height: 80px;
-                        padding: 8px;
-                    }
-
-                    .translate-btn {
-                        background: #0066cc;
-                        color: #fff;
-                        padding: 10px 20px;
-                        border: none;
-                        border-radius: 5px;
-                        cursor: pointer;
-                        margin: 10px 0;
-                    }
-
-                    .translate-btn:hover {
-                        background: #0052a3;
-                    }
-
-                    .translate-btn:disabled {
-                        background: #ccc;
-                        cursor: not-allowed;
-                    }
-
-                    .translate-status {
-                        margin-left: 15px;
-                        font-style: italic;
-                    }
-                </style>
-
-                <!-- Language Tabs -->
-                <div class="lang-tabs">
-                    <?php foreach ($this->languages as $lang_key => $lang): ?>
-                        <a href="?page=iptv-content-settings&lang=<?php echo $lang_key; ?>"
-                            class="lang-tab <?php echo $current_lang === $lang_key ? 'active' : ''; ?>">
-                            <?php echo $lang['flag'] . ' ' . $lang['name']; ?>
+                <div class="wrap">
+                    <!-- Main Tabs -->
+                    <h1>🌍 Content Localizing</h1>
+                    <div class="nav-tab-wrapper" style="margin-bottom: 20px;">
+                        <a href="?page=iptv-content-settings&tab=homepage"
+                            class="nav-tab <?php echo $current_tab === 'homepage' ? 'nav-tab-active' : ''; ?>">
+                            🏠 Home Page
                         </a>
-                    <?php endforeach; ?>
-                </div>
+                        <a href="?page=iptv-content-settings&tab=posts"
+                            class="nav-tab <?php echo $current_tab === 'posts' ? 'nav-tab-active' : ''; ?>">
+                            📝 Posts
+                        </a>
+                        <a href="?page=iptv-content-settings&tab=pages"
+                            class="nav-tab <?php echo $current_tab === 'pages' ? 'nav-tab-active' : ''; ?>">
+                            📄 Pages
+                        </a>
+                    </div>
 
-                <form method="post" id="content-form">
-                    <?php wp_nonce_field('iptv_content_nonce'); ?>
-                    <input type="hidden" name="current_lang" value="<?php echo esc_attr($current_lang); ?>">
+                    <?php if ($current_tab === 'posts'): ?>
+                            <?php $this->render_posts_localizer_tab(); ?>
+                    <?php elseif ($current_tab === 'pages'): ?>
+                            <?php $this->render_pages_localizer_tab(); ?>
+                    <?php else: ?>
+                            <!-- Home Page Content Editor Tab -->
+                            <p>Manage all translatable text on your front page. Edit English content, then use OpenAI to auto-translate to other
+                                languages.</p>
 
-                    <?php if ($current_lang !== 'en'): ?>
-                        <div style="background: #e8f4fd; padding: 15px; border-radius: 5px; margin: 20px 0; border: 1px solid #b8daff;">
-                            <strong>🤖 Auto-Translate from English</strong><br>
-                            <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
-                                <button type="button" class="translate-btn" id="translate-btn" data-lang="<?php echo $current_lang; ?>">
-                                    Translate All to <?php echo $this->languages[$current_lang]['name']; ?> with OpenAI
-                                </button>
-                                <button type="button" class="translate-btn" id="erase-btn" data-lang="<?php echo $current_lang; ?>"
-                                    style="background: #dc3545;">
-                                    🗑️ Erase All <?php echo $this->languages[$current_lang]['name']; ?> Translations
-                                </button>
-                            </div>
-                            <span class="translate-status" id="translate-status"></span>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php foreach ($this->content_fields as $section_key => $section): ?>
-                        <div class="content-section">
-                            <h2>
-                                <?php echo $section['label']; ?>
-                            </h2>
-                            <?php foreach ($section['fields'] as $field_key => $field):
-                                $value = $content[$current_lang][$field_key] ?? ($current_lang === 'en' ? $field['default'] : '');
-                                ?>
-                                <div class="field-row">
-                                    <label for="<?php echo $field_key; ?>">
-                                        <?php echo $field['label']; ?>
-                                    </label>
-                                    <?php if ($field['type'] === 'textarea'): ?>
-                                        <textarea name="iptv_content[<?php echo $field_key; ?>]"
-                                            id="<?php echo $field_key; ?>"><?php echo esc_textarea($value); ?></textarea>
-                                    <?php else: ?>
-                                        <input type="text" name="iptv_content[<?php echo $field_key; ?>]" id="<?php echo $field_key; ?>"
-                                            value="<?php echo esc_attr($value); ?>">
-                                    <?php endif; ?>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                    <?php endforeach; ?>
-
-                    <p>
-                        <button type="submit" class="button button-primary button-large">Save Changes</button>
-                    </p>
-                </form>
-            </div>
-
-            <script>
-                document.getElementById('translate-btn')?.addEventListener('click', function () {
-                    const btn = this;
-                    const status = document.getElementById('translate-status');
-                    const lang = btn.dataset.lang;
-
-                    btn.disabled = true;
-                    status.textContent = 'Translating...';
-
-                    fetch(ajaxurl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: new URLSearchParams({
-                            action: 'iptv_translate_content',
-                            nonce: '<?php echo wp_create_nonce('iptv_content_nonce'); ?>',
-                            target_lang: lang
-                        })
-                    })
-                        .then(r => r.json())
-                        .then(data => {
-                            if (data.success) {
-                                status.textContent = '✅ ' + data.data.message;
-                                // Update form fields with translated content
-                                for (const [key, value] of Object.entries(data.data.content)) {
-                                    const field = document.getElementById(key);
-                                    if (field) field.value = value;
+                            <style>
+                                .lang-tabs {
+                                    display: flex;
+                                    gap: 5px;
+                                    margin: 20px 0 0 0;
+                                    border-bottom: 2px solid #2271b1;
                                 }
-                            } else {
-                                status.textContent = '❌ ' + data.data;
-                            }
-                            btn.disabled = false;
-                        })
-                        .catch(err => {
-                            status.textContent = '❌ Error: ' + err.message;
-                            btn.disabled = false;
-                        });
-                });
 
-                // Erase button handler
-                document.getElementById('erase-btn')?.addEventListener('click', function () {
-                    const btn = this;
-                    const status = document.getElementById('translate-status');
-                    const lang = btn.dataset.lang;
+                                .lang-tab {
+                                    padding: 10px 20px;
+                                    background: #f0f0f1;
+                                    border: 1px solid #ddd;
+                                    border-bottom: none;
+                                    cursor: pointer;
+                                    border-radius: 5px 5px 0 0;
+                                    text-decoration: none;
+                                    color: #1d2327;
+                                }
 
-                    if (!confirm('Are you sure you want to erase all ' + lang.toUpperCase() + ' translations? This cannot be undone.')) {
-                        return;
-                    }
+                                .lang-tab.active {
+                                    background: #2271b1;
+                                    color: #fff;
+                                    border-color: #2271b1;
+                                }
 
-                    btn.disabled = true;
-                    status.textContent = 'Erasing...';
+                                .lang-tab:hover {
+                                    background: #ddd;
+                                }
 
-                    fetch(ajaxurl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: new URLSearchParams({
-                            action: 'iptv_erase_content',
-                            nonce: '<?php echo wp_create_nonce('iptv_content_nonce'); ?>',
-                            target_lang: lang
-                        })
-                    })
-                        .then(r => r.json())
-                        .then(data => {
-                            if (data.success) {
-                                status.textContent = '✅ ' + data.data.message;
-                                // Clear all form fields
-                                document.querySelectorAll('#content-form input[type="text"], #content-form textarea').forEach(field => {
-                                    field.value = '';
-                                });
-                            } else {
-                                status.textContent = '❌ ' + data.data;
-                            }
-                            btn.disabled = false;
-                        })
-                        .catch(err => {
-                            status.textContent = '❌ Error: ' + err.message;
-                            btn.disabled = false;
-                        });
-                });
-            </script>
-        <?php endif; // End of tab conditional ?>
-        </div>
-        <?php
+                                .lang-tab.active:hover {
+                                    background: #2271b1;
+                                }
+
+                                .content-section {
+                                    background: #fff;
+                                    padding: 20px;
+                                    border: 1px solid #ddd;
+                                    margin-bottom: 20px;
+                                    border-radius: 8px;
+                                }
+
+                                .content-section h2 {
+                                    margin-top: 0;
+                                    border-bottom: 1px solid #eee;
+                                    padding-bottom: 10px;
+                                }
+
+                                .field-row {
+                                    margin-bottom: 15px;
+                                }
+
+                                .field-row label {
+                                    display: block;
+                                    font-weight: 600;
+                                    margin-bottom: 5px;
+                                }
+
+                                .field-row input[type="text"] {
+                                    width: 100%;
+                                    padding: 8px;
+                                }
+
+                                .field-row textarea {
+                                    width: 100%;
+                                    height: 80px;
+                                    padding: 8px;
+                                }
+
+                                .translate-btn {
+                                    background: #0066cc;
+                                    color: #fff;
+                                    padding: 10px 20px;
+                                    border: none;
+                                    border-radius: 5px;
+                                    cursor: pointer;
+                                    margin: 10px 0;
+                                }
+
+                                .translate-btn:hover {
+                                    background: #0052a3;
+                                }
+
+                                .translate-btn:disabled {
+                                    background: #ccc;
+                                    cursor: not-allowed;
+                                }
+
+                                .translate-status {
+                                    margin-left: 15px;
+                                    font-style: italic;
+                                }
+                            </style>
+
+                            <!-- Language Tabs -->
+                            <div class="lang-tabs">
+                                <?php foreach ($this->languages as $lang_key => $lang): ?>
+                                        <a href="?page=iptv-content-settings&lang=<?php echo $lang_key; ?>"
+                                            class="lang-tab <?php echo $current_lang === $lang_key ? 'active' : ''; ?>">
+                                            <?php echo $lang['flag'] . ' ' . $lang['name']; ?>
+                                        </a>
+                                <?php endforeach; ?>
+                            </div>
+
+                            <form method="post" id="content-form">
+                                <?php wp_nonce_field('iptv_content_nonce'); ?>
+                                <input type="hidden" name="current_lang" value="<?php echo esc_attr($current_lang); ?>">
+
+                                <?php if ($current_lang !== 'en'): ?>
+                                        <div style="background: #e8f4fd; padding: 15px; border-radius: 5px; margin: 20px 0; border: 1px solid #b8daff;">
+                                            <strong>🤖 Auto-Translate from English</strong><br>
+                                            <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
+                                                <button type="button" class="translate-btn" id="translate-btn" data-lang="<?php echo $current_lang; ?>">
+                                                    Translate All to <?php echo $this->languages[$current_lang]['name']; ?> with OpenAI
+                                                </button>
+                                                <button type="button" class="translate-btn" id="erase-btn" data-lang="<?php echo $current_lang; ?>"
+                                                    style="background: #dc3545;">
+                                                    🗑️ Erase All <?php echo $this->languages[$current_lang]['name']; ?> Translations
+                                                </button>
+                                            </div>
+                                            <span class="translate-status" id="translate-status"></span>
+                                        </div>
+                                <?php endif; ?>
+
+                                <?php foreach ($this->content_fields as $section_key => $section): ?>
+                                        <div class="content-section">
+                                            <h2>
+                                                <?php echo $section['label']; ?>
+                                            </h2>
+                                            <?php foreach ($section['fields'] as $field_key => $field):
+                                                $value = $content[$current_lang][$field_key] ?? ($current_lang === 'en' ? $field['default'] : '');
+                                                ?>
+                                                    <div class="field-row">
+                                                        <label for="<?php echo $field_key; ?>">
+                                                            <?php echo $field['label']; ?>
+                                                        </label>
+                                                        <?php if ($field['type'] === 'textarea'): ?>
+                                                                <textarea name="iptv_content[<?php echo $field_key; ?>]"
+                                                                    id="<?php echo $field_key; ?>"><?php echo esc_textarea($value); ?></textarea>
+                                                        <?php else: ?>
+                                                                <input type="text" name="iptv_content[<?php echo $field_key; ?>]" id="<?php echo $field_key; ?>"
+                                                                    value="<?php echo esc_attr($value); ?>">
+                                                        <?php endif; ?>
+                                                    </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                <?php endforeach; ?>
+
+                                <p>
+                                    <button type="submit" class="button button-primary button-large">Save Changes</button>
+                                </p>
+                            </form>
+                        </div>
+
+                        <script>
+                            document.getElementById('translate-btn')?.addEventListener('click', function () {
+                                const btn = this;
+                                const status = document.getElementById('translate-status');
+                                const lang = btn.dataset.lang;
+
+                                btn.disabled = true;
+                                status.textContent = 'Translating...';
+
+                                fetch(ajaxurl, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                    body: new URLSearchParams({
+                                        action: 'iptv_translate_content',
+                                        nonce: '<?php echo wp_create_nonce('iptv_content_nonce'); ?>',
+                                        target_lang: lang
+                                    })
+                                })
+                                    .then(r => r.json())
+                                    .then(data => {
+                                        if (data.success) {
+                                            status.textContent = '✅ ' + data.data.message;
+                                            // Update form fields with translated content
+                                            for (const [key, value] of Object.entries(data.data.content)) {
+                                                const field = document.getElementById(key);
+                                                if (field) field.value = value;
+                                            }
+                                        } else {
+                                            status.textContent = '❌ ' + data.data;
+                                        }
+                                        btn.disabled = false;
+                                    })
+                                    .catch(err => {
+                                        status.textContent = '❌ Error: ' + err.message;
+                                        btn.disabled = false;
+                                    });
+                            });
+
+                            // Erase button handler
+                            document.getElementById('erase-btn')?.addEventListener('click', function () {
+                                const btn = this;
+                                const status = document.getElementById('translate-status');
+                                const lang = btn.dataset.lang;
+
+                                if (!confirm('Are you sure you want to erase all ' + lang.toUpperCase() + ' translations? This cannot be undone.')) {
+                                    return;
+                                }
+
+                                btn.disabled = true;
+                                status.textContent = 'Erasing...';
+
+                                fetch(ajaxurl, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                    body: new URLSearchParams({
+                                        action: 'iptv_erase_content',
+                                        nonce: '<?php echo wp_create_nonce('iptv_content_nonce'); ?>',
+                                        target_lang: lang
+                                    })
+                                })
+                                    .then(r => r.json())
+                                    .then(data => {
+                                        if (data.success) {
+                                            status.textContent = '✅ ' + data.data.message;
+                                            // Clear all form fields
+                                            document.querySelectorAll('#content-form input[type="text"], #content-form textarea').forEach(field => {
+                                                field.value = '';
+                                            });
+                                        } else {
+                                            status.textContent = '❌ ' + data.data;
+                                        }
+                                        btn.disabled = false;
+                                    })
+                                    .catch(err => {
+                                        status.textContent = '❌ Error: ' + err.message;
+                                        btn.disabled = false;
+                                    });
+                            });
+                        </script>
+                <?php endif; // End of tab conditional ?>
+                </div>
+                <?php
     }
 
     /**
@@ -927,58 +927,58 @@ class IPTV_Content_Settings
             6 => array('name' => 'Iceland 🇮🇸', 'lang' => 'is')
         );
         ?>
-        <div class="post-localizer-wrapper">
-            <p>Localize posts from Main Site to subsites with AI-powered SEO optimization.</p>
+                <div class="post-localizer-wrapper">
+                    <p>Localize posts from Main Site to subsites with AI-powered SEO optimization.</p>
 
-            <div style="margin: 20px 0; background: #f0f0f1; padding: 15px; border-radius: 5px;">
-                <label><strong>Target Subsite:</strong></label>
-                <select id="target-subsite" style="padding: 5px 10px; font-size: 14px; margin-left: 10px;">
-                    <?php foreach ($subsites as $blog_id => $site): ?>
-                        <option value="<?php echo $blog_id; ?>" data-lang="<?php echo $site['lang']; ?>">
-                            <?php echo $site['name']; ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
+                    <div style="margin: 20px 0; background: #f0f0f1; padding: 15px; border-radius: 5px;">
+                        <label><strong>Target Subsite:</strong></label>
+                        <select id="target-subsite" style="padding: 5px 10px; font-size: 14px; margin-left: 10px;">
+                            <?php foreach ($subsites as $blog_id => $site): ?>
+                                    <option value="<?php echo $blog_id; ?>" data-lang="<?php echo $site['lang']; ?>">
+                                        <?php echo $site['name']; ?>
+                                    </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
-            <!-- Posts Section -->
-            <div class="content-section">
-                <div style="margin: 10px 0;">
-                    <button class="button" id="select-all-posts">Select All</button>
-                    <button class="button button-primary" id="clone-posts-to-network">Clone Selected to Network</button>
-                    <button class="button" id="remove-posts-from-network"
-                        style="background: #dc3545; color: white; border-color: #dc3545;">Remove Selected from Network</button>
+                    <!-- Posts Section -->
+                    <div class="content-section">
+                        <div style="margin: 10px 0;">
+                            <button class="button" id="select-all-posts">Select All</button>
+                            <button class="button button-primary" id="clone-posts-to-network">Clone Selected to Network</button>
+                            <button class="button" id="remove-posts-from-network"
+                                style="background: #dc3545; color: white; border-color: #dc3545;">Remove Selected from Network</button>
+                        </div>
+
+                        <table class="wp-list-table widefat fixed striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px;"><input type="checkbox" id="check-all-posts" /></th>
+                                    <th>Title</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($posts as $post): ?>
+                                        <tr>
+                                            <td><input type="checkbox" class="post-checkbox" value="<?php echo $post->ID; ?>" /></td>
+                                            <td><strong><?php echo esc_html($post->post_title); ?></strong></td>
+                                            <td><?php echo date('Y-m-d', strtotime($post->post_date)); ?></td>
+                                            <td>
+                                                <button class="button button-primary localize-btn" data-post-id="<?php echo $post->ID; ?>">
+                                                    Localize
+                                                </button>
+                                                <span class="localize-status-<?php echo $post->ID; ?>" style="margin-left: 10px;"></span>
+                                            </td>
+                                        </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-
-                <table class="wp-list-table widefat fixed striped">
-                    <thead>
-                        <tr>
-                            <th style="width: 40px;"><input type="checkbox" id="check-all-posts" /></th>
-                            <th>Title</th>
-                            <th>Date</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($posts as $post): ?>
-                            <tr>
-                                <td><input type="checkbox" class="post-checkbox" value="<?php echo $post->ID; ?>" /></td>
-                                <td><strong><?php echo esc_html($post->post_title); ?></strong></td>
-                                <td><?php echo date('Y-m-d', strtotime($post->post_date)); ?></td>
-                                <td>
-                                    <button class="button button-primary localize-btn" data-post-id="<?php echo $post->ID; ?>">
-                                        Localize
-                                    </button>
-                                    <span class="localize-status-<?php echo $post->ID; ?>" style="margin-left: 10px;"></span>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <?php
-        $this->render_localizer_modal_and_script();
+                <?php
+                $this->render_localizer_modal_and_script();
     }
 
     /**
@@ -1012,63 +1012,63 @@ class IPTV_Content_Settings
             6 => array('name' => 'Iceland 🇮🇸', 'lang' => 'is')
         );
         ?>
-        <div class="post-localizer-wrapper">
-            <p>Localize pages from Main Site to subsites with AI-powered SEO optimization.</p>
+                <div class="post-localizer-wrapper">
+                    <p>Localize pages from Main Site to subsites with AI-powered SEO optimization.</p>
 
-            <div style="margin: 20px 0; background: #f0f0f1; padding: 15px; border-radius: 5px;">
-                <label><strong>Target Subsite:</strong></label>
-                <select id="target-subsite" style="padding: 5px 10px; font-size: 14px; margin-left: 10px;">
-                    <?php foreach ($subsites as $blog_id => $site): ?>
-                        <option value="<?php echo $blog_id; ?>" data-lang="<?php echo $site['lang']; ?>">
-                            <?php echo $site['name']; ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
+                    <div style="margin: 20px 0; background: #f0f0f1; padding: 15px; border-radius: 5px;">
+                        <label><strong>Target Subsite:</strong></label>
+                        <select id="target-subsite" style="padding: 5px 10px; font-size: 14px; margin-left: 10px;">
+                            <?php foreach ($subsites as $blog_id => $site): ?>
+                                    <option value="<?php echo $blog_id; ?>" data-lang="<?php echo $site['lang']; ?>">
+                                        <?php echo $site['name']; ?>
+                                    </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
-            <!-- Pages Section -->
-            <div class="content-section">
-                <div style="margin: 10px 0;">
-                    <button class="button" id="select-all-pages">Select All</button>
-                    <button class="button button-primary" id="clone-pages-to-network">Clone Selected to Network</button>
-                    <button class="button" id="remove-pages-from-network"
-                        style="background: #dc3545; color: white; border-color: #dc3545;">Remove Selected from Network</button>
+                    <!-- Pages Section -->
+                    <div class="content-section">
+                        <div style="margin: 10px 0;">
+                            <button class="button" id="select-all-pages">Select All</button>
+                            <button class="button button-primary" id="clone-pages-to-network">Clone Selected to Network</button>
+                            <button class="button" id="remove-pages-from-network"
+                                style="background: #dc3545; color: white; border-color: #dc3545;">Remove Selected from Network</button>
+                        </div>
+
+                        <table class="wp-list-table widefat fixed striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px;"><input type="checkbox" id="check-all-pages" /></th>
+                                    <th>Title</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($pages as $page): ?>
+                                        <tr>
+                                            <td><input type="checkbox" class="page-checkbox" value="<?php echo $page->ID; ?>" /></td>
+                                            <td><strong>
+                                                    <?php echo esc_html($page->post_title); ?>
+                                                </strong></td>
+                                            <td>
+                                                <?php echo date('Y-m-d', strtotime($page->post_date)); ?>
+                                            </td>
+                                            <td>
+                                                <button class="button button-primary localize-btn" data-post-id="<?php echo $page->ID; ?>">
+                                                    Localize
+                                                </button>
+                                                <span class="localize-status-<?php echo $page->ID; ?>" style="margin-left: 10px;"></span>
+                                            </td>
+                                        </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-
-                <table class="wp-list-table widefat fixed striped">
-                    <thead>
-                        <tr>
-                            <th style="width: 40px;"><input type="checkbox" id="check-all-pages" /></th>
-                            <th>Title</th>
-                            <th>Date</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($pages as $page): ?>
-                            <tr>
-                                <td><input type="checkbox" class="page-checkbox" value="<?php echo $page->ID; ?>" /></td>
-                                <td><strong>
-                                        <?php echo esc_html($page->post_title); ?>
-                                    </strong></td>
-                                <td>
-                                    <?php echo date('Y-m-d', strtotime($page->post_date)); ?>
-                                </td>
-                                <td>
-                                    <button class="button button-primary localize-btn" data-post-id="<?php echo $page->ID; ?>">
-                                        Localize
-                                    </button>
-                                    <span class="localize-status-<?php echo $page->ID; ?>" style="margin-left: 10px;"></span>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <?php
-        $this->render_localizer_modal();
-        $this->render_localizer_script();
+                <?php
+                $this->render_localizer_modal();
+                $this->render_localizer_script();
     }
 
     /**
@@ -1083,332 +1083,320 @@ class IPTV_Content_Settings
     /**
      * Shared localizer modal HTML
      */
+    /**
+     * Shared localizer modal HTML
+     */
     private function render_localizer_modal()
     {
+        $languages = array(
+            'se' => array('name' => 'Sweden 🇸🇪', 'flag' => '🇸🇪', 'blog_id' => 2),
+            'no' => array('name' => 'Norway 🇳🇴', 'flag' => '🇳🇴', 'blog_id' => 3),
+            'dk' => array('name' => 'Denmark 🇩🇰', 'flag' => '🇩🇰', 'blog_id' => 4),
+            'fi' => array('name' => 'Finland 🇫🇮', 'flag' => '🇫🇮', 'blog_id' => 5),
+            'is' => array('name' => 'Iceland 🇮🇸', 'flag' => '🇮🇸', 'blog_id' => 6),
+        );
         ?>
-        <!-- Review Modal with Rank Math Style -->
-        <div id="localize-modal"
-            style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 0; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); z-index: 10000; width: 90%; max-width: 950px; max-height: 85vh; overflow: hidden;">
-            <!-- Modal Header -->
-            <div
-                style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px 30px; border-radius: 8px 8px 0 0;">
-                <h2 style="margin: 0; font-size: 20px;">🌍 Review & Optimize Localized Content</h2>
-                <p style="margin: 5px 0 0 0; opacity: 0.9; font-size: 14px;">AI-generated content ready for review. Edit as
-                    needed, then publish.</p>
-            </div>
-
-            <div id="modal-content" style="padding: 30px; overflow-y: auto; max-height: calc(85vh - 140px);">
-                <!-- SEO Score Preview (Rank Math style) -->
-                <div id="seo-score-section"
-                    style="background: #f8f9fa; border-left: 4px solid #667eea; padding: 15px; margin-bottom: 25px; border-radius: 4px;">
-                    <div style="display: flex; align-items: center; gap: 15px;">
-                        <div id="seo-score-circle"
-                            style="width: 60px; height: 60px; border-radius: 50%; background: conic-gradient(#10b981 0deg, #10b981 270deg, #e5e7eb 270deg); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; color: #10b981;">
-                            75
-                        </div>
+                <!-- Review Modal with Rank Math Style -->
+                <div id="localize-modal"
+                    style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 0; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); z-index: 10000; width: 95%; max-width: 1200px; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column;">
+            
+                    <!-- Modal Header -->
+                    <div style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); color: white; padding: 15px 25px; flex-shrink: 0; display: flex; justify-content: space-between; align-items: center;">
                         <div>
-                            <strong style="display: block; font-size: 16px;">SEO Score: Good</strong>
-                            <small style="color: #666;">Focus keyword density optimal • Title length perfect</small>
+                            <h2 style="margin: 0; font-size: 18px; color: white;">🌍 Network Content Localizer</h2>
+                            <p style="margin: 2px 0 0 0; opacity: 0.8; font-size: 12px;">Manage localized content for all subsites in one place.</p>
+                        </div>
+                        <button id="close-modal-btn" style="background: rgba(255,255,255,0.1); border: none; color: white; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px;">&times;</button>
+                    </div>
+
+                    <!-- Language Tabs -->
+                    <div style="background: #f1f5f9; padding: 0 20px; border-bottom: 1px solid #e2e8f0; display: flex; gap: 5px; flex-shrink: 0;">
+                        <?php $first = true;
+                        foreach ($languages as $code => $lang): ?>
+                                <button class="lang-tab-btn <?php echo $first ? 'active' : ''; ?>" data-lang="<?php echo $code; ?>"
+                                    style="padding: 12px 20px; border: none; background: <?php echo $first ? 'white' : 'transparent'; ?>; border-bottom: 2px solid <?php echo $first ? '#3b82f6' : 'transparent'; ?>; font-weight: 600; color: <?php echo $first ? '#1e293b' : '#64748b'; ?>; cursor: pointer; transition: all 0.2s;">
+                                    <?php echo $lang['flag']; ?>             <?php echo $lang['name']; ?>
+                                    <span class="status-indicator-<?php echo $code; ?>" style="font-size: 10px; margin-left: 5px;"></span>
+                                </button>
+                                <!-- Hidden inputs for target IDs -->
+                                <input type="hidden" id="target-blog-id-<?php echo $code; ?>" value="<?php echo $lang['blog_id']; ?>">
+                            <?php $first = false; endforeach; ?>
+                    </div>
+
+                    <div id="modal-content" style="flex-grow: 1; overflow-y: auto; background: #f8f9fa;">
+                        <input type="hidden" id="original-post-id" />
+                
+                        <?php $first = true;
+                        foreach ($languages as $code => $lang): ?>
+                                <div id="tab-content-<?php echo $code; ?>" class="tab-content" style="display: <?php echo $first ? 'block' : 'none'; ?>; padding: 25px;">
+                        
+                                    <!-- SEO Score Section -->
+                                    <div id="seo-score-section-<?php echo $code; ?>"
+                                        style="background: white; border: 1px solid #e2e8f0; padding: 15px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 15px;">
+                                        <div id="seo-score-circle-<?php echo $code; ?>"
+                                            style="width: 50px; height: 50px; border-radius: 50%; background: #e5e7eb; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; color: #64748b; flex-shrink: 0;">
+                                            <span id="seo-score-value-<?php echo $code; ?>">0</span>
+                                        </div>
+                                        <div>
+                                            <strong id="seo-score-text-<?php echo $code; ?>" style="display: block; font-size: 15px; color: #64748b;">SEO Score: Checking...</strong>
+                                            <small style="color: #64748b;">Real-time optimization analysis</small>
+                                        </div>
+                                        <div style="margin-left: auto;">
+                                            <button class="button generate-single-btn" data-lang="<?php echo $code; ?>" style="display: flex; align-items: center; gap: 5px;">
+                                                <span>⚡️</span> Regenerate <?php echo $lang['name']; ?>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                                        <!-- Column 1: Metadata -->
+                                        <div style="display: grid; gap: 15px; align-content: start;">
+                                            <!-- Focus Keyword -->
+                                            <div class="rank-math-field">
+                                                <label style="display: block; font-weight: 600; margin-bottom: 5px; font-size: 13px; color: #475569;">Focus Keyword</label>
+                                                <input type="text" id="focus-keyword-<?php echo $code; ?>" class="seo-input" data-lang="<?php echo $code; ?>"
+                                                    style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 4px;" placeholder="Target keyword" />
+                                            </div>
+
+                                            <!-- SEO Title -->
+                                            <div class="rank-math-field">
+                                                <label style="display: block; font-weight: 600; margin-bottom: 5px; font-size: 13px; color: #475569;">
+                                                    SEO Title <span id="meta-title-counter-<?php echo $code; ?>" style="float: right; font-weight: normal; color: #94a3b8;">0/60</span>
+                                                </label>
+                                                <input type="text" id="meta-title-<?php echo $code; ?>" class="seo-input" data-lang="<?php echo $code; ?>" maxlength="60"
+                                                    style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 4px;" />
+                                            </div>
+
+                                            <!-- SEO Description -->
+                                            <div class="rank-math-field">
+                                                <label style="display: block; font-weight: 600; margin-bottom: 5px; font-size: 13px; color: #475569;">
+                                                    Meta Description <span id="meta-desc-counter-<?php echo $code; ?>" style="float: right; font-weight: normal; color: #94a3b8;">0/160</span>
+                                                </label>
+                                                <textarea id="meta-description-<?php echo $code; ?>" class="seo-input" data-lang="<?php echo $code; ?>" maxlength="160"
+                                                    style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 4px; height: 80px; resize: vertical;"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <!-- Column 2: Content -->
+                                        <div style="display: grid; gap: 15px;">
+                                            <!-- Post Title -->
+                                            <div class="rank-math-field">
+                                                <label style="display: block; font-weight: 600; margin-bottom: 5px; font-size: 13px; color: #475569;">Post Title (H1)</label>
+                                                <input type="text" id="post-title-<?php echo $code; ?>" class="seo-input" data-lang="<?php echo $code; ?>"
+                                                    style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-weight: 600;" />
+                                            </div>
+
+                                            <!-- Post Content -->
+                                            <div class="rank-math-field">
+                                                <label style="display: block; font-weight: 600; margin-bottom: 5px; font-size: 13px; color: #475569;">Post Content</label>
+                                                <textarea id="post-content-<?php echo $code; ?>" class="seo-input" data-lang="<?php echo $code; ?>"
+                                                    style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 4px; height: 300px; font-family: monospace; resize: vertical;"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            <?php $first = false; endforeach; ?>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div style="padding: 15px 25px; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <span id="global-status" style="font-weight: 600; color: #475569;"></span>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="button cancel-btn" style="border: 1px solid #cbd5e1; color: #475569;">Cancel</button>
+                            <button id="generate-all-btn" class="button button-secondary" style="display: flex; align-items: center; gap: 5px;">
+                                <span>✨</span> Generate All Missing
+                            </button>
+                            <button id="publish-all-btn" class="button button-primary" style="background: #2563eb; border: none; padding: 0 20px; font-weight: 600;">
+                                🚀 Publish All Checked
+                            </button>
                         </div>
                     </div>
                 </div>
+                <div id="modal-overlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(2px); z-index: 9999;"></div>
 
-                <!-- Rank Math Style Fields -->
-                <div style="display: grid; gap: 20px;">
-                    <!-- Focus Keyword -->
-                    <div class="rank-math-field">
-                        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #1e293b;">
-                            <span style="color: #dc2626;">*</span> Focus Keyword
-                        </label>
-                        <input type="text" id="focus-keyword"
-                            style="width: 100%; padding: 10px 12px; border: 2px solid #e2e8f0; border-radius: 6px; font-size: 14px; transition: border-color 0.2s;"
-                            placeholder="Enter your target keyword" />
-                        <small style="display: block; margin-top: 5px; color: #64748b;">The main keyword you're targeting for
-                            SEO</small>
-                    </div>
+                <script>
+                    jQuery(document).ready(function ($) {
+                        const nonce = '<?php echo wp_create_nonce('iptv_localizer_nonce'); ?>';
+                        const languages = ['se', 'no', 'dk', 'fi', 'is'];
 
-                    <!-- SEO Title -->
-                    <div class="rank-math-field">
-                        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #1e293b;">
-                            SEO Title <span id="meta-title-counter"
-                                style="float: right; color: #64748b; font-weight: normal;">0/60</span>
-                        </label>
-                        <input type="text" id="meta-title" maxlength="60"
-                            style="width: 100%; padding: 10px 12px; border: 2px solid #e2e8f0; border-radius: 6px; font-size: 14px;" />
-                        <div id="title-preview"
-                            style="margin-top: 8px; padding: 10px; background: #f1f5f9; border-radius: 4px; font-size: 13px;">
-                            <div style="color: #1e40af; font-size: 18px; line-height: 1.3; margin-bottom: 2px;"
-                                id="title-preview-text">Your SEO Title Here</div>
-                            <div style="color: #22c55e;">https://yoursite.com/page-url</div>
-                        </div>
-                    </div>
-
-                    <!-- SEO Description -->
-                    <div class="rank-math-field">
-                        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #1e293b;">
-                            Meta Description <span id="meta-desc-counter"
-                                style="float: right; color: #64748b; font-weight: normal;">0/155</span>
-                        </label>
-                        <textarea id="meta-description" maxlength="155"
-                            style="width: 100%; padding: 10px 12px; border: 2px solid #e2e8f0; border-radius: 6px; font-size: 14px; height: 70px; resize: vertical;"></textarea>
-                        <div id="desc-preview"
-                            style="margin-top: 8px; padding: 10px; background: #f1f5f9; border-radius: 4px; font-size: 13px;">
-                            <div style="color: #64748b; line-height: 1.5;" id="desc-preview-text">Your meta description will
-                                appear here...</div>
-                        </div>
-                    </div>
-
-                    <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 10px 0;" />
-
-                    <!-- Post Title -->
-                    <div class="rank-math-field">
-                        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #1e293b;">
-                            <span style="color: #dc2626;">*</span> Post Title
-                        </label>
-                        <input type="text" id="post-title"
-                            style="width: 100%; padding: 10px 12px; border: 2px solid #e2e8f0; border-radius: 6px; font-size: 16px; font-weight: 500;" />
-                    </div>
-
-                    <!-- Post Content -->
-                    <div class="rank-math-field">
-                        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #1e293b;">
-                            Post Content
-                        </label>
-                        <textarea id="post-content"
-                            style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 6px; height: 250px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 14px; line-height: 1.6; resize: vertical;"></textarea>
-                        <small style="display: block; margin-top: 5px; color: #64748b;">Word count: <span
-                                id="word-count">0</span> words</small>
-                    </div>
-                </div>
-
-                <input type="hidden" id="original-post-id" />
-                <input type="hidden" id="target-blog-id" />
-            </div>
-
-            <!-- Modal Footer -->
-            <div
-                style="background: #f8f9fa; padding: 20px 30px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <button class="button" id="close-modal-btn" style="margin-right: 10px;">Cancel</button>
-                    <button class="button button-primary" id="publish-btn"
-                        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; padding: 8px 20px; font-weight: 600;">
-                        📤 Publish to Subsite
-                    </button>
-                    <span id="publish-status" style="margin-left: 15px; font-weight: 500;"></span>
-                </div>
-                <button class="button" id="edit-in-rankmath-btn"
-                    style="display:none; background: #0073aa; color: white; border: none;">
-                    ✏️ Continue in Rank Math Editor
-                </button>
-            </div>
-        </div>
-        <div id="modal-overlay"
-            style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999;">
-        </div>
-
-        <script>
-            jQuery(document).ready(function ($) {
-                const nonce = '<?php echo wp_create_nonce('iptv_localizer_nonce'); ?>';
-
-                // Character counters
-                $('#meta-title').on('input', function () {
-                    $('#meta-title-counter').text($(this).val().length + '/60');
-                });
-                $('#meta-description').on('input', function () {
-                    $('#meta-desc-counter').text($(this).val().length + '/155');
-                });
-
-                // Select all checkboxes
-                $('#check-all-posts').on('change', function () {
-                    $('.post-checkbox').prop('checked', $(this).is(':checked'));
-                });
-                $('#check-all-pages').on('change', function () {
-                    $('.page-checkbox').prop('checked', $(this).is(':checked'));
-                });
-                $('#select-all-posts').on('click', function () {
-                    $('.post-checkbox').prop('checked', true);
-                });
-                $('#select-all-pages').on('click', function () {
-                    $('.page-checkbox').prop('checked', true);
-                });
-
-                // Clone to Network
-                $('#clone-posts-to-network, #clone-pages-to-network').on('click', function () {
-                    const isPost = $(this).attr('id') === 'clone-posts-to-network';
-                    const selectedIds = [];
-                    $(isPost ? '.post-checkbox:checked' : '.page-checkbox:checked').each(function () {
-                        selectedIds.push($(this).val());
-                    });
-
-                    if (selectedIds.length === 0) {
-                        alert('Please select at least one item');
-                        return;
-                    }
-
-                    if (!confirm('Clone ' + selectedIds.length + ' items to ALL subsites?')) {
-                        return;
-                    }
-
-                    alert('Clone to Network feature coming soon! Selected IDs: ' + selectedIds.join(', '));
-                });
-
-                // Remove from Network
-                $('#remove-posts-from-network, #remove-pages-from-network').on('click', function () {
-                    const isPost = $(this).attr('id') === 'remove-posts-from-network';
-                    const selectedIds = [];
-                    $(isPost ? '.post-checkbox:checked' : '.page-checkbox:checked').each(function () {
-                        selectedIds.push($(this).val());
-                    });
-
-                    if (selectedIds.length === 0) {
-                        alert('Please select at least one item');
-                        return;
-                    }
-
-                    if (!confirm('Remove ' + selectedIds.length + ' items from ALL subsites? This cannot be undone!')) {
-                        return;
-                    }
-
-                    alert('Remove from Network feature coming soon! Selected IDs: ' + selectedIds.join(', '));
-                });
-
-                // Real-time SEO Score Calculator
-                function updateSeoScore() {
-                    let score = 0;
-                    const keyword = $('#focus-keyword').val().toLowerCase();
-                    const title = $('#meta-title').val().toLowerCase();
-                    const desc = $('#meta-description').val().toLowerCase();
-                    const content = $('#post-content').val().toLowerCase();
-                    const slug = $('#post-title').val().toLowerCase().replace(/\s+/g, '-');
-
-                    if (!keyword) {
-                        updateScoreDisplay(0);
-                        return;
-                    }
-
-                    // Basic checks (similar to Rank Math logic)
-                    if (title.includes(keyword)) score += 20;
-                    if (desc.includes(keyword)) score += 20;
-                    if (content.includes(keyword)) score += 20;
-                    if (slug.includes(keyword)) score += 10;
+                        // Tab Switching
+                        $('.lang-tab-btn').on('click', function() {
+                            const lang = $(this).data('lang');
                     
-                    // Length checks
-                    if (title.length >= 40 && title.length <= 60) score += 10;
-                    if (desc.length >= 120 && desc.length <= 160) score += 10;
-                    if (content.split(' ').length > 300) score += 10;
+                            // Update tabs
+                            $('.lang-tab-btn').css({
+                                'background': 'transparent',
+                                'border-bottom-color': 'transparent',
+                                'color': '#64748b'
+                            });
+                            $(this).css({
+                                'background': 'white', 
+                                'border-bottom-color': '#3b82f6',
+                                'color': '#1e293b'
+                            });
 
-                    updateScoreDisplay(score);
-                }
+                            // Show content
+                            $('.tab-content').hide();
+                            $('#tab-content-' + lang).show();
+                        });
 
-                function updateScoreDisplay(score) {
-                    $('#seo-score-value').text(score);
+                        // SEO Score Logic
+                        function updateSeoScore(lang) {
+                            let score = 0;
+                            const keyword = $('#focus-keyword-' + lang).val()?.toLowerCase() || '';
+                            const title = $('#meta-title-' + lang).val()?.toLowerCase() || '';
+                            const desc = $('#meta-description-' + lang).val()?.toLowerCase() || '';
+                            const content = $('#post-content-' + lang).val()?.toLowerCase() || '';
                     
-                    // Update color based on score
-                    let color = '#dc2626'; // Red
-                    let label = 'Poor';
-                    if (score >= 50 && score < 80) {
-                        color = '#d97706'; // Orange
-                        label = 'Fair';
-                    } else if (score >= 80) {
-                        color = '#10b981'; // Green
-                        label = 'Good';
-                    }
+                            if (!keyword) {
+                                updateScoreDisplay(lang, 0);
+                                return;
+                            }
 
-                    $('#seo-score-circle').css({
-                        'background': `conic-gradient(${color} ${score * 3.6}deg, #e5e7eb ${score * 3.6}deg)`,
-                        'color': color
-                    });
-                    $('#seo-score-text').text('SEO Score: ' + label).css('color', color);
-                }
+                            if (title.includes(keyword)) score += 20;
+                            if (desc.includes(keyword)) score += 20;
+                            if (content.includes(keyword)) score += 20;
+                    
+                            if (title.length >= 40 && title.length <= 60) score += 10;
+                            if (desc.length >= 120 && desc.length <= 160) score += 10;
+                            if (content.split(' ').length > 300) score += 20;
 
-                // Trigger calculator on any input change
-                $('#focus-keyword, #meta-title, #meta-description, #post-content, #post-title').on('input', updateSeoScore);
+                            updateScoreDisplay(lang, score);
+                        }
 
-                // Localize button click
-                $('.localize-btn').on('click', function () {
-                    const btn = $(this);
-                    const postId = btn.data('post-id');
-                    const targetSubsite = $('#target-subsite');
-                    const targetLang = targetSubsite.find(':selected').data('lang');
-                    const targetBlogId = targetSubsite.val();
-                    const statusSpan = $('.localize-status-' + postId);
+                        function updateScoreDisplay(lang, score) {
+                            $('#seo-score-value-' + lang).text(score);
+                            // Circle color update logic here (simplified)
+                            $('#seo-score-text-' + lang).text('SEO Score: ' + score + '/100');
+                        }
 
-                    btn.prop('disabled', true);
-                    statusSpan.text('🔄 Generating...');
+                        // Input listeners for SEO
+                        $('.seo-input').on('input', function() {
+                            const lang = $(this).data('lang');
+                            updateSeoScore(lang);
+                            // Update counters
+                            if(this.id.includes('meta-title')) $('#meta-title-counter-' + lang).text(this.value.length + '/60');
+                            if(this.id.includes('meta-description')) $('#meta-desc-counter-' + lang).text(this.value.length + '/160');
+                        });
 
-                    $.post(ajaxurl, {
-                        action: 'iptv_generate_localized_content',
-                        nonce: nonce,
-                        post_id: postId,
-                        target_lang: targetLang
-                    }).done(function (response) {
-                        if (response.success) {
-                            // Populate modal
-                            $('#focus-keyword').val(response.data.focus_keyword || '');
-                            $('#meta-title').val(response.data.meta_title || '').trigger('input');
-                            $('#meta-description').val(response.data.meta_description || '').trigger('input');
-                            $('#post-title').val(response.data.title || '');
-                            $('#post-content').val(response.data.content || '');
+                        // Open Modal Logic
+                        $('.localize-btn').on('click', function() {
+                            const btn = $(this);
+                            const postId = btn.data('post-id');
                             $('#original-post-id').val(postId);
-                            $('#target-blog-id').val(targetBlogId);
-
-                            // Calculate initial score
-                            updateSeoScore();
-
-                            // Show modal
                             $('#localize-modal, #modal-overlay').fadeIn();
-                            statusSpan.text('✅ Ready to review');
-                        } else {
-                            statusSpan.text('❌ ' + response.data);
+                    
+                            // Reset fields and maybe fetch existing translations if needed
+                            // For now, simpler empty state is fine or fetch logic
+                        });
+
+                        // Close Modal
+                        $('#close-modal-btn, .cancel-btn, #modal-overlay').on('click', function() {
+                            $('#localize-modal, #modal-overlay').fadeOut();
+                        });
+
+                        // GENERATE SINGLE Logic
+                        $('.generate-single-btn').on('click', function() {
+                            const lang = $(this).data('lang');
+                            generateContent(lang);
+                        });
+
+                        // GENERATE ALL Logic
+                        $('#generate-all-btn').on('click', function() {
+                            // Trigger sequential generation
+                            let index = 0;
+                            function next() {
+                                if (index < languages.length) {
+                                    generateContent(languages[index], next);
+                                    index++;
+                                } else {
+                                    $('#global-status').text('✅ All languages generated!');
+                                }
+                            }
+                            next();
+                        });
+
+                        function generateContent(lang, callback = null) {
+                            const postId = $('#original-post-id').val();
+                            const statusIndicator = $('.status-indicator-' + lang);
+                    
+                            statusIndicator.text('🔄');
+                            $('#global-status').text('Generating for ' + lang.toUpperCase() + '...');
+
+                            $.post(ajaxurl, {
+                                action: 'iptv_generate_localized_content',
+                                nonce: nonce,
+                                post_id: postId,
+                                target_lang: lang
+                            }).done(function(response) {
+                                if (response.success) {
+                                    const data = response.data;
+                                    $('#focus-keyword-' + lang).val(data.focus_keyword || '').trigger('input');
+                                    $('#meta-title-' + lang).val(data.meta_title || '').trigger('input');
+                                    $('#meta-description-' + lang).val(data.meta_description || '').trigger('input');
+                                    $('#post-title-' + lang).val(data.title || '');
+                                    $('#post-content-' + lang).val(data.content || '').trigger('input');
+                            
+                                    statusIndicator.text('✅');
+                                } else {
+                                    statusIndicator.text('❌');
+                                    alert('Error ' + lang + ': ' + response.data);
+                                }
+                                if (callback) callback();
+                            }).fail(function() {
+                                statusIndicator.text('❌');
+                                if (callback) callback();
+                            });
                         }
-                        btn.prop('disabled', false);
-                    }).fail(function (xhr) {
-                        statusSpan.text('❌ Error: ' + xhr.responseText);
-                        btn.prop('disabled', false);
-                    });
-                });
 
-                // Close modal
-                $('#close-modal-btn, #modal-overlay').on('click', function () {
-                    $('#localize-modal, #modal-overlay').fadeOut();
-                });
+                        // PUBLISH ALL Logic
+                        $('#publish-all-btn').on('click', function() {
+                            const postId = $('#original-post-id').val();
+                            if(!confirm('Publish all valid content to subsites?')) return;
 
-                // Publish button
-                $('#publish-btn').on('click', function () {
-                    const btn = $(this);
-                    const status = $('#publish-status');
+                            let index = 0;
+                            function nextPublish() {
+                                if (index < languages.length) {
+                                    const lang = languages[index];
+                                    // Check if content exists before publishing
+                                    if ($('#post-title-' + lang).val()) {
+                                        publishContent(lang, postId, nextPublish);
+                                    } else {
+                                        nextPublish(); // Skip empty
+                                    }
+                                    index++;
+                                } else {
+                                    $('#global-status').text('🚀 All Checked Content Published!');
+                                    setTimeout(() => { $('#localize-modal, #modal-overlay').fadeOut(); }, 2000);
+                                }
+                            }
+                            nextPublish();
+                        });
 
-                    btn.prop('disabled', true);
-                    status.text('🔄 Publishing...');
-
-                    $.post(ajaxurl, {
-                        action: 'iptv_publish_localized_post',
-                        nonce: nonce,
-                        original_post_id: $('#original-post-id').val(),
-                        target_blog_id: $('#target-blog-id').val(),
-                        post_title: $('#post-title').val(),
-                        post_content: $('#post-content').val(),
-                        focus_keyword: $('#focus-keyword').val(),
-                        meta_title: $('#meta-title').val(),
-                        meta_description: $('#meta-description').val()
-                    }).done(function (response) {
-                        if (response.success) {
-                            status.text('✅ ' + response.data.message);
-                            setTimeout(function () {
-                                $('#localize-modal, #modal-overlay').fadeOut();
-                            }, 2000);
-                        } else {
-                            status.text('❌ ' + response.data);
+                        function publishContent(lang, originalPostId, callback) {
+                            $('#global-status').text('Publishing ' + lang.toUpperCase() + '...');
+                            const blogId = $('#target-blog-id-' + lang).val();
+                    
+                            $.post(ajaxurl, {
+                                action: 'iptv_publish_localized_post',
+                                nonce: nonce,
+                                original_post_id: originalPostId,
+                                target_blog_id: blogId,
+                                post_title: $('#post-title-' + lang).val(),
+                                post_content: $('#post-content-' + lang).val(),
+                                focus_keyword: $('#focus-keyword-' + lang).val(),
+                                meta_title: $('#meta-title-' + lang).val(),
+                                meta_description: $('#meta-description-' + lang).val()
+                            }).done(function() {
+                                if (callback) callback();
+                            });
                         }
-                        btn.prop('disabled', false);
-                    }).fail(function (xhr) {
-                        status.text('❌ Error');
-                        btn.prop('disabled', false);
                     });
-                });
-            });
-        </script>
-        <?php
+                </script>
+                <?php
     }
 
     /**
