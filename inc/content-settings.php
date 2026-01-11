@@ -388,20 +388,28 @@ class IPTV_Content_Settings
             wp_send_json_error('OpenAI API key not configured');
         }
 
+        // Determine token parameter based on model
+        // GPT-5 and o1/preview models use max_completion_tokens
+        $token_param = (strpos($model, 'gpt-5') !== false || strpos($model, 'o1-') !== false) 
+            ? 'max_completion_tokens' 
+            : 'max_tokens';
+
+        $body_args = array(
+            'model' => $model,
+            'messages' => array(
+                array('role' => 'user', 'content' => $prompt)
+            ),
+            'temperature' => 0.7,
+        );
+        $body_args[$token_param] = 100000; // Maximum token limit
+
         $response = wp_remote_post('https://api.openai.com/v1/chat/completions', array(
             'timeout' => 120,
             'headers' => array(
                 'Authorization' => 'Bearer ' . $api_key,
                 'Content-Type' => 'application/json',
             ),
-            'body' => json_encode(array(
-                'model' => $model,
-                'messages' => array(
-                    array('role' => 'user', 'content' => $prompt)
-                ),
-                'temperature' => 0.7,
-                'max_tokens' => 100000, // Maximum token limit
-            )),
+            'body' => json_encode($body_args),
         ));
 
         if (is_wp_error($response)) {
@@ -410,8 +418,16 @@ class IPTV_Content_Settings
 
         $body = json_decode(wp_remote_retrieve_body($response), true);
 
+        // Check for API errors
+        if (isset($body['error'])) {
+            $error_msg = isset($body['error']['message']) ? $body['error']['message'] : 'Unknown OpenAI error';
+            wp_send_json_error('OpenAI Error: ' . $error_msg);
+        }
+
         if (!isset($body['choices'][0]['message']['content'])) {
-            wp_send_json_error('Invalid OpenAI response');
+            // Log full response for debugging
+            error_log('OpenAI Critical Error: ' . print_r($body, true));
+            wp_send_json_error('Invalid structure. Raw response: ' . substr(json_encode($body), 0, 300));
         }
 
         $result = trim($body['choices'][0]['message']['content']);
