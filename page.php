@@ -17,6 +17,7 @@
     <?php wp_head(); ?>
     <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/front-page/css/variables.css">
     <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/front-page/css/header.css">
+    <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/front-page/css/footer.css">
 </head>
 
 <body <?php body_class(); ?>>
