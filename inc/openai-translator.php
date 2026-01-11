@@ -35,6 +35,7 @@ class Theme_OpenAI_Translator
      */
     private $available_models = array(
         'gpt-5-nano' => 'GPT-5 Nano (Fastest, Cheapest)',
+        'gpt-5-mini' => 'GPT-5 Mini (Fast, Affordable)',
         'gpt-5' => 'GPT-5 (Best Quality)',
         'gpt-4o-mini' => 'GPT-4o Mini (Fast, Affordable)',
         'gpt-4o' => 'GPT-4o (High Quality)',
