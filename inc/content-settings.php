@@ -405,6 +405,15 @@ class IPTV_Content_Settings
             $result = trim($result);
         }
 
+        // Fix control characters and encoding issues
+        // Remove problematic control characters but preserve valid JSON structure
+        $result = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $result);
+
+        // Ensure UTF-8 encoding
+        if (!mb_check_encoding($result, 'UTF-8')) {
+            $result = utf8_encode($result);
+        }
+
         $data = json_decode($result, true);
 
         if (!$data || !isset($data['focus_keyword'])) {
