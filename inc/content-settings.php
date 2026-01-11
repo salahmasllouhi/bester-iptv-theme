@@ -379,13 +379,42 @@ class IPTV_Content_Settings
         }
         $prompt .= "\n}\n";
 
-        // Call OpenAI
+        // Call OpenAI API directly (not translate() which has token limits)
         $translator = new Theme_OpenAI_Translator();
-        $result = $translator->translate($prompt, $target_lang);
+        $api_key = get_option('iptv_openai_api_key');
+        $model = get_option('iptv_openai_model', 'gpt-4o');
 
-        if (!$result) {
-            wp_send_json_error('OpenAI translation failed');
+        if (empty($api_key)) {
+            wp_send_json_error('OpenAI API key not configured');
         }
+
+        $response = wp_remote_post('https://api.openai.com/v1/chat/completions', array(
+            'timeout' => 120,
+            'headers' => array(
+                'Authorization' => 'Bearer ' . $api_key,
+                'Content-Type' => 'application/json',
+            ),
+            'body' => json_encode(array(
+                'model' => $model,
+                'messages' => array(
+                    array('role' => 'user', 'content' => $prompt)
+                ),
+                'temperature' => 0.7,
+                'max_tokens' => 4000, // Increased for full content
+            )),
+        ));
+
+        if (is_wp_error($response)) {
+            wp_send_json_error('OpenAI request failed: ' . $response->get_error_message());
+        }
+
+        $body = json_decode(wp_remote_retrieve_body($response), true);
+        
+        if (!isset($body['choices'][0]['message']['content'])) {
+            wp_send_json_error('Invalid OpenAI response');
+        }
+
+        $result = trim($body['choices'][0]['message']['content']);
 
         // Try to parse JSON from result
         $result = trim($result);
