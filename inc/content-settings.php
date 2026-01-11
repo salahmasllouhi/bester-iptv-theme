@@ -400,7 +400,7 @@ class IPTV_Content_Settings
                     array('role' => 'user', 'content' => $prompt)
                 ),
                 'temperature' => 0.7,
-                'max_tokens' => 16000, // Increased to handle large content (up to 100k available)
+                'max_tokens' => 100000, // Maximum token limit
             )),
         ));
 
@@ -409,7 +409,7 @@ class IPTV_Content_Settings
         }
 
         $body = json_decode(wp_remote_retrieve_body($response), true);
-        
+
         if (!isset($body['choices'][0]['message']['content'])) {
             wp_send_json_error('Invalid OpenAI response');
         }
