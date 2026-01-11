@@ -36,19 +36,16 @@ require_once get_template_directory() . '/inc/geo-redirect.php';
 // SEO Manager disabled - Using Rank Math Pro instead
 // require_once get_template_directory() . '/inc/seo-manager.php';
 
-// Include DeepL Translation Service
-require_once get_template_directory() . '/inc/deepl-translator.php';
-
 // Include OpenAI Translation Service (secure API key in WordPress options)
 require_once get_template_directory() . '/inc/openai-translator.php';
 
-// Include Network Cloner utility (uses DeepL for auto-translation)
+// Include Network Cloner utility
 require_once get_template_directory() . '/inc/network-cloner.php';
 
 // Include Multi-Currency Pricing Settings
 require_once get_template_directory() . '/inc/currency-settings.php';
 
-// Include Front Page Content Settings with DeepL Translation
+// Include Front Page Content Settings with OpenAI Translation
 require_once get_template_directory() . '/inc/content-settings.php';
 
 // Include User Guide Shortcode (displays posts from user-guide category)
