@@ -1272,6 +1272,58 @@ class IPTV_Content_Settings
                     alert('Remove from Network feature coming soon! Selected IDs: ' + selectedIds.join(', '));
                 });
 
+                // Real-time SEO Score Calculator
+                function updateSeoScore() {
+                    let score = 0;
+                    const keyword = $('#focus-keyword').val().toLowerCase();
+                    const title = $('#meta-title').val().toLowerCase();
+                    const desc = $('#meta-description').val().toLowerCase();
+                    const content = $('#post-content').val().toLowerCase();
+                    const slug = $('#post-title').val().toLowerCase().replace(/\s+/g, '-');
+
+                    if (!keyword) {
+                        updateScoreDisplay(0);
+                        return;
+                    }
+
+                    // Basic checks (similar to Rank Math logic)
+                    if (title.includes(keyword)) score += 20;
+                    if (desc.includes(keyword)) score += 20;
+                    if (content.includes(keyword)) score += 20;
+                    if (slug.includes(keyword)) score += 10;
+                    
+                    // Length checks
+                    if (title.length >= 40 && title.length <= 60) score += 10;
+                    if (desc.length >= 120 && desc.length <= 160) score += 10;
+                    if (content.split(' ').length > 300) score += 10;
+
+                    updateScoreDisplay(score);
+                }
+
+                function updateScoreDisplay(score) {
+                    $('#seo-score-value').text(score);
+                    
+                    // Update color based on score
+                    let color = '#dc2626'; // Red
+                    let label = 'Poor';
+                    if (score >= 50 && score < 80) {
+                        color = '#d97706'; // Orange
+                        label = 'Fair';
+                    } else if (score >= 80) {
+                        color = '#10b981'; // Green
+                        label = 'Good';
+                    }
+
+                    $('#seo-score-circle').css({
+                        'background': `conic-gradient(${color} ${score * 3.6}deg, #e5e7eb ${score * 3.6}deg)`,
+                        'color': color
+                    });
+                    $('#seo-score-text').text('SEO Score: ' + label).css('color', color);
+                }
+
+                // Trigger calculator on any input change
+                $('#focus-keyword, #meta-title, #meta-description, #post-content, #post-title').on('input', updateSeoScore);
+
                 // Localize button click
                 $('.localize-btn').on('click', function () {
                     const btn = $(this);
@@ -1299,6 +1351,9 @@ class IPTV_Content_Settings
                             $('#post-content').val(response.data.content || '');
                             $('#original-post-id').val(postId);
                             $('#target-blog-id').val(targetBlogId);
+
+                            // Calculate initial score
+                            updateSeoScore();
 
                             // Show modal
                             $('#localize-modal, #modal-overlay').fadeIn();
