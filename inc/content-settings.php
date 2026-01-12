@@ -1,16 +1,21 @@
 <?php
 /**
- * Front Page Content Settings with DeepL Translation
- * 
- * Admin page to manage all front page text content with auto-translation
+ * IPTV Content Settings - Main Class
+ * Manages homepage content and post/page localization
  */
 
+// Prevent direct access
 if (!defined('ABSPATH')) {
     exit;
 }
 
+// Load AJAX handlers trait
+require_once plugin_dir_path(__FILE__) . 'content/ajax-handlers.php';
+
 class IPTV_Content_Settings
 {
+    use IPTV_Content_AJAX_Handlers;
+
     // Supported languages
     private $languages = array(
         'en' => array('name' => 'English', 'flag' => '🇺🇸', 'deepl' => 'EN'),
@@ -191,37 +196,25 @@ class IPTV_Content_Settings
     {
         add_action('admin_menu', array($this, 'add_admin_menu'));
         add_action('admin_init', array($this, 'register_settings'));
+        add_action('admin_enqueue_scripts', array($this, 'enqueue_editor_scripts'));
         add_action('wp_ajax_iptv_translate_content', array($this, 'ajax_translate_content'));
         add_action('wp_ajax_iptv_erase_content', array($this, 'ajax_erase_content'));
         // Post Localizer AJAX handlers
+        add_action('wp_ajax_iptv_get_initial_data', array($this, 'ajax_get_initial_data'));
+        add_action('wp_ajax_iptv_save_localized_content', array($this, 'ajax_save_localized_content'));
         add_action('wp_ajax_iptv_generate_localized_content', array($this, 'ajax_generate_localized_content'));
         add_action('wp_ajax_iptv_publish_localized_post', array($this, 'ajax_publish_localized_post'));
     }
 
-    /**
-     * AJAX handler for erasing content translations
-     */
-    public function ajax_erase_content()
+    public function enqueue_editor_scripts($hook)
     {
-        check_ajax_referer('iptv_content_nonce', 'nonce');
-
-        if (!current_user_can('manage_options')) {
-            wp_send_json_error('Unauthorized');
+        // Only load on our settings page
+        if ($hook !== 'toplevel_page_iptv-content-settings') {
+            return;
         }
 
-        $target_lang = sanitize_text_field($_POST['target_lang']);
-
-        // Get content and remove the target language
-        $content = get_option('iptv_content', array());
-
-        if (isset($content[$target_lang])) {
-            unset($content[$target_lang]);
-            update_option('iptv_content', $content);
-        }
-
-        wp_send_json_success(array(
-            'message' => 'All ' . $this->languages[$target_lang]['name'] . ' translations erased'
-        ));
+        // Enqueue WordPress editor (TinyMCE)
+        wp_enqueue_editor();
     }
 
     public function add_admin_menu()
@@ -242,381 +235,6 @@ class IPTV_Content_Settings
         register_setting('iptv_content_settings', 'iptv_content');
     }
 
-    /**
-     * AJAX handler for DeepL translation
-     */
-    public function ajax_translate_content()
-    {
-        check_ajax_referer('iptv_content_nonce', 'nonce');
-
-        if (!current_user_can('manage_options')) {
-            wp_send_json_error('Unauthorized');
-        }
-
-        $target_lang = sanitize_text_field($_POST['target_lang']);
-        $deepl_code = $this->languages[$target_lang]['deepl'] ?? 'EN';
-
-        // Get English content - use defaults if no saved content
-        $content = get_option('iptv_content', array());
-        $english_content = $content['en'] ?? array();
-
-        // Build English content from saved values or defaults
-        $english_to_translate = array();
-        foreach ($this->content_fields as $section_key => $section) {
-            foreach ($section['fields'] as $field_key => $field) {
-                $english_to_translate[$field_key] = !empty($english_content[$field_key])
-                    ? $english_content[$field_key]
-                    : $field['default'];
-            }
-        }
-
-        if (empty($english_to_translate)) {
-            wp_send_json_error('No content to translate');
-        }
-
-        // Get OpenAI translator (uses secure API key from WordPress options)
-        $translator = get_openai_translator();
-        if (!$translator || !$translator->is_configured()) {
-            wp_send_json_error('OpenAI API not configured. Go to Settings → 🤖 OpenAI API to add your API key.');
-        }
-
-        // Get target language name for OpenAI
-        $target_language = $translator->get_target_language($target_lang);
-
-        // Translate all fields using OpenAI
-        $translated = array();
-        foreach ($english_to_translate as $field_key => $english_text) {
-            if (!empty($english_text)) {
-                // First translate with OpenAI (strict translation, no extra words)
-                $translation = $translator->translate($english_text, $target_language, 'English');
-
-                // Then apply glossary overrides for exact matches (if needed)
-                if (isset($this->glossary[$target_lang][$english_text])) {
-                    $translation = $this->glossary[$target_lang][$english_text];
-                }
-
-                $translated[$field_key] = $translation;
-            }
-        }
-
-        // Save translated content
-        $content[$target_lang] = $translated;
-        update_option('iptv_content', $content);
-
-        wp_send_json_success(array(
-            'message' => 'Translated to ' . $this->languages[$target_lang]['name'],
-            'content' => $translated
-        ));
-    }
-
-    /**
-     * AJAX handler for generating localized content with OpenAI
-     */
-    public function ajax_generate_localized_content()
-    {
-        check_ajax_referer('iptv_localizer_nonce', 'nonce');
-
-        if (!current_user_can('manage_options')) {
-            wp_send_json_error('Unauthorized');
-        }
-
-        $post_id = intval($_POST['post_id']);
-        $target_lang = sanitize_text_field($_POST['target_lang']);
-
-        // Get original post
-        $post = get_post($post_id);
-        if (!$post) {
-            wp_send_json_error('Post not found');
-        }
-
-        // Language mapping
-        $lang_map = array(
-            'sv' => 'Swedish',
-            'no' => 'Norwegian',
-            'da' => 'Danish',
-            'fi' => 'Finnish',
-            'is' => 'Icelandic'
-        );
-
-        $target_language = isset($lang_map[$target_lang]) ? $lang_map[$target_lang] : 'English';
-
-        // Get featured image and alt text
-        $featured_image_id = get_post_thumbnail_id($post_id);
-        $featured_image_url = '';
-        $featured_image_alt = '';
-
-        if ($featured_image_id) {
-            $featured_image_url = wp_get_attachment_url($featured_image_id);
-            $featured_image_alt = get_post_meta($featured_image_id, '_wp_attachment_image_alt', true);
-        }
-
-        // Build prompt for OpenAI
-        $prompt = "Localize this content to $target_language with SEO optimization.\n\n";
-        $prompt .= "Original:\n";
-        $prompt .= "Title: " . $post->post_title . "\n";
-        $prompt .= "Content: " . wp_strip_all_tags($post->post_content) . "\n";
-        if ($featured_image_alt) {
-            $prompt .= "Image Alt: " . $featured_image_alt . "\n";
-        }
-
-        $prompt .= "\nGenerate a native $target_language focus keyword (not just a translation).\n";
-        $prompt .= "Rewrite the content and SEO metadata for $target_language audience.\n\n";
-
-        $prompt .= "Return as JSON:\n";
-        $prompt .= "{\n";
-        $prompt .= '  "focus_keyword": "...",';
-        $prompt .= "\n";
-        $prompt .= '  "title": "...",';
-        $prompt .= "\n";
-        $prompt .= '  "content": "...",';
-        $prompt .= "\n";
-        $prompt .= '  "meta_title": "...",';
-        $prompt .= "\n";
-        $prompt .= '  "meta_description": "..."';
-        if ($featured_image_alt) {
-            $prompt .= ",\n";
-            $prompt .= '  "image_alt": "..."';
-        }
-        $prompt .= "\n}\n";
-
-        // Call OpenAI API directly (not translate() which has token limits)
-        $translator = new Theme_OpenAI_Translator();
-        $api_key = get_option('openai_api_key');
-        $model = get_option('openai_model', 'gpt-4o-mini');
-
-        if (empty($api_key)) {
-            wp_send_json_error('OpenAI API key not configured');
-        }
-
-        // Determine token parameter based on model
-        // GPT-5 and o1/preview models use max_completion_tokens
-        $token_param = (strpos($model, 'gpt-5') !== false || strpos($model, 'o1-') !== false)
-            ? 'max_completion_tokens'
-            : 'max_tokens';
-
-        $body_args = array(
-            'model' => $model,
-            'messages' => array(
-                array('role' => 'user', 'content' => $prompt)
-            ),
-            'temperature' => (strpos($model, 'gpt-5') !== false || strpos($model, 'o1-') !== false) ? 1.0 : 0.7,
-        );
-        $body_args[$token_param] = 100000; // Maximum token limit
-
-        $response = wp_remote_post('https://api.openai.com/v1/chat/completions', array(
-            'timeout' => 120,
-            'headers' => array(
-                'Authorization' => 'Bearer ' . $api_key,
-                'Content-Type' => 'application/json',
-            ),
-            'body' => json_encode($body_args),
-        ));
-
-        if (is_wp_error($response)) {
-            wp_send_json_error('OpenAI request failed: ' . $response->get_error_message());
-        }
-
-        $body = json_decode(wp_remote_retrieve_body($response), true);
-
-        // Check for API errors
-        if (isset($body['error'])) {
-            $error_msg = isset($body['error']['message']) ? $body['error']['message'] : 'Unknown OpenAI error';
-            wp_send_json_error('OpenAI Error: ' . $error_msg);
-        }
-
-        if (!isset($body['choices'][0]['message']['content'])) {
-            // Log full response for debugging
-            error_log('OpenAI Critical Error: ' . print_r($body, true));
-            wp_send_json_error('Invalid structure. Raw response: ' . substr(json_encode($body), 0, 300));
-        }
-
-        $result = trim($body['choices'][0]['message']['content']);
-
-        // Try to parse JSON from result
-        $result = trim($result);
-
-        // Remove markdown code blocks if present (be more aggressive)
-        if (strpos($result, '```') !== false) {
-            // Remove ```json and ``` markers
-            $result = preg_replace('/^```json\s*/s', '', $result);
-            $result = preg_replace('/^```\s*/s', '', $result);
-            $result = preg_replace('/\s*```$/s', '', $result);
-            $result = trim($result);
-        }
-
-        // Fix control characters and encoding issues
-        // Remove problematic control characters but preserve valid JSON structure
-        $result = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $result);
-
-        // Ensure UTF-8 encoding
-        if (!mb_check_encoding($result, 'UTF-8')) {
-            $result = utf8_encode($result);
-        }
-
-        $data = json_decode($result, true);
-
-        if (!$data || !isset($data['focus_keyword'])) {
-            // Enhanced debugging
-            $error_msg = 'Failed to parse OpenAI response. ';
-            $error_msg .= 'JSON Error: ' . json_last_error_msg() . '. ';
-            $error_msg .= 'Length: ' . strlen($result) . '. ';
-            $error_msg .= 'First 300 chars: ' . substr($result, 0, 300);
-            wp_send_json_error($error_msg);
-        }
-
-        // Add featured image info to response
-        if ($featured_image_id) {
-            $data['featured_image_url'] = $featured_image_url;
-            $data['featured_image_id'] = $featured_image_id;
-        }
-
-        wp_send_json_success($data);
-    }
-
-    /**
-     * AJAX handler for publishing localized post to subsite
-     */
-    public function ajax_publish_localized_post()
-    {
-        check_ajax_referer('iptv_localizer_nonce', 'nonce');
-
-        if (!current_user_can('manage_options')) {
-            wp_send_json_error('Unauthorized');
-        }
-
-        $original_post_id = intval($_POST['original_post_id']);
-        $target_blog_id = intval($_POST['target_blog_id']);
-        $post_title = sanitize_text_field($_POST['post_title']);
-        $post_content = wp_kses_post($_POST['post_content']);
-        $focus_keyword = sanitize_text_field($_POST['focus_keyword']);
-        $meta_title = sanitize_text_field($_POST['meta_title']);
-        $meta_description = sanitize_textarea_field($_POST['meta_description']);
-        $image_alt = isset($_POST['image_alt']) ? sanitize_text_field($_POST['image_alt']) : '';
-        $featured_image_id = isset($_POST['featured_image_id']) ? intval($_POST['featured_image_id']) : 0;
-
-        // Get original post type
-        $original_post = get_post($original_post_id);
-        if (!$original_post) {
-            wp_send_json_error('Original post not found');
-        }
-
-        // Switch to target blog
-        if (is_multisite()) {
-            switch_to_blog($target_blog_id);
-        }
-
-        // Check if post already exists (by meta)
-        $existing_query = new WP_Query(array(
-            'post_type' => $original_post->post_type,
-            'meta_key' => '_localized_from_post',
-            'meta_value' => $original_post_id,
-            'posts_per_page' => 1
-        ));
-
-        if ($existing_query->have_posts()) {
-            // Update existing post
-            $existing_post = $existing_query->posts[0];
-            $new_post_id = wp_update_post(array(
-                'ID' => $existing_post->ID,
-                'post_title' => $post_title,
-                'post_content' => $post_content
-            ));
-        } else {
-            // Create new post
-            $new_post_id = wp_insert_post(array(
-                'post_title' => $post_title,
-                'post_content' => $post_content,
-                'post_status' => 'publish',
-                'post_type' => $original_post->post_type
-            ));
-        }
-
-        if (is_wp_error($new_post_id) || !$new_post_id) {
-            if (is_multisite()) {
-                restore_current_blog();
-            }
-            wp_send_json_error('Failed to create post');
-        }
-
-        // Copy featured image to target subsite
-        if ($featured_image_id) {
-            // Switch back to main blog to get image
-            if (is_multisite()) {
-                restore_current_blog();
-                switch_to_blog(1); // Main site
-            }
-
-            $image_url = wp_get_attachment_url($featured_image_id);
-            $image_path = get_attached_file($featured_image_id);
-
-            if ($image_path && file_exists($image_path)) {
-                // Switch to target blog
-                if (is_multisite()) {
-                    restore_current_blog();
-                    switch_to_blog($target_blog_id);
-                }
-
-                // Upload image to target site's media library
-                require_once(ABSPATH . 'wp-admin/includes/file.php');
-                require_once(ABSPATH . 'wp-admin/includes/media.php');
-                require_once(ABSPATH . 'wp-admin/includes/image.php');
-
-                $upload_file = wp_upload_bits(basename($image_path), null, file_get_contents($image_path));
-
-                if (!$upload_file['error']) {
-                    $wp_filetype = wp_check_filetype($upload_file['file'], null);
-
-                    $attachment_data = array(
-                        'post_mime_type' => $wp_filetype['type'],
-                        'post_title' => sanitize_file_name(pathinfo($upload_file['file'], PATHINFO_FILENAME)),
-                        'post_content' => '',
-                        'post_status' => 'inherit'
-                    );
-
-                    $attach_id = wp_insert_attachment($attachment_data, $upload_file['file']);
-
-                    if ($attach_id) {
-                        // Generate attachment metadata
-                        $attach_data = wp_generate_attachment_metadata($attach_id, $upload_file['file']);
-                        wp_update_attachment_metadata($attach_id, $attach_data);
-
-                        // Set localized alt text
-                        if ($image_alt) {
-                            update_post_meta($attach_id, '_wp_attachment_image_alt', $image_alt);
-                        }
-
-                        // Set as featured image
-                        set_post_thumbnail($new_post_id, $attach_id);
-                    }
-                }
-            }
-        }
-
-        // Ensure we're on target blog for meta updates
-        if (is_multisite() && get_current_blog_id() != $target_blog_id) {
-            switch_to_blog($target_blog_id);
-        }
-
-        // Add Rank Math meta
-        update_post_meta($new_post_id, 'rank_math_focus_keyword', $focus_keyword);
-        update_post_meta($new_post_id, 'rank_math_title', $meta_title);
-        update_post_meta($new_post_id, 'rank_math_description', $meta_description);
-
-        // Link to original
-        update_post_meta($new_post_id, '_localized_from_post', $original_post_id);
-        update_post_meta($new_post_id, '_localized_from_blog', 1);
-
-        if (is_multisite()) {
-            restore_current_blog();
-        }
-
-        wp_send_json_success(array(
-            'post_id' => $new_post_id,
-            'message' => 'Post published successfully',
-            'edit_link' => admin_url('post.php?post=' . $new_post_id . '&action=edit')
-        ));
-    }
-
     public function render_settings_page()
     {
         // Handle save
@@ -632,268 +250,268 @@ class IPTV_Content_Settings
         $current_lang = isset($_GET['lang']) ? sanitize_text_field($_GET['lang']) : 'en';
         $current_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'homepage';
         ?>
-                <div class="wrap">
-                    <!-- Main Tabs -->
-                    <h1>🌍 Content Localizing</h1>
-                    <div class="nav-tab-wrapper" style="margin-bottom: 20px;">
-                        <a href="?page=iptv-content-settings&tab=homepage"
-                            class="nav-tab <?php echo $current_tab === 'homepage' ? 'nav-tab-active' : ''; ?>">
-                            🏠 Home Page
+        <div class="wrap">
+            <!-- Main Tabs -->
+            <h1>🌍 Content Localizing</h1>
+            <div class="nav-tab-wrapper" style="margin-bottom: 20px;">
+                <a href="?page=iptv-content-settings&tab=homepage"
+                    class="nav-tab <?php echo $current_tab === 'homepage' ? 'nav-tab-active' : ''; ?>">
+                    🏠 Home Page
+                </a>
+                <a href="?page=iptv-content-settings&tab=posts"
+                    class="nav-tab <?php echo $current_tab === 'posts' ? 'nav-tab-active' : ''; ?>">
+                    📝 Posts
+                </a>
+                <a href="?page=iptv-content-settings&tab=pages"
+                    class="nav-tab <?php echo $current_tab === 'pages' ? 'nav-tab-active' : ''; ?>">
+                    📄 Pages
+                </a>
+            </div>
+
+            <?php if ($current_tab === 'posts'): ?>
+                <?php $this->render_posts_localizer_tab(); ?>
+            <?php elseif ($current_tab === 'pages'): ?>
+                <?php $this->render_pages_localizer_tab(); ?>
+            <?php else: ?>
+                <!-- Home Page Content Editor Tab -->
+                <p>Manage all translatable text on your front page. Edit English content, then use OpenAI to auto-translate to other
+                    languages.</p>
+
+                <style>
+                    .lang-tabs {
+                        display: flex;
+                        gap: 5px;
+                        margin: 20px 0 0 0;
+                        border-bottom: 2px solid #2271b1;
+                    }
+
+                    .lang-tab {
+                        padding: 10px 20px;
+                        background: #f0f0f1;
+                        border: 1px solid #ddd;
+                        border-bottom: none;
+                        cursor: pointer;
+                        border-radius: 5px 5px 0 0;
+                        text-decoration: none;
+                        color: #1d2327;
+                    }
+
+                    .lang-tab.active {
+                        background: #2271b1;
+                        color: #fff;
+                        border-color: #2271b1;
+                    }
+
+                    .lang-tab:hover {
+                        background: #ddd;
+                    }
+
+                    .lang-tab.active:hover {
+                        background: #2271b1;
+                    }
+
+                    .content-section {
+                        background: #fff;
+                        padding: 20px;
+                        border: 1px solid #ddd;
+                        margin-bottom: 20px;
+                        border-radius: 8px;
+                    }
+
+                    .content-section h2 {
+                        margin-top: 0;
+                        border-bottom: 1px solid #eee;
+                        padding-bottom: 10px;
+                    }
+
+                    .field-row {
+                        margin-bottom: 15px;
+                    }
+
+                    .field-row label {
+                        display: block;
+                        font-weight: 600;
+                        margin-bottom: 5px;
+                    }
+
+                    .field-row input[type="text"] {
+                        width: 100%;
+                        padding: 8px;
+                    }
+
+                    .field-row textarea {
+                        width: 100%;
+                        height: 80px;
+                        padding: 8px;
+                    }
+
+                    .translate-btn {
+                        background: #0066cc;
+                        color: #fff;
+                        padding: 10px 20px;
+                        border: none;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        margin: 10px 0;
+                    }
+
+                    .translate-btn:hover {
+                        background: #0052a3;
+                    }
+
+                    .translate-btn:disabled {
+                        background: #ccc;
+                        cursor: not-allowed;
+                    }
+
+                    .translate-status {
+                        margin-left: 15px;
+                        font-style: italic;
+                    }
+                </style>
+
+                <!-- Language Tabs -->
+                <div class="lang-tabs">
+                    <?php foreach ($this->languages as $lang_key => $lang): ?>
+                        <a href="?page=iptv-content-settings&lang=<?php echo $lang_key; ?>"
+                            class="lang-tab <?php echo $current_lang === $lang_key ? 'active' : ''; ?>">
+                            <?php echo $lang['flag'] . ' ' . $lang['name']; ?>
                         </a>
-                        <a href="?page=iptv-content-settings&tab=posts"
-                            class="nav-tab <?php echo $current_tab === 'posts' ? 'nav-tab-active' : ''; ?>">
-                            📝 Posts
-                        </a>
-                        <a href="?page=iptv-content-settings&tab=pages"
-                            class="nav-tab <?php echo $current_tab === 'pages' ? 'nav-tab-active' : ''; ?>">
-                            📄 Pages
-                        </a>
-                    </div>
-
-                    <?php if ($current_tab === 'posts'): ?>
-                            <?php $this->render_posts_localizer_tab(); ?>
-                    <?php elseif ($current_tab === 'pages'): ?>
-                            <?php $this->render_pages_localizer_tab(); ?>
-                    <?php else: ?>
-                            <!-- Home Page Content Editor Tab -->
-                            <p>Manage all translatable text on your front page. Edit English content, then use OpenAI to auto-translate to other
-                                languages.</p>
-
-                            <style>
-                                .lang-tabs {
-                                    display: flex;
-                                    gap: 5px;
-                                    margin: 20px 0 0 0;
-                                    border-bottom: 2px solid #2271b1;
-                                }
-
-                                .lang-tab {
-                                    padding: 10px 20px;
-                                    background: #f0f0f1;
-                                    border: 1px solid #ddd;
-                                    border-bottom: none;
-                                    cursor: pointer;
-                                    border-radius: 5px 5px 0 0;
-                                    text-decoration: none;
-                                    color: #1d2327;
-                                }
-
-                                .lang-tab.active {
-                                    background: #2271b1;
-                                    color: #fff;
-                                    border-color: #2271b1;
-                                }
-
-                                .lang-tab:hover {
-                                    background: #ddd;
-                                }
-
-                                .lang-tab.active:hover {
-                                    background: #2271b1;
-                                }
-
-                                .content-section {
-                                    background: #fff;
-                                    padding: 20px;
-                                    border: 1px solid #ddd;
-                                    margin-bottom: 20px;
-                                    border-radius: 8px;
-                                }
-
-                                .content-section h2 {
-                                    margin-top: 0;
-                                    border-bottom: 1px solid #eee;
-                                    padding-bottom: 10px;
-                                }
-
-                                .field-row {
-                                    margin-bottom: 15px;
-                                }
-
-                                .field-row label {
-                                    display: block;
-                                    font-weight: 600;
-                                    margin-bottom: 5px;
-                                }
-
-                                .field-row input[type="text"] {
-                                    width: 100%;
-                                    padding: 8px;
-                                }
-
-                                .field-row textarea {
-                                    width: 100%;
-                                    height: 80px;
-                                    padding: 8px;
-                                }
-
-                                .translate-btn {
-                                    background: #0066cc;
-                                    color: #fff;
-                                    padding: 10px 20px;
-                                    border: none;
-                                    border-radius: 5px;
-                                    cursor: pointer;
-                                    margin: 10px 0;
-                                }
-
-                                .translate-btn:hover {
-                                    background: #0052a3;
-                                }
-
-                                .translate-btn:disabled {
-                                    background: #ccc;
-                                    cursor: not-allowed;
-                                }
-
-                                .translate-status {
-                                    margin-left: 15px;
-                                    font-style: italic;
-                                }
-                            </style>
-
-                            <!-- Language Tabs -->
-                            <div class="lang-tabs">
-                                <?php foreach ($this->languages as $lang_key => $lang): ?>
-                                        <a href="?page=iptv-content-settings&lang=<?php echo $lang_key; ?>"
-                                            class="lang-tab <?php echo $current_lang === $lang_key ? 'active' : ''; ?>">
-                                            <?php echo $lang['flag'] . ' ' . $lang['name']; ?>
-                                        </a>
-                                <?php endforeach; ?>
-                            </div>
-
-                            <form method="post" id="content-form">
-                                <?php wp_nonce_field('iptv_content_nonce'); ?>
-                                <input type="hidden" name="current_lang" value="<?php echo esc_attr($current_lang); ?>">
-
-                                <?php if ($current_lang !== 'en'): ?>
-                                        <div style="background: #e8f4fd; padding: 15px; border-radius: 5px; margin: 20px 0; border: 1px solid #b8daff;">
-                                            <strong>🤖 Auto-Translate from English</strong><br>
-                                            <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
-                                                <button type="button" class="translate-btn" id="translate-btn" data-lang="<?php echo $current_lang; ?>">
-                                                    Translate All to <?php echo $this->languages[$current_lang]['name']; ?> with OpenAI
-                                                </button>
-                                                <button type="button" class="translate-btn" id="erase-btn" data-lang="<?php echo $current_lang; ?>"
-                                                    style="background: #dc3545;">
-                                                    🗑️ Erase All <?php echo $this->languages[$current_lang]['name']; ?> Translations
-                                                </button>
-                                            </div>
-                                            <span class="translate-status" id="translate-status"></span>
-                                        </div>
-                                <?php endif; ?>
-
-                                <?php foreach ($this->content_fields as $section_key => $section): ?>
-                                        <div class="content-section">
-                                            <h2>
-                                                <?php echo $section['label']; ?>
-                                            </h2>
-                                            <?php foreach ($section['fields'] as $field_key => $field):
-                                                $value = $content[$current_lang][$field_key] ?? ($current_lang === 'en' ? $field['default'] : '');
-                                                ?>
-                                                    <div class="field-row">
-                                                        <label for="<?php echo $field_key; ?>">
-                                                            <?php echo $field['label']; ?>
-                                                        </label>
-                                                        <?php if ($field['type'] === 'textarea'): ?>
-                                                                <textarea name="iptv_content[<?php echo $field_key; ?>]"
-                                                                    id="<?php echo $field_key; ?>"><?php echo esc_textarea($value); ?></textarea>
-                                                        <?php else: ?>
-                                                                <input type="text" name="iptv_content[<?php echo $field_key; ?>]" id="<?php echo $field_key; ?>"
-                                                                    value="<?php echo esc_attr($value); ?>">
-                                                        <?php endif; ?>
-                                                    </div>
-                                            <?php endforeach; ?>
-                                        </div>
-                                <?php endforeach; ?>
-
-                                <p>
-                                    <button type="submit" class="button button-primary button-large">Save Changes</button>
-                                </p>
-                            </form>
-                        </div>
-
-                        <script>
-                            document.getElementById('translate-btn')?.addEventListener('click', function () {
-                                const btn = this;
-                                const status = document.getElementById('translate-status');
-                                const lang = btn.dataset.lang;
-
-                                btn.disabled = true;
-                                status.textContent = 'Translating...';
-
-                                fetch(ajaxurl, {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                                    body: new URLSearchParams({
-                                        action: 'iptv_translate_content',
-                                        nonce: '<?php echo wp_create_nonce('iptv_content_nonce'); ?>',
-                                        target_lang: lang
-                                    })
-                                })
-                                    .then(r => r.json())
-                                    .then(data => {
-                                        if (data.success) {
-                                            status.textContent = '✅ ' + data.data.message;
-                                            // Update form fields with translated content
-                                            for (const [key, value] of Object.entries(data.data.content)) {
-                                                const field = document.getElementById(key);
-                                                if (field) field.value = value;
-                                            }
-                                        } else {
-                                            status.textContent = '❌ ' + data.data;
-                                        }
-                                        btn.disabled = false;
-                                    })
-                                    .catch(err => {
-                                        status.textContent = '❌ Error: ' + err.message;
-                                        btn.disabled = false;
-                                    });
-                            });
-
-                            // Erase button handler
-                            document.getElementById('erase-btn')?.addEventListener('click', function () {
-                                const btn = this;
-                                const status = document.getElementById('translate-status');
-                                const lang = btn.dataset.lang;
-
-                                if (!confirm('Are you sure you want to erase all ' + lang.toUpperCase() + ' translations? This cannot be undone.')) {
-                                    return;
-                                }
-
-                                btn.disabled = true;
-                                status.textContent = 'Erasing...';
-
-                                fetch(ajaxurl, {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                                    body: new URLSearchParams({
-                                        action: 'iptv_erase_content',
-                                        nonce: '<?php echo wp_create_nonce('iptv_content_nonce'); ?>',
-                                        target_lang: lang
-                                    })
-                                })
-                                    .then(r => r.json())
-                                    .then(data => {
-                                        if (data.success) {
-                                            status.textContent = '✅ ' + data.data.message;
-                                            // Clear all form fields
-                                            document.querySelectorAll('#content-form input[type="text"], #content-form textarea').forEach(field => {
-                                                field.value = '';
-                                            });
-                                        } else {
-                                            status.textContent = '❌ ' + data.data;
-                                        }
-                                        btn.disabled = false;
-                                    })
-                                    .catch(err => {
-                                        status.textContent = '❌ Error: ' + err.message;
-                                        btn.disabled = false;
-                                    });
-                            });
-                        </script>
-                <?php endif; // End of tab conditional ?>
+                    <?php endforeach; ?>
                 </div>
-                <?php
+
+                <form method="post" id="content-form">
+                    <?php wp_nonce_field('iptv_content_nonce'); ?>
+                    <input type="hidden" name="current_lang" value="<?php echo esc_attr($current_lang); ?>">
+
+                    <?php if ($current_lang !== 'en'): ?>
+                        <div style="background: #e8f4fd; padding: 15px; border-radius: 5px; margin: 20px 0; border: 1px solid #b8daff;">
+                            <strong>🤖 Auto-Translate from English</strong><br>
+                            <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
+                                <button type="button" class="translate-btn" id="translate-btn" data-lang="<?php echo $current_lang; ?>">
+                                    Translate All to <?php echo $this->languages[$current_lang]['name']; ?> with OpenAI
+                                </button>
+                                <button type="button" class="translate-btn" id="erase-btn" data-lang="<?php echo $current_lang; ?>"
+                                    style="background: #dc3545;">
+                                    🗑️ Erase All <?php echo $this->languages[$current_lang]['name']; ?> Translations
+                                </button>
+                            </div>
+                            <span class="translate-status" id="translate-status"></span>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php foreach ($this->content_fields as $section_key => $section): ?>
+                        <div class="content-section">
+                            <h2>
+                                <?php echo $section['label']; ?>
+                            </h2>
+                            <?php foreach ($section['fields'] as $field_key => $field):
+                                $value = $content[$current_lang][$field_key] ?? ($current_lang === 'en' ? $field['default'] : '');
+                                ?>
+                                <div class="field-row">
+                                    <label for="<?php echo $field_key; ?>">
+                                        <?php echo $field['label']; ?>
+                                    </label>
+                                    <?php if ($field['type'] === 'textarea'): ?>
+                                        <textarea name="iptv_content[<?php echo $field_key; ?>]"
+                                            id="<?php echo $field_key; ?>"><?php echo esc_textarea($value); ?></textarea>
+                                    <?php else: ?>
+                                        <input type="text" name="iptv_content[<?php echo $field_key; ?>]" id="<?php echo $field_key; ?>"
+                                            value="<?php echo esc_attr($value); ?>">
+                                    <?php endif; ?>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endforeach; ?>
+
+                    <p>
+                        <button type="submit" class="button button-primary button-large">Save Changes</button>
+                    </p>
+                </form>
+            </div>
+
+            <script>
+                document.getElementById('translate-btn')?.addEventListener('click', function () {
+                    const btn = this;
+                    const status = document.getElementById('translate-status');
+                    const lang = btn.dataset.lang;
+
+                    btn.disabled = true;
+                    status.textContent = 'Translating...';
+
+                    fetch(ajaxurl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: new URLSearchParams({
+                            action: 'iptv_translate_content',
+                            nonce: '<?php echo wp_create_nonce('iptv_content_nonce'); ?>',
+                            target_lang: lang
+                        })
+                    })
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data.success) {
+                                status.textContent = '✅ ' + data.data.message;
+                                // Update form fields with translated content
+                                for (const [key, value] of Object.entries(data.data.content)) {
+                                    const field = document.getElementById(key);
+                                    if (field) field.value = value;
+                                }
+                            } else {
+                                status.textContent = '❌ ' + data.data;
+                            }
+                            btn.disabled = false;
+                        })
+                        .catch(err => {
+                            status.textContent = '❌ Error: ' + err.message;
+                            btn.disabled = false;
+                        });
+                });
+
+                // Erase button handler
+                document.getElementById('erase-btn')?.addEventListener('click', function () {
+                    const btn = this;
+                    const status = document.getElementById('translate-status');
+                    const lang = btn.dataset.lang;
+
+                    if (!confirm('Are you sure you want to erase all ' + lang.toUpperCase() + ' translations? This cannot be undone.')) {
+                        return;
+                    }
+
+                    btn.disabled = true;
+                    status.textContent = 'Erasing...';
+
+                    fetch(ajaxurl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: new URLSearchParams({
+                            action: 'iptv_erase_content',
+                            nonce: '<?php echo wp_create_nonce('iptv_content_nonce'); ?>',
+                            target_lang: lang
+                        })
+                    })
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data.success) {
+                                status.textContent = '✅ ' + data.data.message;
+                                // Clear all form fields
+                                document.querySelectorAll('#content-form input[type="text"], #content-form textarea').forEach(field => {
+                                    field.value = '';
+                                });
+                            } else {
+                                status.textContent = '❌ ' + data.data;
+                            }
+                            btn.disabled = false;
+                        })
+                        .catch(err => {
+                            status.textContent = '❌ Error: ' + err.message;
+                            btn.disabled = false;
+                        });
+                });
+            </script>
+        <?php endif; // End of tab conditional ?>
+        </div>
+        <?php
     }
 
     /**
@@ -927,58 +545,58 @@ class IPTV_Content_Settings
             6 => array('name' => 'Iceland 🇮🇸', 'lang' => 'is')
         );
         ?>
-                <div class="post-localizer-wrapper">
-                    <p>Localize posts from Main Site to subsites with AI-powered SEO optimization.</p>
+        <div class="post-localizer-wrapper">
+            <p>Localize posts from Main Site to subsites with AI-powered SEO optimization.</p>
 
-                    <div style="margin: 20px 0; background: #f0f0f1; padding: 15px; border-radius: 5px;">
-                        <label><strong>Target Subsite:</strong></label>
-                        <select id="target-subsite" style="padding: 5px 10px; font-size: 14px; margin-left: 10px;">
-                            <?php foreach ($subsites as $blog_id => $site): ?>
-                                    <option value="<?php echo $blog_id; ?>" data-lang="<?php echo $site['lang']; ?>">
-                                        <?php echo $site['name']; ?>
-                                    </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
+            <div style="margin: 20px 0; background: #f0f0f1; padding: 15px; border-radius: 5px;">
+                <label><strong>Target Subsite:</strong></label>
+                <select id="target-subsite" style="padding: 5px 10px; font-size: 14px; margin-left: 10px;">
+                    <?php foreach ($subsites as $blog_id => $site): ?>
+                        <option value="<?php echo $blog_id; ?>" data-lang="<?php echo $site['lang']; ?>">
+                            <?php echo $site['name']; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
 
-                    <!-- Posts Section -->
-                    <div class="content-section">
-                        <div style="margin: 10px 0;">
-                            <button class="button" id="select-all-posts">Select All</button>
-                            <button class="button button-primary" id="clone-posts-to-network">Clone Selected to Network</button>
-                            <button class="button" id="remove-posts-from-network"
-                                style="background: #dc3545; color: white; border-color: #dc3545;">Remove Selected from Network</button>
-                        </div>
-
-                        <table class="wp-list-table widefat fixed striped">
-                            <thead>
-                                <tr>
-                                    <th style="width: 40px;"><input type="checkbox" id="check-all-posts" /></th>
-                                    <th>Title</th>
-                                    <th>Date</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($posts as $post): ?>
-                                        <tr>
-                                            <td><input type="checkbox" class="post-checkbox" value="<?php echo $post->ID; ?>" /></td>
-                                            <td><strong><?php echo esc_html($post->post_title); ?></strong></td>
-                                            <td><?php echo date('Y-m-d', strtotime($post->post_date)); ?></td>
-                                            <td>
-                                                <button class="button button-primary localize-btn" data-post-id="<?php echo $post->ID; ?>">
-                                                    Localize
-                                                </button>
-                                                <span class="localize-status-<?php echo $post->ID; ?>" style="margin-left: 10px;"></span>
-                                            </td>
-                                        </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
+            <!-- Posts Section -->
+            <div class="content-section">
+                <div style="margin: 10px 0;">
+                    <button class="button" id="select-all-posts">Select All</button>
+                    <button class="button button-primary" id="clone-posts-to-network">Clone Selected to Network</button>
+                    <button class="button" id="remove-posts-from-network"
+                        style="background: #dc3545; color: white; border-color: #dc3545;">Remove Selected from Network</button>
                 </div>
-                <?php
-                $this->render_localizer_modal_and_script();
+
+                <table class="wp-list-table widefat fixed striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 40px;"><input type="checkbox" id="check-all-posts" /></th>
+                            <th>Title</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($posts as $post): ?>
+                            <tr>
+                                <td><input type="checkbox" class="post-checkbox" value="<?php echo $post->ID; ?>" /></td>
+                                <td><strong><?php echo esc_html($post->post_title); ?></strong></td>
+                                <td><?php echo date('Y-m-d', strtotime($post->post_date)); ?></td>
+                                <td>
+                                    <button class="button button-primary localize-btn" data-post-id="<?php echo $post->ID; ?>">
+                                        Localize
+                                    </button>
+                                    <span class="localize-status-<?php echo $post->ID; ?>" style="margin-left: 10px;"></span>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <?php
+        $this->render_localizer_modal_and_script();
     }
 
     /**
@@ -1012,63 +630,63 @@ class IPTV_Content_Settings
             6 => array('name' => 'Iceland 🇮🇸', 'lang' => 'is')
         );
         ?>
-                <div class="post-localizer-wrapper">
-                    <p>Localize pages from Main Site to subsites with AI-powered SEO optimization.</p>
+        <div class="post-localizer-wrapper">
+            <p>Localize pages from Main Site to subsites with AI-powered SEO optimization.</p>
 
-                    <div style="margin: 20px 0; background: #f0f0f1; padding: 15px; border-radius: 5px;">
-                        <label><strong>Target Subsite:</strong></label>
-                        <select id="target-subsite" style="padding: 5px 10px; font-size: 14px; margin-left: 10px;">
-                            <?php foreach ($subsites as $blog_id => $site): ?>
-                                    <option value="<?php echo $blog_id; ?>" data-lang="<?php echo $site['lang']; ?>">
-                                        <?php echo $site['name']; ?>
-                                    </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
+            <div style="margin: 20px 0; background: #f0f0f1; padding: 15px; border-radius: 5px;">
+                <label><strong>Target Subsite:</strong></label>
+                <select id="target-subsite" style="padding: 5px 10px; font-size: 14px; margin-left: 10px;">
+                    <?php foreach ($subsites as $blog_id => $site): ?>
+                        <option value="<?php echo $blog_id; ?>" data-lang="<?php echo $site['lang']; ?>">
+                            <?php echo $site['name']; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
 
-                    <!-- Pages Section -->
-                    <div class="content-section">
-                        <div style="margin: 10px 0;">
-                            <button class="button" id="select-all-pages">Select All</button>
-                            <button class="button button-primary" id="clone-pages-to-network">Clone Selected to Network</button>
-                            <button class="button" id="remove-pages-from-network"
-                                style="background: #dc3545; color: white; border-color: #dc3545;">Remove Selected from Network</button>
-                        </div>
-
-                        <table class="wp-list-table widefat fixed striped">
-                            <thead>
-                                <tr>
-                                    <th style="width: 40px;"><input type="checkbox" id="check-all-pages" /></th>
-                                    <th>Title</th>
-                                    <th>Date</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($pages as $page): ?>
-                                        <tr>
-                                            <td><input type="checkbox" class="page-checkbox" value="<?php echo $page->ID; ?>" /></td>
-                                            <td><strong>
-                                                    <?php echo esc_html($page->post_title); ?>
-                                                </strong></td>
-                                            <td>
-                                                <?php echo date('Y-m-d', strtotime($page->post_date)); ?>
-                                            </td>
-                                            <td>
-                                                <button class="button button-primary localize-btn" data-post-id="<?php echo $page->ID; ?>">
-                                                    Localize
-                                                </button>
-                                                <span class="localize-status-<?php echo $page->ID; ?>" style="margin-left: 10px;"></span>
-                                            </td>
-                                        </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
+            <!-- Pages Section -->
+            <div class="content-section">
+                <div style="margin: 10px 0;">
+                    <button class="button" id="select-all-pages">Select All</button>
+                    <button class="button button-primary" id="clone-pages-to-network">Clone Selected to Network</button>
+                    <button class="button" id="remove-pages-from-network"
+                        style="background: #dc3545; color: white; border-color: #dc3545;">Remove Selected from Network</button>
                 </div>
-                <?php
-                $this->render_localizer_modal();
-                $this->render_localizer_script();
+
+                <table class="wp-list-table widefat fixed striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 40px;"><input type="checkbox" id="check-all-pages" /></th>
+                            <th>Title</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($pages as $page): ?>
+                            <tr>
+                                <td><input type="checkbox" class="page-checkbox" value="<?php echo $page->ID; ?>" /></td>
+                                <td><strong>
+                                        <?php echo esc_html($page->post_title); ?>
+                                    </strong></td>
+                                <td>
+                                    <?php echo date('Y-m-d', strtotime($page->post_date)); ?>
+                                </td>
+                                <td>
+                                    <button class="button button-primary localize-btn" data-post-id="<?php echo $page->ID; ?>">
+                                        Localize
+                                    </button>
+                                    <span class="localize-status-<?php echo $page->ID; ?>" style="margin-left: 10px;"></span>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <?php
+        $this->render_localizer_modal();
+        $this->render_localizer_script();
     }
 
     /**
@@ -1089,6 +707,7 @@ class IPTV_Content_Settings
     private function render_localizer_modal()
     {
         $languages = array(
+            'en' => array('name' => 'English (Source)', 'flag' => '🇬🇧', 'blog_id' => 1),
             'se' => array('name' => 'Sweden 🇸🇪', 'flag' => '🇸🇪', 'blog_id' => 2),
             'no' => array('name' => 'Norway 🇳🇴', 'flag' => '🇳🇴', 'blog_id' => 3),
             'dk' => array('name' => 'Denmark 🇩🇰', 'flag' => '🇩🇰', 'blog_id' => 4),
@@ -1096,307 +715,754 @@ class IPTV_Content_Settings
             'is' => array('name' => 'Iceland 🇮🇸', 'flag' => '🇮🇸', 'blog_id' => 6),
         );
         ?>
-                <!-- Review Modal with Rank Math Style -->
-                <div id="localize-modal"
-                    style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 0; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); z-index: 10000; width: 95%; max-width: 1200px; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column;">
-            
-                    <!-- Modal Header -->
-                    <div style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); color: white; padding: 15px 25px; flex-shrink: 0; display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <h2 style="margin: 0; font-size: 18px; color: white;">🌍 Network Content Localizer</h2>
-                            <p style="margin: 2px 0 0 0; opacity: 0.8; font-size: 12px;">Manage localized content for all subsites in one place.</p>
-                        </div>
-                        <button id="close-modal-btn" style="background: rgba(255,255,255,0.1); border: none; color: white; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px;">&times;</button>
-                    </div>
+        <!-- Review Modal with Rank Math Style -->
+        <div id="localize-modal"
+            style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 0; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); z-index: 10000; width: 95%; max-width: 1200px; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column;">
 
-                    <!-- Language Tabs -->
-                    <div style="background: #f1f5f9; padding: 0 20px; border-bottom: 1px solid #e2e8f0; display: flex; gap: 5px; flex-shrink: 0;">
-                        <?php $first = true;
-                        foreach ($languages as $code => $lang): ?>
-                                <button class="lang-tab-btn <?php echo $first ? 'active' : ''; ?>" data-lang="<?php echo $code; ?>"
-                                    style="padding: 12px 20px; border: none; background: <?php echo $first ? 'white' : 'transparent'; ?>; border-bottom: 2px solid <?php echo $first ? '#3b82f6' : 'transparent'; ?>; font-weight: 600; color: <?php echo $first ? '#1e293b' : '#64748b'; ?>; cursor: pointer; transition: all 0.2s;">
-                                    <?php echo $lang['flag']; ?>             <?php echo $lang['name']; ?>
-                                    <span class="status-indicator-<?php echo $code; ?>" style="font-size: 10px; margin-left: 5px;"></span>
-                                </button>
-                                <!-- Hidden inputs for target IDs -->
-                                <input type="hidden" id="target-blog-id-<?php echo $code; ?>" value="<?php echo $lang['blog_id']; ?>">
-                            <?php $first = false; endforeach; ?>
-                    </div>
-
-                    <div id="modal-content" style="flex-grow: 1; overflow-y: auto; background: #f8f9fa;">
-                        <input type="hidden" id="original-post-id" />
-                
-                        <?php $first = true;
-                        foreach ($languages as $code => $lang): ?>
-                                <div id="tab-content-<?php echo $code; ?>" class="tab-content" style="display: <?php echo $first ? 'block' : 'none'; ?>; padding: 25px;">
-                        
-                                    <!-- SEO Score Section -->
-                                    <div id="seo-score-section-<?php echo $code; ?>"
-                                        style="background: white; border: 1px solid #e2e8f0; padding: 15px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 15px;">
-                                        <div id="seo-score-circle-<?php echo $code; ?>"
-                                            style="width: 50px; height: 50px; border-radius: 50%; background: #e5e7eb; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; color: #64748b; flex-shrink: 0;">
-                                            <span id="seo-score-value-<?php echo $code; ?>">0</span>
-                                        </div>
-                                        <div>
-                                            <strong id="seo-score-text-<?php echo $code; ?>" style="display: block; font-size: 15px; color: #64748b;">SEO Score: Checking...</strong>
-                                            <small style="color: #64748b;">Real-time optimization analysis</small>
-                                        </div>
-                                        <div style="margin-left: auto;">
-                                            <button class="button generate-single-btn" data-lang="<?php echo $code; ?>" style="display: flex; align-items: center; gap: 5px;">
-                                                <span>⚡️</span> Regenerate <?php echo $lang['name']; ?>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                                        <!-- Column 1: Metadata -->
-                                        <div style="display: grid; gap: 15px; align-content: start;">
-                                            <!-- Focus Keyword -->
-                                            <div class="rank-math-field">
-                                                <label style="display: block; font-weight: 600; margin-bottom: 5px; font-size: 13px; color: #475569;">Focus Keyword</label>
-                                                <input type="text" id="focus-keyword-<?php echo $code; ?>" class="seo-input" data-lang="<?php echo $code; ?>"
-                                                    style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 4px;" placeholder="Target keyword" />
-                                            </div>
-
-                                            <!-- SEO Title -->
-                                            <div class="rank-math-field">
-                                                <label style="display: block; font-weight: 600; margin-bottom: 5px; font-size: 13px; color: #475569;">
-                                                    SEO Title <span id="meta-title-counter-<?php echo $code; ?>" style="float: right; font-weight: normal; color: #94a3b8;">0/60</span>
-                                                </label>
-                                                <input type="text" id="meta-title-<?php echo $code; ?>" class="seo-input" data-lang="<?php echo $code; ?>" maxlength="60"
-                                                    style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 4px;" />
-                                            </div>
-
-                                            <!-- SEO Description -->
-                                            <div class="rank-math-field">
-                                                <label style="display: block; font-weight: 600; margin-bottom: 5px; font-size: 13px; color: #475569;">
-                                                    Meta Description <span id="meta-desc-counter-<?php echo $code; ?>" style="float: right; font-weight: normal; color: #94a3b8;">0/160</span>
-                                                </label>
-                                                <textarea id="meta-description-<?php echo $code; ?>" class="seo-input" data-lang="<?php echo $code; ?>" maxlength="160"
-                                                    style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 4px; height: 80px; resize: vertical;"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <!-- Column 2: Content -->
-                                        <div style="display: grid; gap: 15px;">
-                                            <!-- Post Title -->
-                                            <div class="rank-math-field">
-                                                <label style="display: block; font-weight: 600; margin-bottom: 5px; font-size: 13px; color: #475569;">Post Title (H1)</label>
-                                                <input type="text" id="post-title-<?php echo $code; ?>" class="seo-input" data-lang="<?php echo $code; ?>"
-                                                    style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-weight: 600;" />
-                                            </div>
-
-                                            <!-- Post Content -->
-                                            <div class="rank-math-field">
-                                                <label style="display: block; font-weight: 600; margin-bottom: 5px; font-size: 13px; color: #475569;">Post Content</label>
-                                                <textarea id="post-content-<?php echo $code; ?>" class="seo-input" data-lang="<?php echo $code; ?>"
-                                                    style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 4px; height: 300px; font-family: monospace; resize: vertical;"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            <?php $first = false; endforeach; ?>
-                    </div>
-
-                    <!-- Modal Footer -->
-                    <div style="padding: 15px 25px; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
-                        <div style="display: flex; gap: 10px; align-items: center;">
-                            <span id="global-status" style="font-weight: 600; color: #475569;"></span>
-                        </div>
-                        <div style="display: flex; gap: 10px;">
-                            <button class="button cancel-btn" style="border: 1px solid #cbd5e1; color: #475569;">Cancel</button>
-                            <button id="generate-all-btn" class="button button-secondary" style="display: flex; align-items: center; gap: 5px;">
-                                <span>✨</span> Generate All Missing
-                            </button>
-                            <button id="publish-all-btn" class="button button-primary" style="background: #2563eb; border: none; padding: 0 20px; font-weight: 600;">
-                                🚀 Publish All Checked
-                            </button>
-                        </div>
-                    </div>
+            <!-- Modal Header -->
+            <div
+                style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); color: white; padding: 15px 25px; flex-shrink: 0; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h2 style="margin: 0; font-size: 18px; color: white;">🌍 Network Content Localizer</h2>
+                    <p style="margin: 2px 0 0 0; opacity: 0.8; font-size: 12px;">Manage localized content for all subsites in
+                        one place.</p>
                 </div>
-                <div id="modal-overlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(2px); z-index: 9999;"></div>
+                <button id="close-modal-btn"
+                    style="background: rgba(255,255,255,0.1); border: none; color: white; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px;">&times;</button>
+            </div>
 
-                <script>
-                    jQuery(document).ready(function ($) {
-                        const nonce = '<?php echo wp_create_nonce('iptv_localizer_nonce'); ?>';
-                        const languages = ['se', 'no', 'dk', 'fi', 'is'];
+            <!-- Language Tabs -->
+            <div
+                style="background: #f1f5f9; padding: 0 20px; border-bottom: 1px solid #e2e8f0; display: flex; gap: 5px; flex-shrink: 0;">
+                <?php $first = true;
+                foreach ($languages as $code => $lang): ?>
+                    <button class="lang-tab-btn <?php echo $first ? 'active' : ''; ?>" data-lang="<?php echo $code; ?>"
+                        style="padding: 12px 20px; border: none; background: <?php echo $first ? 'white' : 'transparent'; ?>; border-bottom: 2px solid <?php echo $first ? '#3b82f6' : 'transparent'; ?>; font-weight: 600; color: <?php echo $first ? '#1e293b' : '#64748b'; ?>; cursor: pointer; transition: all 0.2s;">
+                        <?php echo $lang['flag']; ?>             <?php echo $lang['name']; ?>
+                        <span class="status-indicator-<?php echo $code; ?>" style="font-size: 10px; margin-left: 5px;"></span>
+                    </button>
+                    <!-- Hidden inputs for target IDs -->
+                    <input type="hidden" id="target-blog-id-<?php echo $code; ?>" value="<?php echo $lang['blog_id']; ?>">
+                    <?php $first = false; endforeach; ?>
+            </div>
 
-                        // Tab Switching
-                        $('.lang-tab-btn').on('click', function() {
-                            const lang = $(this).data('lang');
-                    
-                            // Update tabs
-                            $('.lang-tab-btn').css({
-                                'background': 'transparent',
-                                'border-bottom-color': 'transparent',
-                                'color': '#64748b'
-                            });
-                            $(this).css({
-                                'background': 'white', 
-                                'border-bottom-color': '#3b82f6',
-                                'color': '#1e293b'
-                            });
+            <div id="modal-content" style="flex-grow: 1; overflow-y: auto; background: #f8f9fa;">
+                <input type="hidden" id="original-post-id" />
+                <input type="hidden" id="featured-image-id" />
 
-                            // Show content
-                            $('.tab-content').hide();
-                            $('#tab-content-' + lang).show();
-                        });
+                <?php $first = true;
+                foreach ($languages as $code => $lang): ?>
+                    <div id="tab-content-<?php echo $code; ?>" class="tab-content"
+                        style="display: <?php echo $first ? 'block' : 'none'; ?>; padding: 25px;">
 
-                        // SEO Score Logic
-                        function updateSeoScore(lang) {
-                            let score = 0;
-                            const keyword = $('#focus-keyword-' + lang).val()?.toLowerCase() || '';
-                            const title = $('#meta-title-' + lang).val()?.toLowerCase() || '';
-                            const desc = $('#meta-description-' + lang).val()?.toLowerCase() || '';
-                            const content = $('#post-content-' + lang).val()?.toLowerCase() || '';
-                    
-                            if (!keyword) {
-                                updateScoreDisplay(lang, 0);
-                                return;
+                        <!-- SEO Score Section -->
+                        <div id="seo-score-section-<?php echo $code; ?>"
+                            style="background: white; border: 1px solid #e2e8f0; padding: 15px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 15px;">
+                            <div id="seo-score-circle-<?php echo $code; ?>"
+                                style="width: 50px; height: 50px; border-radius: 50%; background: #e5e7eb; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; color: white; flex-shrink: 0;">
+                                <span id="seo-score-value-<?php echo $code; ?>">0</span>
+                            </div>
+                            <div>
+                                <strong id="seo-score-text-<?php echo $code; ?>"
+                                    style="display: block; font-size: 15px; color: #64748b;">SEO Score: Checking...</strong>
+                                <small style="color: #64748b;">Real-time optimization analysis</small>
+                            </div>
+                            <div style="margin-left: auto; display: flex; gap: 8px;">
+                                <button class="button save-single-btn" data-lang="<?php echo $code; ?>"
+                                    style="display: flex; align-items: center; gap: 5px;">
+                                    <span>💾</span> Save
+                                </button>
+                                <button class="button fill-missing-btn" data-lang="<?php echo $code; ?>"
+                                    style="display: flex; align-items: center; gap: 5px;">
+                                    <span>✨</span> Fill Missing
+                                </button>
+                                <button class="button refresh-content-btn" data-lang="<?php echo $code; ?>"
+                                    style="display: flex; align-items: center; gap: 5px;">
+                                    <span>🔄</span> Refresh Content
+                                </button>
+                                <?php if ($code === 'en'): ?>
+                                    <button class="button generate-single-btn" data-lang="<?php echo $code; ?>"
+                                        style="display: flex; align-items: center; gap: 5px;">
+                                        <span>⚡️</span> Regenerate All
+                                    </button>
+                                <?php else: ?>
+                                    <button class="button button-primary publish-single-btn" data-lang="<?php echo $code; ?>"
+                                        style="display: flex; align-items: center; gap: 5px;">
+                                        <span>🚀</span> Publish
+                                    </button>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <!-- Column 1: Metadata -->
+                            <div style="display: grid; gap: 15px; align-content: start;">
+                                <!-- Focus Keyword -->
+                                <div class="rank-math-field">
+                                    <label
+                                        style="display: block; font-weight: 600; margin-bottom: 5px; font-size: 13px; color: #475569;">Focus
+                                        Keyword</label>
+                                    <input type="text" id="focus-keyword-<?php echo $code; ?>" class="seo-input"
+                                        data-lang="<?php echo $code; ?>"
+                                        style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 4px;"
+                                        placeholder="Target keyword" />
+                                </div>
+
+                                <!-- SEO Title -->
+                                <div class="rank-math-field">
+                                    <label
+                                        style="display: block; font-weight: 600; margin-bottom: 5px; font-size: 13px; color: #475569;">
+                                        SEO Title <span id="meta-title-counter-<?php echo $code; ?>"
+                                            style="float: right; font-weight: normal; color: #94a3b8;">0/60</span>
+                                    </label>
+                                    <input type="text" id="meta-title-<?php echo $code; ?>" class="seo-input"
+                                        data-lang="<?php echo $code; ?>" maxlength="60"
+                                        style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 4px;" />
+                                </div>
+
+                                <!-- SEO Description -->
+                                <div class="rank-math-field">
+                                    <label
+                                        style="display: block; font-weight: 600; margin-bottom: 5px; font-size: 13px; color: #475569;">
+                                        Meta Description <span id="meta-desc-counter-<?php echo $code; ?>"
+                                            style="float: right; font-weight: normal; color: #94a3b8;">0/160</span>
+                                    </label>
+                                    <textarea id="meta-description-<?php echo $code; ?>" class="seo-input"
+                                        data-lang="<?php echo $code; ?>" maxlength="160"
+                                        style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 4px; height: 80px; resize: vertical;"></textarea>
+                                </div>
+
+                                <!-- Permalink (Slug) -->
+                                <div class="rank-math-field">
+                                    <label
+                                        style="display: block; font-weight: 600; margin-bottom: 5px; font-size: 13px; color: #475569;">
+                                        Permalink (Slug)</label>
+                                    <input type="text" id="post-slug-<?php echo $code; ?>" class="seo-input"
+                                        data-lang="<?php echo $code; ?>"
+                                        style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 4px;"
+                                        placeholder="url-friendly-slug" />
+                                </div>
+
+                                <!-- Image Alt Text -->
+                                <div class="rank-math-field">
+                                    <label
+                                        style="display: block; font-weight: 600; margin-bottom: 5px; font-size: 13px; color: #475569;">
+                                        Featured Image Alt Text</label>
+                                    <input type="text" id="image-alt-<?php echo $code; ?>" class="seo-input"
+                                        data-lang="<?php echo $code; ?>"
+                                        style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 4px;"
+                                        placeholder="Descriptive alt text" />
+                                </div>
+                            </div>
+
+                            <!-- Column 2: Content -->
+                            <div style="display: grid; gap: 15px;">
+                                <!-- Post Title -->
+                                <div class="rank-math-field">
+                                    <label
+                                        style="display: block; font-weight: 600; margin-bottom: 5px; font-size: 13px; color: #475569;">Post
+                                        Title (H1)</label>
+                                    <input type="text" id="post-title-<?php echo $code; ?>" class="seo-input"
+                                        data-lang="<?php echo $code; ?>"
+                                        style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-weight: 600;" />
+                                </div>
+
+                                <!-- Post Content -->
+                                <div class="rank-math-field">
+                                    <label
+                                        style="display: block; font-weight: 600; margin-bottom: 5px; font-size: 13px; color: #475569;">Post
+                                        Content</label>
+
+                                    <!-- Editor Mode Tabs (WordPress style) -->
+                                    <div class="wp-editor-tabs" id="editor-tabs-<?php echo $code; ?>"
+                                        style="border-bottom: 1px solid #cbd5e1; margin-bottom: 0;">
+                                        <button type="button" class="wp-switch-editor switch-tmce" data-lang="<?php echo $code; ?>"
+                                            data-mode="visual"
+                                            style="background: #f9fafb; border: 1px solid #cbd5e1; border-bottom: none; padding: 5px 10px; cursor: pointer; font-size: 13px; border-radius: 4px 4px 0 0; margin-right: 4px; color: #0073aa;">
+                                            Visual
+                                        </button>
+                                        <button type="button" class="wp-switch-editor switch-html" data-lang="<?php echo $code; ?>"
+                                            data-mode="text"
+                                            style="background: #fff; border: 1px solid #cbd5e1; border-bottom: none; padding: 5px 10px; cursor: pointer; font-size: 13px; border-radius: 4px 4px 0 0; color: #555;">
+                                            Text
+                                        </button>
+                                    </div>
+
+                                    <div class="wp-editor-container" id="wp-post-content-<?php echo $code; ?>-wrap"
+                                        style="border: 1px solid #cbd5e1; border-top: none;">
+                                        <textarea id="post-content-<?php echo $code; ?>" class="seo-input"
+                                            data-lang="<?php echo $code; ?>"
+                                            style="width: 100%; padding: 10px; border: none; height: 300px; font-family: monospace; resize: vertical;"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <?php $first = false; endforeach; ?>
+            </div>
+
+            <!-- Modal Footer -->
+            <div
+                style="padding: 15px 25px; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <span id="global-status" style="font-weight: 600; color: #475569;"></span>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="button cancel-btn" style="border: 1px solid #cbd5e1; color: #475569;">Cancel</button>
+                    <button id="generate-all-btn" class="button button-secondary"
+                        style="display: flex; align-items: center; gap: 5px;">
+                        <span>✨</span> Generate All Missing
+                    </button>
+                    <button id="publish-all-btn" class="button button-primary"
+                        style="background: #2563eb; border: none; padding: 0 20px; font-weight: 600;">
+                        🚀 Publish All Checked
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="modal-overlay"
+            style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(2px); z-index: 9999;">
+        </div>
+
+        <script>
+            // v2.1 - Updated Fill Missing logic
+            jQuery(document).ready(function ($) {
+                const nonce = '<?php echo wp_create_nonce('iptv_localizer_nonce'); ?>';
+                const languages = ['en', 'se', 'no', 'dk', 'fi', 'is']; // All languages including English
+                const translateLanguages = ['se', 'no', 'dk', 'fi', 'is']; // Translate targets only
+
+                let currentActiveLang = 'en'; // Track current active language
+
+                // Initialize TinyMCE for a specific language
+                function initializeEditor(lang) {
+                    const editorId = 'post-content-' + lang;
+
+                    // Check if editor already exists
+                    if (typeof tinymce !== 'undefined' && tinymce.get(editorId)) {
+                        // Editor exists, just show it
+                        tinymce.get(editorId).show();
+                        $('#' + editorId).hide();
+                        return;
+                    }
+
+                    // Initialize TinyMCE directly
+                    if (typeof tinymce !== 'undefined') {
+                        tinymce.init({
+                            selector: '#' + editorId,
+                            menubar: false,
+                            branding: false,
+                            height: 300,
+                            plugins: 'lists link paste',
+                            toolbar: 'undo redo | bold italic underline | bullist numlist | link | removeformat',
+                            paste_as_text: false,
+                            content_css: false,
+                            init_instance_callback: function (editor) {
+                                // Hide textarea when editor is ready
+                                $('#' + editorId).hide();
+                            },
+                            setup: function (editor) {
+                                editor.on('change keyup', function () {
+                                    editor.save(); // Save to textarea
+                                    updateSeoScore(lang);
+                                });
                             }
+                        });
+                    }
+                }
 
-                            if (title.includes(keyword)) score += 20;
-                            if (desc.includes(keyword)) score += 20;
-                            if (content.includes(keyword)) score += 20;
-                    
-                            if (title.length >= 40 && title.length <= 60) score += 10;
-                            if (desc.length >= 120 && desc.length <= 160) score += 10;
-                            if (content.split(' ').length > 300) score += 20;
+                // Destroy TinyMCE editor for a language
+                function destroyEditor(lang) {
+                    const editorId = 'post-content-' + lang;
+                    if (typeof tinymce !== 'undefined' && tinymce.get(editorId)) {
+                        tinymce.get(editorId).save(); // Save content to textarea
+                        tinymce.get(editorId).remove(); // Remove editor instance
+                    }
+                }
 
-                            updateScoreDisplay(lang, score);
+                // Visual/Text Mode Switcher
+                $(document).on('click', '.wp-switch-editor', function () {
+                    const lang = $(this).data('lang');
+                    const mode = $(this).data('mode');
+                    const editorId = 'post-content-' + lang;
+
+                    // Update button styles
+                    $('#editor-tabs-' + lang + ' .wp-switch-editor').css({
+                        'background': '#fff',
+                        'color': '#555'
+                    });
+                    $(this).css({
+                        'background': '#f9fafb',
+                        'color': '#0073aa'
+                    });
+
+                    if (mode === 'visual') {
+                        // Switch to Visual mode
+                        if (typeof tinymce !== 'undefined' && !tinymce.get(editorId)) {
+                            // Initialize editor if not exists
+                            initializeEditor(lang);
+                        } else if (tinymce.get(editorId)) {
+                            // Show existing editor
+                            tinymce.get(editorId).show();
                         }
-
-                        function updateScoreDisplay(lang, score) {
-                            $('#seo-score-value-' + lang).text(score);
-                            // Circle color update logic here (simplified)
-                            $('#seo-score-text-' + lang).text('SEO Score: ' + score + '/100');
+                        $('#' + editorId).hide(); // Hide textarea
+                    } else {
+                        // Switch to Text mode
+                        if (typeof tinymce !== 'undefined' && tinymce.get(editorId)) {
+                            tinymce.get(editorId).save(); // Save to textarea
+                            tinymce.get(editorId).hide(); // Hide visual editor
                         }
+                        $('#' + editorId).show(); // Show textarea
+                    }
+                });
 
-                        // Input listeners for SEO
-                        $('.seo-input').on('input', function() {
-                            const lang = $(this).data('lang');
-                            updateSeoScore(lang);
-                            // Update counters
-                            if(this.id.includes('meta-title')) $('#meta-title-counter-' + lang).text(this.value.length + '/60');
-                            if(this.id.includes('meta-description')) $('#meta-desc-counter-' + lang).text(this.value.length + '/160');
-                        });
+                // Tab Switching with editor management
+                $('.lang-tab-btn').on('click', function () {
+                    const lang = $(this).data('lang');
 
-                        // Open Modal Logic
-                        $('.localize-btn').on('click', function() {
-                            const btn = $(this);
-                            const postId = btn.data('post-id');
-                            $('#original-post-id').val(postId);
-                            $('#localize-modal, #modal-overlay').fadeIn();
-                    
-                            // Reset fields and maybe fetch existing translations if needed
-                            // For now, simpler empty state is fine or fetch logic
-                        });
+                    // Don't reinitialize if clicking same tab
+                    if (lang === currentActiveLang) {
+                        return;
+                    }
 
-                        // Close Modal
-                        $('#close-modal-btn, .cancel-btn, #modal-overlay').on('click', function() {
-                            $('#localize-modal, #modal-overlay').fadeOut();
-                        });
+                    // Save current editor content before switching
+                    if (typeof tinymce !== 'undefined' && tinymce.get('post-content-' + currentActiveLang)) {
+                        tinymce.get('post-content-' + currentActiveLang).save();
+                    }
 
-                        // GENERATE SINGLE Logic
-                        $('.generate-single-btn').on('click', function() {
-                            const lang = $(this).data('lang');
-                            generateContent(lang);
-                        });
+                    // Update tabs
+                    $('.lang-tab-btn').css({
+                        'background': 'transparent',
+                        'border-bottom-color': 'transparent',
+                        'color': '#64748b'
+                    });
+                    $(this).css({
+                        'background': 'white',
+                        'border-bottom-color': '#3b82f6',
+                        'color': '#1e293b'
+                    });
 
-                        // GENERATE ALL Logic
-                        $('#generate-all-btn').on('click', function() {
-                            // Trigger sequential generation
-                            let index = 0;
-                            function next() {
-                                if (index < languages.length) {
-                                    generateContent(languages[index], next);
-                                    index++;
-                                } else {
-                                    $('#global-status').text('✅ All languages generated!');
-                                }
-                            }
-                            next();
-                        });
+                    // Show content
+                    $('.tab-content').hide();
+                    $('#tab-content-' + lang).show();
 
-                        function generateContent(lang, callback = null) {
-                            const postId = $('#original-post-id').val();
-                            const statusIndicator = $('.status-indicator-' + lang);
-                    
-                            statusIndicator.text('🔄');
-                            $('#global-status').text('Generating for ' + lang.toUpperCase() + '...');
+                    // Initialize editor for new tab
+                    initializeEditor(lang);
+                    currentActiveLang = lang;
+                });
 
-                            $.post(ajaxurl, {
-                                action: 'iptv_generate_localized_content',
-                                nonce: nonce,
-                                post_id: postId,
-                                target_lang: lang
-                            }).done(function(response) {
-                                if (response.success) {
-                                    const data = response.data;
-                                    $('#focus-keyword-' + lang).val(data.focus_keyword || '').trigger('input');
-                                    $('#meta-title-' + lang).val(data.meta_title || '').trigger('input');
-                                    $('#meta-description-' + lang).val(data.meta_description || '').trigger('input');
-                                    $('#post-title-' + lang).val(data.title || '');
-                                    $('#post-content-' + lang).val(data.content || '').trigger('input');
-                            
-                                    statusIndicator.text('✅');
-                                } else {
-                                    statusIndicator.text('❌');
-                                    alert('Error ' + lang + ': ' + response.data);
-                                }
-                                if (callback) callback();
-                            }).fail(function() {
-                                statusIndicator.text('❌');
-                                if (callback) callback();
-                            });
-                        }
+                // SEO Score Logic (enhanced with slug and color coding)
+                function updateSeoScore(lang) {
+                    let score = 0;
+                    const keyword = $('#focus-keyword-' + lang).val()?.toLowerCase() || '';
+                    const title = $('#meta-title-' + lang).val()?.toLowerCase() || '';
+                    const desc = $('#meta-description-' + lang).val()?.toLowerCase() || '';
+                    const content = $('#post-content-' + lang).val()?.toLowerCase() || '';
+                    const slug = $('#post-slug-' + lang).val()?.toLowerCase() || '';
 
-                        // PUBLISH ALL Logic
-                        $('#publish-all-btn').on('click', function() {
-                            const postId = $('#original-post-id').val();
-                            if(!confirm('Publish all valid content to subsites?')) return;
+                    if (!keyword) {
+                        updateScoreDisplay(lang, 0);
+                        return;
+                    }
 
-                            let index = 0;
-                            function nextPublish() {
-                                if (index < languages.length) {
-                                    const lang = languages[index];
-                                    // Check if content exists before publishing
-                                    if ($('#post-title-' + lang).val()) {
-                                        publishContent(lang, postId, nextPublish);
-                                    } else {
-                                        nextPublish(); // Skip empty
-                                    }
-                                    index++;
-                                } else {
-                                    $('#global-status').text('🚀 All Checked Content Published!');
-                                    setTimeout(() => { $('#localize-modal, #modal-overlay').fadeOut(); }, 2000);
-                                }
-                            }
-                            nextPublish();
-                        });
+                    if (title.includes(keyword)) score += 20;
+                    if (desc.includes(keyword)) score += 20;
+                    if (content.includes(keyword)) score += 20;
+                    if (slug.includes(keyword)) score += 10;
 
-                        function publishContent(lang, originalPostId, callback) {
-                            $('#global-status').text('Publishing ' + lang.toUpperCase() + '...');
-                            const blogId = $('#target-blog-id-' + lang).val();
-                    
-                            $.post(ajaxurl, {
-                                action: 'iptv_publish_localized_post',
-                                nonce: nonce,
-                                original_post_id: originalPostId,
-                                target_blog_id: blogId,
-                                post_title: $('#post-title-' + lang).val(),
-                                post_content: $('#post-content-' + lang).val(),
-                                focus_keyword: $('#focus-keyword-' + lang).val(),
-                                meta_title: $('#meta-title-' + lang).val(),
-                                meta_description: $('#meta-description-' + lang).val()
-                            }).done(function() {
-                                if (callback) callback();
-                            });
+                    if (title.length >= 40 && title.length <= 60) score += 10;
+                    if (desc.length >= 120 && desc.length <= 160) score += 10;
+                    if (content.split(' ').length > 300) score += 10;
+
+                    updateScoreDisplay(lang, score);
+                }
+
+                function updateScoreDisplay(lang, score) {
+                    $('#seo-score-value-' + lang).text(score);
+                    // Enhanced with Rank Math colors and labels
+                    let color = '#dc2626', label = 'Poor'; // Red
+                    if (score >= 80) {
+                        color = '#16a34a'; // Green
+                        label = 'Great';
+                    } else if (score >= 50) {
+                        color = '#f59e0b'; // Orange
+                        label = 'OK';
+                    }
+                    $('#seo-score-circle-' + lang).css('background', color);
+                    $('#seo-score-text-' + lang).text('SEO Score: ' + label + ' (' + score + '/100)');
+                }
+
+                // Input listeners for SEO
+                $('.seo-input').on('input', function () {
+                    const lang = $(this).data('lang');
+                    updateSeoScore(lang);
+                    // Update counters
+                    if (this.id.includes('meta-title')) $('#meta-title-counter-' + lang).text(this.value.length + '/60');
+                    if (this.id.includes('meta-description')) $('#meta-desc-counter-' + lang).text(this.value.length + '/160');
+                });
+
+                // Open Modal Logic (enhanced with initial data fetch)
+                $('.localize-btn').on('click', function () {
+                    const btn = $(this);
+                    const postId = btn.data('post-id');
+                    $('#original-post-id').val(postId);
+                    $('#featured-image-id').val('');
+                    $('#modal-overlay').fadeIn();
+                    $('#localize-modal').fadeIn();
+                    $('#global-status').text('Loading...');
+
+                    // Clear all fields
+                    languages.forEach(lang => {
+                        $('#focus-keyword-' + lang).val('');
+                        $('#meta-title-' + lang).val('');
+                        $('#meta-description-' + lang).val('');
+                        $('#post-slug-' + lang).val('');
+                        $('#image-alt-' + lang).val('');
+                        $('#post-title-' + lang).val('');
+                        $('#post-content-' + lang).val('');
+                    });
+
+                    // Fetch initial data (English source)
+                    $.post(ajaxurl, {
+                        action: 'iptv_get_initial_data',
+                        nonce: nonce,
+                        post_id: postId
+                    }).done(function (response) {
+                        if (response.success) {
+                            const data = response.data;
+                            $('#focus-keyword-en').val(data.focus_keyword || '').trigger('input');
+                            $('#meta-title-en').val(data.meta_title || '').trigger('input');
+                            $('#meta-description-en').val(data.meta_description || '').trigger('input');
+                            $('#post-slug-en').val(data.slug || '');
+                            $('#image-alt-en').val(data.image_alt || '');
+                            $('#post-title-en').val(data.title || '');
+                            $('#post-content-en').val(data.content);
+                            $('#featured-image-id').val(data.featured_image_id || 0);
+                            $('#global-status').text('');
+
+                            // Initialize TinyMCE for English tab (default active tab)
+                            initializeEditor('en');
+                        } else {
+                            $('#global-status').text('⚠️ ' + response.data);
                         }
                     });
-                </script>
-                <?php
+                });
+
+
+                // Close Modal
+                $('#close-modal-btn, .cancel-btn, #modal-overlay').on('click', function () {
+                    // Destroy all editors before closing
+                    languages.forEach(lang => {
+                        destroyEditor(lang);
+                    });
+
+                    // Reset current active lang
+                    currentActiveLang = 'en';
+
+                    $('#localize-modal, #modal-overlay').fadeOut();
+                });
+
+                // Save per-language button handler
+                $('.save-single-btn').on('click', function () {
+                    const lang = $(this).data('lang');
+                    const postId = $('#original-post-id').val();
+                    $('#global-status').text('Saving ' + lang.toUpperCase() + '...');
+
+                    $.post(ajaxurl, {
+                        action: 'iptv_save_localized_content',
+                        nonce: nonce,
+                        post_id: postId,
+                        target_lang: lang,
+                        focus_keyword: $('#focus-keyword-' + lang).val(),
+                        meta_title: $('#meta-title-' + lang).val(),
+                        meta_description: $('#meta-description-' + lang).val(),
+                        post_slug: $('#post-slug-' + lang).val(),
+                        image_alt: $('#image-alt-' + lang).val(),
+                        post_title: $('#post-title-' + lang).val(),
+                        post_content: $('#post-content-' + lang).val(),
+                        featured_image_id: $('#featured-image-id').val()
+                    }).done(function (response) {
+                        if (response.success) {
+                            $('#global-status').text('✅ Saved ' + lang.toUpperCase());
+                            setTimeout(() => $('#global-status').text(''), 2000);
+                        } else {
+                            alert('Error saving: ' + response.data);
+                            $('#global-status').text('');
+                        }
+                    }).fail(function () {
+                        alert('Request failed');
+                        $('#global-status').text('');
+                    });
+                });
+
+                // Fill Missing per-language button handler
+                $('.fill-missing-btn').on('click', function () {
+                    const lang = $(this).data('lang');
+
+                    // Get existing field values
+                    const existingData = {
+                        custom_keyword: $('#focus-keyword-' + lang).val(), // Use user's entered keyword
+                        existing_title: $('#post-title-' + lang).val(),
+                        existing_content: $('#post-content-' + lang).val(),
+                        existing_meta_title: $('#meta-title-' + lang).val(),
+                        existing_meta_desc: $('#meta-description-' + lang).val(),
+                        existing_slug: $('#post-slug-' + lang).val(),
+                        existing_image_alt: $('#image-alt-' + lang).val()
+                    };
+
+                    // Check TinyMCE content
+                    if (typeof tinymce !== 'undefined') {
+                        const editor = tinymce.get('post-content-' + lang);
+                        if (editor && !editor.isHidden()) {
+                            existingData.existing_content = editor.getContent();
+                        }
+                    }
+
+                    generateContent(lang, null, true, existingData); // true = fill missing mode
+                });
+
+                // Refresh Content button handler (rewrites content only)
+                $('.refresh-content-btn').on('click', function () {
+                    const lang = $(this).data('lang');
+                    
+                    // Get current content
+                    let currentContent = $('#post-content-' + lang).val();
+                    
+                    // Check TinyMCE
+                    if (typeof tinymce !== 'undefined') {
+                        const editor = tinymce.get('post-content-' + lang);
+                        if (editor && !editor.isHidden()) {
+                            currentContent = editor.getContent();
+                        }
+                    }
+                    
+                    if (!currentContent) {
+                        alert('No content to refresh! Please add some content first.');
+                        return;
+                    }
+                    
+                    const refreshData = {
+                        custom_keyword: $('#focus-keyword-' + lang).val(),
+                        existing_content: currentContent,
+                        refresh_content_only: 'true'
+                    };
+                    
+                    generateContent(lang, null, false, refreshData); // false = not fill missing, use refresh mode
+                });
+
+                // Publish per-language button handler
+                $('.publish-single-btn').on('click', function () {
+                    const lang = $(this).data('lang');
+                    const postId = $('#original-post-id').val();
+                    const blogId = $('#target-blog-id-' + lang).val();
+
+                    if (!$('#post-title-' + lang).val() || !$('#post-content-' + lang).val()) {
+                        alert('Please generate or fill content for ' + lang.toUpperCase() + ' before publishing');
+                        return;
+                    }
+
+                    if (!confirm('Publish to ' + lang.toUpperCase() + ' site?')) return;
+
+                    $('#global-status').text('Publishing to ' + lang.toUpperCase() + '...');
+
+                    $.post(ajaxurl, {
+                        action: 'iptv_publish_localized_post',
+                        nonce: nonce,
+                        original_post_id: postId,
+                        target_blog_id: blogId,
+                        post_title: $('#post-title-' + lang).val(),
+                        post_content: $('#post-content-' + lang).val(),
+                        focus_keyword: $('#focus-keyword-' + lang).val(),
+                        meta_title: $('#meta-title-' + lang).val(),
+                        meta_description: $('#meta-description-' + lang).val(),
+                        post_slug: $('#post-slug-' + lang).val(),
+                        image_alt: $('#image-alt-' + lang).val()
+                    }).done(function (response) {
+                        if (response.success) {
+                            $('#global-status').text('🚀 Published to ' + lang.toUpperCase() + '!');
+                            setTimeout(() => $('#global-status').text(''), 3000);
+                        } else {
+                            alert('Error publishing: ' + response.data);
+                            $('#global-status').text('');
+                        }
+                    }).fail(function () {
+                        alert('Request failed');
+                        $('#global-status').text('');
+                    });
+                });
+
+                // GENERATE SINGLE Logic
+                $('.generate-single-btn').on('click', function () {
+                    const lang = $(this).data('lang');
+                    if (lang === 'en') {
+                        // For English, regenerate ALL translation languages
+                        if (!confirm('Regenerate ALL translation languages?')) return;
+                        let index = 0;
+                        function next() {
+                            if (index < translateLanguages.length) {
+                                generateContent(translateLanguages[index], next);
+                                index++;
+                            } else {
+                                $('#global-status').text('✅ All languages generated!');
+                            }
+                        }
+                        next();
+                    } else {
+                        generateContent(lang);
+                    }
+                });
+
+                // GENERATE ALL Logic
+                $('#generate-all-btn').on('click', function () {
+                    // Trigger sequential generation for all translate languages
+                    let index = 0;
+                    function next() {
+                        if (index < translateLanguages.length) {
+                            generateContent(translateLanguages[index], next);
+                            index++;
+                        } else {
+                            $('#global-status').text('✅ All languages generated!');
+                        }
+                    }
+                    next();
+                });
+
+                function generateContent(lang, callback = null, fillMissing = false, existingData = {}) {
+                    const postId = $('#original-post-id').val();
+                    const statusIndicator = $('.status-indicator-' + lang);
+
+                    statusIndicator.text('🔄');
+                    $('#global-status').text((fillMissing ? 'Filling missing for ' : 'Generating for ') + lang.toUpperCase() + '...');
+
+                    const requestData = {
+                        action: 'iptv_generate_localized_content',
+                        nonce: nonce,
+                        post_id: postId,
+                        target_lang: lang
+                    };
+
+                    // If fill missing mode, send existing data and custom keyword
+                    if (fillMissing) {
+                        requestData.fill_missing = 'true';
+                        $.extend(requestData, existingData);
+                    }
+
+                    $.post(ajaxurl, requestData).done(function (response) {
+                        if (response.success) {
+                            const data = response.data;
+
+                            // In fill-missing mode, only update fields that were originally empty
+                            if (fillMissing) {
+                                // Only update fields if they were empty BEFORE
+                                if (!existingData.custom_keyword && data.focus_keyword !== undefined) $('#focus-keyword-' + lang).val(data.focus_keyword).trigger('input');
+                                if (!existingData.existing_meta_title && data.meta_title !== undefined) $('#meta-title-' + lang).val(data.meta_title).trigger('input');
+                                if (!existingData.existing_meta_desc && data.meta_description !== undefined) $('#meta-description-' + lang).val(data.meta_description).trigger('input');
+                                if (!existingData.existing_slug && (data.slug !== undefined || data.post_slug !== undefined)) $('#post-slug-' + lang).val(data.slug || data.post_slug || '');
+                                if (!existingData.existing_image_alt && data.image_alt !== undefined) $('#image-alt-' + lang).val(data.image_alt);
+                                if (!existingData.existing_title && data.title !== undefined) $('#post-title-' + lang).val(data.title);
+
+                                // Only update content if it was empty
+                                if (!existingData.existing_content && data.content !== undefined) {
+                                    $('#post-content-' + lang).val(data.content);
+
+                                    // Also update TinyMCE if it exists and is visible
+                                    if (typeof tinymce !== 'undefined') {
+                                        const editor = tinymce.get('post-content-' + lang);
+                                        if (editor && !editor.isHidden()) {
+                                            editor.setContent(data.content);
+                                        }
+                                    }
+
+                                    $('#post-content-' + lang).trigger('input');
+                                }
+                            } else {
+                                // Full regeneration: update all fields
+                                if (data.focus_keyword !== undefined) $('#focus-keyword-' + lang).val(data.focus_keyword).trigger('input');
+                                if (data.meta_title !== undefined) $('#meta-title-' + lang).val(data.meta_title).trigger('input');
+                                if (data.meta_description !== undefined) $('#meta-description-' + lang).val(data.meta_description).trigger('input');
+                                if (data.slug !== undefined || data.post_slug !== undefined) $('#post-slug-' + lang).val(data.slug || data.post_slug || '');
+                                if (data.image_alt !== undefined) $('#image-alt-' + lang).val(data.image_alt);
+                                if (data.title !== undefined) $('#post-title-' + lang).val(data.title);
+
+                                // Update content
+                                if (data.content !== undefined) {
+                                    $('#post-content-' + lang).val(data.content);
+
+                                    // Also update TinyMCE if it exists and is visible
+                                    if (typeof tinymce !== 'undefined') {
+                                        const editor = tinymce.get('post-content-' + lang);
+                                        if (editor && !editor.isHidden()) {
+                                            editor.setContent(data.content);
+                                        }
+                                    }
+
+                                    $('#post-content-' + lang).trigger('input');
+                                }
+                            }
+
+                            statusIndicator.text('✅');
+                            $('#global-status').text('✅ ' + (fillMissing ? 'Filled missing for ' : 'Generated for ') + lang.toUpperCase() + '!');
+                        } else {
+                            statusIndicator.text('❌');
+                            $('#global-status').text('❌ Error for ' + lang.toUpperCase());
+                            alert('Error ' + lang + ': ' + response.data);
+                        }
+                        if (callback) callback();
+                    }).fail(function (xhr, status, error) {
+                        statusIndicator.text('❌');
+                        $('#global-status').text('❌ Failed for ' + lang.toUpperCase());
+                        console.error('AJAX Error:', status, error);
+                        if (callback) callback();
+                    });
+                }
+
+                // PUBLISH ALL Logic
+                $('#publish-all-btn').on('click', function () {
+                    const postId = $('#original-post-id').val();
+                    if (!confirm('Publish all valid content to subsites?')) return;
+
+                    let index = 0;
+                    function nextPublish() {
+                        if (index < translateLanguages.length) {
+                            const lang = translateLanguages[index];
+                            // Check if content exists before publishing
+                            if ($('#post-title-' + lang).val()) {
+                                publishContent(lang, postId, nextPublish);
+                            } else {
+                                nextPublish(); // Skip empty
+                            }
+                            index++;
+                        } else {
+                            $('#global-status').text('🚀 All Checked Content Published!');
+                            setTimeout(() => { $('#global-status').text(''); }, 2000);
+                        }
+                    }
+                    nextPublish();
+                });
+
+                function publishContent(lang, originalPostId, callback) {
+                    $('#global-status').text('Publishing ' + lang.toUpperCase() + '...');
+                    const blogId = $('#target-blog-id-' + lang).val();
+
+                    $.post(ajaxurl, {
+                        action: 'iptv_publish_localized_post',
+                        nonce: nonce,
+                        original_post_id: originalPostId,
+                        target_blog_id: blogId,
+                        post_title: $('#post-title-' + lang).val(),
+                        post_content: $('#post-content-' + lang).val(),
+                        focus_keyword: $('#focus-keyword-' + lang).val(),
+                        meta_title: $('#meta-title-' + lang).val(),
+                        meta_description: $('#meta-description-' + lang).val(),
+                        post_slug: $('#post-slug-' + lang).val(),
+                        image_alt: $('#image-alt-' + lang).val()
+                    }).done(function () {
+                        if (callback) callback();
+                    });
+                }
+            });
+        </script>
+        <?php
     }
 
     /**
