@@ -22,7 +22,7 @@
                 <span
                     style="width:1.75rem;height:1.75rem;background:var(--blue-600);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;">1</span>
                 <span
-                    style="font-weight:600;font-size:0.875rem;"><?php echo esc_html(iptv_text('step_1', 'Select Devices')); ?></span>
+                    style="font-weight:600;font-size:0.875rem;"><?php echo esc_html(iptv_text('step_1_label', 'Select Devices')); ?></span>
             </div>
             <div style="width:3rem;height:2px;background:var(--border);"></div>
             <div style="display:flex;align-items:center;gap:0.5rem;">
@@ -30,7 +30,7 @@
                     style="width:1.75rem;height:1.75rem;background:var(--border);color:var(--text-muted);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;"
                     id="step2">2</span>
                 <span style="font-weight:600;font-size:0.875rem;color:var(--text-muted);"
-                    id="step2-label"><?php echo esc_html(iptv_text('step_2', 'Choose Plan')); ?></span>
+                    id="step2-label"><?php echo esc_html(iptv_text('step_2_label', 'Choose Plan')); ?></span>
             </div>
             <div style="width:3rem;height:2px;background:var(--border);"></div>
             <div style="display:flex;align-items:center;gap:0.5rem;">
@@ -38,7 +38,7 @@
                     style="width:1.75rem;height:1.75rem;background:var(--border);color:var(--text-muted);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;"
                     id="step3">3</span>
                 <span style="font-weight:600;font-size:0.875rem;color:var(--text-muted);"
-                    id="step3-label"><?php echo esc_html(iptv_text('step_3', 'Complete Order')); ?></span>
+                    id="step3-label"><?php echo esc_html(iptv_text('step_3_label', 'Complete Order')); ?></span>
             </div>
         </div>
 
@@ -55,14 +55,20 @@
                     <?php echo esc_html(iptv_text('devices_title', 'How many devices will you use?')); ?>
                 </div>
                 <div class="card-grid" id="devices">
-                    <?php for ($i = 1; $i <= 4; $i++): ?>
+                    <?php
+                    $dev_sing = iptv_text('device_singular', 'Device');
+                    $dev_plur = iptv_text('device_plural', 'Devices');
+                    for ($i = 1; $i <= 4; $i++):
+                        ?>
                         <div class="select-card" data-devices="<?php echo $i; ?>">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                 style="width:1.5rem;height:1.5rem;margin-bottom:0.5rem;color:var(--text-muted);">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                             </svg>
-                            <div class="num"><?php echo $i; ?> Device<?php echo $i > 1 ? 's' : ''; ?></div>
+                            <div class="num"><?php echo $i; ?>
+                                <?php echo $i > 1 ? esc_html($dev_plur) : esc_html($dev_sing); ?>
+                            </div>
                         </div>
                     <?php endfor; ?>
                 </div>
@@ -83,45 +89,66 @@
                     <?php
                     $all_prices = IPTV_Currency_Settings::calculate_all_prices();
                     $default_device = '1_device';
+                    $save_more_text = iptv_text('save_more', 'Save more');
+                    $per_month_text = iptv_text('per_month', 'per month');
+                    $best_deal_text = iptv_text('best_deal', 'Best deal!');
                     ?>
                     <script>window.iptvPrices = <?php echo json_encode($all_prices); ?>;</script>
 
+                    <!-- Trial Card -->
+                    <div class="select-card duration-card" data-duration="trial" data-months="0">
+                        <span class="badge badge-blue">Risk Free</span>
+                        <div class="duration-header">24h Trial</div>
+                        <div class="duration-price price-display" id="price-trial">$
+                            <?php echo esc_html($all_prices['trial_24h']['usd']); ?>
+                        </div>
+                        <div class="duration-per" id="per-trial">One time</div>
+                        <div class="duration-savings">Test first</div>
+                    </div>
+
                     <div class="select-card duration-card" data-duration="1" data-months="1">
-                        <div class="duration-header">1 Month</div>
+                        <div class="duration-header"><?php echo esc_html(iptv_text('month_1_label', '1 Month')); ?>
+                        </div>
                         <div class="duration-price price-display" id="price-1mo">$
                             <?php echo esc_html($all_prices['1_month'][$default_device]['usd']); ?>
                         </div>
-                        <div class="duration-per" id="per-1mo">per month</div>
+                        <div class="duration-per" id="per-1mo"><?php echo esc_html($per_month_text); ?></div>
                     </div>
                     <div class="select-card duration-card" data-duration="3" data-months="3">
-                        <span class="badge badge-green">Save 40%</span>
-                        <div class="duration-header">3 Months</div>
+                        <span
+                            class="badge badge-green"><?php echo esc_html(iptv_text('save_40_text', 'Save 40%')); ?></span>
+                        <div class="duration-header"><?php echo esc_html(iptv_text('month_3_label', '3 Months')); ?>
+                        </div>
                         <div class="duration-price price-display" id="price-3mo">$
                             <?php echo esc_html($all_prices['3_months'][$default_device]['usd']); ?>
                         </div>
                         <div class="duration-per" id="per-3mo">
                             ~$<?php echo round($all_prices['3_months'][$default_device]['usd'] / 3, 2); ?>/mo</div>
-                        <div class="duration-savings">Save more</div>
+                        <div class="duration-savings"><?php echo esc_html($save_more_text); ?></div>
                     </div>
                     <div class="select-card duration-card" data-duration="6" data-months="6">
-                        <span class="badge badge-green">Save 58%</span>
-                        <div class="duration-header">6 Months</div>
+                        <span
+                            class="badge badge-green"><?php echo esc_html(iptv_text('save_58_text', 'Save 58%')); ?></span>
+                        <div class="duration-header"><?php echo esc_html(iptv_text('month_6_label', '6 Months')); ?>
+                        </div>
                         <div class="duration-price price-display" id="price-6mo">$
                             <?php echo esc_html($all_prices['6_months'][$default_device]['usd']); ?>
                         </div>
                         <div class="duration-per" id="per-6mo">
                             ~$<?php echo round($all_prices['6_months'][$default_device]['usd'] / 6, 2); ?>/mo</div>
-                        <div class="duration-savings">Save more</div>
+                        <div class="duration-savings"><?php echo esc_html($save_more_text); ?></div>
                     </div>
                     <div class="select-card duration-card" data-duration="12" data-months="12">
-                        <span class="badge badge-orange">Best Value</span>
-                        <div class="duration-header">12 Months</div>
+                        <span
+                            class="badge badge-orange"><?php echo esc_html(iptv_text('best_value_text', 'Best Value')); ?></span>
+                        <div class="duration-header"><?php echo esc_html(iptv_text('month_12_label', '12 Months')); ?>
+                        </div>
                         <div class="duration-price price-display" id="price-12mo">$
                             <?php echo esc_html($all_prices['12_months'][$default_device]['usd']); ?>
                         </div>
                         <div class="duration-per" id="per-12mo">
                             ~$<?php echo round($all_prices['12_months'][$default_device]['usd'] / 12, 2); ?>/mo</div>
-                        <div class="duration-savings">Best deal!</div>
+                        <div class="duration-savings"><?php echo esc_html($best_deal_text); ?></div>
                     </div>
                 </div>
             </div>
@@ -151,9 +178,11 @@
                     </div>
                     <div>
                         <div style="font-weight:600;font-size:0.875rem;">
-                            <?php echo esc_html(iptv_text('trust_1_title', 'Transparent pricing')); ?></div>
+                            <?php echo esc_html(iptv_text('trust_1_title', 'Transparent pricing')); ?>
+                        </div>
                         <div style="color:var(--text-muted);font-size:0.75rem;">
-                            <?php echo esc_html(iptv_text('trust_1_desc', 'No contracts. Cancel anytime.')); ?></div>
+                            <?php echo esc_html(iptv_text('trust_1_desc', 'No contracts. Cancel anytime.')); ?>
+                        </div>
                     </div>
                 </div>
                 <div
@@ -168,9 +197,11 @@
                     </div>
                     <div>
                         <div style="font-weight:600;font-size:0.875rem;">
-                            <?php echo esc_html(iptv_text('trust_2_title', 'Instant activation')); ?></div>
+                            <?php echo esc_html(iptv_text('trust_2_title', 'Instant activation')); ?>
+                        </div>
                         <div style="color:var(--text-muted);font-size:0.75rem;">
-                            <?php echo esc_html(iptv_text('trust_2_desc', 'Start watching in minutes.')); ?></div>
+                            <?php echo esc_html(iptv_text('trust_2_desc', 'Start watching in minutes.')); ?>
+                        </div>
                     </div>
                 </div>
                 <div
@@ -185,9 +216,11 @@
                     </div>
                     <div>
                         <div style="font-weight:600;font-size:0.875rem;">
-                            <?php echo esc_html(iptv_text('trust_3_title', 'Risk-free')); ?></div>
+                            <?php echo esc_html(iptv_text('trust_3_title', 'Risk-free')); ?>
+                        </div>
                         <div style="color:var(--text-muted);font-size:0.75rem;">
-                            <?php echo esc_html(iptv_text('trust_3_desc', '14-day money-back guarantee.')); ?></div>
+                            <?php echo esc_html(iptv_text('trust_3_desc', '14-day money-back guarantee.')); ?>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -44,6 +44,17 @@
     color: var(--white);
 }
 
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-col li {
+    margin: 0;
+    padding: 0;
+}
+
 .footer-col a {
     display: block;
     color: rgba(255, 255, 255, 0.6);

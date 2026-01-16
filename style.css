@@ -11,7 +11,9 @@ Text Domain: my-iptv-theme
 */
 
 /* Base reset - additional styles are in template files */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
@@ -32,4 +34,279 @@ a {
 img {
     max-width: 100%;
     height: auto;
+}
+
+/* =========================================
+   Universal & Page Styles (Extracted from page.php)
+   ========================================= */
+
+/* Page Header - Blue Gradient Banner */
+.logo-img {
+    height: 32px;
+    /* Force small size to match front-page header */
+    width: auto;
+}
+
+.page-header {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    padding: 8rem 0 3rem;
+    text-align: center;
+    margin-top: 0;
+}
+
+.page-header h1 {
+    color: #fff;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.page-header p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9375rem;
+}
+
+@media (max-width: 768px) {
+    .page-header {
+        padding: 7rem 0 2.5rem;
+    }
+
+    .page-header h1 {
+        font-size: 1.75rem;
+    }
+}
+
+/* Content Container */
+.page-content {
+    padding: 4rem 0;
+    background: #fff;
+}
+
+.content-wrapper {
+    max-width: 1200px;
+    /* Wide enough for Shop/Dashboard */
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Typography inside Content */
+.content-wrapper h1,
+.content-wrapper h2,
+.content-wrapper h3,
+.content-wrapper h4 {
+    color: #0f172a;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.content-wrapper h1 {
+    font-size: 2rem;
+}
+
+.content-wrapper h2 {
+    font-size: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #3b82f6;
+}
+
+.content-wrapper h3 {
+    font-size: 1.25rem;
+}
+
+.content-wrapper p {
+    margin-bottom: 1rem;
+    color: #64748b;
+    line-height: 1.8;
+}
+
+.content-wrapper ul,
+.content-wrapper ol {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+    color: #64748b;
+}
+
+.content-wrapper li {
+    margin-bottom: 0.5rem;
+}
+
+.content-wrapper a {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.content-wrapper a:hover {
+    text-decoration: underline;
+}
+
+.content-wrapper strong {
+    color: #0f172a;
+}
+
+.content-wrapper blockquote {
+    border-left: 4px solid #3b82f6;
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 0 0.5rem 0.5rem 0;
+}
+
+/* Tables */
+.content-wrapper table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+}
+
+.content-wrapper th,
+.content-wrapper td {
+    border: 1px solid #e2e8f0;
+    padding: 0.75rem;
+    text-align: left;
+}
+
+.content-wrapper th {
+    background: #f8fafc;
+    font-weight: 600;
+}
+
+/* =========================================
+   WooCommerce Overrides
+   ========================================= */
+
+/* Buttons - Match Theme Primary */
+.woocommerce button.button,
+.woocommerce .button,
+.woocommerce a.button,
+.woocommerce input.button,
+.woocommerce #respond input#submit {
+    background: #2563eb;
+    color: #fff;
+    padding: 0.875rem 2rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    border: none;
+    transition: all 0.2s;
+    line-height: 1.5;
+}
+
+.woocommerce button.button:hover,
+.woocommerce .button:hover,
+.woocommerce a.button:hover,
+.woocommerce input.button:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+    color: #fff;
+    text-decoration: none;
+}
+
+.woocommerce button.button:disabled,
+.woocommerce button.button:disabled[disabled] {
+    background: #cbd5e1;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Alt Buttons (e.g. Checkout, Update Cart) */
+.woocommerce button.button.alt,
+.woocommerce a.button.alt {
+    background: linear-gradient(135deg, #7c3aed, #6d28d9);
+    color: #fff;
+}
+
+.woocommerce button.button.alt:hover,
+.woocommerce a.button.alt:hover {
+    background: #6d28d9;
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+}
+
+/* Form Fields */
+.woocommerce form .form-row .input-text,
+.woocommerce form .form-row select {
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    width: 100%;
+    font-size: 1rem;
+    color: #1e293b;
+    background: #fff;
+}
+
+.woocommerce form .form-row .input-text:focus,
+.woocommerce form .form-row select:focus {
+    border-color: #2563eb;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Notices / Alerts */
+.woocommerce-message,
+.woocommerce-info,
+.woocommerce-error {
+    padding: 1rem 1.5rem;
+    border-top: 3px solid #2563eb;
+    background: #f8fafc;
+    color: #334155;
+    border-radius: 0.5rem;
+    margin-bottom: 2rem !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.woocommerce-info {
+    border-top-color: #3b82f6;
+}
+
+.woocommerce-message {
+    border-top-color: #10b981;
+}
+
+.woocommerce-error {
+    border-top-color: #ef4444;
+}
+
+.woocommerce-message::before,
+.woocommerce-info::before,
+.woocommerce-error::before {
+    display: none;
+    /* Hide default icons to keep it clean, or could customize */
+}
+
+/* Tables (Cart, Checkout) */
+.woocommerce table.shop_table {
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+}
+
+.woocommerce table.shop_table th {
+    background: #f8fafc;
+    color: #475569;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    padding: 1rem;
+}
+
+.woocommerce table.shop_table td {
+    padding: 1rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+/* Checkout Layout - 2 Cols Desktop */
+@media (min-width: 992px) {
+    .col2-set {
+        display: flex;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .col2-set .col-1,
+    .col2-set .col-2 {
+        flex: 1;
+        width: 50%;
+        float: none;
+    }
 }

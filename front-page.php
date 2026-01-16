@@ -52,7 +52,7 @@ $sections = array(
     'pricing',
     'steps',
     'dark-cta',
-    'unlock',
+    'comparison',
     'reviews',
     'contact',
     'footer'

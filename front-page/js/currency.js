@@ -159,6 +159,17 @@ function updateAllPrices() {
             }
         }
     });
+
+    // Update Comparison Table "Annual Price"
+    const compPriceEl = document.getElementById('comp-annual-price');
+    if (compPriceEl && window.iptvPrices && window.iptvPrices['12_months'] && window.iptvPrices['12_months']['1_device']) {
+        const price = window.iptvPrices['12_months']['1_device'][currency];
+        if (price) {
+            compPriceEl.textContent = data.position === 'before'
+                ? data.symbol + price
+                : price + ' ' + data.symbol;
+        }
+    }
 }
 
 // Initialize currency on page load

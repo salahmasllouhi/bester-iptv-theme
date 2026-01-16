@@ -3,16 +3,36 @@
     <div class="container">
         <div class="sports-grid" id="sportsCarousel">
             <?php
-            $sports = array(
-                array('name' => 'NFL', 'subtitle' => 'American Football', 'features' => array('Sunday Ticket', 'RedZone Channel', 'Super Bowl 4K')),
-                array('name' => 'NBA', 'subtitle' => 'Basketball', 'features' => array('All Regular Season', 'Playoffs & Finals', 'March Madness')),
-                array('name' => 'MLB', 'subtitle' => 'Baseball', 'features' => array('Full Season', 'World Series', 'All-Star Game')),
-                array('name' => 'Soccer', 'subtitle' => 'MLS & International', 'features' => array('Premier League', 'Champions League', 'World Cup')),
-                array('name' => 'NHL', 'subtitle' => 'Ice Hockey', 'features' => array('Regular Season', 'Stanley Cup', 'Winter Classic')),
-                array('name' => 'Tennis', 'subtitle' => 'ATP & WTA', 'features' => array('Grand Slams', 'US Open', 'Wimbledon')),
-                array('name' => 'Golf', 'subtitle' => 'PGA Tour', 'features' => array('Masters', 'PGA Championship', 'US Open')),
-                array('name' => 'Motorsports', 'subtitle' => 'NASCAR & F1', 'features' => array('NASCAR Cup', 'Formula 1', 'Indy 500'))
-            );
+            // Get content for sports (helper function assumption or inline logic)
+            // We need to re-fetch/utilize the global $content or fetch it here
+            $all_content = get_option('iptv_content', array());
+            $lang = isset($_GET['lang']) ? sanitize_text_field($_GET['lang']) : 'en';
+            $content = isset($all_content[$lang]) ? $all_content[$lang] : (isset($all_content['en']) ? $all_content['en'] : array());
+
+            // Helper to get text
+            if (!function_exists('iptv_sport_text')) {
+                function iptv_sport_text($key, $default, $content)
+                {
+                    return isset($content[$key]) && !empty($content[$key]) ? $content[$key] : $default;
+                }
+            }
+
+            // Construct Sports Array dynamically
+            $sports = array();
+            for ($i = 1; $i <= 8; $i++) {
+                $sports[] = array(
+                    'name' => iptv_sport_text("sport_{$i}_name", "Sport $i", $content),
+                    'subtitle' => iptv_sport_text("sport_{$i}_subtitle", "Subtitle $i", $content),
+                    'features' => array(
+                        iptv_sport_text("sport_{$i}_feat_1", "Feature 1", $content),
+                        iptv_sport_text("sport_{$i}_feat_2", "Feature 2", $content),
+                        iptv_sport_text("sport_{$i}_feat_3", "Feature 3", $content),
+                    )
+                );
+            }
+
+            $live_text = iptv_sport_text('sport_live_text', 'LIVE NOW', $content);
+
             foreach ($sports as $sport):
                 ?>
                 <div class="sport-card">
@@ -45,7 +65,7 @@
                         <?php endforeach; ?>
                     </ul>
                     <div class="live-badge">
-                        <div class="live-dot"></div>LIVE NOW
+                        <div class="live-dot"></div><?php echo esc_html($live_text); ?>
                     </div>
                 </div>
             <?php endforeach; ?>

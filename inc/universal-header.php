@@ -84,11 +84,10 @@ if (isset($site_currency_map[$site_slug])) {
                 </div>
             </div>
             <a href="<?php echo home_url('/#pricing'); ?>" class="nav-btn nav-btn-primary">Get Access Now</a>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <span></span><span></span><span></span>
+            </button>
         </div>
-        <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
-            <span></span><span></span><span></span>
-        </button>
-    </div>
 </header>
 
 <!-- Mobile Menu -->

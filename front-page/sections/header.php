@@ -45,14 +45,24 @@ if (isset($site_currency_map[$site_slug])) {
             <img src="<?php echo get_template_directory_uri(); ?>/images/logo/light logo 500_150.png" alt="Nordic IPTV"
                 class="logo-img">
         </a>
-        <nav class="nav-links">
-            <a href="<?php echo home_url('/'); ?>">Home</a>
-            <a href="#features">Features</a>
-            <a href="#pricing">Pricing</a>
-            <a href="<?php echo home_url('/blog/'); ?>">Blog</a>
-            <a href="<?php echo home_url('/user-guide/'); ?>">User Guide</a>
-            <a href="#contact">Contact</a>
-        </nav>
+        <?php if (has_nav_menu('primary')): ?>
+            <?php wp_nav_menu(array(
+                'theme_location' => 'primary',
+                'container' => 'nav',
+                'container_class' => 'nav-links',
+                'menu_class' => '',
+                'fallback_cb' => false,
+            )); ?>
+        <?php else: ?>
+            <nav class="nav-links">
+                <a href="<?php echo home_url('/'); ?>">Home</a>
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+                <a href="<?php echo home_url('/blog/'); ?>">Blog</a>
+                <a href="<?php echo home_url('/user-guide/'); ?>">User Guide</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        <?php endif; ?>
         <div class="nav-right">
             <div class="country-selector" id="countrySelector">
                 <button class="country-btn" onclick="toggleCountryDropdown()">
@@ -94,12 +104,22 @@ if (isset($site_currency_map[$site_slug])) {
 <!-- Mobile Menu -->
 <div class="mobile-menu" id="mobile-menu">
     <button class="mobile-menu-close" onclick="toggleMobileMenu()">&times;</button>
-    <a href="<?php echo home_url('/'); ?>" onclick="toggleMobileMenu()">Home</a>
-    <a href="#features" onclick="toggleMobileMenu()">Features</a>
-    <a href="#pricing" onclick="toggleMobileMenu()">Pricing</a>
-    <a href="<?php echo home_url('/blog/'); ?>" onclick="toggleMobileMenu()">Blog</a>
-    <a href="<?php echo home_url('/user-guide/'); ?>" onclick="toggleMobileMenu()">User Guide</a>
-    <a href="#contact" onclick="toggleMobileMenu()">Contact</a>
+    
+    <?php if (has_nav_menu('primary')) : ?>
+        <?php wp_nav_menu(array(
+            'theme_location' => 'primary',
+            'container'      => false,
+            'menu_class'     => '',
+            'fallback_cb'    => false,
+        )); ?>
+    <?php else : ?>
+        <a href="<?php echo home_url('/'); ?>">Home</a>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="<?php echo home_url('/blog/'); ?>">Blog</a>
+        <a href="<?php echo home_url('/user-guide/'); ?>">User Guide</a>
+        <a href="#contact">Contact</a>
+    <?php endif; ?>
 
     <!-- Language Selector in Mobile Menu -->
     <div class="mobile-language-selector">

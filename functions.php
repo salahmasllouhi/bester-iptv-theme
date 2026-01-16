@@ -8,7 +8,9 @@ function my_iptv_enqueue_styles()
 {
     wp_enqueue_style('my-iptv-style', get_stylesheet_uri(), array(), '1.0.0');
 }
-add_action('wp_enqueue_scripts', 'my_iptv_enqueue_styles');
+add_action('wp_enqueue_scripts', 'my_iptv_enqueue_styles', 20);
+
+
 
 // Theme setup
 function my_iptv_theme_setup()
@@ -23,6 +25,14 @@ function my_iptv_theme_setup()
         'comment-list',
         'gallery',
         'caption',
+    ));
+
+    // Register Navigation Menus
+    register_nav_menus(array(
+        'primary' => esc_html__('Header Menu', 'my-iptv'),
+        'footer_1' => esc_html__('Footer - Quick Links', 'my-iptv'),
+        'footer_2' => esc_html__('Footer - Support', 'my-iptv'),
+        'footer_3' => esc_html__('Footer - Legal', 'my-iptv'),
     ));
 
     // Add WooCommerce support
@@ -50,3 +60,9 @@ require_once get_template_directory() . '/inc/content-settings.php';
 
 // Include User Guide Shortcode (displays posts from user-guide category)
 require_once get_template_directory() . '/inc/user-guide-shortcode.php';
+
+// Include Product Setup Utility (Ensures WooCommerce products exist)
+require_once get_template_directory() . '/inc/product-setup.php';
+
+// Include Bulk Product Editor
+require_once get_template_directory() . '/inc/admin-bulk-editor.php';

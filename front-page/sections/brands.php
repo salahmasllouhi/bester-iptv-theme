@@ -2,8 +2,9 @@
 <section class="channels-posters">
     <!-- Centered Header -->
     <div class="channels-posters-header">
-        <h2>Stream Your Favorite Channels</h2>
-        <p>Access premium content from top networks worldwide with crystal-clear quality</p>
+        <h2><?php echo esc_html(iptv_text('brands_title', 'Stream Your Favorite Channels')); ?></h2>
+        <p><?php echo esc_html(iptv_text('brands_subtitle', 'Access premium content from top networks worldwide with crystal-clear quality')); ?>
+        </p>
     </div>
 
     <!-- 3D Poster Carousel -->

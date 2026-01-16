@@ -30,22 +30,61 @@
                     </div>
                 </div>
             </div>
+            <?php
+            // Get all menu locations
+            $locations = get_nav_menu_locations();
+
+            // Helper to get menu name safely
+            if (!function_exists('iptv_get_menu_title')) {
+                function iptv_get_menu_title($loc, $default)
+                {
+                    global $locations;
+                    if (isset($locations[$loc])) {
+                        $menu = wp_get_nav_menu_object($locations[$loc]);
+                        if ($menu)
+                            return $menu->name;
+                    }
+                    return $default;
+                }
+            }
+            ?>
+
             <div class="footer-col">
-                <h4>Quick Links</h4>
-                <a href="#features">Features</a>
-                <a href="#pricing">Pricing</a>
+                <h4><?php echo esc_html(iptv_get_menu_title('footer_1', 'Quick Links')); ?></h4>
+                <?php if (has_nav_menu('footer_1')): ?>
+                    <?php wp_nav_menu(array(
+                        'theme_location' => 'footer_1',
+                        'container' => false,
+                        'fallback_cb' => false,
+                    )); ?>
+                <?php else: ?>
+                    <a href="#features">Features</a>
+                    <a href="#pricing">Pricing</a>
+                <?php endif; ?>
             </div>
+            <?php if (has_nav_menu('footer_2')): ?>
+                <div class="footer-col">
+                    <h4><?php echo esc_html(iptv_get_menu_title('footer_2', 'Support')); ?></h4>
+                    <?php wp_nav_menu(array(
+                        'theme_location' => 'footer_2',
+                        'container' => false,
+                        'fallback_cb' => false,
+                    )); ?>
+                </div>
+            <?php endif; ?>
             <div class="footer-col">
-                <h4>Support</h4>
-                <a href="#">Help Center</a>
-                <a href="#">Contact Us</a>
-                <a href="#">Setup Guides</a>
-            </div>
-            <div class="footer-col">
-                <h4>Legal</h4>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">Refund Policy</a>
+                <h4><?php echo esc_html(iptv_get_menu_title('footer_3', 'Legal')); ?></h4>
+                <?php if (has_nav_menu('footer_3')): ?>
+                    <?php wp_nav_menu(array(
+                        'theme_location' => 'footer_3',
+                        'container' => false,
+                        'fallback_cb' => false,
+                    )); ?>
+                <?php else: ?>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Refund Policy</a>
+                <?php endif; ?>
             </div>
         </div>
         <div class="footer-bottom">

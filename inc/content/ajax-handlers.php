@@ -82,6 +82,10 @@ trait IPTV_Content_AJAX_Handlers
             wp_send_json_error('Unauthorized');
         }
 
+        // Increase processing time for AI operations
+        set_time_limit(300); // 5 minutes
+        ignore_user_abort(true); // Continue even if user closes connection
+
         $target_lang = sanitize_text_field($_POST['target_lang']);
         $deepl_code = $this->languages[$target_lang]['deepl'] ?? 'EN';
 
@@ -99,6 +103,13 @@ trait IPTV_Content_AJAX_Handlers
             }
         }
 
+        // Support for single field translation (Client-side iteration)
+        $field_key_param = isset($_POST['field_key']) ? sanitize_text_field($_POST['field_key']) : null;
+        if ($field_key_param && isset($english_to_translate[$field_key_param])) {
+            // Only translate this specific field
+            $english_to_translate = array($field_key_param => $english_to_translate[$field_key_param]);
+        }
+
         if (empty($english_to_translate)) {
             wp_send_json_error('No content to translate');
         }
@@ -109,15 +120,27 @@ trait IPTV_Content_AJAX_Handlers
             wp_send_json_error('OpenAI API not configured. Go to Settings → 🤖 OpenAI API to add your API key.');
         }
 
-        // Get target language name for OpenAI
+        // Get target language information
         $target_language = $translator->get_target_language($target_lang);
+
+        // Get Target Currency for Pricing Context
+        $languages = $this->languages; // Access the class property via local var
+        $target_currency = isset($languages[$target_lang]['currency']) ? $languages[$target_lang]['currency'] : 'USD ($)';
+        $currency_context = "";
+
+        // Only add currency context if target is NOT English
+        if ($target_lang !== 'en') {
+            $currency_context = "CONTEXT: Target Currency is {$target_currency}.\n";
+            $currency_context .= "INSTRUCTION: If the text contains prices (like '$10', '$5.99'), CONVERT them to {$target_currency} using standard marketing pricing (approximate). Example: '$5.83' -> '59 kr' (or appropriate local equivalent). Use the correct symbol.";
+        }
 
         // Translate all fields using OpenAI
         $translated = array();
         foreach ($english_to_translate as $field_key => $english_text) {
             if (!empty($english_text)) {
                 // First translate with OpenAI (strict translation, no extra words)
-                $translation = $translator->translate($english_text, $target_language, 'English');
+                // Pass currency context as 4th argument
+                $translation = $translator->translate($english_text, $target_language, 'English', $currency_context);
 
                 // Then apply glossary overrides for exact matches (if needed)
                 if (isset($this->glossary[$target_lang][$english_text])) {
@@ -128,8 +151,27 @@ trait IPTV_Content_AJAX_Handlers
             }
         }
 
+        // Check for API errors
+        $last_error = $translator->get_last_error();
+        if ($last_error) {
+            wp_send_json_error('Translation Partial/Failed: ' . $last_error . ' (Check your API Key and Model setting)');
+        }
+
         // Save translated content
-        $content[$target_lang] = $translated;
+        if ($field_key_param) {
+            // Merge single field update to avoid overwriting other fields
+            if (!isset($content[$target_lang])) {
+                $content[$target_lang] = array();
+            }
+            // Update only the specific field
+            if (isset($translated[$field_key_param])) {
+                $content[$target_lang][$field_key_param] = $translated[$field_key_param];
+            }
+        } else {
+            // Legacy: Overwrite all content for this language (used for "Translate All" single request)
+            $content[$target_lang] = $translated;
+        }
+
         update_option('iptv_content', $content);
 
         wp_send_json_success(array(
@@ -161,6 +203,11 @@ trait IPTV_Content_AJAX_Handlers
         // Get user's custom keyword if provided
         $custom_keyword = isset($_POST['custom_keyword']) ? sanitize_text_field($_POST['custom_keyword']) : '';
 
+        // Debug log for refresh content mode
+        if ($refresh_content_mode) {
+            error_log("REFRESH CONTENT MODE - Keyword: '$custom_keyword', Content length: " . strlen($_POST['existing_content'] ?? ''));
+        }
+
         // Get existing field values if in fill-missing mode
         $existing_title = isset($_POST['existing_title']) ? sanitize_text_field($_POST['existing_title']) : '';
         $existing_content = isset($_POST['existing_content']) ? wp_kses_post($_POST['existing_content']) : '';
@@ -175,16 +222,22 @@ trait IPTV_Content_AJAX_Handlers
             wp_send_json_error('Post not found');
         }
 
-        // Language mapping
+        // Language mapping - MUST match frontend codes from content-settings.php
         $lang_map = array(
-            'sv' => 'Swedish',
+            'en' => 'English',
+            'se' => 'Swedish',    // Frontend uses 'se', not 'sv'
+            'sv' => 'Swedish',    // Also support 'sv' for backwards compatibility
             'no' => 'Norwegian',
-            'da' => 'Danish',
+            'dk' => 'Danish',     // Frontend uses 'dk', not 'da'
+            'da' => 'Danish',     // Also support 'da' for backwards compatibility
             'fi' => 'Finnish',
             'is' => 'Icelandic'
         );
 
         $target_language = isset($lang_map[$target_lang]) ? $lang_map[$target_lang] : 'English';
+
+        // Debug log to verify language is being set correctly
+        error_log("IPTV Generate Content - Target Lang Code: $target_lang, Target Language: $target_language");
 
         // Get featured image and alt text
         $featured_image_id = get_post_thumbnail_id($post_id);
@@ -196,116 +249,257 @@ trait IPTV_Content_AJAX_Handlers
             $featured_image_alt = get_post_meta($featured_image_id, '_wp_attachment_image_alt', true);
         }
 
-        // Build prompt for OpenAI
+        // Build prompt for OpenAI - PRO SEO EXPERT MODE
         if ($refresh_content_mode) {
-            // Refresh content only mode - rewrite existing content with a fresh version
-            $prompt = "Rewrite this $target_language content with a fresh version while keeping the same topic and SEO focus.\n\n";
-            $prompt .= "Current Content (HTML):\n" . $existing_content . "\n\n";
+            // Simple, direct prompt that forces exact keyword usage
+            $prompt = "You are an EXPERT SEO Content Rewriter. Rewrite this article in $target_language to achieve a 100/100 Rank Math SEO Score.\n\n";
 
             if ($custom_keyword) {
-                $prompt .= "SEO Focus Keyword: \"$custom_keyword\"\n";
+                // Use find/replace instruction - this is clearer for LLMs
+                $prompt .= "IMPORTANT: Replace ALL mentions of 'Firestick', 'Fire Stick', 'Fire TV Stick', 'Amazon Firestick', 'Firestick IPTV setup', or any similar term with exactly: \"$custom_keyword\"\n\n";
+
+                $prompt .= "═══════════════════════════════════════════════════════════════\n";
+                $prompt .= "         STRICT KEYWORD RULES (RANK MATH SEO PRO)\n";
+                $prompt .= "═══════════════════════════════════════════════════════════════\n";
+                $prompt .= "The phrase \"$custom_keyword\" MUST appear:\n";
+                $prompt .= "✓ In the FIRST sentence of the first paragraph (CRITICAL)\n";
+                $prompt .= "✓ In at least 3 H2 headings\n";
+                $prompt .= "✓ In at least 2 H3 headings\n";
+                $prompt .= "✓ Keyword Density: 1.5% - 2.5% (Approx 15-20 times total)\n";
+                $prompt .= "✓ In the LAST paragraph\n";
+                $prompt .= "✓ Bolded with <strong> tags at least 5 times\n\n";
             }
 
-            $prompt .= "\nIMPORTANT RULES:\n";
-            $prompt .= "1. Create a NEW VERSION of the content about the same topic\n";
-            $prompt .= "2. Use different wording and structure but convey the same information\n";
-            $prompt .= "3. Preserve ALL HTML tags (h2, h3, p, ul, ol, li, etc.)\n";
-            $prompt .= "4. Keep similar length to original\n";
-            $prompt .= "5. Maintain the same SEO focus\n";
-            $prompt .= "6. Write in $target_language\n\n";
+            $prompt .= "═══════════════════════════════════════════════════════════════\n";
+            $prompt .= "         CONTENT READABILITY & STRUCTURE RULES \n";
+            $prompt .= "═══════════════════════════════════════════════════════════════\n";
+            $prompt .= "✓ Paragraphs: Short! Max 150 words per paragraph. (Preferred 3-4 lines)\n";
+            $prompt .= "✓ Sentence Length: Short! distinct sentences. Max 20 words per sentence.\n";
+            $prompt .= "✓ Transition Words: Use in >30% of sentences (e.g., 'However', 'Furthermore', 'Therefore').\n";
+            $prompt .= "✓ Active Voice: Use active voice in >90% of sentences.\n";
+            $prompt .= "✓ Formatting: Use bullet points (<ul>) and numbered lists (<ol>) frequently only where appropriate.\n";
+            $prompt .= "✓ Subheadings: Use H2 and H3 tags to break up content clearly (every 300 words).\n";
+            $prompt .= "✓ Tone: Engaging, helpful, and professional.\n\n";
 
-            $prompt .= "Return ONLY the refreshed content as JSON:\n{\n";
-            $prompt .= '  "content": "... (new version with HTML tags preserved)"' . "\n";
-            $prompt .= "}\n";
+            $prompt .= "Article to rewrite:\n";
+            $prompt .= "---\n";
+            $prompt .= $existing_content . "\n";
+            $prompt .= "---\n\n";
+
+            $prompt .= "Output format: Return ONLY a JSON object with a single 'content' key containing the HTML.\n";
+            $prompt .= "Use proper HTML tags: <h2>, <h3>, <p>, <ul>, <ol>, <li>, <strong>\n\n";
+
+            $prompt .= "Example output:\n";
+            $prompt .= "{\"content\": \"<p>The <strong>$custom_keyword</strong> is a great device...</p><h2>How to set up your $custom_keyword</h2>...\"}\n";
+
         } elseif ($fill_missing_mode) {
-            $prompt = "Fill missing SEO fields for $target_language content.\n\n";
-            $prompt .= "Source Content (English HTML):\n";
+            // Fill missing mode with STRICT SEO optimization
+            $prompt = "You are an EXPERT SEO Content Writer. Generate ONLY the missing fields following Rank Math 100/100 guidelines.\n\n";
+
+            $prompt .= "═══════════════════════════════════════════════════════════════\n";
+            $prompt .= "★★★ CRITICAL: ALL OUTPUT MUST BE IN $target_language ★★★\n";
+            $prompt .= "═══════════════════════════════════════════════════════════════\n";
+            $prompt .= "Do NOT write in English. Write EVERYTHING in native $target_language.\n";
+            $prompt .= "This includes: title, content, meta_title, meta_description, focus_keyword.\n\n";
+
+            $prompt .= "=== SOURCE CONTENT (English - for reference only) ===\n";
             $prompt .= "Title: " . $post->post_title . "\n";
             $prompt .= "Content:\n" . $post->post_content . "\n\n";
 
             if ($custom_keyword) {
-                $prompt .= "REQUIRED: Use this exact focus keyword: \"$custom_keyword\"\n";
+                $prompt .= "★★★ PRIMARY FOCUS KEYWORD (USE EXACTLY): \"$custom_keyword\" ★★★\n\n";
             }
 
-            $prompt .= "Current $target_language fields:\n";
+            $prompt .= "=== EXISTING FIELDS (DO NOT REGENERATE) ===\n";
             if ($existing_title)
-                $prompt .= "Title: " . $existing_title . " (KEEP)\n";
+                $prompt .= "✓ Title: " . $existing_title . " (KEEP - do NOT include in output)\n";
             if ($existing_content)
-                $prompt .= "Content: (EXISTS - KEEP)\n";
+                $prompt .= "✓ Content: (EXISTS - KEEP - do NOT include in output)\n";
             if ($existing_meta_title)
-                $prompt .= "Meta Title: " . $existing_meta_title . " (KEEP)\n";
+                $prompt .= "✓ Meta Title: " . $existing_meta_title . " (KEEP - do NOT include in output)\n";
             if ($existing_meta_desc)
-                $prompt .= "Meta Description: " . $existing_meta_desc . " (KEEP)\n";
+                $prompt .= "✓ Meta Description: " . $existing_meta_desc . " (KEEP - do NOT include in output)\n";
             if ($existing_slug)
-                $prompt .= "Slug: " . $existing_slug . " (KEEP)\n";
+                $prompt .= "✓ Slug: " . $existing_slug . " (KEEP - do NOT include in output)\n";
             if ($existing_image_alt)
-                $prompt .= "Image Alt: " . $existing_image_alt . " (KEEP)\n";
+                $prompt .= "✓ Image Alt: " . $existing_image_alt . " (KEEP - do NOT include in output)\n";
 
-            $prompt .= "\nIMPORTANT RULES:\n";
-            $prompt .= "1. ONLY generate fields that are NOT marked as (KEEP)\n";
-            $prompt .= "2. All generated content must be in $target_language\n";
-            $prompt .= "3. Preserve ALL HTML structure in content (h2, h3, p tags)\n";
-            if ($custom_keyword) {
-                $prompt .= "4. Use EXACTLY this focus keyword: \"$custom_keyword\"\n";
-            } else {
-                $prompt .= "4. Generate a native $target_language focus keyword\n";
-            }
+            $prompt .= "\n═══════════════════════════════════════════════════════════════\n";
+            $prompt .= "           STRICT SEO RULES FOR MISSING FIELDS ONLY\n";
+            $prompt .= "═══════════════════════════════════════════════════════════════\n\n";
 
-            $prompt .= "\nReturn ONLY missing fields as JSON:\n{\n";
+            $prompt .= "【1】FOCUS KEYWORD:\n";
+            $prompt .= "   ✓ 2-4 words, native $target_language\n";
+            $prompt .= "   ✓ What people actually search for\n\n";
+
+            $prompt .= "【2】SEO TITLE (meta_title):\n";
+            $prompt .= "   ✓ EXACTLY 50-60 characters (count carefully!)\n";
+            $prompt .= "   ✓ Keyword MUST appear in first 50 characters\n";
+            $prompt .= "   ✓ Include power word (Ultimate, Best, Complete, Guide, Easy)\n\n";
+
+            $prompt .= "【3】META DESCRIPTION:\n";
+            $prompt .= "   ✓ EXACTLY 120-160 characters (count carefully!)\n";
+            $prompt .= "   ✓ Keyword MUST appear in FIRST sentence\n";
+            $prompt .= "   ✓ Include call-to-action\n\n";
+
+            $prompt .= "【4】URL SLUG:\n";
+            $prompt .= "   ✓ Include ALL keyword words\n";
+            $prompt .= "   ✓ Lowercase with hyphens only\n";
+            $prompt .= "   ✓ Short and clean (3-5 words)\n\n";
+
+            $prompt .= "【5】CONTENT (if missing):\n";
+            $prompt .= "   ✓ Keyword in FIRST paragraph (first 10%)\n";
+            $prompt .= "   ✓ Keyword in at least ONE <h2> heading\n";
+            $prompt .= "   ✓ 1-2.5% keyword density\n";
+            $prompt .= "   ✓ Short paragraphs (<120 words)\n";
+            $prompt .= "   ✓ Proper HTML structure\n\n";
+
+            $prompt .= "【6】IMAGE ALT:\n";
+            $prompt .= "   ✓ Descriptive with keyword included\n";
+            $prompt .= "   ✓ Under 125 characters\n\n";
+
+            $prompt .= "═══════════════════════════════════════════════════════════════\n";
+            $prompt .= "              OUTPUT: ONLY MISSING FIELDS AS JSON\n";
+            $prompt .= "═══════════════════════════════════════════════════════════════\n\n";
+
+            $prompt .= "Return ONLY fields that are MISSING (not marked KEEP above):\n{\n";
             if (!$custom_keyword)
-                $prompt .= '  "focus_keyword": "...",' . "\n";
+                $prompt .= '  "focus_keyword": "native keyword 2-4 words",' . "\n";
             if (!$existing_title)
-                $prompt .= '  "title": "...",' . "\n";
+                $prompt .= '  "title": "H1 title with keyword naturally",' . "\n";
             if (!$existing_content)
-                $prompt .= '  "content": "... (full HTML)",' . "\n";
+                $prompt .= '  "content": "<p>Keyword in first paragraph...</p><h2>Keyword in heading</h2>...",' . "\n";
             if (!$existing_meta_title)
-                $prompt .= '  "meta_title": "...",' . "\n";
+                $prompt .= '  "meta_title": "Keyword First | Power Word - 50-60 chars exact",' . "\n";
             if (!$existing_meta_desc)
-                $prompt .= '  "meta_description": "...",' . "\n";
+                $prompt .= '  "meta_description": "Keyword in first sentence. 120-160 chars exact.",' . "\n";
             if (!$existing_slug)
-                $prompt .= '  "slug": "url-friendly-slug"' . ($existing_image_alt || $featured_image_alt ? ',' : '') . "\n";
+                $prompt .= '  "slug": "keyword-words-here"' . (($featured_image_alt && !$existing_image_alt) ? ',' : '') . "\n";
             if ($featured_image_alt && !$existing_image_alt)
-                $prompt .= '  "image_alt": "..."' . "\n";
+                $prompt .= '  "image_alt": "descriptive alt with keyword"' . "\n";
             $prompt .= "}\n";
+
         } else {
-            // Full regeneration mode
-            $prompt = "Localize this content to $target_language with SEO optimization.\n\n";
-            $prompt .= "Original (HTML):\n";
+            // Full regeneration mode - STRICT SEO optimization for Rank Math 100/100
+            $prompt = "You are an EXPERT SEO Content Writer creating content that MUST achieve Rank Math 100/100 score.\n\n";
+
+            $prompt .= "═══════════════════════════════════════════════════════════════\n";
+            $prompt .= "★★★ CRITICAL: ALL OUTPUT MUST BE IN $target_language ★★★\n";
+            $prompt .= "═══════════════════════════════════════════════════════════════\n";
+            $prompt .= "Do NOT write in English. Write EVERYTHING in native $target_language.\n";
+            $prompt .= "This includes: focus_keyword, title, content, meta_title, meta_description, slug, image_alt.\n\n";
+
+            $prompt .= "=== SOURCE CONTENT (English - for reference only) ===\n";
             $prompt .= "Title: " . $post->post_title . "\n";
             $prompt .= "Content:\n" . $post->post_content . "\n";
             if ($featured_image_alt) {
                 $prompt .= "Image Alt: " . $featured_image_alt . "\n";
             }
+            $prompt .= "\n";
 
             if ($custom_keyword) {
-                $prompt .= "\nREQUIRED: Use this exact focus keyword: \"$custom_keyword\"\n";
+                $prompt .= "★★★ PRIMARY FOCUS KEYWORD (MUST USE EXACTLY): \"$custom_keyword\" ★★★\n\n";
             } else {
-                $prompt .= "\nGenerate a native $target_language focus keyword (not just a translation).\n";
+                $prompt .= "Generate a native $target_language focus keyword (2-4 words, what people actually search for in that language).\n\n";
             }
 
-            $prompt .= "IMPORTANT: Preserve ALL HTML structure including headings (h2, h3), paragraphs (p), lists, and other HTML tags.\n";
-            $prompt .= "Rewrite the content and SEO metadata for $target_language audience.\n";
-            $prompt .= "The content field MUST be valid HTML with proper tags preserved.\n\n";
+            $prompt .= "═══════════════════════════════════════════════════════════════\n";
+            $prompt .= "               MANDATORY RANK MATH SEO REQUIREMENTS\n";
+            $prompt .= "               YOU MUST FOLLOW EVERY SINGLE RULE BELOW\n";
+            $prompt .= "═══════════════════════════════════════════════════════════════\n\n";
 
-            $prompt .= "Return as JSON:\n";
+            $prompt .= "【1】FOCUS KEYWORD PLACEMENT - CRITICAL ✓\n";
+            $prompt .= "   ✓ The EXACT focus keyword MUST appear in:\n";
+            $prompt .= "     • meta_title - within first 50 characters\n";
+            $prompt .= "     • meta_description - in the FIRST sentence\n";
+            $prompt .= "     • slug - all keyword words included\n";
+            $prompt .= "     • title (H1) - naturally included\n";
+            $prompt .= "     • First paragraph of content (first 10%)\n";
+            $prompt .= "     • At least ONE H2 subheading\n";
+            $prompt .= "     • Content body multiple times (1-2.5% density)\n\n";
+
+            $prompt .= "【2】SEO TITLE (meta_title) - STRICT FORMAT ✓\n";
+            $prompt .= "   ✓ Length: EXACTLY 50-60 characters (count carefully!)\n";
+            $prompt .= "   ✓ Focus keyword MUST appear in first 50 characters\n";
+            $prompt .= "   ✓ Include ONE power word: Ultimate, Best, Complete, Essential, Guide, Easy, Fast, Simple, Proven, Free\n";
+            $prompt .= "   ✓ Use pipe (|) or dash (-) as separator\n";
+            $prompt .= "   ✓ Example: \"[Keyword]: Ultimate Guide | [Brand]\" or \"Best [Keyword] - Complete Guide 2026\"\n\n";
+
+            $prompt .= "【3】META DESCRIPTION - STRICT FORMAT ✓\n";
+            $prompt .= "   ✓ Length: EXACTLY 120-160 characters (count carefully!)\n";
+            $prompt .= "   ✓ Focus keyword MUST appear in FIRST sentence\n";
+            $prompt .= "   ✓ Include a clear call-to-action (Learn, Discover, Find out, Get, Try)\n";
+            $prompt .= "   ✓ Describe the benefit to the reader\n";
+            $prompt .= "   ✓ Make it compelling for clicks\n\n";
+
+            $prompt .= "【4】URL SLUG - STRICT FORMAT ✓\n";
+            $prompt .= "   ✓ Include ALL words from focus keyword\n";
+            $prompt .= "   ✓ Lowercase only, hyphens between words\n";
+            $prompt .= "   ✓ Short and readable (3-5 words max)\n";
+            $prompt .= "   ✓ No special characters, no stop words (the, a, an)\n\n";
+
+            $prompt .= "【5】POST TITLE (H1) - REQUIRED ✓\n";
+            $prompt .= "   ✓ Include focus keyword naturally\n";
+            $prompt .= "   ✓ Engaging and click-worthy\n";
+            $prompt .= "   ✓ Can be different from meta_title (can be longer)\n\n";
+
+            $prompt .= "【6】CONTENT BODY - STRICT STRUCTURE ✓\n";
+            $prompt .= "   ✓ Focus keyword in FIRST paragraph (mandatory!)\n";
+            $prompt .= "   ✓ Focus keyword in at least ONE <h2> heading\n";
+            $prompt .= "   ✓ Keyword density: 1-2.5% (use keyword 5-15 times naturally)\n";
+            $prompt .= "   ✓ Minimum 1000 words (longer = better for SEO)\n";
+            $prompt .= "   ✓ Use <strong> tags to bold the keyword 2-3 times\n";
+            $prompt .= "   ✓ Short paragraphs: MAX 120 words per <p> tag\n";
+            $prompt .= "   ✓ Add H2/H3 subheading every 300 words\n";
+            $prompt .= "   ✓ Use bullet points <ul><li> and numbered lists <ol><li>\n";
+            $prompt .= "   ✓ Proper hierarchy: H2 → H3 → H4 (never skip levels)\n\n";
+
+            $prompt .= "【7】HTML FORMATTING - STRICT ✓\n";
+            $prompt .= "   ✓ All text MUST be in proper HTML tags\n";
+            $prompt .= "   ✓ Use: <h2>, <h3>, <p>, <ul>, <ol>, <li>, <strong>, <em>\n";
+            $prompt .= "   ✓ NO naked text (everything wrapped in tags)\n";
+            $prompt .= "   ✓ Clean, valid HTML only\n\n";
+
+            $prompt .= "【8】IMAGE ALT TEXT ✓\n";
+            $prompt .= "   ✓ Include focus keyword naturally\n";
+            $prompt .= "   ✓ Descriptive of image content\n";
+            $prompt .= "   ✓ Under 125 characters\n\n";
+
+            $prompt .= "═══════════════════════════════════════════════════════════════\n";
+            $prompt .= "                      JSON OUTPUT FORMAT\n";
+            $prompt .= "═══════════════════════════════════════════════════════════════\n\n";
+
+            $prompt .= "Return ONLY valid JSON (no markdown, no explanation):\n";
             $prompt .= "{\n";
-            $prompt .= '  "focus_keyword": "...",' . "\n";
-            $prompt .= '  "title": "...",' . "\n";
-            $prompt .= '  "content": "... (full HTML with h2, h3, p tags preserved)",' . "\n";
-            $prompt .= '  "meta_title": "...",' . "\n";
-            $prompt .= '  "meta_description": "...",' . "\n";
-            $prompt .= '  "slug": "url-friendly-slug"';
+            $prompt .= '  "focus_keyword": "exact native ' . $target_language . ' keyword 2-4 words",' . "\n";
+            $prompt .= '  "title": "H1 title with keyword naturally included",' . "\n";
+            $prompt .= '  "content": "<p>First paragraph with <strong>keyword</strong>...</p><h2>Heading with keyword</h2><p>...</p>",' . "\n";
+            $prompt .= '  "meta_title": "Keyword First | Power Word - 50-60 chars exact",' . "\n";
+            $prompt .= '  "meta_description": "Keyword in first sentence. Benefit to reader. Call to action. 120-160 chars exact.",' . "\n";
+            $prompt .= '  "slug": "keyword-words-here"';
             if ($featured_image_alt) {
                 $prompt .= ",\n";
-                $prompt .= '  "image_alt": "..."';
+                $prompt .= '  "image_alt": "descriptive alt with keyword naturally"';
             }
-            $prompt .= "\n}\n";
+            $prompt .= "\n}\n\n";
+
+            $prompt .= "★★★ SELF-CHECK BEFORE RESPONDING ★★★\n";
+            $prompt .= "Before returning JSON, verify:\n";
+            $prompt .= "□ Is keyword in meta_title within first 50 chars? YES/NO\n";
+            $prompt .= "□ Is meta_title 50-60 characters? YES/NO\n";
+            $prompt .= "□ Is keyword in first sentence of meta_description? YES/NO\n";
+            $prompt .= "□ Is meta_description 120-160 characters? YES/NO\n";
+            $prompt .= "□ Does slug contain keyword words? YES/NO\n";
+            $prompt .= "□ Is keyword in first paragraph of content? YES/NO\n";
+            $prompt .= "□ Is keyword in at least one H2 heading? YES/NO\n";
+            $prompt .= "□ Is content 1000+ words? YES/NO\n";
+            $prompt .= "\nALL must be YES. Fix any NO before responding.\n";
         }
 
         // Call OpenAI API directly (not translate() which has token limits)
         $translator = new Theme_OpenAI_Translator();
         $api_key = get_option('openai_api_key');
-        $model = get_option('openai_model', 'gpt-4o-mini');
+        $model = $translator->get_model();
 
         if (empty($api_key)) {
             wp_send_json_error('OpenAI API key not configured');
@@ -313,21 +507,31 @@ trait IPTV_Content_AJAX_Handlers
 
         // Determine token parameter based on model
         // GPT-5 and o1/preview models use max_completion_tokens
-        $token_param = (strpos($model, 'gpt-5') !== false || strpos($model, 'o1-') !== false)
-            ? 'max_completion_tokens'
-            : 'max_tokens';
+        $is_gpt5_or_o1 = (strpos($model, 'gpt-5') !== false || strpos($model, 'o1-') !== false);
+        $token_param = $is_gpt5_or_o1 ? 'max_completion_tokens' : 'max_tokens';
+
+        // Set reasonable token limits based on model
+        $token_limit = $is_gpt5_or_o1 ? 32000 : 4096;
 
         $body_args = array(
             'model' => $model,
             'messages' => array(
                 array('role' => 'user', 'content' => $prompt)
             ),
-            'temperature' => (strpos($model, 'gpt-5') !== false || strpos($model, 'o1-') !== false) ? 1.0 : 0.7,
         );
-        $body_args[$token_param] = 100000; // Maximum token limit
+
+        // GPT-5 and o1 models don't support temperature parameter
+        if (!$is_gpt5_or_o1) {
+            $body_args['temperature'] = 0.7;
+        }
+
+        $body_args[$token_param] = $token_limit;
+
+        // Log the request for debugging
+        error_log('OpenAI Request - Model: ' . $model . ', Token Param: ' . $token_param . ', Limit: ' . $token_limit);
 
         $response = wp_remote_post('https://api.openai.com/v1/chat/completions', array(
-            'timeout' => 120,
+            'timeout' => 180, // Increased timeout for GPT-5
             'headers' => array(
                 'Authorization' => 'Bearer ' . $api_key,
                 'Content-Type' => 'application/json',
@@ -371,9 +575,23 @@ trait IPTV_Content_AJAX_Handlers
         // Remove problematic control characters but preserve valid JSON structure
         $result = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $result);
 
+        // Fix escaped newlines in content that break JSON
+        // Replace literal newlines inside JSON strings with \n escape sequence
+        $result = preg_replace('/\r\n|\r/', "\n", $result); // Normalize line endings
+
+        // Try to fix common JSON issues with HTML content
+        // Match content between quotes and escape newlines properly
+        $result = preg_replace_callback('/"content"\s*:\s*"(.*?)(?<!\\\\)"/s', function ($matches) {
+            $content = $matches[1];
+            // Escape unescaped newlines
+            $content = str_replace("\n", "\\n", $content);
+            $content = str_replace("\r", "", $content);
+            return '"content": "' . $content . '"';
+        }, $result);
+
         // Ensure UTF-8 encoding
         if (!mb_check_encoding($result, 'UTF-8')) {
-            $result = utf8_encode($result);
+            $result = mb_convert_encoding($result, 'UTF-8', 'auto');
         }
 
         $data = json_decode($result, true);
@@ -543,7 +761,7 @@ trait IPTV_Content_AJAX_Handlers
     }
 
     /**
-     * AJAX handler for getting initial post data (English source)
+     * AJAX handler for getting initial post data (English source + all subsites)
      */
     public function ajax_get_initial_data()
     {
@@ -555,13 +773,21 @@ trait IPTV_Content_AJAX_Handlers
 
         $post_id = intval($_POST['post_id']);
 
-        // Get original post
+        // Always get original English post from main site (blog 1)
+        if (is_multisite()) {
+            switch_to_blog(1);
+        }
+
+        // Get original post from main site
         $post = get_post($post_id);
         if (!$post) {
+            if (is_multisite()) {
+                restore_current_blog();
+            }
             wp_send_json_error('Post not found');
         }
 
-        // Get Rank Math SEO data
+        // Get Rank Math SEO data for English
         $focus_keyword = get_post_meta($post_id, 'rank_math_focus_keyword', true);
         $meta_title = get_post_meta($post_id, 'rank_math_title', true);
         $meta_description = get_post_meta($post_id, 'rank_math_description', true);
@@ -573,16 +799,83 @@ trait IPTV_Content_AJAX_Handlers
             $image_alt = get_post_meta($featured_image_id, '_wp_attachment_image_alt', true);
         }
 
-        wp_send_json_success(array(
-            'title' => $post->post_title,
-            'content' => $post->post_content,
-            'slug' => $post->post_name,
-            'focus_keyword' => $focus_keyword,
-            'meta_title' => $meta_title,
-            'meta_description' => $meta_description,
-            'image_alt' => $image_alt,
+        // Store post type for later use
+        $post_type = $post->post_type;
+
+        // Prepare response with English data
+        $response = array(
+            'en' => array(
+                'title' => $post->post_title,
+                'content' => $post->post_content,
+                'slug' => $post->post_name,
+                'focus_keyword' => $focus_keyword,
+                'meta_title' => $meta_title,
+                'meta_description' => $meta_description,
+                'image_alt' => $image_alt,
+            ),
             'featured_image_id' => $featured_image_id
-        ));
+        );
+
+        if (is_multisite()) {
+            restore_current_blog();
+        }
+
+        // Subsite mapping - lang code => blog_id
+        $subsites = array(
+            'se' => 2,
+            'no' => 3,
+            'dk' => 4,
+            'fi' => 5,
+            'is' => 6
+        );
+
+        // Fetch data from each subsite
+        if (is_multisite()) {
+            foreach ($subsites as $lang_code => $blog_id) {
+                switch_to_blog($blog_id);
+
+                // Find the localized post by meta
+                $localized_query = new WP_Query(array(
+                    'post_type' => $post_type,
+                    'post_status' => array('publish', 'draft'),
+                    'meta_key' => '_localized_from_post',
+                    'meta_value' => $post_id,
+                    'posts_per_page' => 1
+                ));
+
+                if ($localized_query->have_posts()) {
+                    $localized_post = $localized_query->posts[0];
+
+                    // Get Rank Math SEO data
+                    $loc_focus_keyword = get_post_meta($localized_post->ID, 'rank_math_focus_keyword', true);
+                    $loc_meta_title = get_post_meta($localized_post->ID, 'rank_math_title', true);
+                    $loc_meta_description = get_post_meta($localized_post->ID, 'rank_math_description', true);
+
+                    // Get featured image alt text
+                    $loc_image_alt = '';
+                    $loc_featured_image_id = get_post_thumbnail_id($localized_post->ID);
+                    if ($loc_featured_image_id) {
+                        $loc_image_alt = get_post_meta($loc_featured_image_id, '_wp_attachment_image_alt', true);
+                    }
+
+                    $response[$lang_code] = array(
+                        'title' => $localized_post->post_title,
+                        'content' => $localized_post->post_content,
+                        'slug' => $localized_post->post_name,
+                        'focus_keyword' => $loc_focus_keyword,
+                        'meta_title' => $loc_meta_title,
+                        'meta_description' => $loc_meta_description,
+                        'image_alt' => $loc_image_alt,
+                        'post_id' => $localized_post->ID,
+                        'status' => $localized_post->post_status
+                    );
+                }
+
+                restore_current_blog();
+            }
+        }
+
+        wp_send_json_success($response);
     }
 
     /**
@@ -654,29 +947,37 @@ trait IPTV_Content_AJAX_Handlers
 
             wp_send_json_success(array('message' => 'English post updated successfully'));
         } else {
-            // For translations: save as draft on main site for later publishing
-            // Check if a draft already exists for this language
-            $draft_query = new WP_Query(array(
+            // For translations: save as draft on TARGET subsite
+            $target_blog_id = isset($_POST['target_blog_id']) ? intval($_POST['target_blog_id']) : 0;
+
+            // Get source image path while still on main blog
+            $source_image_path = '';
+            if ($featured_image_id) {
+                $source_image_path = get_attached_file($featured_image_id);
+            }
+
+            if ($target_blog_id && is_multisite()) {
+                switch_to_blog($target_blog_id);
+            }
+
+            // Check if a draft or published post already exists for this language linked to original post
+            $existing_query = new WP_Query(array(
                 'post_type' => $post->post_type,
-                'post_status' => 'draft',
+                'post_status' => array('publish', 'draft', 'pending', 'future'), // Check all statuses
                 'meta_query' => array(
                     array(
                         'key' => '_localized_from_post',
                         'value' => $post_id
-                    ),
-                    array(
-                        'key' => '_localized_target_lang',
-                        'value' => $target_lang
                     )
                 ),
                 'posts_per_page' => 1
             ));
 
-            if ($draft_query->have_posts()) {
-                // Update existing draft
-                $draft_post = $draft_query->posts[0];
+            if ($existing_query->have_posts()) {
+                // Update existing post/draft
+                $existing_post = $existing_query->posts[0];
                 $draft_id = wp_update_post(array(
-                    'ID' => $draft_post->ID,
+                    'ID' => $existing_post->ID,
                     'post_title' => $post_title,
                     'post_content' => $post_content,
                     'post_name' => $post_slug
@@ -693,18 +994,81 @@ trait IPTV_Content_AJAX_Handlers
             }
 
             if (is_wp_error($draft_id) || !$draft_id) {
-                wp_send_json_error('Failed to save draft');
+                if ($target_blog_id && is_multisite()) {
+                    restore_current_blog();
+                }
+                wp_send_json_error('Failed to save draft on subsite ' . $target_blog_id);
             }
 
             // Save meta data
             update_post_meta($draft_id, '_localized_from_post', $post_id);
             update_post_meta($draft_id, '_localized_target_lang', $target_lang);
-            update_post_meta($draft_id, 'rank_math_focus_keyword', $focus_keyword);
-            update_post_meta($draft_id, 'rank_math_title', $meta_title);
-            update_post_meta($draft_id, 'rank_math_description', $meta_description);
+
+            // Rank Math SEO
+            if ($focus_keyword)
+                update_post_meta($draft_id, 'rank_math_focus_keyword', $focus_keyword);
+            if ($meta_title)
+                update_post_meta($draft_id, 'rank_math_title', $meta_title);
+            if ($meta_description)
+                update_post_meta($draft_id, 'rank_math_description', $meta_description);
 
             if ($image_alt) {
                 update_post_meta($draft_id, '_localized_image_alt', $image_alt);
+            }
+            // Handle Featured Image Duplication/Update
+            if ($featured_image_id && $source_image_path && file_exists($source_image_path)) {
+
+                // If post already has a thumbnail, just update its alt text
+                // Wait - verify if existing thumbnail is valid or unrelated. 
+                // For now, if thumbnail exists, we assume it is the correct one to avoid duplicates.
+                if (has_post_thumbnail($draft_id)) {
+                    $thumb_id = get_post_thumbnail_id($draft_id);
+                    if ($image_alt) {
+                        update_post_meta($thumb_id, '_wp_attachment_image_alt', $image_alt);
+                    }
+                } else {
+                    // Upload image to localized site's media library if missing
+                    require_once(ABSPATH . 'wp-admin/includes/file.php');
+                    require_once(ABSPATH . 'wp-admin/includes/media.php');
+                    require_once(ABSPATH . 'wp-admin/includes/image.php');
+
+                    // Read content safely
+                    $image_data = file_get_contents($source_image_path);
+
+                    if ($image_data) {
+                        $upload_file = wp_upload_bits(basename($source_image_path), null, $image_data);
+
+                        if (!$upload_file['error']) {
+                            $wp_filetype = wp_check_filetype($upload_file['file'], null);
+
+                            $attachment_data = array(
+                                'post_mime_type' => $wp_filetype['type'],
+                                'post_title' => sanitize_file_name(pathinfo($upload_file['file'], PATHINFO_FILENAME)),
+                                'post_content' => '',
+                                'post_status' => 'inherit'
+                            );
+
+                            $attach_id = wp_insert_attachment($attachment_data, $upload_file['file']);
+
+                            if ($attach_id) {
+                                $attach_data = wp_generate_attachment_metadata($attach_id, $upload_file['file']);
+                                wp_update_attachment_metadata($attach_id, $attach_data);
+
+                                // Set Alt Text
+                                if ($image_alt) {
+                                    update_post_meta($attach_id, '_wp_attachment_image_alt', $image_alt);
+                                }
+
+                                // Set as Featured Image
+                                set_post_thumbnail($draft_id, $attach_id);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if ($target_blog_id && is_multisite()) {
+                restore_current_blog();
             }
 
             wp_send_json_success(array('message' => 'Draft saved for ' . $target_lang));

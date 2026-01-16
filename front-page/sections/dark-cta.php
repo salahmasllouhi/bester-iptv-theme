@@ -3,8 +3,15 @@
     <div class="nd-container">
 
         <div class="nd-header">
-            <h2>Tired of Streaming Hassles? <br> <span class="highlight-green">Break Free with Nordic IPTV</span></h2>
-            <p>Join thousands of satisfied customers who switched to premium IPTV streaming.</p>
+            <h2>
+                <?php echo esc_html(iptv_text('cta_title', 'Tired of Streaming Hassles?')); ?> <br> <span
+                    class="highlight-green">
+                    <?php echo esc_html(iptv_text('cta_title_span', 'Break Free with Nordic IPTV')); ?>
+                </span>
+            </h2>
+            <p>
+                <?php echo esc_html(iptv_text('cta_subtitle', 'Join thousands of satisfied customers who switched to premium IPTV streaming.')); ?>
+            </p>
         </div>
 
         <div class="nd-grid">
@@ -19,8 +26,12 @@
                         </svg>
                     </div>
                     <div>
-                        <h3>The Struggle is Real</h3>
-                        <span class="sub-text">What you're dealing with right now</span>
+                        <h3>
+                            <?php echo esc_html(iptv_text('cta_negative_title', 'The Struggle is Real')); ?>
+                        </h3>
+                        <span class="sub-text">
+                            <?php echo esc_html(iptv_text('cta_negative_subtitle', "What you're dealing with right now")); ?>
+                        </span>
                     </div>
                 </div>
 
@@ -28,29 +39,45 @@
                     <div class="list-item">
                         <div class="num-circle num-negative">1</div>
                         <div class="content">
-                            <h4>Buffering when it matters most</h4>
-                            <p>Nothing kills the vibe like loading screens interrupting your show.</p>
+                            <h4>
+                                <?php echo esc_html(iptv_text('neg_1_title', 'Buffering when it matters most')); ?>
+                            </h4>
+                            <p>
+                                <?php echo esc_html(iptv_text('neg_1_desc', 'Nothing kills the vibe like loading screens interrupting your show.')); ?>
+                            </p>
                         </div>
                     </div>
                     <div class="list-item">
                         <div class="num-circle num-negative">2</div>
                         <div class="content">
-                            <h4>Sky-high bills for channels you don't watch</h4>
-                            <p>Paying premium prices for bloated packages filled with filler.</p>
+                            <h4>
+                                <?php echo esc_html(iptv_text('neg_2_title', 'Sky-high bills for channels you don\'t watch')); ?>
+                            </h4>
+                            <p>
+                                <?php echo esc_html(iptv_text('neg_2_desc', 'Paying premium prices for bloated packages filled with filler.')); ?>
+                            </p>
                         </div>
                     </div>
                     <div class="list-item">
                         <div class="num-circle num-negative">3</div>
                         <div class="content">
-                            <h4>Same old content, same old reruns</h4>
-                            <p>Limited selection keeps you stuck in a small box.</p>
+                            <h4>
+                                <?php echo esc_html(iptv_text('neg_3_title', 'Same old content, same old reruns')); ?>
+                            </h4>
+                            <p>
+                                <?php echo esc_html(iptv_text('neg_3_desc', 'Limited selection keeps you stuck in a small box.')); ?>
+                            </p>
                         </div>
                     </div>
                     <div class="list-item">
                         <div class="num-circle num-negative">4</div>
                         <div class="content">
-                            <h4>Blurry, pixelated picture quality</h4>
-                            <p>Your expensive TV deserves better than fuzzy streams.</p>
+                            <h4>
+                                <?php echo esc_html(iptv_text('neg_4_title', 'Blurry, pixelated picture quality')); ?>
+                            </h4>
+                            <p>
+                                <?php echo esc_html(iptv_text('neg_4_desc', 'Your expensive TV deserves better than fuzzy streams.')); ?>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -65,8 +92,12 @@
                         </svg>
                     </div>
                     <div>
-                        <h3>Welcome to Nordic IPTV</h3>
-                        <span class="sub-text" style="color:#86efac;">Your complete streaming freedom awaits</span>
+                        <h3>
+                            <?php echo esc_html(iptv_text('cta_positive_title', 'Welcome to Nordic IPTV')); ?>
+                        </h3>
+                        <span class="sub-text" style="color:#86efac;">
+                            <?php echo esc_html(iptv_text('cta_positive_subtitle', 'Your complete streaming freedom awaits')); ?>
+                        </span>
                     </div>
                 </div>
 
@@ -74,29 +105,45 @@
                     <div class="list-item">
                         <div class="num-circle num-positive">1</div>
                         <div class="content">
-                            <h4>Silky-smooth, uninterrupted streaming</h4>
-                            <p>Crystal clear playback, even when everyone's watching.</p>
+                            <h4>
+                                <?php echo esc_html(iptv_text('pos_1_title', 'Silky-smooth, uninterrupted streaming')); ?>
+                            </h4>
+                            <p>
+                                <?php echo esc_html(iptv_text('pos_1_desc', 'Crystal clear playback, even when everyone\'s watching.')); ?>
+                            </p>
                         </div>
                     </div>
                     <div class="list-item">
                         <div class="num-circle num-positive">2</div>
                         <div class="content">
-                            <h4>Smart pricing that doesn't break the bank</h4>
-                            <p>Premium entertainment at a fraction of traditional costs.</p>
+                            <h4>
+                                <?php echo esc_html(iptv_text('pos_2_title', 'Smart pricing that doesn\'t break the bank')); ?>
+                            </h4>
+                            <p>
+                                <?php echo esc_html(iptv_text('pos_2_desc', 'Premium entertainment at a fraction of traditional costs.')); ?>
+                            </p>
                         </div>
                     </div>
                     <div class="list-item">
                         <div class="num-circle num-positive">3</div>
                         <div class="content">
-                            <h4>30,000+ channels & 150,000+ movies</h4>
-                            <p>The entire world of entertainment at your fingertips.</p>
+                            <h4>
+                                <?php echo esc_html(iptv_text('pos_3_title', '30,000+ channels & 150,000+ movies')); ?>
+                            </h4>
+                            <p>
+                                <?php echo esc_html(iptv_text('pos_3_desc', 'The entire world of entertainment at your fingertips.')); ?>
+                            </p>
                         </div>
                     </div>
                     <div class="list-item">
                         <div class="num-circle num-positive">4</div>
                         <div class="content">
-                            <h4>Stunning 4K quality picture</h4>
-                            <p>Cinema-quality viewing that honors your home investment.</p>
+                            <h4>
+                                <?php echo esc_html(iptv_text('pos_4_title', 'Stunning 4K quality picture')); ?>
+                            </h4>
+                            <p>
+                                <?php echo esc_html(iptv_text('pos_4_desc', 'Cinema-quality viewing that honors your home investment.')); ?>
+                            </p>
                         </div>
                     </div>
                 </div>

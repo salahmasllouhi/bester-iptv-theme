@@ -1,0 +1,9 @@
+Primary Background: #FFFFFF A clean, pure white used for the main canvas and high-brightness areas of your interface.
+
+Secondary Background (Tint): #F5F3FF A soft, pale lavender tint. Ideal for separating sections, background cards, or subtle hover states.
+
+Primary Text: #1F2937 A deep charcoal gray. This provides excellent readability for body text and headings while feeling softer and more modern than pure black.
+
+Accent / CTA Button: #7C3AED A vibrant violet purple. This is your "action" color—use it for your primary buttons, links, and important interactive elements.
+
+Secondary Accent (Badges): #FBBF24 A warm amber yellow. Best used for high-visibility accents like "New" tags, "Sale" badges, or notification alerts.
