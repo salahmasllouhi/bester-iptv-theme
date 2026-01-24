@@ -47,13 +47,18 @@ class Theme_OpenAI_Translator
 
     /**
      * Language mapping (site slug => language name)
+     * NOTE: Non-Swedish languages temporarily disabled - see Project_dyali.md
      */
     private $language_map = array(
         'se' => 'Swedish',
-        'no' => 'Norwegian',
-        'dk' => 'Danish',
-        'fi' => 'Finnish',
-        'is' => 'Icelandic',
+        // LANG-DISABLED: no - See Project_dyali.md "Language Reactivation Guide" to revert
+        // 'no' => 'Norwegian',
+        // LANG-DISABLED: dk - See Project_dyali.md "Language Reactivation Guide" to revert
+        // 'dk' => 'Danish',
+        // LANG-DISABLED: fi - See Project_dyali.md "Language Reactivation Guide" to revert
+        // 'fi' => 'Finnish',
+        // LANG-DISABLED: is - See Project_dyali.md "Language Reactivation Guide" to revert
+        // 'is' => 'Icelandic',
     );
 
     /**

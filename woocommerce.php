@@ -1,9 +1,12 @@
 <?php
 /**
- * The template for displaying all WooCommerce pages
+ * The template for displaying WooCommerce pages (checkout, account, etc.)
  * 
- * Fully styled to match the Nordic IPTV theme with proper logo sizing
+ * Note: Single product pages use single-product.php template
+ * Styled to match the Nordic IPTV theme
  */
+
+defined('ABSPATH') || exit;
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -18,8 +21,34 @@
     <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/front-page/css/header.css">
     <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/front-page/css/footer.css">
     <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/front-page/css/responsive.css">
+    <link rel="stylesheet"
+        href="<?php echo get_template_directory_uri(); ?>/front-page/css/product-page.css?v=<?php echo time(); ?>">
 
+    <style>
+        /* Fix Header Logo Size - match home page (32px height) */
+        .site-header .logo img,
+        .site-header .logo-img,
+        .site-header img.logo-img,
+        .logo-img,
+        header .logo img,
+        .nav-container .logo img {
+            height: 40px !important;
+            width: auto !important;
+            max-height: 40px !important;
+        }
 
+        /* WooCommerce Content Container */
+        .wc-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+
+        /* Hide breadcrumbs */
+        .woocommerce-breadcrumb {
+            display: none !important;
+        }
+    </style>
 </head>
 
 <body <?php body_class(); ?>>
@@ -28,26 +57,16 @@
     <!-- Universal Header -->
     <?php include get_template_directory() . '/inc/universal-header.php'; ?>
 
-    <!-- Page Header -->
-    <div class="wc-page-header">
-        <div class="container">
-            <h1><?php woocommerce_page_title(); ?></h1>
-        </div>
-    </div>
-
     <!-- Page Content -->
     <main class="wc-content">
-        <div class="container">
-            <?php woocommerce_content(); ?>
-        </div>
+        <?php woocommerce_content(); ?>
     </main>
 
     <!-- Footer -->
     <?php include get_template_directory() . '/front-page/sections/footer.php'; ?>
 
-    <!-- Include Currency JS -->
+    <script src="<?php echo get_template_directory_uri(); ?>/front-page/js/header.js"></script>
     <script src="<?php echo get_template_directory_uri(); ?>/front-page/js/currency.js"></script>
-
     <?php wp_footer(); ?>
 </body>
 

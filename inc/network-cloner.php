@@ -336,6 +336,9 @@ class Theme_Network_Cloner
         // Get all sites
         $sites = get_sites(array('number' => 100));
 
+        // Save current blog ID to restore later
+        $original_blog_id = get_current_blog_id();
+
         foreach ($sites as $site) {
             // Skip main site
             if ($site->blog_id == 1) {
@@ -356,12 +359,27 @@ class Theme_Network_Cloner
             switch_to_blog($site->blog_id);
 
             try {
-                // Check if page with same slug exists
-                $existing = get_page_by_path($source_post->post_name);
+                // Check if page/post with same slug exists (include post type)
+                $existing = get_page_by_path($source_post->post_name, OBJECT, $source_post->post_type);
+
+                // Special handling for Products (check SKU if not found by slug)
+                if (!$existing && $source_post->post_type === 'product' && function_exists('wc_get_product_id_by_sku')) {
+                    // Try to find by SKU - Switch to main to get SKU
+                    switch_to_blog(1);
+                    $sku = get_post_meta($source_post->ID, '_sku', true);
+                    switch_to_blog($site->blog_id); // Back to subsite
+
+                    if ($sku) {
+                        $existing_id = wc_get_product_id_by_sku($sku);
+                        if ($existing_id) {
+                            $existing = get_post($existing_id);
+                        }
+                    }
+                }
 
                 if ($existing) {
-                    // Delete the page (move to trash)
-                    $delete_result = wp_trash_post($existing->ID);
+                    // Force Delete the post (bypass trash)
+                    $delete_result = wp_delete_post($existing->ID, true);
 
                     if ($delete_result) {
                         $results['removed'][] = strtoupper($site_slug);
@@ -375,7 +393,8 @@ class Theme_Network_Cloner
                 $results['errors'][] = strtoupper($site_slug) . ': ' . $e->getMessage();
             }
 
-            restore_current_blog();
+            // Switch back to original blog (usually 1)
+            switch_to_blog($original_blog_id);
         }
 
         return $results;
@@ -395,7 +414,9 @@ class Theme_Network_Cloner
 
         // Get OpenAI translator (uses secure API key from WordPress options)
         $translator = function_exists('get_openai_translator') ? get_openai_translator() : null;
-        $translate_enabled = $translator && $translator->is_configured();
+        // Disable translation for products - only translate pages/posts
+        $is_product = ($source_post->post_type === 'product');
+        $translate_enabled = !$is_product && $translator && $translator->is_configured();
 
         // Get all sites
         $sites = get_sites(array('number' => 100));
@@ -416,7 +437,7 @@ class Theme_Network_Cloner
                 continue;
             }
 
-            // Prepare content (translate if enabled)
+            // Prepare content (translate if enabled - NOT for products)
             $post_title = $source_post->post_title;
             $post_content = $source_post->post_content;
             $post_excerpt = $source_post->post_excerpt; // Short Description
@@ -447,7 +468,8 @@ class Theme_Network_Cloner
                 $existing = get_page_by_path($source_post->post_name, OBJECT, $expected_post_type);
 
                 // Special handling for Products (check SKU or Slug)
-                if ($expected_post_type === 'product' && !$existing) {
+                // Only if WooCommerce is active on this subsite
+                if ($expected_post_type === 'product' && !$existing && function_exists('wc_get_product_id_by_sku')) {
                     $sku = get_post_meta($source_post->ID, '_sku', true);
                     if ($sku) {
                         $existing_id = wc_get_product_id_by_sku($sku);
@@ -497,8 +519,11 @@ class Theme_Network_Cloner
                 if (isset($target_id)) {
                     $this->copy_post_meta($source_post->ID, $target_id);
 
-                    if ($source_post->post_type === 'product') {
+                    // Only clone product data if WooCommerce is active on target site
+                    if ($source_post->post_type === 'product' && class_exists('WooCommerce')) {
                         $this->clone_product_data($source_post->ID, $target_id);
+                        // Clone product images (featured, gallery, and content images)
+                        $this->clone_product_images($source_post->ID, $target_id);
                     }
                 }
 
@@ -518,11 +543,20 @@ class Theme_Network_Cloner
      */
     private function clone_product_data($source_id, $target_id)
     {
+        // Ensure WooCommerce functions are available
+        if (!function_exists('wc_get_product')) {
+            return; // WooCommerce not active, skip cloning product data
+        }
+
         // Switch back to main site to gather source data
         $target_blog_id = get_current_blog_id();
         restore_current_blog(); // Back to ID 1
 
         $source_product = wc_get_product($source_id);
+        if (!$source_product) {
+            switch_to_blog($target_blog_id);
+            return; // Source product not found
+        }
         $source_attributes = $source_product->get_attributes();
         $source_children = $source_product->get_children();
 
@@ -547,7 +581,15 @@ class Theme_Network_Cloner
 
         switch_to_blog($target_blog_id); // Back to Target
 
+        // Check if WooCommerce is available on target site
+        if (!function_exists('wc_get_product') || !class_exists('WC_Product_Attribute')) {
+            return; // WooCommerce not active on target, skip
+        }
+
         $target_product = wc_get_product($target_id);
+        if (!$target_product) {
+            return; // Target product not found
+        }
 
         // 0. Sync Main Product Price/SKU (Important for Simple Products)
         $target_product->set_regular_price($parent_data['regular_price']);
@@ -589,21 +631,280 @@ class Theme_Network_Cloner
             }
         }
 
-        // Create new variations
-        foreach ($variations_data as $v_data) {
-            $variation = new WC_Product_Variation();
-            $variation->set_parent_id($target_id);
-            $variation->set_attributes($v_data['attributes']);
-            $variation->set_regular_price($v_data['regular_price']);
-            $variation->set_price($v_data['regular_price']);
-            $variation->set_sale_price($v_data['sale_price']);
-            if ($v_data['sale_price']) {
-                $variation->set_price($v_data['sale_price']);
+        // Create new variations (only if WC_Product_Variation class exists)
+        if (class_exists('WC_Product_Variation')) {
+            foreach ($variations_data as $v_data) {
+                $variation = new WC_Product_Variation();
+                $variation->set_parent_id($target_id);
+                $variation->set_attributes($v_data['attributes']);
+                $variation->set_regular_price($v_data['regular_price']);
+                $variation->set_price($v_data['regular_price']);
+                $variation->set_sale_price($v_data['sale_price']);
+                if ($v_data['sale_price']) {
+                    $variation->set_price($v_data['sale_price']);
+                }
+                $variation->set_status($v_data['status']);
+                $variation->set_sku($v_data['sku']);
+                $variation->save();
             }
-            $variation->set_status($v_data['status']);
-            $variation->set_sku($v_data['sku']);
-            $variation->save();
         }
+    }
+
+    /**
+     * Clone Product Images (Featured Image, Gallery, and Content Images)
+     * Must be called while switched to target blog
+     */
+    private function clone_product_images($source_id, $target_id)
+    {
+        // Get target blog ID before switching
+        $target_blog_id = get_current_blog_id();
+
+        // Explicitly switch to main site (blog ID 1) to get source images
+        // Using switch_to_blog(1) instead of restore_current_blog() for reliability
+        switch_to_blog(1);
+
+        // Get featured image
+        $featured_image_id = get_post_meta($source_id, '_thumbnail_id', true);
+        $featured_image_data = null;
+        if ($featured_image_id) {
+            $featured_image_data = $this->get_attachment_data($featured_image_id);
+        }
+
+        // Get product gallery images
+        $gallery_image_ids = get_post_meta($source_id, '_product_image_gallery', true);
+        $gallery_images_data = array();
+        if ($gallery_image_ids) {
+            $gallery_ids_array = explode(',', $gallery_image_ids);
+            foreach ($gallery_ids_array as $gallery_id) {
+                $gallery_id = trim($gallery_id);
+                if ($gallery_id) {
+                    $img_data = $this->get_attachment_data($gallery_id);
+                    if ($img_data) {
+                        $gallery_images_data[] = $img_data;
+                    }
+                }
+            }
+        }
+
+        // Get content images (from post_content)
+        $source_post = get_post($source_id);
+        $content_images_data = array();
+        if ($source_post && $source_post->post_content) {
+            $content_images_data = $this->extract_content_images($source_post->post_content);
+        }
+
+        // Switch to target site
+        switch_to_blog($target_blog_id);
+
+        // Clone featured image to target
+        if ($featured_image_data) {
+            $new_featured_id = $this->upload_attachment_to_blog($featured_image_data, $target_id);
+            if ($new_featured_id) {
+                update_post_meta($target_id, '_thumbnail_id', $new_featured_id);
+                // Also set WooCommerce product image
+                if (function_exists('wc_get_product')) {
+                    $product = wc_get_product($target_id);
+                    if ($product) {
+                        $product->set_image_id($new_featured_id);
+                        $product->save();
+                    }
+                }
+            }
+        }
+
+        // Clone gallery images to target
+        if (!empty($gallery_images_data)) {
+            $new_gallery_ids = array();
+            foreach ($gallery_images_data as $gallery_img) {
+                $new_id = $this->upload_attachment_to_blog($gallery_img, $target_id);
+                if ($new_id) {
+                    $new_gallery_ids[] = $new_id;
+                }
+            }
+            if (!empty($new_gallery_ids)) {
+                update_post_meta($target_id, '_product_image_gallery', implode(',', $new_gallery_ids));
+                // Also set WooCommerce gallery
+                if (function_exists('wc_get_product')) {
+                    $product = wc_get_product($target_id);
+                    if ($product) {
+                        $product->set_gallery_image_ids($new_gallery_ids);
+                        $product->save();
+                    }
+                }
+            }
+        }
+
+        // Clone content images and update post_content
+        if (!empty($content_images_data)) {
+            $target_post = get_post($target_id);
+            $updated_content = $target_post->post_content;
+
+            foreach ($content_images_data as $img_data) {
+                $new_id = $this->upload_attachment_to_blog($img_data, $target_id);
+                if ($new_id) {
+                    // Get new image URL
+                    $new_url = wp_get_attachment_url($new_id);
+                    if ($new_url && isset($img_data['url'])) {
+                        // Replace old URL with new URL in content
+                        $updated_content = str_replace($img_data['url'], $new_url, $updated_content);
+                    }
+                }
+            }
+
+            // Update the post content with new image URLs
+            wp_update_post(array(
+                'ID' => $target_id,
+                'post_content' => $updated_content,
+            ));
+        }
+
+        // Restore back to main site for proper cleanup
+        restore_current_blog();
+    }
+
+    /**
+     * Get attachment data from main site
+     * @param int $attachment_id
+     * @return array|null
+     */
+    private function get_attachment_data($attachment_id)
+    {
+        $attachment = get_post($attachment_id);
+        if (!$attachment || $attachment->post_type !== 'attachment') {
+            return null;
+        }
+
+        $file_path = get_attached_file($attachment_id);
+        if (!$file_path || !file_exists($file_path)) {
+            return null;
+        }
+
+        return array(
+            'id' => $attachment_id,
+            'url' => wp_get_attachment_url($attachment_id),
+            'file_path' => $file_path,
+            'file_name' => basename($file_path),
+            'mime_type' => $attachment->post_mime_type,
+            'title' => $attachment->post_title,
+            'alt' => get_post_meta($attachment_id, '_wp_attachment_image_alt', true),
+        );
+    }
+
+    /**
+     * Extract images from post content
+     * @param string $content
+     * @return array
+     */
+    private function extract_content_images($content)
+    {
+        $images = array();
+
+        // Match img tags with src attribute
+        preg_match_all('/<img[^>]+src=["\']([^"\']+)["\'][^>]*>/i', $content, $matches);
+
+        if (!empty($matches[1])) {
+            $upload_dir = wp_upload_dir();
+            $base_url = $upload_dir['baseurl'];
+
+            foreach ($matches[1] as $img_url) {
+                // Only clone images from our uploads directory
+                if (strpos($img_url, $base_url) !== false) {
+                    // Find attachment by URL
+                    $attachment_id = attachment_url_to_postid($img_url);
+                    if ($attachment_id) {
+                        $img_data = $this->get_attachment_data($attachment_id);
+                        if ($img_data) {
+                            $images[] = $img_data;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $images;
+    }
+
+    /**
+     * Upload attachment to current blog
+     * @param array $attachment_data
+     * @param int $parent_post_id
+     * @return int|null New attachment ID or null on failure
+     */
+    private function upload_attachment_to_blog($attachment_data, $parent_post_id)
+    {
+        if (!$attachment_data || !isset($attachment_data['file_path'])) {
+            error_log('Clone Images: Missing attachment data');
+            return null;
+        }
+
+        $source_file = $attachment_data['file_path'];
+
+        // Check if file exists
+        if (!file_exists($source_file)) {
+            error_log('Clone Images: Source file does not exist - ' . $source_file);
+            return null;
+        }
+
+        // Get upload directory for current blog
+        $upload_dir = wp_upload_dir();
+
+        // Check for upload directory errors
+        if (!empty($upload_dir['error'])) {
+            error_log('Clone Images: Upload dir error - ' . $upload_dir['error']);
+            return null;
+        }
+
+        // Ensure upload directory exists
+        if (!file_exists($upload_dir['path'])) {
+            if (!wp_mkdir_p($upload_dir['path'])) {
+                error_log('Clone Images: Could not create upload directory - ' . $upload_dir['path']);
+                return null;
+            }
+        }
+
+        // Generate unique filename to avoid conflicts
+        $filename = wp_unique_filename($upload_dir['path'], $attachment_data['file_name']);
+        $target_file = $upload_dir['path'] . '/' . $filename;
+
+        // Copy file to target blog's uploads
+        if (!copy($source_file, $target_file)) {
+            error_log('Clone Images: Failed to copy file from ' . $source_file . ' to ' . $target_file);
+            return null;
+        }
+
+        // Get the relative path for WordPress (subdir/filename)
+        $relative_file = $upload_dir['subdir'] . '/' . $filename;
+        $relative_file = ltrim($relative_file, '/');
+
+        // Prepare attachment data
+        $attachment = array(
+            'guid' => $upload_dir['url'] . '/' . $filename,
+            'post_mime_type' => $attachment_data['mime_type'],
+            'post_title' => $attachment_data['title'],
+            'post_content' => '',
+            'post_status' => 'inherit',
+            'post_parent' => $parent_post_id,
+        );
+
+        // Insert attachment using relative file path
+        $attach_id = wp_insert_attachment($attachment, $target_file, $parent_post_id);
+
+        if (is_wp_error($attach_id) || !$attach_id) {
+            error_log('Clone Images: Failed to insert attachment - ' . (is_wp_error($attach_id) ? $attach_id->get_error_message() : 'Unknown error'));
+            return null;
+        }
+
+        // Generate attachment metadata
+        require_once(ABSPATH . 'wp-admin/includes/image.php');
+        $attach_data = wp_generate_attachment_metadata($attach_id, $target_file);
+        wp_update_attachment_metadata($attach_id, $attach_data);
+
+        // Set alt text
+        if (!empty($attachment_data['alt'])) {
+            update_post_meta($attach_id, '_wp_attachment_image_alt', $attachment_data['alt']);
+        }
+
+        return $attach_id;
     }
 
     /**

@@ -1,12 +1,12 @@
 // Pricing JavaScript - Device/Duration configurator
 (function () {
-    // Product IDs for WooCommerce
-    const products = {
-        '1-1': 101, '1-3': 102, '1-6': 103, '1-12': 104,
-        '2-1': 201, '2-3': 202, '2-6': 203, '2-12': 204,
-        '3-1': 301, '3-3': 302, '3-6': 303, '3-12': 304,
-        '4-1': 401, '4-3': 402, '4-6': 403, '4-12': 404
-    };
+    // Get variation ID from dynamically generated map (from pricing.php)
+    function getVariationId(devices, duration) {
+        if (window.iptvVariationIds) {
+            return window.iptvVariationIds[devices + '-' + duration] || null;
+        }
+        return null;
+    }
 
     let selectedDevices = null;
     let selectedDuration = null;
@@ -84,10 +84,21 @@
     function updateButton() {
         if (selectedDevices && selectedDuration) {
             const price = getPrice(selectedDevices, selectedDuration);
+            const variationId = getVariationId(selectedDevices, selectedDuration);
             btnText.textContent = 'Complete Your Order  -  ' + formatPrice(price);
-            btn.href = 'checkout/?add-to-cart=' + products[selectedDevices + '-' + selectedDuration];
-            btn.style.opacity = '1';
-            btn.style.pointerEvents = 'auto';
+            // Use main site URL for cross-site checkout
+            const mainSiteUrl = window.iptvMainSiteUrl || '';
+            if (variationId) {
+                btn.href = mainSiteUrl + '/checkout/?add-to-cart=' + variationId;
+                btn.style.opacity = '1';
+                btn.style.pointerEvents = 'auto';
+            } else {
+                // Variation not found - fallback to shop page
+                btn.href = mainSiteUrl + '/shop/';
+                btn.style.opacity = '0.7';
+                btn.style.pointerEvents = 'auto';
+                console.warn('Variation ID not found for:', selectedDevices, selectedDuration);
+            }
 
             // Update step indicators
             document.getElementById('step2').style.background = 'var(--blue-600)';

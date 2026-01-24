@@ -1,4 +1,8 @@
 <!-- Pricing Section -->
+<script>
+    // Main site URL for cross-site cart (used by pricing.js)
+    window.iptvMainSiteUrl = '<?php echo esc_js(defined("IPTV_MAIN_SITE_URL") ? IPTV_MAIN_SITE_URL : home_url()); ?>';
+</script>
 <section id="pricing" class="pricing">
     <div class="container">
         <div style="text-align:center;margin-bottom:1rem;">
@@ -94,17 +98,39 @@
                     $best_deal_text = iptv_text('best_deal', 'Best deal!');
                     ?>
                     <script>window.iptvPrices = <?php echo json_encode($all_prices); ?>;</script>
+                    <?php
+                    // Generate variation ID map for checkout URLs
+                    $variation_map = array();
+                    $duration_skus = array(
+                        1 => '1_month',
+                        3 => '3_months',
+                        6 => '6_months',
+                        12 => '12_months'
+                    );
 
-                    <!-- Trial Card -->
-                    <div class="select-card duration-card" data-duration="trial" data-months="0">
-                        <span class="badge badge-blue">Risk Free</span>
-                        <div class="duration-header">24h Trial</div>
-                        <div class="duration-price price-display" id="price-trial">$
-                            <?php echo esc_html($all_prices['trial_24h']['usd']); ?>
-                        </div>
-                        <div class="duration-per" id="per-trial">One time</div>
-                        <div class="duration-savings">Test first</div>
-                    </div>
+                    foreach ($duration_skus as $months => $sku) {
+                        $product_id = wc_get_product_id_by_sku($sku);
+                        if ($product_id) {
+                            $product = wc_get_product($product_id);
+                            if ($product && $product->is_type('variable')) {
+                                $children = $product->get_children();
+                                foreach ($children as $child_id) {
+                                    $variation = wc_get_product($child_id);
+                                    if ($variation) {
+                                        $attributes = $variation->get_attributes();
+                                        $device_attr = isset($attributes['pa_devices']) ? $attributes['pa_devices'] : '';
+                                        if ($device_attr) {
+                                            $key = $device_attr . '-' . $months; // e.g., "1-12", "2-3"
+                                            $variation_map[$key] = $child_id;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    ?>
+                    <script>window.iptvVariationIds = <?php echo json_encode($variation_map); ?>;</script>
+
 
                     <div class="select-card duration-card" data-duration="1" data-months="1">
                         <div class="duration-header"><?php echo esc_html(iptv_text('month_1_label', '1 Month')); ?>

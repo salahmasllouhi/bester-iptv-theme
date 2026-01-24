@@ -17,18 +17,26 @@ if (empty($site_slug)) {
     $path_parts = explode('/', trim($request_uri, '/'));
     $first_segment = isset($path_parts[0]) ? $path_parts[0] : '';
     // Only use if it's actually a language code
-    if (in_array($first_segment, array('se', 'no', 'dk', 'fi', 'is'))) {
+    // NOTE: Non-Swedish languages temporarily disabled - see Project_dyali.md
+    if (in_array($first_segment, array('se'))) {
+        // LANG-DISABLED: no, dk, fi, is - See Project_dyali.md "Language Reactivation Guide" to revert
+        // Original: array('se', 'no', 'dk', 'fi', 'is')
         $site_slug = $first_segment;
     }
 }
 
 // Map subsite to currency
+// NOTE: Non-Swedish languages temporarily disabled - see Project_dyali.md
 $site_currency_map = array(
     'se' => array('flag' => '🇸🇪', 'code' => 'SEK', 'symbol' => 'kr'),
-    'no' => array('flag' => '🇳🇴', 'code' => 'NOK', 'symbol' => 'kr'),
-    'dk' => array('flag' => '🇩🇰', 'code' => 'DKK', 'symbol' => 'kr'),
-    'fi' => array('flag' => '🇫🇮', 'code' => 'EUR', 'symbol' => '€'),
-    'is' => array('flag' => '🇮🇸', 'code' => 'ISK', 'symbol' => 'kr'),
+    // LANG-DISABLED: no - See Project_dyali.md "Language Reactivation Guide" to revert
+    // 'no' => array('flag' => '🇳🇴', 'code' => 'NOK', 'symbol' => 'kr'),
+    // LANG-DISABLED: dk - See Project_dyali.md "Language Reactivation Guide" to revert
+    // 'dk' => array('flag' => '🇩🇰', 'code' => 'DKK', 'symbol' => 'kr'),
+    // LANG-DISABLED: fi - See Project_dyali.md "Language Reactivation Guide" to revert
+    // 'fi' => array('flag' => '🇫🇮', 'code' => 'EUR', 'symbol' => '€'),
+    // LANG-DISABLED: is - See Project_dyali.md "Language Reactivation Guide" to revert
+    // 'is' => array('flag' => '🇮🇸', 'code' => 'ISK', 'symbol' => 'kr'),
 );
 
 // Get default based on current subsite (main site = USD)
@@ -66,12 +74,15 @@ if (isset($site_currency_map[$site_slug])) {
                     <div class="country-option" data-currency="usd" data-symbol="$" data-flag="🇺🇸">
                         <span class="country-flag">🇺🇸</span><span>USD</span>
                     </div>
+                    <!-- LANG-DISABLED: eur - See Project_dyali.md "Language Reactivation Guide" to revert
                     <div class="country-option" data-currency="eur" data-symbol="€" data-flag="🇫🇮">
                         <span class="country-flag">🇫🇮</span><span>EUR</span>
                     </div>
+                    -->
                     <div class="country-option" data-currency="sek" data-symbol="kr" data-flag="🇸🇪">
                         <span class="country-flag">🇸🇪</span><span>SEK</span>
                     </div>
+                    <!-- LANG-DISABLED: nok, dkk, isk - See Project_dyali.md "Language Reactivation Guide" to revert
                     <div class="country-option" data-currency="nok" data-symbol="kr" data-flag="🇳🇴">
                         <span class="country-flag">🇳🇴</span><span>NOK</span>
                     </div>
@@ -81,13 +92,15 @@ if (isset($site_currency_map[$site_slug])) {
                     <div class="country-option" data-currency="isk" data-symbol="kr" data-flag="🇮🇸">
                         <span class="country-flag">🇮🇸</span><span>ISK</span>
                     </div>
+                    -->
                 </div>
             </div>
             <a href="<?php echo home_url('/#pricing'); ?>" class="nav-btn nav-btn-primary">Get Access Now</a>
-            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
-                <span></span><span></span><span></span>
-            </button>
         </div>
+        <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
 </header>
 
 <!-- Mobile Menu -->
@@ -105,11 +118,15 @@ if (isset($site_currency_map[$site_slug])) {
         <span class="mobile-language-label">Region / Currency</span>
         <div class="mobile-language-options">
             <button class="mobile-lang-btn" data-currency="usd" onclick="redirectToRegion('usd')">🇺🇸 USD</button>
+            <!-- LANG-DISABLED: eur - See Project_dyali.md "Language Reactivation Guide" to revert
             <button class="mobile-lang-btn" data-currency="eur" onclick="redirectToRegion('eur')">🇫🇮 EUR</button>
+            -->
             <button class="mobile-lang-btn" data-currency="sek" onclick="redirectToRegion('sek')">🇸🇪 SEK</button>
+            <!-- LANG-DISABLED: nok, dkk, isk - See Project_dyali.md "Language Reactivation Guide" to revert
             <button class="mobile-lang-btn" data-currency="nok" onclick="redirectToRegion('nok')">🇳🇴 NOK</button>
             <button class="mobile-lang-btn" data-currency="dkk" onclick="redirectToRegion('dkk')">🇩🇰 DKK</button>
             <button class="mobile-lang-btn" data-currency="isk" onclick="redirectToRegion('isk')">🇮🇸 ISK</button>
+            -->
         </div>
     </div>
 

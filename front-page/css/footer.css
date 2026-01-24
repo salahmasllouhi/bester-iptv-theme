@@ -23,8 +23,10 @@
 }
 
 .footer-logo-img {
-    height: 36px;
-    width: auto;
+    height: 36px !important;
+    max-height: 36px !important;
+    width: auto !important;
+    max-width: 150px !important;
     display: block;
     margin-bottom: 1rem;
 }

@@ -21,11 +21,15 @@
                         </button>
                         <div class="footer-country-dropdown" id="footerCountryDropdown">
                             <div class="footer-country-option" onclick="setFooterCurrency('usd')">🇺🇸 USD</div>
+                            <!-- LANG-DISABLED: eur - See Project_dyali.md "Language Reactivation Guide" to revert
                             <div class="footer-country-option" onclick="setFooterCurrency('eur')">🇫🇮 EUR</div>
+                            -->
                             <div class="footer-country-option" onclick="setFooterCurrency('sek')">🇸🇪 SEK</div>
+                            <!-- LANG-DISABLED: nok, dkk, isk - See Project_dyali.md "Language Reactivation Guide" to revert
                             <div class="footer-country-option" onclick="setFooterCurrency('nok')">🇳🇴 NOK</div>
                             <div class="footer-country-option" onclick="setFooterCurrency('dkk')">🇩🇰 DKK</div>
                             <div class="footer-country-option" onclick="setFooterCurrency('isk')">🇮🇸 ISK</div>
+                            -->
                         </div>
                     </div>
                 </div>

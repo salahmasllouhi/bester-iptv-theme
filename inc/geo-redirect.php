@@ -57,12 +57,17 @@ function nordic_iptv_geo_redirect()
     }
 
     // Country to sub-site mapping
+    // NOTE: Non-Swedish languages temporarily disabled - see Project_dyali.md "Language Reactivation Guide"
     $redirect_map = array(
         'SE' => '/se/',  // Sweden
-        'NO' => '/no/',  // Norway
-        'DK' => '/dk/',  // Denmark
-        'FI' => '/fi/',  // Finland
-        'IS' => '/is/',  // Iceland
+        // LANG-DISABLED: no - See Project_dyali.md "Language Reactivation Guide" to revert
+        // 'NO' => '/no/',  // Norway
+        // LANG-DISABLED: dk - See Project_dyali.md "Language Reactivation Guide" to revert
+        // 'DK' => '/dk/',  // Denmark
+        // LANG-DISABLED: fi - See Project_dyali.md "Language Reactivation Guide" to revert
+        // 'FI' => '/fi/',  // Finland
+        // LANG-DISABLED: is - See Project_dyali.md "Language Reactivation Guide" to revert
+        // 'IS' => '/is/',  // Iceland
     );
 
     // Check if country has a redirect target
