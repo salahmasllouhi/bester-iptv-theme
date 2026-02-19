@@ -1,112 +1,104 @@
-<!-- Features Section -->
-<div id="features" class="nordic-features-section">
-    <div class="nordic-container">
-        <div class="nordic-header">
-            <h2>
-                <?php echo esc_html(iptv_text('features_title', 'Streaming Promises')); ?> <span class="text-highlight">
-                    <?php echo esc_html(iptv_text('features_title_span', 'Delivered')); ?>
-                </span>
-            </h2>
-            <p>
-                <?php echo esc_html(iptv_text('features_subtitle', 'Experience the future of television with our ultra-stable network. No freezing, no buffering—just pure entertainment on your terms.')); ?>
+<section class="features" id="features">
+    <div class="section-header">
+        <div class="section-tag"><?php echo esc_html(iptv_text('features_tag', 'Features')); ?></div>
+        <h2 class="section-title"><?php echo iptv_text('features_title', 'Everything You Need in'); ?> <span
+                class="gradient-text"><?php echo iptv_text('features_title_span', 'One Place'); ?></span></h2>
+        <p class="section-subtitle">
+            <?php echo esc_html(iptv_text('features_subtitle', 'No more juggling multiple subscriptions. Get it all with Nordic IPTV.')); ?>
+        </p>
+    </div>
+    <div class="features-grid">
+        <!-- Feature 1 -->
+        <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                    <line x1="8" y1="21" x2="16" y2="21" />
+                    <line x1="12" y1="17" x2="12" y2="21" />
+                </svg>
+            </div>
+            <h3 class="feature-title"><?php echo esc_html(iptv_text('feature_1_title', '35,000+ Live Channels')); ?>
+            </h3>
+            <p class="feature-desc">
+                <?php echo esc_html(iptv_text('feature_1_desc', 'Sports, news, entertainment, kids content — from 198 countries worldwide.')); ?>
             </p>
         </div>
-        <div class="nordic-grid">
-            <div class="feature-card">
-                <div class="icon-wrapper">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <polygon points="23 7 16 12 23 17 23 7"></polygon>
-                        <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
-                    </svg>
-                </div>
-                <h3>
-                    <?php echo esc_html(iptv_text('feature_1_title', '4K Ultra HD Streaming')); ?>
-                </h3>
-                <p>
-                    <?php echo esc_html(iptv_text('feature_1_desc', 'Crystal clear picture quality with native support for 4K, FHD, and HD streaming on all your modern devices.')); ?>
-                </p>
+
+        <!-- Feature 2 -->
+        <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="2" y1="12" x2="22" y2="12" />
+                    <path
+                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                </svg>
             </div>
-            <div class="feature-card">
-                <div class="icon-wrapper">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                    </svg>
-                </div>
-                <h3>
-                    <?php echo esc_html(iptv_text('feature_2_title', 'Lightning Fast Servers')); ?>
-                </h3>
-                <p>
-                    <?php echo esc_html(iptv_text('feature_2_desc', 'Advanced Anti-buffering technology backed by a 99.9% uptime guarantee for seamless, uninterrupted viewing.')); ?>
-                </p>
+            <h3 class="feature-title"><?php echo esc_html(iptv_text('feature_2_title', '$0 PPV Events')); ?></h3>
+            <p class="feature-desc">
+                <?php echo esc_html(iptv_text('feature_2_desc', 'UFC, Boxing, Wrestling — all Pay-Per-View events included free. Save $70+ per event!')); ?>
+            </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                </svg>
             </div>
-            <div class="feature-card">
-                <div class="icon-wrapper">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-                        <line x1="12" y1="18" x2="12.01" y2="18"></line>
-                    </svg>
-                </div>
-                <h3>
-                    <?php echo esc_html(iptv_text('feature_3_title', 'All Devices Supported')); ?>
-                </h3>
-                <p>
-                    <?php echo esc_html(iptv_text('feature_3_desc', 'Works flawlessly on Smart TV, Android, iOS, Firestick, MAG, and more. Take your stream anywhere.')); ?>
-                </p>
+            <h3 class="feature-title"><?php echo esc_html(iptv_text('feature_3_title', 'All Sports Live')); ?></h3>
+            <p class="feature-desc">
+                <?php echo esc_html(iptv_text('feature_3_desc', 'EPL, La Liga, Champions League, NFL, NBA, F1 — every game, live.')); ?>
+            </p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
+                    <line x1="7" y1="2" x2="7" y2="22" />
+                    <line x1="17" y1="2" x2="17" y2="22" />
+                    <line x1="2" y1="12" x2="22" y2="12" />
+                    <line x1="2" y1="7" x2="7" y2="7" />
+                    <line x1="2" y1="17" x2="7" y2="17" />
+                    <line x1="17" y1="17" x2="22" y2="17" />
+                    <line x1="17" y1="7" x2="22" y2="7" />
+                </svg>
             </div>
-            <div class="feature-card">
-                <div class="icon-wrapper">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="2" y1="12" x2="22" y2="12"></line>
-                        <path
-                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
-                        </path>
-                    </svg>
-                </div>
-                <h3>
-                    <?php echo esc_html(iptv_text('feature_4_title', 'Worldwide Content')); ?>
-                </h3>
-                <p>
-                    <?php echo esc_html(iptv_text('feature_4_desc', 'Access premium channels from USA, UK, Canada, Europe, Asia, Middle East, and everywhere in between.')); ?>
-                </p>
+            <h3 class="feature-title"><?php echo esc_html(iptv_text('feature_4_title', '150K+ Movies & Shows')); ?></h3>
+            <p class="feature-desc">
+                <?php echo esc_html(iptv_text('feature_4_desc', 'Massive VOD library with latest releases. New content added daily.')); ?>
+            </p>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                    <line x1="8" y1="21" x2="16" y2="21" />
+                    <line x1="12" y1="17" x2="12" y2="21" />
+                </svg>
             </div>
-            <div class="feature-card">
-                <div class="icon-wrapper">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="16" y1="2" x2="16" y2="6"></line>
-                        <line x1="8" y1="2" x2="8" y2="6"></line>
-                        <line x1="3" y1="10" x2="21" y2="10"></line>
-                    </svg>
-                </div>
-                <h3>
-                    <?php echo esc_html(iptv_text('feature_5_title', 'EPG Guide Included')); ?>
-                </h3>
-                <p>
-                    <?php echo esc_html(iptv_text('feature_5_desc', 'Full Electronic Program Guide keeps you on schedule with complete listings for every channel.')); ?>
-                </p>
+            <h3 class="feature-title"><?php echo esc_html(iptv_text('feature_5_title', 'Crystal Clear 4K')); ?></h3>
+            <p class="feature-desc">
+                <?php echo esc_html(iptv_text('feature_5_desc', 'Ultra HD quality on all devices. No buffering, no lag.')); ?>
+            </p>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                </svg>
             </div>
-            <div class="feature-card">
-                <div class="icon-wrapper">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path
-                            d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
-                        </path>
-                    </svg>
-                </div>
-                <h3>
-                    <?php echo esc_html(iptv_text('feature_6_title', '24/7 Expert Support')); ?>
-                </h3>
-                <p>
-                    <?php echo esc_html(iptv_text('feature_6_desc', 'Our dedicated support team is online around the clock to ensure you never miss a moment.')); ?>
-                </p>
-            </div>
+            <h3 class="feature-title"><?php echo esc_html(iptv_text('feature_6_title', '24/7 Support')); ?></h3>
+            <p class="feature-desc">
+                <?php echo esc_html(iptv_text('feature_6_desc', 'Real humans, real help via live chat or WhatsApp anytime.')); ?>
+            </p>
         </div>
     </div>
-</div>
+</section>

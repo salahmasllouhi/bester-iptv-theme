@@ -282,21 +282,135 @@ Return ONLY the JSON.";
         
         if (isset($body['choices'][0]['message']['content'])) {
             $translated_json = $body['choices'][0]['message']['content'];
+            
+            // Strip markdown code blocks if present
+            $translated_json = preg_replace('/^```(?:json)?\s*/s', '', $translated_json);
+            $translated_json = preg_replace('/\s*```$/s', '', $translated_json);
+            $translated_json = trim($translated_json);
+
+            // Sanitize JSON for control characters
+            $translated_json = $this->sanitize_json_string($translated_json);
+
             $translated_array = json_decode($translated_json, true);
             
             if (json_last_error() === JSON_ERROR_NONE && is_array($translated_array)) {
-                // Merge translated items back into original data (preserves empty keys)
                 return array_merge($data, $translated_array);
             } else {
-                $this->last_error = 'Invalid JSON response from OpenAI';
-                error_log('Invalid JSON from OpenAI: ' . $translated_json);
+                // FALLBACK: Try regex extraction for each expected key
+                error_log('JSON parse failed, attempting regex extraction. Error: ' . json_last_error_msg());
+                $extracted = $this->extract_json_values($translated_json, array_keys($data));
+                
+                if (!empty($extracted)) {
+                    error_log('Regex extraction recovered ' . count($extracted) . ' fields');
+                    return array_merge($data, $extracted);
+                }
+                
+                $this->last_error = 'JSON parse failed: ' . json_last_error_msg();
+                throw new Exception($this->last_error);
             }
         } else {
              $this->last_error = 'No content in response';
              error_log('OpenAI Error: ' . print_r($body, true));
+             throw new Exception($this->last_error);
         }
+    }
+    
+    /**
+     * Extract JSON values using string search when json_decode fails.
+     * Uses simple string operations instead of regex to avoid backtracking limits on long content.
+     */
+    private function extract_json_values($json_string, $expected_keys)
+    {
+        $result = array();
+        
+        foreach ($expected_keys as $key) {
+            // Find the key pattern: "key": "
+            $search = '"' . $key . '": "';
+            $pos = strpos($json_string, $search);
+            
+            // Also try without space after colon
+            if ($pos === false) {
+                $search = '"' . $key . '":"';
+                $pos = strpos($json_string, $search);
+            }
+            
+            if ($pos === false) {
+                continue;
+            }
+            
+            // Move past the key pattern to start of value
+            $value_start = $pos + strlen($search);
+            
+            // Scan for the closing quote (accounting for escaped quotes)
+            $value = '';
+            $i = $value_start;
+            $len = strlen($json_string);
+            
+            while ($i < $len) {
+                $char = $json_string[$i];
+                
+                if ($char === '\\' && $i + 1 < $len) {
+                    // Escape sequence - take both chars
+                    $next = $json_string[$i + 1];
+                    
+                    // Convert escape sequences
+                    switch ($next) {
+                        case 'n': $value .= "\n"; break;
+                        case 'r': $value .= "\r"; break;
+                        case 't': $value .= "\t"; break;
+                        case '"': $value .= '"'; break;
+                        case '\\': $value .= '\\'; break;
+                        default: $value .= $char . $next; break;
+                    }
+                    $i += 2;
+                } elseif ($char === '"') {
+                    // End of string
+                    break;
+                } else {
+                    $value .= $char;
+                    $i++;
+                }
+            }
+            
+            if (!empty($value)) {
+                $result[$key] = $value;
+            }
+        }
+        
+        return $result;
+    }
 
-        return $data; // Fallback
+    /**
+     * Sanitize a JSON string by escaping control characters inside string values.
+     * VERSION 4 - Uses regex callback to find and fix string contents.
+     * 
+     * @param string $json Raw JSON string
+     * @return string Sanitized JSON string
+     */
+    public function sanitize_json_string($json)
+    {
+        // First, remove truly invalid control chars (0x00-0x08, 0x0B, 0x0C, 0x0E-0x1F)
+        // These are NEVER valid in JSON anywhere
+        $json = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', '', $json);
+        
+        // Now handle tabs/newlines/CR which are valid OUTSIDE strings but must be escaped INSIDE strings
+        // Use a callback to process each JSON string value
+        $result = preg_replace_callback(
+            '/"((?:[^"\\\\]|\\\\.)*)"/s',
+            function($match) {
+                $content = $match[1];
+                // Escape unescaped control chars inside the string
+                $content = str_replace(
+                    array("\t", "\n", "\r"),
+                    array('\t', '\n', '\r'),
+                    $content
+                );
+                return '"' . $content . '"';
+            },
+            $json
+        );
+        
+        return $result !== null ? $result : $json;
     }
 
     /**
@@ -422,6 +536,50 @@ Return ONLY the JSON.";
                     <li>The key is only used server-side, never exposed to browsers</li>
                     <li>Only administrators can view or change this setting</li>
                 </ul>
+            </div>
+
+            <!-- Testing Section -->
+            <div style="margin-top:20px;background:#fff;padding:20px;border-radius:8px;max-width:600px;border:1px solid #ddd;">
+                <h3 style="margin-top:0;">🧪 Test Translation</h3>
+                <p>Enter text below to test the connection and translation logic.</p>
+                <form method="post">
+                    <textarea name="test_translation_text" rows="3" class="large-text code" placeholder="Enter text to translate..."></textarea>
+                    <p>
+                        <button type="submit" name="run_test_translation" class="button">Test Translate (to Swedish)</button>
+                    </p>
+                </form>
+
+                <?php
+                if (isset($_POST['run_test_translation']) && !empty($_POST['test_translation_text'])) {
+                    $text = stripslashes($_POST['test_translation_text']);
+                    echo '<div style="margin-top:15px;padding:10px;background:#f9f9f9;border:1px solid #ccc;">';
+                    echo '<strong>Original:</strong> ' . esc_html($text) . '<br><br>';
+                    
+                    // Force a fresh instance to be sure
+                    $translator = new Theme_OpenAI_Translator();
+                    if (!$translator->is_configured()) {
+                         echo '<span style="color:red;">Error: API Key not configured.</span>';
+                    } else {
+                        $start = microtime(true);
+                        // Try Batch method with single item if possible, or standard
+                        if (method_exists($translator, 'translate_batch')) {
+                             $res = $translator->translate_batch(array('test'=>$text), 'Swedish');
+                             $translated = $res['test'] ?? 'ERROR';
+                        } else {
+                             $translated = $translator->translate($text, 'Swedish', 'English');
+                        }
+                        $duration = round(microtime(true) - $start, 2);
+                        
+                        echo '<strong>Translated (Swedish):</strong> ' . esc_html($translated) . '<br>';
+                        echo '<em>Time: ' . $duration . 's</em><br>';
+                        
+                        if ($translator->get_last_error()) {
+                             echo '<br><strong style="color:red;">Error Log:</strong> ' . esc_html($translator->get_last_error());
+                        }
+                    }
+                    echo '</div>';
+                }
+                ?>
             </div>
         </div>
         <?php

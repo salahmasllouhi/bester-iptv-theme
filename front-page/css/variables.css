@@ -1,5 +1,5 @@
 /* CSS Variables - Neo-Streamer Palette */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap');
 
 :root {
     /* Core Colors */
@@ -15,10 +15,13 @@
     --text-muted: #9CA3AF;
     --border: #e2e8f0;
 
-    /* Vivid Violet - Primary Accent */
-    --violet-500: #7C3AED;
-    --violet-600: #6D28D9;
-    --violet-700: #5B21B6;
+    /* Vivid Violet - REMAPPED to Teal/Navy for Redesign */
+    --violet-500: #00D4AA;
+    /* Was #7C3AED */
+    --violet-600: #1A4B7C;
+    /* Was #6D28D9 */
+    --violet-700: #0F2847;
+    /* Was #5B21B6 */
 
     /* Amber/Gold - Secondary Accent */
     --amber-400: #FBBF24;
@@ -27,9 +30,12 @@
     /* Legacy blue (kept for compatibility) */
     --blue-50: #eff6ff;
     --blue-100: #dbeafe;
-    --blue-500: #7C3AED;
-    --blue-600: #6D28D9;
-    --blue-700: #5B21B6;
+    --blue-500: #3D7AB8;
+    /* Was Purple #7C3AED -> Now Primary Light Blue */
+    --blue-600: #1A4B7C;
+    /* Was Purple #6D28D9 -> Now Primary Mid Blue */
+    --blue-700: #0F2847;
+    /* Was Purple #5B21B6 -> Now Primary Deep Navy */
 
     /* Status Colors */
     --green-500: #22c55e;

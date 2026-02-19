@@ -14,22 +14,19 @@ $sections_dir = $front_page_dir . '/sections';
 
 <style>
     <?php
-    // Load all CSS files in order
+    // Load CSS files
     $css_files = array(
-        'variables',
-        'base',
-        'header',
-        'hero',
-        'sports',
-        'brands',
-        'features',
-        'pricing',
-        'steps',
-        'cta',
-        'reviews',
-        'contact',
-        'footer',
-        'responsive'
+        'variables',      // Old vars (Keep for Pricing/Reviews)
+        'base',           // Old base (Keep for layout safety)
+        'header',         // Existing Header
+        'pricing',        // Existing Pricing
+        'reviews',        // Existing Reviews
+        'contact',        // Existing Contact form styling
+        'footer',         // Existing Footer
+        'responsive',     // Existing Responsive
+        'redesign-theme', // NEW REDESIGN (Overrides + New Sections)
+        'cta',            // CTA Section Styles
+        'activity-ticker' // Social proof notifications
     );
 
     foreach ($css_files as $file) {
@@ -44,18 +41,20 @@ $sections_dir = $front_page_dir . '/sections';
 <?php
 // Load all sections in order
 $sections = array(
-    'header',
-    'hero',
-    'sports',
-    'brands',
-    'features',
-    'pricing',
-    'steps',
-    'dark-cta',
-    'comparison',
-    'reviews',
-    'contact',
-    'footer'
+    'header',      // Front-page header (source of truth for all headers)
+    'hero',        // Redesigned
+    'content-showcase', // New Section
+    'brands',      // Redesigned (Logos)
+    'features',    // Redesigned
+    'sports',      // Redesigned
+    'comparison',  // Redesigned (Price Comparison)
+    'steps',       // Redesigned
+    'unlock',      // Redesigned (Devices)
+    'pricing',     // Existing (User said: "Your Existing Pricing Section Goes Here")
+    'reviews',     // Existing
+    'faq',         // New
+    'dark-cta',    // Redesigned (CTA)
+    'footer'       // Existing
 );
 
 foreach ($sections as $section) {
@@ -64,6 +63,9 @@ foreach ($sections as $section) {
         include $path;
     }
 }
+
+// Activity Ticker (Social Proof)
+include $front_page_dir . '/partials/activity-ticker.php';
 ?>
 
 <script>
@@ -73,7 +75,9 @@ foreach ($sections as $section) {
         'header',
         'currency',
         'carousels',
-        'pricing'
+        'pricing',
+        'hero-animation',   // New Hero Animation
+        'activity-ticker'   // Social proof notifications
     );
 
     foreach ($js_files as $file) {

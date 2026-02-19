@@ -6,6 +6,37 @@
 // Main site URL for cross-site cart (all subsites use main site checkout)
 define('IPTV_MAIN_SITE_URL', 'https://nordictv.io');
 
+// Disable WordPress Twemoji to use native system emojis
+remove_action('wp_head', 'print_emoji_detection_script', 7);
+remove_action('wp_print_styles', 'print_emoji_styles');
+
+// Meta Pixel - fires on ALL pages (front page, checkout, product pages, subsites)
+function iptv_meta_pixel()
+{
+    ?>
+    <!-- Meta Pixel Code -->
+    <script>
+        !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return; n = f.fbq = function () {
+                n.callMethod ?
+                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+            n.queue = []; t = b.createElement(e); t.async = !0;
+            t.src = v; s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '2000858220840148');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=2000858220840148&ev=PageView&noscript=1" /></noscript>
+    <!-- End Meta Pixel Code -->
+    <?php
+}
+add_action('wp_head', 'iptv_meta_pixel', 1);
+
 // Enqueue theme styles
 function my_iptv_enqueue_styles()
 {
@@ -14,6 +45,7 @@ function my_iptv_enqueue_styles()
     // Load product page styles on single product pages
     if (function_exists('is_product') && is_product()) {
         wp_enqueue_style('iptv-variables', get_template_directory_uri() . '/front-page/css/variables.css', array(), '1.0.1');
+        wp_enqueue_style('iptv-redesign', get_template_directory_uri() . '/front-page/css/redesign-theme.css', array(), '1.0.1');
         wp_enqueue_style('iptv-base', get_template_directory_uri() . '/front-page/css/base.css', array(), '1.0.1');
         wp_enqueue_style('iptv-header', get_template_directory_uri() . '/front-page/css/header.css', array(), '1.0.1');
         wp_enqueue_style('iptv-footer', get_template_directory_uri() . '/front-page/css/footer.css', array(), '1.0.1');
@@ -59,7 +91,7 @@ function my_iptv_product_page_inline_css()
 
             /* ===== PRODUCT IMAGE ===== */
             .woocommerce div.product div.images {
-                background: linear-gradient(135deg, #F5F3FF 0%, #EDE9FE 100%) !important;
+                background: linear-gradient(135deg, var(--bg-secondary) 0%, #FFFFFF 100%) !important;
                 border-radius: 12px !important;
                 padding: 1.25rem !important;
                 width: 100% !important;
@@ -93,7 +125,7 @@ function my_iptv_product_page_inline_css()
             .woocommerce div.product .summary>.price {
                 font-size: 1.5rem !important;
                 font-weight: 700 !important;
-                color: #7C3AED !important;
+                color: var(--accent-primary) !important;
                 margin: 0 0 1.25rem !important;
             }
 
@@ -175,7 +207,7 @@ function my_iptv_product_page_inline_css()
 
             .woocommerce div.product form.cart .button {
                 width: 100% !important;
-                background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%) !important;
+                background: linear-gradient(135deg, var(--accent-primary) 0%, var(--primary-light) 100%) !important;
                 color: #fff !important;
                 padding: 1rem 2rem !important;
                 border-radius: 8px !important;
@@ -241,7 +273,7 @@ function my_iptv_product_page_inline_css()
 
             .woocommerce div.product .woocommerce-tabs ul.tabs li.active a {
                 background: #fff !important;
-                color: #7C3AED !important;
+                color: var(--accent-primary) !important;
                 box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
             }
 
@@ -285,7 +317,7 @@ function my_iptv_product_page_inline_css()
             }
 
             .woocommerce .related.products ul.products::-webkit-scrollbar-thumb {
-                background: #7C3AED !important;
+                background: var(--accent-primary) !important;
                 border-radius: 3px !important;
             }
 
@@ -304,7 +336,7 @@ function my_iptv_product_page_inline_css()
                 width: 100% !important;
                 height: 100px !important;
                 object-fit: contain !important;
-                background: #F5F3FF !important;
+                background: var(--bg-secondary) !important;
                 padding: 0.5rem !important;
             }
 
@@ -318,7 +350,7 @@ function my_iptv_product_page_inline_css()
 
             .woocommerce .related.products ul.products li.product .price {
                 font-size: 0.8rem !important;
-                color: #7C3AED !important;
+                color: var(--accent-primary) !important;
                 font-weight: 600 !important;
                 padding: 0 0.5rem 0.5rem !important;
             }
@@ -327,7 +359,7 @@ function my_iptv_product_page_inline_css()
                 display: block !important;
                 margin: 0 0.5rem 0.5rem !important;
                 padding: 0.4rem !important;
-                background: #7C3AED !important;
+                background: var(--accent-primary) !important;
                 color: #fff !important;
                 border-radius: 6px !important;
                 font-size: 0.75rem !important;
@@ -544,6 +576,9 @@ require_once get_template_directory() . '/inc/product-setup.php';
 // Include Bulk Product Editor
 require_once get_template_directory() . '/inc/admin-bulk-editor.php';
 
+// Include Price Sync Utility (for syncing variation prices from main site to subsites)
+require_once get_template_directory() . '/inc/sync-prices.php';
+
 /**
  * WooCommerce: Redirect all cart operations to checkout page
  * Since the cart page is disabled, we redirect to checkout instead
@@ -561,6 +596,18 @@ if (class_exists('WooCommerce')) {
     add_filter('woocommerce_cart_redirect_after_error', function ($url) {
         return wc_get_checkout_url();
     }, 10, 1);
+
+    // Force only 1 product in cart with quantity 1
+    // Clear cart before adding new product
+    add_filter('woocommerce_add_to_cart_validation', function ($passed, $product_id, $quantity) {
+        WC()->cart->empty_cart();
+        return $passed;
+    }, 10, 3);
+
+    // Force quantity to 1
+    add_filter('woocommerce_add_to_cart_quantity', function ($quantity, $product_id) {
+        return 1;
+    }, 10, 2);
 }
 
 // Redirect cart page to checkout, shop page to home (only if WooCommerce is active)
@@ -577,6 +624,54 @@ add_action('template_redirect', function () {
         exit;
     }
 });
+
+// Handle add-by-sku parameter from subsites - lookup product by SKU and add to cart
+add_action('template_redirect', function () {
+    if (!class_exists('WooCommerce'))
+        return;
+
+    // Check for add-by-sku parameter
+    if (!isset($_GET['add-by-sku']) || empty($_GET['add-by-sku']))
+        return;
+
+    $sku = sanitize_text_field($_GET['add-by-sku']);
+
+    // Lookup product ID by SKU on this site (main site)
+    $product_id = wc_get_product_id_by_sku($sku);
+
+    if (!$product_id) {
+        // SKU not found, redirect to homepage
+        wp_safe_redirect(home_url('/'));
+        exit;
+    }
+
+    $product = wc_get_product($product_id);
+
+    if (!$product) {
+        wp_safe_redirect(home_url('/'));
+        exit;
+    }
+
+    // Check if this is a variation
+    if ($product->is_type('variation')) {
+        // Get parent product ID
+        $parent_id = $product->get_parent_id();
+        $variation_id = $product_id;
+
+        // Get variation attributes
+        $variation_attributes = $product->get_attributes();
+
+        // Add variation to cart
+        WC()->cart->add_to_cart($parent_id, 1, $variation_id, $variation_attributes);
+    } else {
+        // Simple product - add directly
+        WC()->cart->add_to_cart($product_id);
+    }
+
+    // Redirect to checkout
+    wp_safe_redirect(wc_get_checkout_url());
+    exit;
+}, 5); // Run early (priority 5)
 
 /**
  * WooCommerce: Change "Add to cart" to "Buy Now" and redirect to checkout
@@ -649,41 +744,66 @@ add_action('wp_footer', function () {
     // Only add redirect script on subsites (not main site)
     if ($main_site_url === $current_site_url)
         return;
+
+    // Get current product SKU for main site lookup
+    global $product;
+    $product_sku = $product ? $product->get_sku() : '';
+
+    // Get variation SKUs if this is a variable product
+    $variation_skus = array();
+    if ($product && $product->is_type('variable')) {
+        $variations = $product->get_available_variations();
+        foreach ($variations as $variation) {
+            $var_product = wc_get_product($variation['variation_id']);
+            if ($var_product) {
+                $var_sku = $var_product->get_sku();
+                $attributes = $var_product->get_attributes();
+                // Create a key from attributes
+                $attr_key = '';
+                foreach ($attributes as $key => $value) {
+                    $attr_key .= $key . ':' . $value . ';';
+                }
+                $variation_skus[$attr_key] = $var_sku;
+            }
+        }
+    }
     ?>
     <script>
         (function () {
-            // Cross-site cart: Redirect add-to-cart to main site
+            // Cross-site cart: Redirect add-to-cart to main site using SKU
             const mainSiteUrl = '<?php echo esc_js($main_site_url); ?>';
+            const productSku = '<?php echo esc_js($product_sku); ?>';
+            const variationSkus = <?php echo json_encode($variation_skus); ?>;
             const form = document.querySelector('form.cart');
 
             if (form) {
                 form.addEventListener('submit', function (e) {
                     e.preventDefault();
 
-                    // Get variation ID if available
+                    // For variable products, get the selected variation's SKU
+                    let skuToUse = productSku;
                     const variationInput = form.querySelector('input[name="variation_id"]');
-                    const variationId = variationInput ? variationInput.value : '';
 
-                    // Get product ID
-                    const productIdInput = form.querySelector('input[name="product_id"]');
-                    const addToCartBtn = form.querySelector('button[name="add-to-cart"]');
-                    const productId = productIdInput ? productIdInput.value : (addToCartBtn ? addToCartBtn.value : '');
-
-                    if (!productId) return;
-
-                    // Build main site add-to-cart URL
-                    let url = mainSiteUrl + '/checkout/?add-to-cart=' + productId;
-                    if (variationId) {
-                        url += '&variation_id=' + variationId;
-
-                        // Add variation attributes
+                    if (variationInput && variationInput.value) {
+                        // Build attribute key to match variation SKU
                         const attrs = form.querySelectorAll('select[name^="attribute_"]');
+                        let attrKey = '';
                         attrs.forEach(select => {
-                            url += '&' + select.name + '=' + encodeURIComponent(select.value);
+                            attrKey += select.name.replace('attribute_', '') + ':' + select.value + ';';
                         });
+
+                        if (variationSkus[attrKey]) {
+                            skuToUse = variationSkus[attrKey];
+                        }
                     }
 
-                    // Redirect to main site checkout
+                    if (!skuToUse) {
+                        console.error('No SKU found for product');
+                        return;
+                    }
+
+                    // Redirect to main site checkout with SKU (main site will lookup by SKU)
+                    const url = mainSiteUrl + '/checkout/?add-by-sku=' + encodeURIComponent(skuToUse);
                     window.location.href = url;
                 });
             }
@@ -730,5 +850,33 @@ if (class_exists('WooCommerce')) {
     add_filter('woocommerce_checkout_required_field_keys', function ($required) {
         $keep = array('billing_email', 'billing_phone');
         return array_intersect($required, $keep);
+    });
+
+    // Change attribute label from 'pa_devices' to 'Devices'
+    add_filter('woocommerce_attribute_label', function ($label, $name) {
+        if ($name === 'pa_devices') {
+            return 'Devices';
+        }
+        return $label;
+    }, 10, 2);
+
+    // Hide excessive WooCommerce notices on product pages (cart added/removed messages)
+    add_filter('wc_add_to_cart_message_html', '__return_empty_string');
+
+    // Limit displayed notices to prevent spam
+    add_action('wp_footer', function () {
+        if (!is_product())
+            return;
+        ?>
+        <style>
+            /* Hide WooCommerce notices on product pages */
+            .woocommerce-notices-wrapper,
+            .woocommerce-message,
+            .woocommerce-info,
+            .wc-block-components-notice-banner {
+                display: none !important;
+            }
+        </style>
+        <?php
     });
 }

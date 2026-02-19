@@ -64,11 +64,11 @@ if (isset($site_currency_map[$site_slug])) {
         <?php else: ?>
             <nav class="nav-links">
                 <a href="<?php echo home_url('/'); ?>">Home</a>
-                <a href="#features">Features</a>
-                <a href="#pricing">Pricing</a>
+                <a href="<?php echo home_url('/#features'); ?>">Features</a>
+                <a href="<?php echo home_url('/#pricing'); ?>">Pricing</a>
                 <a href="<?php echo home_url('/blog/'); ?>">Blog</a>
                 <a href="<?php echo home_url('/user-guide/'); ?>">User Guide</a>
-                <a href="#contact">Contact</a>
+                <a href="<?php echo home_url('/#contact'); ?>">Contact</a>
             </nav>
         <?php endif; ?>
         <div class="nav-right">
@@ -109,7 +109,7 @@ if (isset($site_currency_map[$site_slug])) {
                     -->
                 </div>
             </div>
-            <a href="#pricing" class="nav-btn nav-btn-primary">Get Access Now</a>
+            <a href="<?php echo home_url('/#pricing'); ?>" class="nav-btn nav-btn-primary">Get Access Now</a>
         </div>
         <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
             <span></span><span></span><span></span>
@@ -130,11 +130,11 @@ if (isset($site_currency_map[$site_slug])) {
         )); ?>
     <?php else: ?>
         <a href="<?php echo home_url('/'); ?>">Home</a>
-        <a href="#features">Features</a>
-        <a href="#pricing">Pricing</a>
+        <a href="<?php echo home_url('/#features'); ?>">Features</a>
+        <a href="<?php echo home_url('/#pricing'); ?>">Pricing</a>
         <a href="<?php echo home_url('/blog/'); ?>">Blog</a>
         <a href="<?php echo home_url('/user-guide/'); ?>">User Guide</a>
-        <a href="#contact">Contact</a>
+        <a href="<?php echo home_url('/#contact'); ?>">Contact</a>
     <?php endif; ?>
 
     <!-- Language Selector in Mobile Menu -->
@@ -154,6 +154,7 @@ if (isset($site_currency_map[$site_slug])) {
         </div>
     </div>
 
-    <a href="#pricing" class="nav-btn nav-btn-primary" style="margin-top:1rem;" onclick="toggleMobileMenu()">Get Access
+    <a href="<?php echo home_url('/#pricing'); ?>" class="nav-btn nav-btn-primary" style="margin-top:1rem;"
+        onclick="toggleMobileMenu()">Get Access
         Now</a>
 </div>

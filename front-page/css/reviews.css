@@ -2,7 +2,7 @@
 .reviews {
     padding: 2.5rem 0;
     /* Reduced padding */
-    background: var(--white);
+    background: var(--bg-card);
     overflow: hidden;
     /* Hide overflow for carousel */
 }
@@ -14,8 +14,9 @@
 
 .reviews-header h2 {
     font-size: 2rem;
+    font-size: 2rem;
     font-weight: 800;
-    color: var(--dark);
+    color: var(--primary-deep);
     margin-bottom: 0.5rem;
 }
 
@@ -28,7 +29,7 @@
 }
 
 .reviews-header .stars {
-    color: var(--amber-400);
+    color: var(--accent-gold);
     font-size: 1.25rem;
 }
 
@@ -71,8 +72,8 @@
 
 /* Review Card */
 .review-card {
-    background: var(--white);
-    border: 1px solid var(--border);
+    background: var(--bg-card);
+    border: 1px solid var(--border-medium);
     border-radius: 1rem;
     padding: 1.5rem;
     width: 300px;
@@ -86,17 +87,17 @@
 .review-card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-lg);
-    border-color: var(--primary);
+    border-color: var(--accent-primary);
 }
 
 .review-stars {
-    color: var(--amber-400);
+    color: var(--accent-gold);
     margin-bottom: 0.75rem;
 }
 
 .review-text {
     font-size: 0.9375rem;
-    color: var(--text);
+    color: var(--text-secondary);
     line-height: 1.5;
     margin-bottom: 1rem;
     font-style: italic;
@@ -104,7 +105,7 @@
 
 .review-author {
     font-weight: 700;
-    color: var(--dark);
+    color: var(--primary-deep);
     font-size: 0.875rem;
 }
 
@@ -117,21 +118,21 @@
 .reviews-cta .button {
     padding: 0.75rem 2rem;
     font-size: 1.1rem;
-    background: #7C3AED;
+    background: linear-gradient(135deg, var(--accent-primary), var(--primary-light));
     color: #ffffff;
     border-radius: 9999px;
     /* Pill shape */
     text-transform: uppercase;
     font-weight: 700;
     letter-spacing: 0.5px;
-    box-shadow: 0 4px 6px -1px rgba(124, 58, 237, 0.3);
+    box-shadow: var(--shadow-glow);
     /* Purple shadow */
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .reviews-cta .button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(124, 58, 237, 0.4);
+    box-shadow: 0 12px 48px rgba(0, 212, 170, 0.4);
 }
 
 /* Mobile Responsiveness */

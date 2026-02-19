@@ -1,0 +1,279 @@
+<!-- ============================================
+     SECTION 5: PRICE COMPARISON
+     (This is NOT your pricing plans - this is the 
+     "Without vs With" comparison section)
+     ============================================ -->
+
+<!-- HTML -->
+<section class="comparison">
+    <div class="section-header">
+        <div class="section-tag">Save Money</div>
+        <h2 class="section-title">Stop The <span class="gradient-text">Subscription Trap</span></h2>
+        <p class="section-subtitle">See how much you're really paying vs Nordic IPTV.</p>
+    </div>
+
+    <div class="comparison-grid">
+        <div class="comparison-card without">
+            <div class="comparison-header">
+                <div class="comparison-dot red"></div>
+                <span class="comparison-label">WITHOUT NORDIC IPTV</span>
+            </div>
+            <div class="comparison-items">
+                <div class="comparison-item">
+                    <span class="comparison-item-name">Netflix</span>
+                    <span class="comparison-item-value">$17.99/mo</span>
+                </div>
+                <div class="comparison-item">
+                    <span class="comparison-item-name">Disney+</span>
+                    <span class="comparison-item-value">$13.99/mo</span>
+                </div>
+                <div class="comparison-item">
+                    <span class="comparison-item-name">HBO Max</span>
+                    <span class="comparison-item-value">$15.99/mo</span>
+                </div>
+                <div class="comparison-item">
+                    <span class="comparison-item-name">Sports Package</span>
+                    <span class="comparison-item-value">$35.00/mo</span>
+                </div>
+                <div class="comparison-item">
+                    <span class="comparison-item-name">PPV Events (yearly)</span>
+                    <span class="comparison-item-value">$700+</span>
+                </div>
+            </div>
+            <div class="comparison-total">
+                <div class="comparison-total-label">Annual Cost</div>
+                <div class="comparison-total-value expensive">$1,200+</div>
+            </div>
+        </div>
+
+        <div class="comparison-card with">
+            <div class="comparison-header">
+                <div class="comparison-dot green"></div>
+                <span class="comparison-label">WITH NORDIC IPTV</span>
+            </div>
+            <div class="comparison-items">
+                <div class="comparison-item">
+                    <span class="comparison-item-name">All Streaming Content</span>
+                    <span class="comparison-item-value included">Included</span>
+                </div>
+                <div class="comparison-item">
+                    <span class="comparison-item-name">All Live Sports</span>
+                    <span class="comparison-item-value included">Included</span>
+                </div>
+                <div class="comparison-item">
+                    <span class="comparison-item-name">All PPV Events</span>
+                    <span class="comparison-item-value included">$0 Extra</span>
+                </div>
+                <div class="comparison-item">
+                    <span class="comparison-item-name">35,000+ Channels</span>
+                    <span class="comparison-item-value included">Included</span>
+                </div>
+                <div class="comparison-item">
+                    <span class="comparison-item-name">4K Quality</span>
+                    <span class="comparison-item-value included">Included</span>
+                </div>
+            </div>
+            <div class="comparison-total">
+                <div class="comparison-total-label">Nordic IPTV Annual Cost</div>
+                <div class="comparison-total-value cheap">$69.99</div>
+                <div class="comparison-per-month">Just ~$5.83/month</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="savings-banner">
+        <div class="savings-label">Your Annual Savings</div>
+        <div class="savings-value">$1,100+</div>
+    </div>
+</section>
+
+
+<style>
+/* ============================================
+   SECTION 5: PRICE COMPARISON - CSS
+   ============================================ */
+.comparison {
+    padding: var(--space-2xl) var(--space-lg);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-xl);
+}
+
+.comparison-card {
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg);
+    position: relative;
+}
+
+.comparison-card.without {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+}
+
+.comparison-card.with {
+    background: linear-gradient(135deg, var(--primary-deep), var(--primary-mid));
+    color: white;
+    overflow: hidden;
+}
+
+.comparison-card.with::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -30%;
+    width: 80%;
+    height: 150%;
+    background: radial-gradient(circle, rgba(0, 212, 170, 0.15) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.comparison-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+    position: relative;
+}
+
+.comparison-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+}
+
+.comparison-dot.red { background: var(--accent-warm); }
+.comparison-dot.green { background: var(--accent-glow); }
+
+.comparison-label {
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+}
+
+.comparison-items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    position: relative;
+}
+
+.comparison-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-sm) 0;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.comparison-card.with .comparison-item {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.comparison-item-name {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+.comparison-card.with .comparison-item-name {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.comparison-item-value {
+    font-weight: 600;
+    font-family: 'Space Mono', monospace;
+}
+
+.comparison-item-value.included {
+    color: var(--accent-glow);
+}
+
+.comparison-total {
+    margin-top: var(--space-md);
+    padding: var(--space-md);
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: var(--radius-md);
+    text-align: center;
+    position: relative;
+}
+
+.comparison-card.with .comparison-total {
+    background: rgba(0, 212, 170, 0.2);
+}
+
+.comparison-total-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+}
+
+.comparison-card.with .comparison-total-label {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.comparison-total-value {
+    font-size: 2.75rem;
+    font-weight: 800;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: -0.02em;
+}
+
+.comparison-total-value.expensive {
+    color: var(--accent-warm);
+}
+
+.comparison-total-value.cheap {
+    color: var(--accent-glow);
+}
+
+.comparison-per-month {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    margin-top: 4px;
+}
+
+/* Savings Banner */
+.savings-banner {
+    text-align: center;
+    padding: var(--space-lg);
+    background: linear-gradient(135deg, rgba(0, 212, 170, 0.08), rgba(26, 75, 124, 0.06));
+    border: 2px dashed var(--accent-primary);
+    border-radius: var(--radius-xl);
+}
+
+.savings-label {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-xs);
+}
+
+.savings-value {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: var(--accent-primary);
+    font-family: 'Space Mono', monospace;
+    letter-spacing: -0.02em;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .comparison-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .savings-value {
+        font-size: 2.5rem;
+    }
+
+    .comparison-total-value {
+        font-size: 2rem;
+    }
+}
+</style>

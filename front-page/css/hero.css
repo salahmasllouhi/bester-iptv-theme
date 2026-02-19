@@ -7,6 +7,7 @@
     justify-content: center;
     overflow: hidden;
     background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    padding-top: 8rem;
 }
 
 .hero h1 {
@@ -203,11 +204,13 @@
 @media (max-width: 768px) {
     .hero {
         min-height: auto;
-        padding: 6rem 0 3rem;
+        padding: 9rem 0 3rem;
+        /* Increased from 6rem to avoid header overlap */
     }
 
     .hero-content {
-        padding: 0 1rem;
+        padding: 0 0.5rem;
+        /* Reduced from 1rem to give more width */
     }
 
     .hero h1 {

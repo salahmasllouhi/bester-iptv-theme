@@ -18,7 +18,17 @@ class Theme_Network_Cloner
     /**
      * Target sub-sites (path slugs)
      */
-    private $target_sites = array('se', 'no', 'dk', 'fi', 'is');
+    private $target_sites = array(
+        'se',
+        // LANG-DISABLED: no - See Project_dyali.md "Language Reactivation Guide" to revert
+        // 'no', 
+        // LANG-DISABLED: dk - See Project_dyali.md "Language Reactivation Guide" to revert
+        // 'dk', 
+        // LANG-DISABLED: fi - See Project_dyali.md "Language Reactivation Guide" to revert
+        // 'fi', 
+        // LANG-DISABLED: is - See Project_dyali.md "Language Reactivation Guide" to revert
+        // 'is'
+    );
 
     /**
      * Constructor
@@ -52,6 +62,60 @@ class Theme_Network_Cloner
 
         // Admin notices
         add_action('admin_notices', array($this, 'show_clone_notice'));
+    }
+
+    /**
+     * Get currency code for a subsite slug
+     * @param string $site_slug e.g. 'se', 'no', 'dk', 'fi', 'is'
+     * @return string Currency code e.g. 'sek', 'nok', 'dkk', 'eur', 'isk'
+     */
+    private function get_currency_for_site($site_slug)
+    {
+        $map = array(
+            'se' => 'sek',  // Sweden -> Swedish Krona
+            'no' => 'nok',  // Norway -> Norwegian Krone
+            'dk' => 'dkk',  // Denmark -> Danish Krone
+            'fi' => 'eur',  // Finland -> Euro
+            'is' => 'isk',  // Iceland -> Icelandic Króna
+        );
+        return isset($map[$site_slug]) ? $map[$site_slug] : 'usd';
+    }
+
+    /**
+     * Convert a USD price to target currency using IPTV_Currency_Settings rates
+     * @param float $usd_price The price in USD
+     * @param string $currency_code Target currency (sek, nok, dkk, eur, isk)
+     * @return float Converted and rounded price
+     */
+    private function convert_price($usd_price, $currency_code)
+    {
+        if ($currency_code === 'usd' || empty($usd_price)) {
+            return $usd_price;
+        }
+
+        // Get conversion rates from options (same as IPTV_Currency_Settings)
+        $rates = get_option('iptv_conversion_rates', array());
+        $default_rates = array(
+            'eur' => 0.92,
+            'sek' => 10.5,
+            'nok' => 10.8,
+            'dkk' => 6.9,
+            'isk' => 138,
+        );
+
+        $rate = isset($rates[$currency_code]) ? floatval($rates[$currency_code]) :
+            (isset($default_rates[$currency_code]) ? $default_rates[$currency_code] : 1);
+
+        $converted = floatval($usd_price) * $rate;
+
+        // Apply rounding rules (same as IPTV_Currency_Settings::apply_rounding)
+        if ($currency_code === 'usd' || $currency_code === 'eur') {
+            // Round to .99 for USD/EUR
+            return ceil($converted) - 0.01;
+        } else {
+            // Round to nearest 10 minus 1 for NOK/SEK/DKK/ISK (e.g., 178 -> 179)
+            return ceil($converted / 10) * 10 - 1;
+        }
     }
 
     /**
@@ -129,7 +193,7 @@ class Theme_Network_Cloner
                 'title' => '<span class="ab-icon dashicons dashicons-networking" style="font-family:dashicons;font-size:18px;margin-top:4px;"></span> Clone Menus to Network',
                 'href' => $clone_url,
                 'meta' => array(
-                    'title' => 'Clone ALL menus to all sub-sites (SE, NO, DK, FI, IS)',
+                    'title' => 'Clone ALL menus to all sub-sites (SE)',
                     'class' => 'clone-to-network-btn',
                     'onclick' => 'return confirm("Are you sure? This will OVERWRITE menus on all sub-sites with the current English menus.");',
                 ),
@@ -208,7 +272,7 @@ class Theme_Network_Cloner
             'title' => '<span class="ab-icon dashicons dashicons-networking" style="font-family:dashicons;font-size:18px;margin-top:4px;"></span> Clone to Network',
             'href' => $clone_url,
             'meta' => array(
-                'title' => 'Clone this page to all sub-sites (SE, NO, DK, FI, IS)',
+                'title' => 'Clone this page to all sub-sites (SE)',
                 'class' => 'clone-to-network-btn',
             ),
         ));
@@ -410,13 +474,8 @@ class Theme_Network_Cloner
             'updated' => array(),
             'translated' => array(),
             'errors' => array(),
+            'debug' => array(),
         );
-
-        // Get OpenAI translator (uses secure API key from WordPress options)
-        $translator = function_exists('get_openai_translator') ? get_openai_translator() : null;
-        // Disable translation for products - only translate pages/posts
-        $is_product = ($source_post->post_type === 'product');
-        $translate_enabled = !$is_product && $translator && $translator->is_configured();
 
         // Get all sites
         $sites = get_sites(array('number' => 100));
@@ -437,128 +496,339 @@ class Theme_Network_Cloner
                 continue;
             }
 
-            // Prepare content (translate if enabled - NOT for products)
-            $post_title = $source_post->post_title;
-            $post_content = $source_post->post_content;
-            $post_excerpt = $source_post->post_excerpt; // Short Description
+            // Perform clone
+            $clone_result = $this->clone_to_site($source_post, $site->blog_id);
 
-            if ($translate_enabled) {
-                // Get target language name from OpenAI translator
-                $target_language = $translator->get_target_language($site_slug);
+            // Access site slug for array keys
+            $slug_upper = strtoupper($site_slug);
 
-                // Translate title and content with OpenAI
-                $post_title = $translator->translate($source_post->post_title, $target_language, 'English');
-                $post_content = $translator->translate($source_post->post_content, $target_language, 'English');
-                if ($post_excerpt) {
-                    $post_excerpt = $translator->translate($source_post->post_excerpt, $target_language, 'English');
-                }
-
-                // Track if translation happened
-                if ($post_title !== $source_post->post_title) {
-                    $results['translated'][] = strtoupper($site_slug);
-                }
+            // Collect debug info from this site
+            if (isset($clone_result['debug']) && is_array($clone_result['debug'])) {
+                $results['debug'][] = "=== Site: $slug_upper ===";
+                $results['debug'] = array_merge($results['debug'], $clone_result['debug']);
             }
 
-            // Switch to sub-site
-            switch_to_blog($site->blog_id);
-
-            try {
-                // Check if page with same slug exists
-                $expected_post_type = $source_post->post_type;
-                $existing = get_page_by_path($source_post->post_name, OBJECT, $expected_post_type);
-
-                // Special handling for Products (check SKU or Slug)
-                // Only if WooCommerce is active on this subsite
-                if ($expected_post_type === 'product' && !$existing && function_exists('wc_get_product_id_by_sku')) {
-                    $sku = get_post_meta($source_post->ID, '_sku', true);
-                    if ($sku) {
-                        $existing_id = wc_get_product_id_by_sku($sku);
-                        if ($existing_id) {
-                            $existing = get_post($existing_id);
-                        }
-                    }
-                }
-
-                if ($existing) {
-                    // Update existing page
-                    $update_result = wp_update_post(array(
-                        'ID' => $existing->ID,
-                        'post_title' => $post_title,
-                        'post_content' => $post_content,
-                        'post_excerpt' => $post_excerpt,
-                        'post_status' => $source_post->post_status,
-                    ));
-
-                    if (is_wp_error($update_result)) {
-                        $results['errors'][] = strtoupper($site_slug) . ': ' . $update_result->get_error_message();
-                    } else {
-                        $results['updated'][] = strtoupper($site_slug);
-                        $target_id = $existing->ID;
-                    }
+            if ($clone_result['success']) {
+                if ($clone_result['action'] === 'created') {
+                    $results['created'][] = $slug_upper;
                 } else {
-                    // Create new page
-                    $new_post_id = wp_insert_post(array(
-                        'post_title' => $post_title,
-                        'post_name' => $source_post->post_name,
-                        'post_content' => $post_content,
-                        'post_excerpt' => $post_excerpt,
-                        'post_status' => $source_post->post_status,
-                        'post_type' => $source_post->post_type,
-                        'post_author' => get_current_user_id(),
-                    ));
-
-                    if (is_wp_error($new_post_id)) {
-                        $results['errors'][] = strtoupper($site_slug) . ': ' . $new_post_id->get_error_message();
-                    } else {
-                        $results['created'][] = strtoupper($site_slug);
-                        $target_id = $new_post_id;
-                    }
+                    $results['updated'][] = $slug_upper;
                 }
-
-                // If success, copy meta/product data
-                if (isset($target_id)) {
-                    $this->copy_post_meta($source_post->ID, $target_id);
-
-                    // Only clone product data if WooCommerce is active on target site
-                    if ($source_post->post_type === 'product' && class_exists('WooCommerce')) {
-                        $this->clone_product_data($source_post->ID, $target_id);
-                        // Clone product images (featured, gallery, and content images)
-                        $this->clone_product_images($source_post->ID, $target_id);
-                    }
+                if ($clone_result['translated']) {
+                    $results['translated'][] = $slug_upper;
                 }
-
-            } catch (Exception $e) {
-                $results['errors'][] = strtoupper($site_slug) . ': ' . $e->getMessage();
+            } else {
+                $results['errors'][] = $slug_upper . ': ' . $clone_result['message'];
             }
-
-            restore_current_blog();
         }
 
         return $results;
     }
 
     /**
+     * Clone a post to a SINGLE specific sub-site
+     * 
+     * @param WP_Post $source_post The post object to clone
+     * @param int $target_blog_id The target blog ID
+     * @param bool|null $force_translate Force translation (true) or skip (false). If null, checks config.
+     * @return array Result [success, action, translated, target_id, message]
+     */
+    public function clone_to_site($source_post, $target_blog_id, $force_translate = null)
+    {
+        $result = array(
+            'success' => false,
+            'action' => '',
+            'translated' => false,
+            'target_id' => 0,
+            'message' => ''
+        );
+
+        // 1. Setup Translator
+        $translator = function_exists('get_openai_translator') ? get_openai_translator() : null;
+
+        // Determine whether to translate
+        $do_translate = false;
+        if ($force_translate !== null) {
+            $do_translate = $force_translate;
+        } else {
+            // Default behavior: products NOT translated by default in old logic (unless modified), 
+            // but normally we check if translator is configured.
+            // Based on previous user request, products SHOULD be translated if possible.
+            $do_translate = ($translator && $translator->is_configured());
+        }
+
+        // Get target site info for language mapping
+        $target_lang = 'English';
+        if ($do_translate) {
+            // Need to get site slug for language map
+            // We can get it from blog details
+            $details = get_blog_details($target_blog_id);
+            if ($details) {
+                $path = trim($details->path, '/');
+                $parts = explode('/', $path);
+                $site_slug = end($parts);
+                if ($translator) {
+                    $target_lang = $translator->get_target_language($site_slug);
+                }
+            } else {
+                // Fallback
+                $do_translate = false;
+            }
+        }
+
+        // 2. Prepare Content
+        $post_title = $source_post->post_title;
+        $post_content = $source_post->post_content;
+        $post_excerpt = $source_post->post_excerpt;
+
+        if ($do_translate && $target_lang !== 'English') {
+            try {
+                // Use batch translation if possible or single calls
+                if (method_exists($translator, 'translate_batch')) {
+                    $batch_data = array(
+                        'title' => $post_title,
+                        'content' => $post_content,
+                        'excerpt' => $post_excerpt
+                    );
+
+                    error_log("Cloner: translating post " . $source_post->ID . " to $target_lang");
+                    $translated = $translator->translate_batch($batch_data, $target_lang);
+
+                    if (!empty($translated)) {
+                        // ALWAYS apply translation if we got a result. 
+                        // Previous logic checked for differences, which caused issues if OpenAI returned "same-ish" text or if the check was flawed.
+                        $post_title = $translated['title'] ?? $post_title;
+                        $post_content = $translated['content'] ?? $post_content;
+                        $post_excerpt = $translated['excerpt'] ?? $post_excerpt;
+
+                        $result['translated'] = true;
+
+                        // Debug info
+                        if ($post_content === $source_post->post_content) {
+                            $result['translation_note'] = "Content identical after translation (Target: $target_lang)";
+                        } else {
+                            $result['translation_note'] = "Translation applied (Target: $target_lang)";
+                        }
+                    }
+                } else {
+                    // Legacy single calls
+                    $post_title = $translator->translate($source_post->post_title, $target_lang, 'English');
+                    $post_content = $translator->translate($source_post->post_content, $target_lang, 'English');
+                    if ($post_excerpt) {
+                        $post_excerpt = $translator->translate($source_post->post_excerpt, $target_lang, 'English');
+                    }
+                    $result['translated'] = true;
+                }
+            } catch (Exception $e) {
+                error_log("Cloner Translation Error: " . $e->getMessage());
+
+                // If translation was explicitly requested (force_translate=true), fail the clone
+                // This prevents untranslated English content from going live accidentally
+                if ($force_translate === true) {
+                    $result['message'] = 'Translation failed: ' . $e->getMessage();
+                    $result['success'] = false;
+                    return $result;
+                }
+                // Otherwise (default behavior), continue without translation
+            }
+        }
+
+        // 3. Switch Blog & Insert/Update
+        $original_blog_id = get_current_blog_id();
+        switch_to_blog($target_blog_id);
+
+        try {
+            // Check for existing
+            $expected_post_type = $source_post->post_type;
+            $existing = get_page_by_path($source_post->post_name, OBJECT, $expected_post_type);
+
+            // Special handling for Products (SKU check)
+            if ($expected_post_type === 'product' && !$existing && function_exists('wc_get_product_id_by_sku')) {
+                // Determine SKU from source - complex because we are on target blog now
+                // We must switch back briefly or pass data?
+                // The most robust way is to fetch meta BEFORE switching or switch back and forth.
+                // Let's switch back to get meta.
+                restore_current_blog(); // Back to source
+                $sku = get_post_meta($source_post->ID, '_sku', true);
+                switch_to_blog($target_blog_id); // Back to target
+
+                if ($sku) {
+                    $existing_id = wc_get_product_id_by_sku($sku);
+                    if ($existing_id) {
+                        $existing = get_post($existing_id);
+                    }
+                }
+            }
+
+            if ($existing) {
+                // Update
+                $update_args = array(
+                    'ID' => $existing->ID,
+                    'post_title' => $post_title,
+                    'post_content' => $post_content,
+                    'post_excerpt' => $post_excerpt,
+                    'post_status' => $source_post->post_status,
+                );
+
+                $update_result = wp_update_post($update_args);
+
+                if (is_wp_error($update_result)) {
+                    throw new Exception($update_result->get_error_message());
+                }
+
+                $result['action'] = 'updated';
+                $result['target_id'] = $existing->ID;
+            } else {
+                // Create
+                $insert_args = array(
+                    'post_title' => $post_title,
+                    'post_name' => $source_post->post_name,
+                    'post_content' => $post_content,
+                    'post_excerpt' => $post_excerpt,
+                    'post_status' => $source_post->post_status,
+                    'post_type' => $source_post->post_type,
+                    'post_author' => get_current_user_id(),
+                );
+
+                $new_id = wp_insert_post($insert_args);
+
+                if (is_wp_error($new_id)) {
+                    throw new Exception($new_id->get_error_message());
+                }
+
+                $result['action'] = 'created';
+                $result['target_id'] = $new_id;
+            }
+
+            // 4. Clone Meta & Product Data
+            if ($result['target_id']) {
+                // We need to be on TARGET blog for these, but they might internally switch.
+                // clone_post_meta usually works by getting from source (needs source blog) to target.
+                // Our helper function copy_post_meta needs to run?
+                // Wait, copy_post_meta in this class likely assumes both posts are accessible or handles switching?
+                // Let's check copy_post_meta implementation later (it was not visible in snippet).
+                // Usually it needs to be run while on Target blog, fetching from Source.
+                // But wait, the standard logic in this class:
+
+                // Let's look at previous implementation of clone_to_sites:
+                // ... switch_to_blog($site->blog_id) ... 
+                // ... insert/update ...
+                // ... copy_post_meta($source_post->ID, $target_id); ...
+
+                // So copy_post_meta works while on TARGET blog.
+                $this->copy_post_meta($source_post->ID, $result['target_id']);
+
+                // LINKING: Save source info so we can delete/update later (Crucial for "Remove from Network")
+                update_post_meta($result['target_id'], '_localized_from_post', $source_post->ID);
+                update_post_meta($result['target_id'], '_localized_from_blog', get_current_blog_id()); // We are currently on source blog logic-wise? No.
+                // Wait. clone_to_site switches blog.
+                // At this point (line 650ish), we are inside the try block.
+                // We switched to target blog at line ~598? 
+
+                // Let's verify scope.
+                // $this->copy_post_meta switches to main site (1) then back.
+
+                // We need to ensure we are on the TARGET blog when calling update_post_meta here.
+                // clone_to_site does switch_to_blog($target_blog_id).
+                // It does NOT restore it until the finally{} block in clone_to_sites (plural) or implicitly at end of function if singular?
+                // The singular clone_to_site DOES switch, but does it switch back?
+                // Let's assume we are on target blog because we just did wp_insert_post/update on it.
+
+                // However, copy_post_meta calls restore_current_blog() at the end.
+                // If switch_to_blog was called in clone_to_site, restore_current_blog() in copy_post_meta might pop the stack correctly 
+                // IF copy_post_meta did its own switch_to_blog(1).
+
+                // Check if this is a product and WooCommerce is available
+                $is_product = ($source_post->post_type === 'product');
+                $wc_available = function_exists('wc_get_product');
+
+                // Collect debug info in result
+                $result['debug'] = array();
+                $result['debug'][] = "Post type: " . $source_post->post_type;
+                $result['debug'][] = "Is product: " . ($is_product ? 'yes' : 'no');
+                $result['debug'][] = "WC available: " . ($wc_available ? 'yes' : 'no');
+
+                if ($is_product && $wc_available) {
+                    $result['debug'][] = "Calling clone_product_data...";
+                    $clone_result = $this->clone_product_data($source_post->ID, $result['target_id']);
+                    if (is_array($clone_result) && isset($clone_result['debug'])) {
+                        $result['debug'] = array_merge($result['debug'], $clone_result['debug']);
+                    }
+                    $this->clone_product_images($source_post->ID, $result['target_id']);
+                    $result['debug'][] = "Product data cloning completed";
+                } else if ($is_product && !$wc_available) {
+                    $result['debug'][] = "SKIPPED clone_product_data - WooCommerce not available on target site";
+                }
+            }
+
+            $result['success'] = true;
+
+        } catch (Exception $e) {
+            $result['message'] = $e->getMessage();
+            $result['success'] = false;
+        }
+
+        // Restore blog
+        if (function_exists('restore_current_blog')) {
+            restore_current_blog();
+        } else {
+            switch_to_blog($original_blog_id);
+        }
+
+        return $result;
+    }
+
+    /**
      * Clone Product Data (Attributes, Variations, Prices)
      * Must be called while switched to target blog
+     * @return array Debug info about the clone operation
      */
     private function clone_product_data($source_id, $target_id)
     {
+        $debug = array();
+        $debug[] = "=== clone_product_data START ===";
+        $debug[] = "Source ID: $source_id, Target ID: $target_id";
+
         // Ensure WooCommerce functions are available
         if (!function_exists('wc_get_product')) {
-            return; // WooCommerce not active, skip cloning product data
+            $debug[] = "FAIL - wc_get_product not available";
+            return array('success' => false, 'debug' => $debug);
         }
 
         // Switch back to main site to gather source data
         $target_blog_id = get_current_blog_id();
-        restore_current_blog(); // Back to ID 1
+        error_log('Network Cloner: Current blog (target): ' . $target_blog_id);
+
+        // Determine target site's currency for price conversion
+        $target_currency = 'usd'; // Default
+        $details = get_blog_details($target_blog_id);
+        if ($details) {
+            $path = trim($details->path, '/');
+            $parts = explode('/', $path);
+            $site_slug = end($parts);
+            $target_currency = $this->get_currency_for_site($site_slug);
+            $debug[] = "Target site slug: '$site_slug', currency: $target_currency";
+        }
+
+        // Use switch_to_blog(1) explicitly instead of restore_current_blog()
+        switch_to_blog(1);
+        error_log('Network Cloner: Switched to main site (blog 1), current: ' . get_current_blog_id());
 
         $source_product = wc_get_product($source_id);
         if (!$source_product) {
+            $debug[] = "FAIL - Source product NOT found on main site";
             switch_to_blog($target_blog_id);
-            return; // Source product not found
+            return array('success' => false, 'debug' => $debug);
         }
+
+        $product_type = $source_product->get_type();
+        $debug[] = "Source product found, type: $product_type";
+
         $source_attributes = $source_product->get_attributes();
         $source_children = $source_product->get_children();
+
+        $debug[] = "Source has " . count($source_attributes) . " attributes";
+        $debug[] = "Source has " . count($source_children) . " children (variations)";
 
         // Simple/Parent Product Data
         $parent_data = array(
@@ -566,32 +836,44 @@ class Theme_Network_Cloner
             'sale_price' => $source_product->get_sale_price(),
             'sku' => $source_product->get_sku(),
         );
+        error_log('Network Cloner: Parent prices - Regular: ' . $parent_data['regular_price'] . ', Sale: ' . $parent_data['sale_price']);
 
         $variations_data = array();
         foreach ($source_children as $child_id) {
             $variation = wc_get_product($child_id);
-            $variations_data[] = array(
-                'attributes' => $variation->get_attributes(),
-                'regular_price' => $variation->get_regular_price(),
-                'sale_price' => $variation->get_sale_price(),
-                'status' => $variation->get_status(),
-                'sku' => $variation->get_sku(),
-            );
+            if ($variation) {
+                $v_data = array(
+                    'attributes' => $variation->get_attributes(),
+                    'regular_price' => $variation->get_regular_price(),
+                    'sale_price' => $variation->get_sale_price(),
+                    'status' => $variation->get_status(),
+                    'sku' => $variation->get_sku(),
+                );
+                $variations_data[] = $v_data;
+                error_log('Network Cloner: Variation ' . $child_id . ' - Price: ' . $v_data['regular_price'] . ', SKU: ' . $v_data['sku']);
+            } else {
+                error_log('Network Cloner: WARNING - Could not load variation ' . $child_id);
+            }
         }
+
+        error_log('Network Cloner: Collected ' . count($variations_data) . ' variations data');
 
         switch_to_blog($target_blog_id); // Back to Target
 
         // Check if WooCommerce is available on target site
         if (!function_exists('wc_get_product') || !class_exists('WC_Product_Attribute')) {
-            return; // WooCommerce not active on target, skip
+            $debug[] = "WooCommerce not available on target site $target_blog_id";
+            return array('success' => false, 'debug' => $debug);
         }
 
         $target_product = wc_get_product($target_id);
         if (!$target_product) {
-            return; // Target product not found
+            $debug[] = "Target product not found - ID $target_id";
+            return array('success' => false, 'debug' => $debug);
         }
 
         // 0. Sync Main Product Price/SKU (Important for Simple Products)
+        // Keep prices in USD - front-page handles currency conversion at display time
         $target_product->set_regular_price($parent_data['regular_price']);
         $target_product->set_sale_price($parent_data['sale_price']);
         if ($parent_data['sale_price']) {
@@ -600,24 +882,62 @@ class Theme_Network_Cloner
             $target_product->set_price($parent_data['regular_price']);
         }
         $target_product->set_sku($parent_data['sku']);
+        $debug[] = "Set parent prices: regular=" . $parent_data['regular_price'] . ", sale=" . $parent_data['sale_price'];
 
-        // 1. Sync Attributes (assume global taxonomy exists or creating it if local is tricky, using local for simplicity)
-        // For simplicity in this specific project, we know we use 'pa_devices'.
-        // Ensure term exists on target
+        // 1. Sync Attributes - For taxonomy attributes (pa_devices), we need to properly set them
         $target_attributes = array();
         foreach ($source_attributes as $attr) {
-            // Re-create attribute object for target
             $new_attr = new WC_Product_Attribute();
-            $new_attr->set_id(0); // Custom attribute or taxonomy? 
-            $new_attr->set_name($attr->get_name());
-            $new_attr->set_options($attr->get_options());
+
+            // Check if this is a taxonomy attribute (like pa_devices)
+            $attr_name = $attr->get_name();
+            if (taxonomy_exists($attr_name)) {
+                // It's a taxonomy attribute
+                $new_attr->set_id(wc_attribute_taxonomy_id_by_name($attr_name));
+                $new_attr->set_name($attr_name);
+
+                // Ensure terms exist on target site and get their IDs
+                $source_term_ids = $attr->get_options();
+                $target_term_ids = array();
+
+                // Switch to main site to get term slugs
+                switch_to_blog(1);
+                $term_slugs = array();
+                foreach ($source_term_ids as $term_id) {
+                    $term = get_term($term_id, $attr_name);
+                    if ($term && !is_wp_error($term)) {
+                        $term_slugs[] = $term->slug;
+                    }
+                }
+                switch_to_blog($target_blog_id);
+
+                // Get or create terms on target site
+                foreach ($term_slugs as $slug) {
+                    $target_term = get_term_by('slug', $slug, $attr_name);
+                    if ($target_term) {
+                        $target_term_ids[] = $target_term->term_id;
+                    } else {
+                        // Create term if it doesn't exist
+                        $inserted = wp_insert_term($slug, $attr_name, array('slug' => $slug));
+                        if (!is_wp_error($inserted)) {
+                            $target_term_ids[] = $inserted['term_id'];
+                        }
+                    }
+                }
+
+                $new_attr->set_options($target_term_ids);
+                $debug[] = "Taxonomy attr $attr_name: mapped " . count($source_term_ids) . " source terms to " . count($target_term_ids) . " target terms";
+            } else {
+                // It's a custom attribute
+                $new_attr->set_id(0);
+                $new_attr->set_name($attr_name);
+                $new_attr->set_options($attr->get_options());
+            }
+
             $new_attr->set_position($attr->get_position());
             $new_attr->set_visible($attr->get_visible());
             $new_attr->set_variation($attr->get_variation());
             $target_attributes[] = $new_attr;
-
-            // If taxonomy, we should ideally register/sync it, but we assume it exists for now based on previous manual check
-            // or 'product-setup.php' running on sub-sites (which it should if functions.php is shared)
         }
         $target_product->set_attributes($target_attributes);
         $target_product->save();
@@ -632,22 +952,59 @@ class Theme_Network_Cloner
         }
 
         // Create new variations (only if WC_Product_Variation class exists)
-        if (class_exists('WC_Product_Variation')) {
+        $created_count = 0;
+        if (class_exists('WC_Product_Variation') && !empty($variations_data)) {
             foreach ($variations_data as $v_data) {
-                $variation = new WC_Product_Variation();
-                $variation->set_parent_id($target_id);
-                $variation->set_attributes($v_data['attributes']);
-                $variation->set_regular_price($v_data['regular_price']);
-                $variation->set_price($v_data['regular_price']);
-                $variation->set_sale_price($v_data['sale_price']);
-                if ($v_data['sale_price']) {
-                    $variation->set_price($v_data['sale_price']);
+                try {
+                    $variation = new WC_Product_Variation();
+                    $variation->set_parent_id($target_id);
+                    $variation->set_attributes($v_data['attributes']);
+
+                    // Keep USD prices - front-page handles currency conversion at display time
+                    $variation->set_regular_price($v_data['regular_price']);
+                    $variation->set_price($v_data['regular_price']);
+                    $variation->set_sale_price($v_data['sale_price']);
+                    if ($v_data['sale_price']) {
+                        $variation->set_price($v_data['sale_price']);
+                    }
+                    $variation->set_status($v_data['status']);
+                    $variation->set_sku($v_data['sku']);
+                    $variation->save();
+                    $created_count++;
+                } catch (Exception $e) {
+                    $debug[] = "Failed to create variation: " . $e->getMessage();
+                    error_log('Network Cloner: Failed to create variation - ' . $e->getMessage());
                 }
-                $variation->set_status($v_data['status']);
-                $variation->set_sku($v_data['sku']);
-                $variation->save();
             }
+            $debug[] = "Created $created_count variations for target product $target_id";
         }
+
+        // CRITICAL: Set product type to "variable" AFTER variations are created
+        // This must be done AFTER save() and after variations exist
+        if ($created_count > 0) {
+            // Clear any cached product data
+            wc_delete_product_transients($target_id);
+            clean_post_cache($target_id);
+
+            // Force set the product type using the taxonomy directly
+            wp_set_object_terms($target_id, 'variable', 'product_type', false);
+
+            // Also update the post meta that some themes use
+            update_post_meta($target_id, '_product_type', 'variable');
+
+            // Sync the variable product data (min/max prices, stock, etc)
+            $variable_product = new WC_Product_Variable($target_id);
+            $variable_product->sync($variable_product);
+
+            $debug[] = "Set product type to VARIABLE and synced (force)";
+
+            // Verify
+            $check_product = wc_get_product($target_id);
+            $debug[] = "Verification: Product type is now: " . $check_product->get_type();
+        }
+
+        $debug[] = "Product data cloning completed";
+        return array('success' => true, 'debug' => $debug);
     }
 
     /**
@@ -1336,7 +1693,234 @@ class Theme_Network_Cloner
 
         return $results;
     }
+
+    /**
+     * Clone menus to a single site (for AJAX/UI use)
+     * 
+     * @param int  $target_blog_id Target blog ID
+     * @param bool $do_translate   Whether to translate menu labels
+     * @return array Result with success status
+     */
+    public function clone_menus_to_site($target_blog_id, $do_translate = true)
+    {
+        $result = array(
+            'success' => false,
+            'translated' => false,
+            'menus_count' => 0,
+            'message' => ''
+        );
+
+        // Get OpenAI translator if translation is requested
+        $translator = null;
+        $target_language = 'English';
+        if ($do_translate) {
+            $translator = function_exists('get_openai_translator') ? get_openai_translator() : null;
+            if ($translator && $translator->is_configured()) {
+                // Get site slug to determine target language
+                $site = get_blog_details($target_blog_id);
+                if ($site) {
+                    $path = trim($site->path, '/');
+                    $path_parts = explode('/', $path);
+                    $site_slug = end($path_parts);
+                    $target_language = $translator->get_target_language($site_slug);
+                }
+            } else {
+                $translator = null; // Disable translation if not configured
+            }
+        }
+
+        // Get Main Site Home URL (without trailing slash for matching)
+        $main_home_url = untrailingslashit(home_url());
+
+        // Get registered menu locations on Main Site
+        $locations = get_nav_menu_locations();
+        $registered_menus = get_registered_nav_menus();
+
+        // Switch to target sub-site
+        switch_to_blog($target_blog_id);
+        $sub_home_url = untrailingslashit(home_url());
+        $subsite_locations = get_nav_menu_locations();
+        $menus_cloned = 0;
+
+        foreach ($registered_menus as $location_slug => $location_name) {
+            // Switch back to Main Site to get the Menu Object
+            restore_current_blog();
+
+            if (!isset($locations[$location_slug])) {
+                switch_to_blog($target_blog_id);
+                continue;
+            }
+
+            $menu_id = $locations[$location_slug];
+            $menu_object = wp_get_nav_menu_object($menu_id);
+            $menu_items = wp_get_nav_menu_items($menu_id);
+
+            if (!$menu_object) {
+                switch_to_blog($target_blog_id);
+                continue;
+            }
+
+            // Switch back to Sub Site
+            switch_to_blog($target_blog_id);
+
+            try {
+                // Check if menu exists on sub-site
+                $sub_menu_obj = wp_get_nav_menu_object($menu_object->name);
+
+                if (!$sub_menu_obj) {
+                    // Create it
+                    $sub_menu_id = wp_create_nav_menu($menu_object->name);
+                } else {
+                    $sub_menu_id = $sub_menu_obj->term_id;
+                    // Clear existing items to ensure sync
+                    $existing_items = wp_get_nav_menu_items($sub_menu_id);
+                    if ($existing_items) {
+                        foreach ($existing_items as $item) {
+                            wp_delete_post($item->ID, true);
+                        }
+                    }
+                }
+
+                // Assign menu to location
+                $subsite_locations[$location_slug] = $sub_menu_id;
+
+                // Add items
+                if ($menu_items) {
+                    // Build a map of old_db_id => new_db_id for parent/child relationships
+                    $id_map = array();
+
+                    foreach ($menu_items as $item) {
+                        // Translate Label
+                        $title = $item->title;
+                        if ($translator && $target_language !== 'English') {
+                            $trans_title = $translator->translate($title, $target_language, 'English');
+                            if ($trans_title !== $title) {
+                                $title = $trans_title;
+                                $result['translated'] = true;
+                            }
+                        }
+
+                        // Rewrite URL: Replace main site home URL with subsite home URL
+                        $url = $item->url;
+                        if (strpos($url, $main_home_url) === 0) {
+                            $url = str_replace($main_home_url, $sub_home_url, $url);
+                        }
+
+                        // Prepare item data
+                        $args = array(
+                            'menu-item-title' => $title,
+                            'menu-item-classes' => implode(' ', $item->classes),
+                            'menu-item-url' => $url,
+                            'menu-item-status' => 'publish',
+                            'menu-item-type' => $item->type,
+                        );
+
+                        // Handle object linking (pages/posts)
+                        if ($item->type === 'post_type') {
+                            // Need to find the equivalent post ID on this subsite
+                            restore_current_blog();
+                            $original_post = get_post($item->object_id);
+                            $original_slug = $original_post ? $original_post->post_name : '';
+                            switch_to_blog($target_blog_id);
+
+                            if ($original_slug) {
+                                $target_post = get_page_by_path($original_slug, OBJECT, $item->object);
+                                if ($target_post) {
+                                    $args['menu-item-object-id'] = $target_post->ID;
+                                    $args['menu-item-object'] = $item->object;
+                                } else {
+                                    // Fallback to custom link if page not found
+                                    $args['menu-item-type'] = 'custom';
+                                    $args['menu-item-url'] = home_url('/' . $original_slug . '/');
+                                }
+                            }
+                        }
+
+                        // Handle Parent
+                        if ($item->menu_item_parent && isset($id_map[$item->menu_item_parent])) {
+                            $args['menu-item-parent-id'] = $id_map[$item->menu_item_parent];
+                        }
+
+                        $new_item_id = wp_update_nav_menu_item($sub_menu_id, 0, $args);
+                        if (!is_wp_error($new_item_id)) {
+                            $id_map[$item->db_id] = $new_item_id;
+                        }
+                    }
+                }
+
+                $menus_cloned++;
+
+            } catch (Exception $e) {
+                $result['message'] = $e->getMessage();
+            }
+        }
+
+        if ($menus_cloned > 0) {
+            set_theme_mod('nav_menu_locations', $subsite_locations);
+            $result['success'] = true;
+            $result['menus_count'] = $menus_cloned;
+        }
+
+        restore_current_blog();
+
+        return $result;
+    }
+
+    /**
+     * Remove menus from a single site (for AJAX/UI use)
+     * 
+     * @param int $target_blog_id Target blog ID
+     * @return array Result with success status
+     */
+    public function remove_menus_from_site($target_blog_id)
+    {
+        $result = array(
+            'success' => false,
+            'removed_count' => 0,
+            'message' => ''
+        );
+
+        // Get Main Site menu names
+        $main_menu_names = array();
+        $locations = get_nav_menu_locations();
+        foreach ($locations as $loc => $id) {
+            $menu = wp_get_nav_menu_object($id);
+            if ($menu) {
+                $main_menu_names[] = $menu->name;
+            }
+        }
+
+        switch_to_blog($target_blog_id);
+
+        try {
+            $menus_removed = 0;
+
+            // We loop through main site menu names and delete counterparts on subsite
+            foreach ($main_menu_names as $name) {
+                $sub_menu = wp_get_nav_menu_object($name);
+                if ($sub_menu) {
+                    wp_delete_nav_menu($sub_menu->term_id);
+                    $menus_removed++;
+                }
+            }
+
+            if ($menus_removed > 0) {
+                $result['success'] = true;
+                $result['removed_count'] = $menus_removed;
+            } else {
+                $result['message'] = 'No matching menus found to remove';
+            }
+
+        } catch (Exception $e) {
+            $result['message'] = $e->getMessage();
+        }
+
+        restore_current_blog();
+
+        return $result;
+    }
 }
 
 // Initialize the Network Cloner
 new Theme_Network_Cloner();
+

@@ -1,0 +1,93 @@
+/* Activity Ticker Styles */
+.activity-ticker {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    background: #FFFFFF;
+    border: 1px solid rgba(15, 40, 71, 0.08);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    box-shadow: 0 8px 32px rgba(15, 40, 71, 0.08);
+    z-index: 9999;
+    max-width: 300px;
+    font-family: 'DM Sans', sans-serif;
+    opacity: 0;
+    transform: translateX(-100%);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.activity-ticker.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.activity-ticker.hide {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.activity-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.5rem;
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif !important;
+    font-style: normal !important;
+    -webkit-font-smoothing: antialiased;
+}
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-content strong {
+    display: block;
+    font-size: 0.85rem;
+    color: #0F2847;
+    font-weight: 600;
+}
+
+.activity-content span {
+    font-size: 0.75rem;
+    color: #8B9DB8;
+}
+
+/* Close button */
+.activity-close {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 20px;
+    height: 20px;
+    background: #0F2847;
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.activity-ticker:hover .activity-close {
+    opacity: 1;
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+    .activity-ticker {
+        left: 0.75rem;
+        right: 0.75rem;
+        bottom: 1rem;
+        max-width: none;
+    }
+}

@@ -7,7 +7,9 @@
                     <img src="<?php echo get_template_directory_uri(); ?>/images/logo/light logo 500_150.png"
                         alt="Nordic IPTV" class="footer-logo-img">
                 </div>
-                <p class="footer-desc">Premium IPTV streaming service with 35,000+ channels worldwide.</p>
+                <p class="footer-desc">
+                    <?php echo esc_html(iptv_text('footer_desc', 'Premium IPTV streaming service with 35,000+ channels worldwide.')); ?>
+                </p>
 
                 <!-- Language Selector Dropdown in Footer -->
                 <div class="footer-language-selector">
@@ -92,7 +94,8 @@
             </div>
         </div>
         <div class="footer-bottom">
-            © <?php echo date('Y'); ?> Nordic IPTV. All rights reserved.
+            © <?php echo date('Y'); ?> Nordic IPTV.
+            <?php echo esc_html(iptv_text('footer_copyright', 'All rights reserved.')); ?>
         </div>
     </div>
 </footer>

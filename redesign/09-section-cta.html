@@ -1,0 +1,124 @@
+<!-- ============================================
+     SECTION 9: FINAL CTA (Call to Action)
+     ============================================ -->
+
+<!-- HTML -->
+<section class="cta">
+    <div class="cta-content">
+        <h2>Ready to Start Streaming?</h2>
+        <p>Join thousands of satisfied customers who switched to premium IPTV streaming.</p>
+        <a href="#pricing" class="btn btn-primary">
+            Start Streaming Now
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+            </svg>
+        </a>
+        <div class="cta-features">
+            <div class="cta-feature">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+                256-bit SSL Encryption
+            </div>
+            <div class="cta-feature">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20 6 9 17 4 12" />
+                </svg>
+                Instant Activation
+            </div>
+            <div class="cta-feature">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                </svg>
+                24/7 Customer Support
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<style>
+    /* ============================================
+   SECTION 9: FINAL CTA - CSS
+   ============================================ */
+    .cta {
+        padding: var(--space-2xl) var(--space-lg);
+        background: linear-gradient(135deg, var(--primary-deep), var(--primary-mid));
+        text-align: center;
+        color: #ffffff;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cta::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background:
+            radial-gradient(circle at 20% 50%, rgba(0, 212, 170, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 80% 50%, rgba(0, 245, 196, 0.1) 0%, transparent 50%);
+        pointer-events: none;
+    }
+
+    .cta-content {
+        position: relative;
+        max-width: 650px;
+        margin: 0 auto;
+    }
+
+    .cta h2 {
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 700;
+        margin-bottom: var(--space-sm);
+        letter-spacing: -0.02em;
+    }
+
+    .cta p {
+        font-size: 1.15rem;
+        opacity: 0.9;
+        margin-bottom: var(--space-lg);
+    }
+
+    .cta .btn-primary {
+        background: #ffffff;
+        color: #0F2847;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .cta .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
+    }
+
+    .cta-features {
+        display: flex;
+        justify-content: center;
+        gap: var(--space-lg);
+        margin-top: var(--space-lg);
+        flex-wrap: wrap;
+    }
+
+    .cta-feature {
+        display: flex;
+        align-items: center;
+        gap: var(--space-xs);
+        font-size: 0.9rem;
+        opacity: 0.9;
+    }
+
+    .cta-feature svg {
+        color: var(--accent-glow);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .cta-features {
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+</style>

@@ -1,7 +1,7 @@
 <!-- Pricing Section -->
 <script>
     // Main site URL for cross-site cart (used by pricing.js)
-    window.iptvMainSiteUrl = '<?php echo esc_js(defined("IPTV_MAIN_SITE_URL") ? IPTV_MAIN_SITE_URL : home_url()); ?>';
+    window.iptvMainSiteUrl = '<?php echo esc_js(defined("IPTV_MAIN_SITE_URL") ? IPTV_MAIN_SITE_URL : network_site_url("/")); ?>';
 </script>
 <section id="pricing" class="pricing">
     <div class="container">
@@ -12,7 +12,7 @@
             </span>
         </div>
         <div class="pricing-header">
-            <h2><?php echo esc_html(iptv_text('pricing_title', 'Unlimited Streaming')); ?>
+            <h2 class="mobile-split-title"><?php echo esc_html(iptv_text('pricing_title', 'Unlimited Streaming')); ?>
                 <span><?php echo esc_html(iptv_text('pricing_title_span', 'at a fair price')); ?></span>
             </h2>
             <p style="color:var(--text-secondary);margin-top:0.5rem;">
@@ -20,28 +20,52 @@
             </p>
         </div>
 
+        <style>
+            @media (max-width: 768px) {
+                .mobile-split-title span {
+                    display: block;
+                    margin-top: 0.2rem;
+                }
+
+                /* Mobile Steps Simplification */
+                .steps-container {
+                    gap: 0.5rem !important;
+                }
+
+                .step-label {
+                    display: none;
+                    /* Hide labels on mobile to reduce crowding */
+                }
+
+                .step-separator {
+                    width: 1rem !important;
+                }
+            }
+        </style>
+
         <!-- Step Indicators -->
-        <div style="display:flex;align-items:center;justify-content:center;gap:1rem;margin-bottom:2rem;flex-wrap:wrap;">
+        <div class="steps-container"
+            style="display:flex;align-items:center;justify-content:center;gap:1rem;margin-bottom:2rem;flex-wrap:wrap;">
             <div style="display:flex;align-items:center;gap:0.5rem;">
                 <span
                     style="width:1.75rem;height:1.75rem;background:var(--blue-600);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;">1</span>
-                <span
+                <span class="step-label"
                     style="font-weight:600;font-size:0.875rem;"><?php echo esc_html(iptv_text('step_1_label', 'Select Devices')); ?></span>
             </div>
-            <div style="width:3rem;height:2px;background:var(--border);"></div>
+            <div class="step-separator" style="width:3rem;height:2px;background:var(--border);"></div>
             <div style="display:flex;align-items:center;gap:0.5rem;">
                 <span
                     style="width:1.75rem;height:1.75rem;background:var(--border);color:var(--text-muted);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;"
                     id="step2">2</span>
-                <span style="font-weight:600;font-size:0.875rem;color:var(--text-muted);"
+                <span class="step-label" style="font-weight:600;font-size:0.875rem;color:var(--text-muted);"
                     id="step2-label"><?php echo esc_html(iptv_text('step_2_label', 'Choose Plan')); ?></span>
             </div>
-            <div style="width:3rem;height:2px;background:var(--border);"></div>
+            <div class="step-separator" style="width:3rem;height:2px;background:var(--border);"></div>
             <div style="display:flex;align-items:center;gap:0.5rem;">
                 <span
                     style="width:1.75rem;height:1.75rem;background:var(--border);color:var(--text-muted);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;"
                     id="step3">3</span>
-                <span style="font-weight:600;font-size:0.875rem;color:var(--text-muted);"
+                <span class="step-label" style="font-weight:600;font-size:0.875rem;color:var(--text-muted);"
                     id="step3-label"><?php echo esc_html(iptv_text('step_3_label', 'Complete Order')); ?></span>
             </div>
         </div>

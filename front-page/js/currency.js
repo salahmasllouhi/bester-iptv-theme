@@ -23,6 +23,10 @@ function redirectToRegion(currency) {
 
     const targetPath = countryUrls[currency];
     if (targetPath) {
+        // Set noredirect cookie to prevent PHP geo-redirect from overriding (30 days)
+        document.cookie = 'noredirect=1;path=/;max-age=' + (30 * 24 * 60 * 60);
+        localStorage.setItem('iptv_manual_switch', 'true');
+
         const baseUrl = window.location.origin;
         window.location.href = baseUrl + targetPath;
     }
@@ -65,18 +69,9 @@ const countryUrls = {
 };
 
 // Get default currency from URL path or localStorage
+// Get default currency from URL path
 function getDefaultCurrency() {
-    const pathname = window.location.pathname;
-    if (pathname.startsWith('/se')) return 'sek';
-    if (pathname.startsWith('/no')) return 'nok';
-    if (pathname.startsWith('/dk')) return 'dkk';
-    if (pathname.startsWith('/fi')) return 'eur';
-    if (pathname.startsWith('/is')) return 'isk';
-
-    const saved = localStorage.getItem('iptv_currency');
-    if (saved && currencyData[saved]) return saved;
-
-    return 'usd';
+    return getCurrentCurrencyFromUrl();
 }
 
 // Detect current currency from URL
@@ -126,7 +121,15 @@ function setCurrency(currency) {
 
 // Footer currency setter (syncs with header)
 function setFooterCurrency(currency) {
-    setCurrency(currency);
+    const targetPath = countryUrls[currency];
+    const currentCurrency = getCurrentCurrencyFromUrl();
+
+    if (currency !== currentCurrency && targetPath) {
+        const baseUrl = window.location.origin;
+        window.location.href = baseUrl + targetPath;
+    } else {
+        setCurrency(currency);
+    }
 }
 
 // Update all prices based on selected device count and currency
@@ -172,14 +175,51 @@ function updateAllPrices() {
     }
 }
 
+// Check if we should auto-redirect based on browser language
+function checkForSmartRedirect() {
+    // If user has manually switched before, respect their choice (DO NOT REDIRECT)
+    if (localStorage.getItem('iptv_manual_switch')) {
+        return;
+    }
+
+    const currentPath = window.location.pathname;
+    // Only redirect if we are on the main domain (root) or a non-specific path
+    // Avoid circular redirects if already on correct subsite
+    if (currentPath.startsWith('/se') || currentPath.startsWith('/no') || currentPath.startsWith('/dk') || currentPath.startsWith('/fi') || currentPath.startsWith('/is')) {
+        return;
+    }
+
+    const lang = navigator.language || navigator.userLanguage;
+    if (!lang) return;
+
+    const primaryLang = lang.split('-')[0].toLowerCase();
+
+    // Redirect Logic
+    if (primaryLang === 'sv') {
+        window.location.href = window.location.origin + '/se/';
+    }
+}
+
 // Initialize currency on page load
 document.addEventListener('DOMContentLoaded', function () {
+
+    // Check for smart redirect FIRST
+    checkForSmartRedirect();
+
     // Set up country option click handlers with redirect
     document.querySelectorAll('.country-option').forEach(option => {
-        option.addEventListener('click', function () {
+        option.addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent default link behavior to ensure storage save
+
+            // User manually clicked, so save this preference to prevent auto-redirect
+            localStorage.setItem('iptv_manual_switch', 'true');
+
+            // Also set the noredirect cookie to prevent PHP geo-redirect (30 days)
+            document.cookie = 'noredirect=1;path=/;max-age=' + (30 * 24 * 60 * 60);
+
             const currency = this.dataset.currency;
             const targetPath = countryUrls[currency];
-            const currentCurrency = getCurrentCurrencyFromUrl();
+            const currentCurrency = htmlCurrentCurrency(); // Helper to safely get current
 
             if (currency !== currentCurrency) {
                 const baseUrl = window.location.origin;
@@ -194,3 +234,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const defaultCurrency = getDefaultCurrency();
     setCurrency(defaultCurrency);
 });
+
+function htmlCurrentCurrency() {
+    return getCurrentCurrencyFromUrl();
+}

@@ -373,10 +373,21 @@ class IPTV_Bulk_Editor
                             post_id: id,
                             nonce: '<?php echo wp_create_nonce('iptv_bulk_net_action'); ?>'
                         }, function (response) {
-                            console.log(response);
+                            console.log('[Clone Debug V2] Response:', response);
+                            // Display debug info if available
+                            if (response.success && response.data && response.data.debug && response.data.debug.length > 0) {
+                                console.log('=== DEBUG INFO for ID ' + id + ' ===');
+                                var debugText = response.data.debug.join('\n');
+                                console.log(debugText);
+                                // Also show first 500 chars in alert for visibility
+                                alert('Clone Debug Info:\n' + debugText.substring(0, 500));
+                            } else {
+                                console.log('[Clone Debug V2] No debug array in response. Response.data:', response.data);
+                            }
                             current++;
                             processNext();
-                        }).fail(function () {
+                        }).fail(function (xhr, status, error) {
+                            console.log('[Clone Debug V2] AJAX failed:', status, error);
                             alert('Network error on ID ' + id);
                             current++;
                             processNext();

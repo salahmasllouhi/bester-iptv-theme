@@ -83,10 +83,9 @@ img {
 }
 
 .content-wrapper {
-    max-width: 1200px;
-    /* Wide enough for Shop/Dashboard */
+    max-width: 100%;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 0;
 }
 
 /* Typography inside Content */

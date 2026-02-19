@@ -1,116 +1,122 @@
-<!-- Channels & Posters Section -->
-<section class="channels-posters">
-    <!-- Centered Header -->
-    <div class="channels-posters-header">
-        <h2><?php echo esc_html(iptv_text('brands_title', 'Stream Your Favorite Channels')); ?></h2>
-        <p><?php echo esc_html(iptv_text('brands_subtitle', 'Access premium content from top networks worldwide with crystal-clear quality')); ?>
-        </p>
-    </div>
+<div class="logos-bar">
+    <div class="logos-container">
+        <div class="logos-label"><?php echo esc_html(iptv_text('logos_label', 'Access Premium Content From')); ?></div>
 
-    <!-- 3D Poster Carousel -->
-    <div class="posters-carousel">
-        <div class="swiper swiper-posters">
-            <div class="swiper-wrapper">
+        <!-- Marquee Wrapper -->
+        <div class="logos-marquee">
+            <div class="logos-track">
                 <?php
-                $sport_images = array(
-                    '40-days-IPTV-Service-USA.png',
-                    'Canelo-IPTV-subscription.png',
-                    'Club-Ibiza-IPTV-United-States-America.png',
-                    'Corners-IPTV-USA-Prime.png',
-                    'Days-off-IPTV-USA.png',
-                    'Dunk-IPTV-subscription-USA.png',
-                    'Gracia-unwrapped-IPTV-USA-Premium.png',
-                    'Inside-Sailing-IPTV-America.png',
-                    'knockout-chaos-IPTV-USA.png',
-                    'More-than-machine-IPTV-Provider-USA.png',
-                    'no-days-off-IPTV-Service-USA.png',
-                    'Riyadh-season-club-IPTV-USA.png',
-                    'Tennis-club-IPTV-USA.png'
-                );
-                foreach ($sport_images as $img):
-                    ?>
-                    <div class="swiper-slide">
-                        <img src="<?php echo get_template_directory_uri(); ?>/images/sport images/<?php echo $img; ?>"
-                            alt="Sports Event" loading="lazy">
-                    </div>
-                <?php endforeach; ?>
+                // List of logo files
+                $logos = [
+                    'FOX.png',
+                    'brand_item05-150x46-1-1.webp',
+                    'brand_item06-150x46-1.webp',
+                    'brand_item08-150x46-1-1.webp',
+                    'brand_item09-150x46-1-1.webp',
+                    'brand_item11-1.webp',
+                    'brand_item12-1.webp',
+                    'brand_item21-150x46-1-1.webp'
+                ];
+
+                // Output twice for seamless infinite scroll
+                for ($i = 0; $i < 2; $i++) {
+                    foreach ($logos as $logo) {
+                        $url = get_template_directory_uri() . '/images/brand/' . $logo;
+                        echo '<div class="logo-item"><img src="' . esc_url($url) . '" alt="Brand Logo" loading="lazy"></div>';
+                    }
+                }
+                ?>
             </div>
-            <!-- Navigation -->
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
-            <!-- Pagination -->
-            <div class="swiper-pagination"></div>
         </div>
     </div>
+</div>
 
-    <!-- Channel Logo Carousel (Auto-scrolling) -->
-    <div class="channel-carousel-wrapper">
-        <div class="channel-carousel">
-            <?php
-            $brand_images = array(
-                'FOX.png',
-                'brand_item05-150x46-1-1.webp',
-                'brand_item06-150x46-1.webp',
-                'brand_item08-150x46-1-1.webp',
-                'brand_item09-150x46-1-1.webp',
-                'brand_item10-150x46-1-1.webp',
-                'brand_item11-1.webp',
-                'brand_item12-1.webp',
-                'brand_item13-150x46-1-1.webp',
-                'brand_item14-150x46-1-1.webp',
-                'brand_item15-150x46-1-1.webp',
-                'brand_item16-150x46-1-1.webp',
-                'brand_item17-150x46-1-1.webp',
-                'brand_item18-150x46-1-1.webp',
-                'brand_item21-150x46-1-1.webp',
-                'brand_item22-150x46-1-1.webp'
-            );
-            // Output twice for seamless loop
-            for ($i = 0; $i < 2; $i++):
-                foreach ($brand_images as $brand):
-                    ?>
-                    <div class="channel-logo-item">
-                        <img src="<?php echo get_template_directory_uri(); ?>/images/brand/<?php echo $brand; ?>" alt="Channel"
-                            loading="lazy">
-                    </div>
-                    <?php
-                endforeach;
-            endfor;
-            ?>
-        </div>
-    </div>
-</section>
+<style>
+    /* Inline critical styles for logo sizing */
+    .logos-bar {
+        background: var(--primary-deep);
+        padding: 2rem 0;
+        margin-top: -2px;
+        overflow: hidden;
+        /* Hide overflow for marquee */
+    }
 
-<!-- Swiper.js CDN -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        new Swiper('.swiper-posters', {
-            effect: 'coverflow',
-            grabCursor: true,
-            centeredSlides: true,
-            slidesPerView: 'auto',
-            loop: true,
-            autoplay: {
-                delay: 3000,
-                disableOnInteraction: false,
-            },
-            coverflowEffect: {
-                rotate: 30,
-                stretch: 0,
-                depth: 100,
-                modifier: 1,
-                slideShadows: true,
-            },
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
-        });
-    });
-</script>
+    .logos-label {
+        color: rgba(255, 255, 255, 0.6);
+        text-align: center;
+        margin-bottom: 1.5rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .logos-marquee {
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .logos-track {
+        display: flex;
+        align-items: center;
+        gap: 3rem;
+        width: max-content;
+    }
+
+    /* Desktop: Center grid (disable animation essentially, or center it) */
+    @media (min-width: 769px) {
+        .logos-marquee {
+            display: flex;
+            justify-content: center;
+        }
+
+        .logos-track {
+            justify-content: center;
+            flex-wrap: wrap;
+            /* Stack on desktop if needed, or single row */
+            width: auto;
+            animation: none;
+        }
+
+        /* Hide the second set of logos on desktop to avoid duplicates */
+        .logo-item:nth-child(n+9) {
+            display: none;
+        }
+    }
+
+    /* Mobile: Infinite Scroll */
+    @media (max-width: 768px) {
+        .logos-track {
+            animation: scrollLogos 20s linear infinite;
+            flex-wrap: nowrap;
+        }
+
+        /* Ensure all logos are visible for scrolling */
+        .logo-item:nth-child(n+9) {
+            display: block;
+        }
+    }
+
+    @keyframes scrollLogos {
+        0% {
+            transform: translateX(0);
+        }
+
+        100% {
+            transform: translateX(-50%);
+        }
+    }
+
+    .logo-item img {
+        height: 28px;
+        width: auto;
+        opacity: 0.8;
+        transition: all 0.3s ease;
+        filter: brightness(0) invert(1);
+    }
+
+    .logo-item img:hover {
+        opacity: 1;
+        transform: scale(1.05);
+        filter: none;
+    }
+</style>

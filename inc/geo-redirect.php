@@ -18,6 +18,36 @@ if (!defined('ABSPATH')) {
  */
 function nordic_iptv_geo_redirect()
 {
+    // DEBUG MODE: Add ?geo_debug=1 to URL to see what's being detected
+    if (isset($_GET['geo_debug']) && $_GET['geo_debug'] === '1') {
+        // Prevent caching of debug output
+        header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+        header('Pragma: no-cache');
+
+        $debug = array(
+            'timestamp' => date('Y-m-d H:i:s'),
+            'blog_id' => get_current_blog_id(),
+            'is_front_page' => is_front_page(),
+            'noredirect_cookie' => isset($_COOKIE['noredirect']) ? $_COOKIE['noredirect'] : 'not set',
+            'all_cookies' => $_COOKIE,
+            'woocommerce_available' => class_exists('WC_Geolocation'),
+            'accept_language' => isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : 'not set',
+            'user_ip' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'unknown',
+            'cf_ip' => isset($_SERVER['HTTP_CF_CONNECTING_IP']) ? $_SERVER['HTTP_CF_CONNECTING_IP'] : 'not cloudflare',
+        );
+
+        // Try WooCommerce geolocation
+        if (class_exists('WC_Geolocation')) {
+            $geo = WC_Geolocation::geolocate_ip();
+            $debug['wc_geo_country'] = isset($geo['country']) ? $geo['country'] : 'empty';
+            $debug['wc_geo_full'] = $geo;
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($debug, JSON_PRETTY_PRINT);
+        exit;
+    }
+
     // Only run on main site (ID 1)
     if (get_current_blog_id() !== 1) {
         return;
@@ -26,6 +56,13 @@ function nordic_iptv_geo_redirect()
     // Only run on homepage
     if (!is_front_page()) {
         return;
+    }
+
+    // Tell LiteSpeed Cache to NOT cache this page and vary by noredirect cookie
+    // This prevents LiteSpeed from serving cached pages with stale cookie data
+    if (!headers_sent()) {
+        header('X-LiteSpeed-Cache-Control: no-cache');
+        header('X-LiteSpeed-Vary: cookie=noredirect');
     }
 
     // Don't redirect admin users
@@ -43,14 +80,23 @@ function nordic_iptv_geo_redirect()
         return;
     }
 
-    // Check if WooCommerce geolocation is available
-    if (!class_exists('WC_Geolocation')) {
-        return;
+    // Try WooCommerce geolocation first (most accurate for IP-based)
+    $country_code = '';
+
+    if (class_exists('WC_Geolocation')) {
+        $geo = WC_Geolocation::geolocate_ip();
+        $country_code = isset($geo['country']) ? strtoupper($geo['country']) : '';
     }
 
-    // Get geolocation data
-    $geo = WC_Geolocation::geolocate_ip();
-    $country_code = isset($geo['country']) ? strtoupper($geo['country']) : '';
+    // Fallback: Check Accept-Language header for Swedish browser
+    if (empty($country_code)) {
+        $accept_lang = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : '';
+
+        // Check if Swedish is the primary language
+        if (preg_match('/^sv/i', $accept_lang)) {
+            $country_code = 'SE'; // Treat Swedish browser as Swedish
+        }
+    }
 
     if (empty($country_code)) {
         return;

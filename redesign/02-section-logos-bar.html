@@ -1,0 +1,80 @@
+<!-- ============================================
+     SECTION 2: LOGOS / TRUST BAR
+     ============================================ -->
+
+<!-- HTML -->
+<div class="logos-bar">
+    <div class="logos-container">
+        <div class="logos-label">Access Premium Content From</div>
+        <div class="logos-grid">
+            <span>FOX</span>
+            <span>NETFLIX</span>
+            <span>hulu</span>
+            <span>HBO</span>
+            <span>ESPN</span>
+            <span>Disney+</span>
+            <span>F1</span>
+        </div>
+    </div>
+</div>
+
+
+<style>
+/* ============================================
+   SECTION 2: LOGOS BAR - CSS
+   ============================================ */
+.logos-bar {
+    padding: var(--space-xl) var(--space-lg);
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.logos-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.logos-label {
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: var(--space-md);
+}
+
+.logos-grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-xl);
+    flex-wrap: wrap;
+    opacity: 0.5;
+    filter: grayscale(100%);
+    transition: all 0.3s ease;
+}
+
+.logos-grid:hover {
+    opacity: 0.7;
+}
+
+.logos-grid span {
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: var(--text-secondary);
+    letter-spacing: -0.02em;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .logos-grid {
+        gap: var(--space-md);
+    }
+
+    .logos-grid span {
+        font-size: 1.1rem;
+    }
+}
+</style>

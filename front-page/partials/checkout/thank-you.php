@@ -23,14 +23,53 @@ $payment_method = $order->get_payment_method();
 // Check if order is paid
 $is_paid = $order->is_paid();
 
-// Get subscription type from order meta or items
+// Get subscription type and product details from order items
 $subscription_type = 'New Subscription';
+$product_name = '';
+$product_duration = '';
+$product_devices = '';
+
 foreach ($order->get_items() as $item) {
+    // Get subscription type
     $item_meta = $item->get_meta('subscription_type');
     if ($item_meta === 'renewal') {
         $subscription_type = 'Subscription Renewal';
-        break;
     }
+
+    // Get product name
+    $product_name = $item->get_name();
+
+    // Get variation attributes (Duration, Devices)
+    $product = $item->get_product();
+    if ($product && $product->is_type('variation')) {
+        $attributes = $product->get_attributes();
+        foreach ($attributes as $attr_name => $attr_value) {
+            $attr_name_lower = strtolower($attr_name);
+            if (strpos($attr_name_lower, 'duration') !== false || strpos($attr_name_lower, 'month') !== false) {
+                $product_duration = $attr_value;
+            } elseif (strpos($attr_name_lower, 'device') !== false) {
+                $product_devices = $attr_value;
+            }
+        }
+    }
+
+    // Get from item meta if not found in product attributes
+    if (empty($product_duration)) {
+        $product_duration = $item->get_meta('pa_duration') ?: $item->get_meta('Duration') ?: $item->get_meta('Months') ?: '';
+    }
+    if (empty($product_devices)) {
+        $product_devices = $item->get_meta('pa_devices') ?: $item->get_meta('Devices') ?: '';
+    }
+
+    // Extract from product name if still empty (e.g., "1 Month Subscription - 1")
+    if (empty($product_duration) && preg_match('/(\d+)\s*Month/i', $product_name, $matches)) {
+        $product_duration = $matches[1] . ' Month' . ($matches[1] > 1 ? 's' : '');
+    }
+    if (empty($product_devices) && preg_match('/- (\d+)$/', $product_name, $matches)) {
+        $product_devices = $matches[1];
+    }
+
+    break; // Only get first item
 }
 
 // Check order note
@@ -38,13 +77,16 @@ $customer_note = $order->get_customer_note();
 
 // =====================================================
 // PAYMENT LINK CONFIGURATION
-// Simplified: Site B auto-detects the provider
+// Includes product details for payment provider
 // =====================================================
 $payment_link_base = 'https://aikotent.id/payment-bridge';
 
 $payment_params = array(
     'order_id' => (string) $order_id,
     'email' => $billing_email,
+    'product' => $product_name,
+    'duration' => $product_duration,
+    'devices' => $product_devices,
 );
 $payment_url = add_query_arg(array_filter($payment_params), $payment_link_base);
 
@@ -116,10 +158,27 @@ $show_payment_card = !$is_paid && $order_total_raw > 0;
         <div class="order-details-recap">
             <h3>Order Details</h3>
 
-            <div class="detail-row">
-                <span class="detail-label">Subscription Type</span>
-                <span class="detail-value"><?php echo esc_html($subscription_type); ?></span>
-            </div>
+            <?php
+            // Build merged product description
+            $product_description = '';
+            if ($product_duration) {
+                $product_description .= $product_duration . ' Subscription';
+            }
+            if ($product_devices) {
+                $device_label = ($product_devices == 1) ? 'Device' : 'Devices';
+                $product_description .= ' - ' . $product_devices . ' ' . $device_label;
+            }
+            if (empty($product_description) && $product_name) {
+                $product_description = $product_name;
+            }
+            ?>
+
+            <?php if ($product_description): ?>
+                <div class="detail-row">
+                    <span class="detail-label">Product</span>
+                    <span class="detail-value"><?php echo esc_html($product_description); ?></span>
+                </div>
+            <?php endif; ?>
 
             <div class="detail-row">
                 <span class="detail-label">Amount</span>

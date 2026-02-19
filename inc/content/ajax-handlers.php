@@ -302,7 +302,7 @@ trait IPTV_Content_AJAX_Handlers
             $prompt .= "Do NOT write in English. Write EVERYTHING in native $target_language.\n";
             $prompt .= "This includes: title, content, meta_title, meta_description, focus_keyword.\n\n";
 
-            $prompt .= "=== SOURCE CONTENT (English - for reference only) ===\n";
+            $prompt .= "=== SOURCE CONTENT (English - TRANSLATE & ADAPT FULLY) ===\n";
             $prompt .= "Title: " . $post->post_title . "\n";
             $prompt .= "Content:\n" . $post->post_content . "\n\n";
 
@@ -348,6 +348,9 @@ trait IPTV_Content_AJAX_Handlers
             $prompt .= "   ✓ Short and clean (3-5 words)\n\n";
 
             $prompt .= "【5】CONTENT (if missing):\n";
+            $prompt .= "   ✓ CRITICAL: TRANSLATE FULL ARTICLE. Do NOT summarize.\n";
+            $prompt .= "   ✓ LENGTH: Must match source content length (approx same number of paragraphs).\n";
+            $prompt .= "   ✓ STRUCTURE: Keep all H2/H3 headings and sections from source.\n";
             $prompt .= "   ✓ Keyword in FIRST paragraph (first 10%)\n";
             $prompt .= "   ✓ Keyword in at least ONE <h2> heading\n";
             $prompt .= "   ✓ 1-2.5% keyword density\n";
@@ -469,7 +472,8 @@ trait IPTV_Content_AJAX_Handlers
             $prompt .= "                      JSON OUTPUT FORMAT\n";
             $prompt .= "═══════════════════════════════════════════════════════════════\n\n";
 
-            $prompt .= "Return ONLY valid JSON (no markdown, no explanation):\n";
+            $prompt .= "Return ONLY valid JSON (no markdown, no explanation).\n";
+            $prompt .= "CRITICAL: Ensure all newlines in content are escaped as \\n. No literal control characters.\n";
             $prompt .= "{\n";
             $prompt .= '  "focus_keyword": "exact native ' . $target_language . ' keyword 2-4 words",' . "\n";
             $prompt .= '  "title": "H1 title with keyword naturally included",' . "\n";
@@ -528,7 +532,7 @@ trait IPTV_Content_AJAX_Handlers
         $body_args[$token_param] = $token_limit;
 
         // Log the request for debugging
-        error_log('OpenAI Request - Model: ' . $model . ', Token Param: ' . $token_param . ', Limit: ' . $token_limit);
+        error_log('OpenAI Request - Model: ' . $model . ', Token Param: ' . $token_param . ', Limit: ' . $token_limit . ', Prompt Length: ' . strlen($prompt));
 
         $response = wp_remote_post('https://api.openai.com/v1/chat/completions', array(
             'timeout' => 180, // Increased timeout for GPT-5
@@ -571,38 +575,102 @@ trait IPTV_Content_AJAX_Handlers
             $result = trim($result);
         }
 
-        // Fix control characters and encoding issues
-        // Remove problematic control characters but preserve valid JSON structure
-        $result = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $result);
-
-        // Fix escaped newlines in content that break JSON
-        // Replace literal newlines inside JSON strings with \n escape sequence
-        $result = preg_replace('/\r\n|\r/', "\n", $result); // Normalize line endings
-
-        // Try to fix common JSON issues with HTML content
-        // Match content between quotes and escape newlines properly
-        $result = preg_replace_callback('/"content"\s*:\s*"(.*?)(?<!\\\\)"/s', function ($matches) {
-            $content = $matches[1];
-            // Escape unescaped newlines
-            $content = str_replace("\n", "\\n", $content);
-            $content = str_replace("\r", "", $content);
-            return '"content": "' . $content . '"';
-        }, $result);
-
-        // Ensure UTF-8 encoding
-        if (!mb_check_encoding($result, 'UTF-8')) {
-            $result = mb_convert_encoding($result, 'UTF-8', 'auto');
-        }
+        // Sanitize the JSON string using UTF-8 safe sanitizer from translator
+        // This handles control characters without corrupting multi-byte chars (Swedish ö, ä, å)
+        $translator = new Theme_OpenAI_Translator();
+        $result = $translator->sanitize_json_string($result);
 
         $data = json_decode($result, true);
 
-        // In fill-missing mode, the response might not have all fields (e.g., no focus_keyword if user provided one)
-        // So we just check if we got valid JSON with at least one expected field
+        // FALLBACK: If JSON parse fails, try string-based extraction
+        if (json_last_error() !== JSON_ERROR_NONE || !$data) {
+            error_log('Primary JSON parse failed: ' . json_last_error_msg() . '. Attempting string extraction.');
+
+            // Extract values using string operations (avoids regex backtracking limits)
+            $expected_keys = array('focus_keyword', 'title', 'content', 'meta_title', 'meta_description');
+            $data = array();
+
+            foreach ($expected_keys as $key) {
+                // Find the key pattern: "key": "
+                $search = '"' . $key . '": "';
+                $pos = strpos($result, $search);
+
+                if ($pos === false) {
+                    $search = '"' . $key . '":"';
+                    $pos = strpos($result, $search);
+                }
+
+                if ($pos === false)
+                    continue;
+
+                // Move past the key pattern
+                $value_start = $pos + strlen($search);
+
+                // Scan for closing quote
+                $value = '';
+                $i = $value_start;
+                $len = strlen($result);
+
+                while ($i < $len) {
+                    $char = $result[$i];
+
+                    if ($char === '\\' && $i + 1 < $len) {
+                        $next = $result[$i + 1];
+                        switch ($next) {
+                            case 'n':
+                                $value .= "\n";
+                                break;
+                            case 'r':
+                                $value .= "\r";
+                                break;
+                            case 't':
+                                $value .= "\t";
+                                break;
+                            case '"':
+                                $value .= '"';
+                                break;
+                            case '\\':
+                                $value .= '\\';
+                                break;
+                            default:
+                                $value .= $char . $next;
+                                break;
+                        }
+                        $i += 2;
+                    } elseif ($char === '"') {
+                        break;
+                    } else {
+                        $value .= $char;
+                        $i++;
+                    }
+                }
+
+                if (!empty($value)) {
+                    $data[$key] = $value;
+                }
+            }
+
+            if (!empty($data)) {
+                error_log('String extraction recovered ' . count($data) . ' fields for Fill Missing');
+            }
+        }
+
+        // In fill-missing mode, the response might not have all fields
         if (!$data || (!isset($data['focus_keyword']) && !isset($data['title']) && !isset($data['content']) && !isset($data['meta_title']))) {
-            // Enhanced debugging
+            // Enhanced debugging - find control characters
+            $control_chars = array();
+            for ($i = 0; $i < min(500, strlen($result)); $i++) {
+                $ord = ord($result[$i]);
+                if ($ord < 32 && $ord !== 9 && $ord !== 10 && $ord !== 13) {
+                    $control_chars[] = "pos:$i=0x" . dechex($ord);
+                }
+            }
             $error_msg = 'Failed to parse OpenAI response. ';
             $error_msg .= 'JSON Error: ' . json_last_error_msg() . '. ';
             $error_msg .= 'Length: ' . strlen($result) . '. ';
+            if (!empty($control_chars)) {
+                $error_msg .= 'Bad chars: ' . implode(',', array_slice($control_chars, 0, 5)) . '. ';
+            }
             $error_msg .= 'First 300 chars: ' . substr($result, 0, 300);
             wp_send_json_error($error_msg);
         }
@@ -1072,6 +1140,231 @@ trait IPTV_Content_AJAX_Handlers
             }
 
             wp_send_json_success(array('message' => 'Draft saved for ' . $target_lang));
+        }
+    }
+
+    /**
+     * AJAX Handler: Clone to Network (Bulk or Single)
+     * 
+     * Now supports full product data cloning via Theme_Network_Cloner.
+     */
+    public function ajax_clone_to_network()
+    {
+        // verify nonce
+        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'iptv_localizer_nonce')) {
+            wp_send_json_error('Invalid security nonce');
+        }
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error('Unauthorized');
+        }
+
+        $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
+        $target_blog_id = intval($_POST['target_blog_id']);
+        $raw_translate = isset($_POST['translate']) ? $_POST['translate'] : 'not set';
+        $do_translate = ($raw_translate === 'true' || $raw_translate === true);
+
+        if (!$post_id || !$target_blog_id) {
+            wp_send_json_error('Missing parameters');
+        }
+
+        // Must run in context of potentially finding the classes
+        if (!class_exists('Theme_Network_Cloner')) {
+            // Try to load it if not found (it should be loaded by functions.php)
+            // fallback or error
+            error_log('IPTV Clone Error: Theme_Network_Cloner class not found.');
+            wp_send_json_error('Cloner class not found');
+        }
+
+        $cloner = new Theme_Network_Cloner();
+        $source_post = get_post($post_id);
+
+        if (!$source_post) {
+            wp_send_json_error('Source post not found');
+        }
+
+        // Perform Cloning
+        // clone_to_site($source_post, $target_blog_id, $do_translate)
+        $result = $cloner->clone_to_site($source_post, $target_blog_id, $do_translate);
+
+        if ($result['success']) {
+            wp_send_json_success(array(
+                'message' => 'Cloned successfully.',
+                'processed' => array(
+                    array(
+                        'original_id' => $post_id,
+                        'target_id' => $result['target_id'],
+                        'action' => $result['action'],
+                        'translated' => $result['translated'],
+                        'translation_status' => $result['translated'] ? 'success' : 'skipped',
+                        'translation_error' => '' // We could enhance cloner to return specific error if needed
+                    )
+                ),
+                'translated' => $result['translated'],
+                'debug' => isset($result['debug']) ? $result['debug'] : array()
+            ));
+        } else {
+            wp_send_json_error(array(
+                'message' => $result['message'] ? $result['message'] : 'Cloning failed',
+                'debug' => isset($result['debug']) ? $result['debug'] : array()
+            ));
+        }
+    }
+
+    /**
+     * AJAX Handler: Remove from Network
+     */
+    public function ajax_remove_from_network()
+    {
+        // verify nonce
+        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'iptv_localizer_nonce')) {
+            wp_send_json_error('Invalid security nonce');
+        }
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error('Unauthorized');
+        }
+
+        $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
+        $target_blog_id = intval($_POST['target_blog_id']);
+
+        if (!$post_id || !$target_blog_id) {
+            wp_send_json_error('Missing parameters');
+        }
+
+        $source_post = get_post($post_id);
+        if (!$source_post) {
+            wp_send_json_error('Source post not found');
+        }
+        $source_slug = $source_post->post_name;
+        $post_type = $source_post->post_type;
+
+        if (is_multisite()) {
+            switch_to_blog($target_blog_id);
+        }
+
+        // Try to find the linked post
+        // 1. By Meta Tag (Best)
+        $args = array(
+            'post_type' => $post_type,
+            'meta_key' => '_localized_from_post',
+            'meta_value' => $post_id,
+            'posts_per_page' => 1,
+            'post_status' => 'any'
+        );
+        $query = new WP_Query($args);
+
+        $post_to_delete = null;
+
+        if ($query->have_posts()) {
+            $post_to_delete = $query->posts[0];
+        } else {
+            // 2. Fallback: By Slug (Legacy clones without meta)
+            // Warning: Slug might have changed or be translated, but legacy cloner kept English slug usually.
+            $existing = get_page_by_path($source_slug, OBJECT, $post_type);
+            if ($existing) {
+                $post_to_delete = $existing;
+            }
+        }
+
+        if ($post_to_delete) {
+            $deleted = wp_delete_post($post_to_delete->ID, true); // Force delete (bypass trash)
+
+            if (is_multisite()) {
+                restore_current_blog();
+            }
+
+            if ($deleted) {
+                wp_send_json_success(array('message' => 'Removed successfully'));
+            } else {
+                wp_send_json_error('Failed to delete post from subsite');
+            }
+        } else {
+            if (is_multisite()) {
+                restore_current_blog();
+            }
+            wp_send_json_error('Post not found on target subsite (is it already removed?)');
+        }
+    }
+
+    /**
+     * AJAX Handler: Clone Menus to Network (Single Subsite)
+     */
+    public function ajax_clone_menus_to_network()
+    {
+        // verify nonce
+        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'iptv_localizer_nonce')) {
+            wp_send_json_error('Invalid security nonce');
+        }
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error('Unauthorized');
+        }
+
+        $target_blog_id = intval($_POST['target_blog_id']);
+        $raw_translate = isset($_POST['translate']) ? $_POST['translate'] : 'true';
+        $do_translate = ($raw_translate === 'true' || $raw_translate === true || $raw_translate === '1');
+
+        if (!$target_blog_id) {
+            wp_send_json_error('Missing target blog ID');
+        }
+
+        if (!class_exists('Theme_Network_Cloner')) {
+            wp_send_json_error('Network Cloner class not found');
+        }
+
+        $cloner = new Theme_Network_Cloner();
+
+        // Call the single-site clone method
+        $result = $cloner->clone_menus_to_site($target_blog_id, $do_translate);
+
+        if ($result['success']) {
+            wp_send_json_success(array(
+                'message' => 'Menus cloned successfully',
+                'translated' => $result['translated'],
+                'menus_count' => $result['menus_count'] ?? 0
+            ));
+        } else {
+            wp_send_json_error($result['message'] ?? 'Failed to clone menus');
+        }
+    }
+
+    /**
+     * AJAX Handler: Remove Menus from Network (Single Subsite)
+     */
+    public function ajax_remove_menus_from_network()
+    {
+        // verify nonce
+        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'iptv_localizer_nonce')) {
+            wp_send_json_error('Invalid security nonce');
+        }
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error('Unauthorized');
+        }
+
+        $target_blog_id = intval($_POST['target_blog_id']);
+
+        if (!$target_blog_id) {
+            wp_send_json_error('Missing target blog ID');
+        }
+
+        if (!class_exists('Theme_Network_Cloner')) {
+            wp_send_json_error('Network Cloner class not found');
+        }
+
+        $cloner = new Theme_Network_Cloner();
+
+        // Call the single-site remove method
+        $result = $cloner->remove_menus_from_site($target_blog_id);
+
+        if ($result['success']) {
+            wp_send_json_success(array(
+                'message' => 'Menus removed successfully',
+                'removed_count' => $result['removed_count'] ?? 0
+            ));
+        } else {
+            wp_send_json_error($result['message'] ?? 'Failed to remove menus');
         }
     }
 }

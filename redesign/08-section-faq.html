@@ -1,0 +1,156 @@
+<!-- ============================================
+     SECTION 8: FAQ ACCORDION
+     ============================================ -->
+
+<!-- HTML -->
+<section class="faq" id="faq">
+    <div class="faq-container">
+        <div class="section-header">
+            <div class="section-tag">FAQ</div>
+            <h2 class="section-title">Got Questions?</h2>
+            <p class="section-subtitle">Find answers to commonly asked questions.</p>
+        </div>
+        <div class="faq-list">
+            <div class="faq-item">
+                <button class="faq-question">
+                    When will I receive my credentials?
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">You'll receive your login credentials within minutes of completing your purchase. Our automated system sends them directly to your email.</div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">
+                    What devices are supported?
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">We support all major devices including Smart TVs, Firestick, Roku, Apple TV, Android, iOS, MAG boxes, and web browsers.</div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">
+                    Are PPV events really free?
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">Yes! All PPV events including UFC, Boxing, and Wrestling are included in your subscription at no extra cost.</div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">
+                    What if I'm not satisfied?
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">We offer a 14-day money-back guarantee. If you're not completely satisfied, we'll refund every cent. No questions asked.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<style>
+/* ============================================
+   SECTION 8: FAQ - CSS
+   ============================================ */
+.faq {
+    padding: var(--space-2xl) var(--space-lg);
+    background: var(--bg-secondary);
+}
+
+.faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.faq-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+    border-color: rgba(0, 212, 170, 0.3);
+}
+
+.faq-question {
+    width: 100%;
+    padding: var(--space-md) var(--space-lg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: none;
+    border: none;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.2s ease;
+}
+
+.faq-question:hover {
+    background: var(--bg-secondary);
+}
+
+.faq-icon {
+    font-size: 1.5rem;
+    color: var(--accent-primary);
+    transition: transform 0.3s ease;
+    font-weight: 300;
+}
+
+.faq-item.open .faq-icon {
+    transform: rotate(45deg);
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+
+.faq-item.open .faq-answer {
+    max-height: 300px;
+}
+
+.faq-answer-content {
+    padding: 0 var(--space-lg) var(--space-lg);
+    color: var(--text-secondary);
+    line-height: 1.7;
+}
+</style>
+
+
+<!-- JavaScript for FAQ Accordion -->
+<script>
+// FAQ Accordion
+document.querySelectorAll('.faq-question').forEach(button => {
+    button.addEventListener('click', () => {
+        const item = button.parentElement;
+        const wasOpen = item.classList.contains('open');
+        
+        // Close all items
+        document.querySelectorAll('.faq-item').forEach(faq => {
+            faq.classList.remove('open');
+        });
+        
+        // Open clicked item if it wasn't open
+        if (!wasOpen) {
+            item.classList.add('open');
+        }
+    });
+});
+</script>

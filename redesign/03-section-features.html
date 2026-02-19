@@ -1,0 +1,156 @@
+<!-- ============================================
+     SECTION 3: FEATURES
+     ============================================ -->
+
+<!-- HTML -->
+<section class="features" id="features">
+    <div class="section-header">
+        <div class="section-tag">Features</div>
+        <h2 class="section-title">Everything You Need in <span class="gradient-text">One Place</span></h2>
+        <p class="section-subtitle">No more juggling multiple subscriptions. Get it all with Nordic IPTV.</p>
+    </div>
+    <div class="features-grid">
+        <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                    <line x1="8" y1="21" x2="16" y2="21"/>
+                    <line x1="12" y1="17" x2="12" y2="21"/>
+                </svg>
+            </div>
+            <h3 class="feature-title">35,000+ Live Channels</h3>
+            <p class="feature-desc">Sports, news, entertainment, kids content — from 198 countries worldwide.</p>
+        </div>
+        <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="2" y1="12" x2="22" y2="12"/>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+            </div>
+            <h3 class="feature-title">$0 PPV Events</h3>
+            <p class="feature-desc">UFC, Boxing, Wrestling — all Pay-Per-View events included free. Save $70+ per event!</p>
+        </div>
+        <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                </svg>
+            </div>
+            <h3 class="feature-title">All Sports Live</h3>
+            <p class="feature-desc">EPL, La Liga, Champions League, NFL, NBA, F1 — every game, live.</p>
+        </div>
+        <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/>
+                    <line x1="7" y1="2" x2="7" y2="22"/>
+                    <line x1="17" y1="2" x2="17" y2="22"/>
+                    <line x1="2" y1="12" x2="22" y2="12"/>
+                    <line x1="2" y1="7" x2="7" y2="7"/>
+                    <line x1="2" y1="17" x2="7" y2="17"/>
+                    <line x1="17" y1="17" x2="22" y2="17"/>
+                    <line x1="17" y1="7" x2="22" y2="7"/>
+                </svg>
+            </div>
+            <h3 class="feature-title">150K+ Movies & Shows</h3>
+            <p class="feature-desc">Massive VOD library with latest releases. New content added daily.</p>
+        </div>
+        <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                    <line x1="8" y1="21" x2="16" y2="21"/>
+                    <line x1="12" y1="17" x2="12" y2="21"/>
+                </svg>
+            </div>
+            <h3 class="feature-title">Crystal Clear 4K</h3>
+            <p class="feature-desc">Ultra HD quality on all devices. No buffering, no lag.</p>
+        </div>
+        <div class="feature-card animate-on-scroll">
+            <div class="feature-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+            </div>
+            <h3 class="feature-title">24/7 Support</h3>
+            <p class="feature-desc">Real humans, real help via live chat or WhatsApp anytime.</p>
+        </div>
+    </div>
+</section>
+
+
+<style>
+/* ============================================
+   SECTION 3: FEATURES - CSS
+   ============================================ */
+.features {
+    padding: var(--space-2xl) var(--space-lg);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--space-md);
+}
+
+.feature-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-primary), var(--primary-light));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-md);
+}
+
+.feature-card:hover::before {
+    transform: scaleX(1);
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, rgba(0, 212, 170, 0.12), rgba(26, 75, 124, 0.08));
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-md);
+    color: var(--accent-primary);
+}
+
+.feature-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: var(--space-xs);
+    color: var(--text-primary);
+}
+
+.feature-desc {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+</style>

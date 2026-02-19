@@ -16,6 +16,7 @@
     <title><?php the_title(); ?> | Nordic IPTV</title>
     <?php wp_head(); ?>
     <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/front-page/css/variables.css">
+    <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/front-page/css/redesign-theme.css">
     <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/front-page/css/base.css">
     <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/front-page/css/header.css">
     <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/front-page/css/footer.css">
@@ -31,7 +32,7 @@
     <style>
         /* Page-specific styles */
         .page-header {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            background: linear-gradient(135deg, var(--primary-deep) 0%, var(--primary-mid) 100%);
             padding: 8rem 0 3rem;
             text-align: center;
             margin-top: 0;
@@ -55,9 +56,10 @@
         }
 
         .content-wrapper {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+            /* Edit here to add padding, e.g. padding: 0 20px; */
         }
 
         .content-wrapper h1,
@@ -76,7 +78,7 @@
         .content-wrapper h2 {
             font-size: 1.5rem;
             padding-bottom: 0.5rem;
-            border-bottom: 2px solid #3b82f6;
+            border-bottom: 2px solid var(--accent-primary);
         }
 
         .content-wrapper h3 {
@@ -101,7 +103,7 @@
         }
 
         .content-wrapper a {
-            color: #2563eb;
+            color: var(--accent-primary);
             text-decoration: none;
         }
 
@@ -114,10 +116,10 @@
         }
 
         .content-wrapper blockquote {
-            border-left: 4px solid #3b82f6;
+            border-left: 4px solid var(--accent-primary);
             padding-left: 1rem;
             margin: 1.5rem 0;
-            background: #f8fafc;
+            background: var(--bg-secondary);
             padding: 1rem;
             border-radius: 0 0.5rem 0.5rem 0;
         }

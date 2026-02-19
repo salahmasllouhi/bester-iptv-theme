@@ -1,0 +1,149 @@
+<!-- ============================================
+     SECTION 4: SPORTS
+     ============================================ -->
+
+<!-- HTML -->
+<section class="sports">
+    <div class="sports-container">
+        <div class="section-header">
+            <div class="section-tag">Sports</div>
+            <h2 class="section-title">Never Miss a <span class="gradient-text">Game</span></h2>
+            <p class="section-subtitle">All your favorite leagues and tournaments, live and on-demand.</p>
+        </div>
+        <div class="sports-grid">
+            <div class="sport-card animate-on-scroll">
+                <div class="sport-icon">⚽</div>
+                <div class="sport-name">Soccer</div>
+                <div class="sport-leagues">Premier League, Champions League, World Cup</div>
+                <div class="sport-live">LIVE NOW</div>
+            </div>
+            <div class="sport-card animate-on-scroll">
+                <div class="sport-icon">🏀</div>
+                <div class="sport-name">NBA</div>
+                <div class="sport-leagues">Regular Season, Playoffs & Finals</div>
+                <div class="sport-live">LIVE NOW</div>
+            </div>
+            <div class="sport-card animate-on-scroll">
+                <div class="sport-icon">⚾</div>
+                <div class="sport-name">MLB</div>
+                <div class="sport-leagues">Full Season, World Series</div>
+                <div class="sport-live">LIVE NOW</div>
+            </div>
+            <div class="sport-card animate-on-scroll">
+                <div class="sport-icon">🏈</div>
+                <div class="sport-name">NFL</div>
+                <div class="sport-leagues">Regular Season, Super Bowl</div>
+                <div class="sport-live">LIVE NOW</div>
+            </div>
+            <div class="sport-card animate-on-scroll">
+                <div class="sport-icon">🏎️</div>
+                <div class="sport-name">F1</div>
+                <div class="sport-leagues">All Grand Prix Races</div>
+                <div class="sport-live">LIVE NOW</div>
+            </div>
+            <div class="sport-card animate-on-scroll">
+                <div class="sport-icon">🥊</div>
+                <div class="sport-name">UFC/Boxing</div>
+                <div class="sport-leagues">All PPV Events Free</div>
+                <div class="sport-live">LIVE NOW</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<style>
+/* ============================================
+   SECTION 4: SPORTS - CSS
+   ============================================ */
+.sports {
+    padding: var(--space-2xl) var(--space-lg);
+    background: var(--bg-secondary);
+}
+
+.sports-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.sports-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--space-md);
+}
+
+.sport-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.sport-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(0, 212, 170, 0.3);
+}
+
+.sport-icon {
+    font-size: 2.5rem;
+    margin-bottom: var(--space-sm);
+}
+
+.sport-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+    color: var(--text-primary);
+}
+
+.sport-leagues {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.sport-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: var(--space-sm);
+    padding: 5px 12px;
+    background: rgba(0, 212, 170, 0.1);
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.sport-live::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--accent-primary);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.15); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sports-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .sports-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>

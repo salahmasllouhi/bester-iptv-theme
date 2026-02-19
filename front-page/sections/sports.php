@@ -1,60 +1,68 @@
-<!-- Sports Section -->
-<section class="ultimate-experience">
-    <div class="container">
-        <div class="sports-grid" id="sportsCarousel">
-            <?php
-            // Sports content (same across all languages - no translation needed)
-            $sports = array(
-                array('name' => 'NFL', 'subtitle' => 'American Football', 'features' => array('Sunday Ticket', 'RedZone Channel', 'Super Bowl 4K')),
-                array('name' => 'NBA', 'subtitle' => 'Basketball', 'features' => array('All Regular Season', 'Playoffs & Finals', 'March Madness')),
-                array('name' => 'MLB', 'subtitle' => 'Baseball', 'features' => array('Full Season', 'World Series', 'All-Star Game')),
-                array('name' => 'Soccer', 'subtitle' => 'MLS & International', 'features' => array('Premier League', 'Champions League', 'World Cup')),
-                array('name' => 'NHL', 'subtitle' => 'Ice Hockey', 'features' => array('Regular Season', 'Stanley Cup', 'Winter Classic')),
-                array('name' => 'Tennis', 'subtitle' => 'ATP & WTA', 'features' => array('Grand Slams', 'US Open', 'Wimbledon')),
-                array('name' => 'Golf', 'subtitle' => 'PGA Tour', 'features' => array('Masters', 'PGA Championship', 'US Open')),
-                array('name' => 'Motorsports', 'subtitle' => 'NASCAR & F1', 'features' => array('NASCAR Cup', 'Formula 1', 'Indy 500')),
-                array('name' => 'Combat Sports', 'subtitle' => 'Boxing & MMA', 'features' => array('UFC PPV', 'Boxing Title Fights', 'Bellator')),
-                array('name' => 'Track & Field', 'subtitle' => 'World Athletics', 'features' => array('World Championships', 'Diamond League', 'Olympic Games')),
-            );
-
-            $live_text = 'LIVE NOW';
-
-            foreach ($sports as $sport):
-                ?>
-                <div class="sport-card">
-                    <div class="sport-header">
-                        <div class="sport-icon">
-                            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                        <div class="sport-name">
-                            <h3>
-                                <?php echo esc_html($sport['name']); ?>
-                            </h3>
-                            <span>
-                                <?php echo esc_html($sport['subtitle']); ?>
-                            </span>
-                        </div>
-                    </div>
-                    <ul class="sport-features">
-                        <?php foreach ($sport['features'] as $feature): ?>
-                            <li>
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                </svg>
-                                <?php echo esc_html($feature); ?>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-                    <div class="live-badge">
-                        <div class="live-dot"></div><?php echo esc_html($live_text); ?>
-                    </div>
+<section class="sports">
+    <div class="sports-container">
+        <div class="section-header">
+            <div class="section-tag"><?php echo esc_html(iptv_text('sports_tag', 'Sports')); ?></div>
+            <h2 class="section-title"><?php echo iptv_text('sports_title', 'Never Miss a'); ?> <span
+                    class="gradient-text"><?php echo iptv_text('sports_title_span', 'Game'); ?></span></h2>
+            <p class="section-subtitle">
+                <?php echo esc_html(iptv_text('sports_desc', 'All your favorite leagues and tournaments, live and on-demand.')); ?>
+            </p>
+        </div>
+        <div class="sports-grid">
+            <!-- Sport 1: Soccer -->
+            <div class="sport-card animate-on-scroll">
+                <div class="sport-icon">⚽</div>
+                <div class="sport-name"><?php echo esc_html(iptv_text('sport_1_name', 'Soccer')); ?></div>
+                <div class="sport-leagues">
+                    <?php echo esc_html(iptv_text('sport_1_subtitle', 'Premier League, Champions League, World Cup')); ?>
                 </div>
-            <?php endforeach; ?>
+                <div class="sport-live"><?php echo esc_html(iptv_text('sport_live_text', 'LIVE NOW')); ?></div>
+            </div>
+
+            <!-- Sport 2: NBA -->
+            <div class="sport-card animate-on-scroll">
+                <div class="sport-icon">🏀</div>
+                <div class="sport-name"><?php echo esc_html(iptv_text('sport_2_name', 'NBA')); ?></div>
+                <div class="sport-leagues">
+                    <?php echo esc_html(iptv_text('sport_2_subtitle', 'Regular Season, Playoffs & Finals')); ?></div>
+                <div class="sport-live"><?php echo esc_html(iptv_text('sport_live_text', 'LIVE NOW')); ?></div>
+            </div>
+
+            <!-- Sport 3: MLB -->
+            <div class="sport-card animate-on-scroll">
+                <div class="sport-icon">⚾</div>
+                <div class="sport-name"><?php echo esc_html(iptv_text('sport_3_name', 'MLB')); ?></div>
+                <div class="sport-leagues">
+                    <?php echo esc_html(iptv_text('sport_3_subtitle', 'Full Season, World Series')); ?></div>
+                <div class="sport-live"><?php echo esc_html(iptv_text('sport_live_text', 'LIVE NOW')); ?></div>
+            </div>
+
+            <!-- Sport 4: NFL -->
+            <div class="sport-card animate-on-scroll">
+                <div class="sport-icon">🏈</div>
+                <div class="sport-name"><?php echo esc_html(iptv_text('sport_4_name', 'NFL')); ?></div>
+                <div class="sport-leagues">
+                    <?php echo esc_html(iptv_text('sport_4_subtitle', 'Regular Season, Super Bowl')); ?></div>
+                <div class="sport-live"><?php echo esc_html(iptv_text('sport_live_text', 'LIVE NOW')); ?></div>
+            </div>
+
+            <!-- Sport 5: F1 -->
+            <div class="sport-card animate-on-scroll">
+                <div class="sport-icon">🏎️</div>
+                <div class="sport-name"><?php echo esc_html(iptv_text('sport_5_name', 'F1')); ?></div>
+                <div class="sport-leagues">
+                    <?php echo esc_html(iptv_text('sport_5_subtitle', 'All Grand Prix Races')); ?></div>
+                <div class="sport-live"><?php echo esc_html(iptv_text('sport_live_text', 'LIVE NOW')); ?></div>
+            </div>
+
+            <!-- Sport 6: UFC/Boxing -->
+            <div class="sport-card animate-on-scroll">
+                <div class="sport-icon">🥊</div>
+                <div class="sport-name"><?php echo esc_html(iptv_text('sport_6_name', 'UFC/Boxing')); ?></div>
+                <div class="sport-leagues"><?php echo esc_html(iptv_text('sport_6_subtitle', 'All PPV Events Free')); ?>
+                </div>
+                <div class="sport-live"><?php echo esc_html(iptv_text('sport_live_text', 'LIVE NOW')); ?></div>
+            </div>
         </div>
     </div>
 </section>

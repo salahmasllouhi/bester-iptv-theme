@@ -57,6 +57,116 @@ class IPTV_Currency_Settings
     {
         add_action('admin_menu', array($this, 'add_admin_menu'));
         add_action('admin_init', array($this, 'register_settings'));
+        
+        // Price conversion for subsites is handled differently - not via filters
+        // to avoid recursion issues with switch_to_blog
+    }
+
+    /**
+     * Check if current site is a subsite
+     */
+    public function is_subsite()
+    {
+        if (!function_exists('is_multisite') || !is_multisite()) {
+            return false;
+        }
+        $blog_id = function_exists('get_current_blog_id') ? get_current_blog_id() : 1;
+        return $blog_id > 1;
+    }
+
+    /**
+     * Get the currency for the current subsite based on URL slug
+     */
+    public function get_subsite_currency()
+    {
+        if (!$this->is_subsite()) {
+            return 'usd';
+        }
+
+        $blog_id = get_current_blog_id();
+        $details = get_blog_details($blog_id);
+        if (!$details) {
+            return 'usd';
+        }
+
+        $path = trim($details->path, '/');
+        $parts = explode('/', $path);
+        $site_slug = end($parts);
+
+        $currency_map = array(
+            'se' => 'sek',
+            'no' => 'nok',
+            'dk' => 'dkk',
+            'fi' => 'eur',
+            'is' => 'isk'
+        );
+
+        return isset($currency_map[$site_slug]) ? $currency_map[$site_slug] : 'usd';
+    }
+
+    /**
+     * Get conversion rate for a currency (from main site)
+     */
+    public function get_conversion_rate($currency)
+    {
+        // Get rates from main site
+        if ($this->is_subsite()) {
+            switch_to_blog(1);
+        }
+
+        $rates = get_option('iptv_conversion_rates', array());
+
+        if ($this->is_subsite()) {
+            restore_current_blog();
+        }
+
+        // Use stored rate or default
+        if (!empty($rates[$currency])) {
+            return floatval($rates[$currency]);
+        }
+
+        return isset($this->default_rates[$currency]) ? $this->default_rates[$currency] : 1;
+    }
+
+    /**
+     * Convert USD price to local currency
+     */
+    public function convert_price_to_local($price, $product)
+    {
+        // Prevent infinite recursion
+        static $converting = false;
+        if ($converting) {
+            return $price;
+        }
+        
+        if (empty($price) || $price <= 0) {
+            return $price;
+        }
+
+        $converting = true;
+        
+        $currency = $this->get_subsite_currency();
+        if ($currency === 'usd') {
+            $converting = false;
+            return $price;
+        }
+
+        $rate = $this->get_conversion_rate($currency);
+        $converted = floatval($price) * $rate;
+
+        // Apply rounding
+        $rounded = self::apply_rounding($converted, $currency);
+
+        $converting = false;
+        return $rounded;
+    }
+
+    /**
+     * Convert variation prices array
+     */
+    public function convert_variation_price($price, $variation, $product)
+    {
+        return $this->convert_price_to_local($price, $product);
     }
 
     /**
@@ -100,6 +210,16 @@ class IPTV_Currency_Settings
     public static function calculate_all_prices()
     {
         $instance = self::instance();
+
+        // ALWAYS fetch prices AND rates from main site (blog_id = 1) for consistency
+        $current_blog_id = function_exists('get_current_blog_id') ? get_current_blog_id() : 1;
+        $should_switch = function_exists('is_multisite') && is_multisite() && $current_blog_id > 1;
+
+        if ($should_switch) {
+            switch_to_blog(1); // Switch to main site to get USD prices AND conversion rates
+        }
+
+        // Get conversion rates FROM MAIN SITE's database
         $rates = get_option('iptv_conversion_rates', array());
 
         foreach ($instance->default_rates as $cur => $rate) {
@@ -113,7 +233,7 @@ class IPTV_Currency_Settings
         foreach ($instance->durations as $dur_key => $dur_label) {
             $all_prices[$dur_key] = array();
 
-            // Try to fetch product by SKU
+            // Try to fetch product by SKU from MAIN SITE
             $product_id = function_exists('wc_get_product_id_by_sku') ? wc_get_product_id_by_sku($dur_key) : 0;
             $product = $product_id ? wc_get_product($product_id) : null;
 
@@ -149,9 +269,10 @@ class IPTV_Currency_Settings
                     $usd_price = isset($instance->default_usd[$dur_key][$dev_key]) ? $instance->default_usd[$dur_key][$dev_key] : 0;
                 }
 
+                // Always store USD as base
                 $all_prices[$dur_key][$dev_key]['usd'] = number_format($usd_price, 2, '.', '');
 
-                // Calculate other currencies
+                // Calculate ALL other currencies from USD
                 foreach ($instance->currencies as $cur_key => $currency) {
                     if ($cur_key === 'usd')
                         continue;
@@ -166,6 +287,11 @@ class IPTV_Currency_Settings
                     }
                 }
             }
+        }
+
+        // Restore original blog if we switched
+        if ($should_switch) {
+            restore_current_blog();
         }
 
         // 2. Trial Product (Simple)
@@ -436,13 +562,7 @@ class IPTV_Currency_Settings
                         </div>
                         <?php $first = false; endforeach; ?>
 
-                    <script>
-                        function showCurrencyTab(cur) {
-                            document.querySelectorAll('.currency-tab').forEach(t => t.classList.remove('active'));
-                            document.querySelectorAll('.currency-panel').forEach(p => p.classList.remove('active'));
-                            document.getElementById('panel-' + cur).classList.add('active');
-                            event.target.classList.add('active');
-                        }
+                    <script>                 function showCurrencyTab(cur) { document.querySelectorAll('.currency-tab').forEach(t => t.classList.remove('active')); document.querySelectorAll('.currency-panel').forEach(p => p.classList.remove('active')); document.getElementById('panel-' + cur).classList.add('active'); event.target.classList.add('active'); }
                     </script>
                 </div>
 

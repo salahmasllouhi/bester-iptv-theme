@@ -36,6 +36,7 @@ if (!$is_thank_you_page && class_exists('WooCommerce') && function_exists('WC') 
     <title><?php wp_title('|', true, 'right'); ?></title>
     <?php wp_head(); ?>
     <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/front-page/css/variables.css">
+    <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/front-page/css/redesign-theme.css">
     <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/front-page/css/base.css">
     <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/front-page/css/header.css">
     <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/front-page/css/footer.css">

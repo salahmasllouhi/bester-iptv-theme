@@ -2,7 +2,7 @@
 .nordic-dark-section {
     background-color: #0f172a;
     padding: 80px 20px;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'DM Sans', sans-serif;
     color: #ffffff;
 }
 
@@ -281,5 +281,92 @@
 @media (max-width: 480px) {
     .unlock-features {
         grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================
+   GENERIC CTA SECTION STYLES (Used by dark-cta.php)
+   ============================================ */
+.cta {
+    padding: var(--space-2xl) var(--space-lg);
+    background: linear-gradient(135deg, var(--primary-deep), var(--primary-mid));
+    text-align: center;
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(circle at 20% 50%, rgba(0, 212, 170, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(0, 245, 196, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.cta-content {
+    position: relative;
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+.cta h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    margin-bottom: var(--space-sm);
+    letter-spacing: -0.02em;
+    color: #ffffff;
+}
+
+.cta p {
+    font-size: 1.15rem;
+    opacity: 0.9;
+    margin-bottom: var(--space-lg);
+    color: #ffffff !important;
+}
+
+.cta .btn-primary {
+    background: #ffffff !important;
+    color: var(--primary-deep) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.cta .btn-primary:hover {
+    background: rgba(255, 255, 255, 0.9) !important;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
+}
+
+.cta-features {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-lg);
+    margin-top: var(--space-lg);
+    flex-wrap: wrap;
+}
+
+.cta-feature {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: 0.9rem;
+    opacity: 0.9;
+    color: #ffffff;
+}
+
+.cta-feature svg {
+    color: var(--accent-glow);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cta-features {
+        flex-direction: column;
+        align-items: center;
     }
 }

@@ -1,0 +1,106 @@
+<!-- ============================================
+     SECTION 7: DEVICES COMPATIBILITY
+     ============================================ -->
+
+<!-- HTML -->
+<section class="devices">
+    <div class="section-header">
+        <div class="section-tag">Compatibility</div>
+        <h2 class="section-title">Watch On <span class="gradient-text">Any Device</span></h2>
+        <p class="section-subtitle">Works flawlessly on Smart TV, Android, iOS, Firestick, MAG, and more.</p>
+    </div>
+    <div class="devices-grid">
+        <div class="device-item animate-on-scroll">
+            <div class="device-icon">📺</div>
+            <div class="device-name">Apple TV</div>
+        </div>
+        <div class="device-item animate-on-scroll">
+            <div class="device-icon">🔥</div>
+            <div class="device-name">Firestick</div>
+        </div>
+        <div class="device-item animate-on-scroll">
+            <div class="device-icon">📱</div>
+            <div class="device-name">Smart TV</div>
+        </div>
+        <div class="device-item animate-on-scroll">
+            <div class="device-icon">📡</div>
+            <div class="device-name">Roku</div>
+        </div>
+        <div class="device-item animate-on-scroll">
+            <div class="device-icon">🤖</div>
+            <div class="device-name">Android</div>
+        </div>
+        <div class="device-item animate-on-scroll">
+            <div class="device-icon">🍎</div>
+            <div class="device-name">iPhone/iPad</div>
+        </div>
+        <div class="device-item animate-on-scroll">
+            <div class="device-icon">🌐</div>
+            <div class="device-name">Browser</div>
+        </div>
+        <div class="device-item animate-on-scroll">
+            <div class="device-icon">🛡️</div>
+            <div class="device-name">Shield</div>
+        </div>
+    </div>
+</section>
+
+
+<style>
+/* ============================================
+   SECTION 7: DEVICES - CSS
+   ============================================ */
+.devices {
+    padding: var(--space-2xl) var(--space-lg);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.devices-grid {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+}
+
+.device-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-md) var(--space-lg);
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.device-item:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(0, 212, 170, 0.3);
+}
+
+.device-icon {
+    font-size: 2.25rem;
+}
+
+.device-name {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .devices-grid {
+        gap: var(--space-sm);
+    }
+
+    .device-item {
+        min-width: 100px;
+        padding: var(--space-sm);
+    }
+}
+</style>
