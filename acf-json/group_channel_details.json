@@ -1,0 +1,73 @@
+{
+    "key": "group_channel_details",
+    "title": "Channel Details",
+    "fields": [
+        {
+            "key": "field_channel_type",
+            "label": "Channel Type",
+            "name": "channel_type",
+            "type": "select",
+            "instructions": "What kind of content does this channel broadcast?",
+            "required": 1,
+            "choices": {
+                "Sports": "\u26bd Sports",
+                "News": "\ud83d\udcf0 News",
+                "Entertainment": "\ud83c\udfac Entertainment",
+                "Movies": "\ud83c\udfa5 Movies",
+                "Kids": "\ud83e\uddf8 Kids",
+                "Music": "\ud83c\udfb5 Music",
+                "General": "\ud83d\udcfa General",
+                "Documentary": "\ud83c\udefe\ufe0f Documentary",
+                "Lifestyle": "\ud83c\udf3f Lifestyle"
+            },
+            "default_value": "General",
+            "allow_null": 0,
+            "multiple": 0,
+            "ui": 1,
+            "return_format": "value",
+            "ajax": 0
+        },
+        {
+            "key": "field_channel_tagline",
+            "label": "Channel Tagline",
+            "name": "channel_tagline",
+            "type": "text",
+            "instructions": "Short marketing line shown under the title in the hero. E.g. \"The World's #1 Sports Network\"",
+            "required": 0,
+            "default_value": "",
+            "placeholder": "e.g. The Worldwide Leader in Sports",
+            "maxlength": 100
+        },
+        {
+            "key": "field_channel_short_description",
+            "label": "Short Description",
+            "name": "channel_short_description",
+            "type": "textarea",
+            "instructions": "Short description about this channel shown below the headline in the hero section. Keep it under 200 characters for best display.",
+            "required": 0,
+            "default_value": "",
+            "placeholder": "e.g. Stream ESPN live with NordicTV. No cable required. No blackouts. No restrictions.",
+            "maxlength": 250,
+            "rows": 3,
+            "new_lines": "br"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "channel"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Per-channel dynamic fields: type, tagline, short description.",
+    "modified": 1999999999
+}

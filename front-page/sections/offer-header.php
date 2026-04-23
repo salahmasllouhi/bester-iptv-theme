@@ -1,0 +1,120 @@
+<?php
+/**
+ * Offer Landing Page Header
+ * Same design as site-header but stripped to: Logo | Currency selector | CTA button
+ * Nav links removed — keeps focus on one action.
+ *
+ * Variables expected from template-offer-landing.php:
+ *   $offer_cta_text      (string)
+ *   $offer_checkout_url  (string)
+ */
+
+// ── Currency detection (copied from header.php) ────────────────────────────
+$site_slug = '';
+if (is_multisite() && function_exists('get_blog_details')) {
+    $blog_details = get_blog_details();
+    if ($blog_details && !empty($blog_details->path)) {
+        $site_slug = trim($blog_details->path, '/');
+    }
+}
+if (empty($site_slug)) {
+    $request_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+    $path_parts = explode('/', trim($request_uri, '/'));
+    $first = isset($path_parts[0]) ? $path_parts[0] : '';
+    if (in_array($first, ['se'])) {
+        $site_slug = $first;
+    }
+}
+
+$site_currency_map = [
+    'se' => ['flag' => '🇸🇪', 'code' => 'SEK'],
+];
+$default_flag = '🇺🇸';
+$default_code = 'USD';
+if (isset($site_currency_map[$site_slug])) {
+    $default_flag = $site_currency_map[$site_slug]['flag'];
+    $default_code = $site_currency_map[$site_slug]['code'];
+}
+?>
+
+<header class="site-header offer-header" id="site-header">
+    <div class="container nav-container">
+
+        <!-- Logo -->
+        <a href="<?php echo home_url('/'); ?>" class="logo">
+            <img src="<?php echo get_template_directory_uri(); ?>/images/logo/light logo 500_150.png" alt="Nordic IPTV"
+                class="logo-img">
+        </a>
+
+        <!-- Right side: currency + CTA -->
+        <div class="nav-right">
+            <!-- Currency selector (same markup as header.php so currency.js works) -->
+            <div class="country-selector" id="countrySelector">
+                <button class="country-btn" onclick="toggleCountryDropdown()">
+                    <span class="country-flag" id="selectedFlag"><?php echo $default_flag; ?></span>
+                    <span class="country-code" id="selectedCode"><?php echo $default_code; ?></span>
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
+                        <path d="M1 3L5 7L9 3" stroke="currentColor" stroke-width="1.5" fill="none" />
+                    </svg>
+                </button>
+                <div class="country-dropdown" id="countryDropdown">
+                    <div class="country-option" data-currency="usd" data-symbol="$" data-flag="🇺🇸">
+                        <span class="country-flag">🇺🇸</span><span>USD</span>
+                    </div>
+                    <div class="country-option" data-currency="sek" data-symbol="kr" data-flag="🇸🇪">
+                        <span class="country-flag">🇸🇪</span><span>SEK</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA — same pulse style as page buttons -->
+            <a href="<?php echo esc_url($offer_checkout_url); ?>" class="nav-btn offer-cta-btn offer-header__cta">
+                <?php echo esc_html($offer_cta_text); ?>
+            </a>
+        </div>
+
+        <!-- Mobile toggle -->
+        <button class="mobile-menu-toggle" onclick="toggleOfferMobileMenu()">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</header>
+
+<!-- Minimal mobile menu: only currency + CTA -->
+<div class="mobile-menu" id="offer-mobile-menu">
+    <button class="mobile-menu-close" onclick="toggleOfferMobileMenu()">&times;</button>
+    <div class="mobile-language-selector">
+        <span class="mobile-language-label">Region / Currency</span>
+        <div class="mobile-language-options">
+            <button class="mobile-lang-btn" data-currency="usd" onclick="redirectToRegion('usd')">🇺🇸 USD</button>
+            <button class="mobile-lang-btn" data-currency="sek" onclick="redirectToRegion('sek')">🇸🇪 SEK</button>
+        </div>
+    </div>
+    <a href="<?php echo esc_url($offer_checkout_url); ?>" class="nav-btn offer-cta-btn" style="margin-top:1rem;"
+        onclick="toggleOfferMobileMenu()">
+        <?php echo esc_html($offer_cta_text); ?>
+    </a>
+</div>
+
+<style>
+    /* Strip nav links, keep everything else identical to site-header */
+    .offer-header .nav-links {
+        display: none !important;
+    }
+
+    /* CTA in header — smaller than page CTAs, no full-width pulse override */
+    .offer-header__cta {
+        font-size: 0.875rem !important;
+        padding: 10px 22px !important;
+        width: auto !important;
+        /* cancel the mobile full-width rule */
+        animation: offerCtaPulse 2.5s ease-in-out infinite;
+    }
+</style>
+
+<script>
+    function toggleOfferMobileMenu() {
+        var menu = document.getElementById('offer-mobile-menu');
+        if (menu) menu.classList.toggle('open');
+    }
+</script>

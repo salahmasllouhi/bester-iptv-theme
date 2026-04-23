@@ -1,0 +1,246 @@
+{
+    "key": "group_offer_landing",
+    "title": "Offer Landing Page",
+    "fields": [
+        {
+            "key": "field_offer_headline",
+            "label": "Hero Headline",
+            "name": "offer_headline",
+            "type": "text",
+            "instructions": "The offer in one line. E.g. \"12 Months, Get 3 Free\"",
+            "required": 1,
+            "default_value": "12 Months, Get 3 Free",
+            "placeholder": "e.g. 12 Months, Get 3 Free",
+            "maxlength": 80
+        },
+        {
+            "key": "field_offer_subline",
+            "label": "Hero Subline",
+            "name": "offer_subline",
+            "type": "text",
+            "instructions": "Supporting line under the headline. E.g. \"Total = 15 months. Pay for 12.\"",
+            "required": 0,
+            "default_value": "Total = 15 months. Pay for 12.",
+            "placeholder": "e.g. Total = 15 months. Pay for 12.",
+            "maxlength": 120
+        },
+        {
+            "key": "field_offer_cta_text",
+            "label": "CTA Button Text",
+            "name": "offer_cta_text",
+            "type": "text",
+            "instructions": "Text for all CTA buttons on this page.",
+            "required": 0,
+            "default_value": "Get This Deal",
+            "placeholder": "e.g. Get This Deal",
+            "maxlength": 60
+        },
+        {
+            "key": "field_offer_product",
+            "label": "WooCommerce Product",
+            "name": "offer_product",
+            "type": "post_object",
+            "instructions": "Select the WooCommerce product that will be added to cart when the visitor clicks any CTA button. The checkout URL will be built as: /checkout/?add-to-cart={product_id}",
+            "required": 1,
+            "post_type": [
+                "product"
+            ],
+            "taxonomy": "",
+            "return_format": "id",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 1,
+            "ajax": 1
+        },
+        {
+            "key": "field_offer_paid_months",
+            "label": "Paid Months",
+            "name": "offer_paid_months",
+            "type": "number",
+            "instructions": "Number of months the customer pays for. E.g. 12",
+            "required": 1,
+            "default_value": 12,
+            "min": 1,
+            "max": 24,
+            "step": 1
+        },
+        {
+            "key": "field_offer_free_months",
+            "label": "Free Months (Bonus)",
+            "name": "offer_free_months",
+            "type": "number",
+            "instructions": "Number of free bonus months. E.g. 3 (for '12 + 3 free' offer)",
+            "required": 0,
+            "default_value": 3,
+            "min": 0,
+            "max": 12,
+            "step": 1
+        },
+        {
+            "key": "field_offer_highlight_text",
+            "label": "Savings Highlight Text",
+            "name": "offer_highlight_text",
+            "type": "text",
+            "instructions": "The 'You save X' badge text shown in the pricing block. E.g. \"You save 3 months free!\"",
+            "required": 0,
+            "default_value": "You get 3 months FREE!",
+            "placeholder": "e.g. You save $50 — 3 months free!",
+            "maxlength": 80
+        },
+        {
+            "key": "field_offer_features",
+            "label": "What You Get (Features)",
+            "name": "offer_features",
+            "type": "repeater",
+            "instructions": "List of features shown in the 'What You Get' section.",
+            "required": 0,
+            "min": 0,
+            "max": 12,
+            "layout": "table",
+            "button_label": "Add Feature",
+            "sub_fields": [
+                {
+                    "key": "field_offer_feature_icon",
+                    "label": "Icon (SVG path or emoji)",
+                    "name": "feature_icon",
+                    "type": "text",
+                    "instructions": "Use an emoji (e.g. 📺) or leave empty for a default checkmark.",
+                    "required": 0,
+                    "default_value": "",
+                    "maxlength": 10
+                },
+                {
+                    "key": "field_offer_feature_text",
+                    "label": "Feature Text",
+                    "name": "feature_text",
+                    "type": "text",
+                    "instructions": "E.g. \"35,000+ live channels\"",
+                    "required": 1,
+                    "default_value": "",
+                    "maxlength": 100
+                }
+            ]
+        },
+        {
+            "key": "field_offer_steps",
+            "label": "How It Works (Steps)",
+            "name": "offer_steps",
+            "type": "repeater",
+            "instructions": "3 steps explaining how the offer works.",
+            "required": 0,
+            "min": 0,
+            "max": 3,
+            "layout": "table",
+            "button_label": "Add Step",
+            "sub_fields": [
+                {
+                    "key": "field_offer_step_number",
+                    "label": "Step Number",
+                    "name": "step_number",
+                    "type": "text",
+                    "instructions": "E.g. \"1\"",
+                    "required": 0,
+                    "default_value": "",
+                    "maxlength": 5
+                },
+                {
+                    "key": "field_offer_step_title",
+                    "label": "Step Title",
+                    "name": "step_title",
+                    "type": "text",
+                    "instructions": "E.g. \"Pick Plan\"",
+                    "required": 1,
+                    "default_value": "",
+                    "maxlength": 60
+                },
+                {
+                    "key": "field_offer_step_description",
+                    "label": "Step Description",
+                    "name": "step_description",
+                    "type": "textarea",
+                    "instructions": "Short explanation of this step.",
+                    "required": 0,
+                    "default_value": "",
+                    "maxlength": 200,
+                    "rows": 2,
+                    "new_lines": "br"
+                }
+            ]
+        },
+        {
+            "key": "field_offer_faq",
+            "label": "FAQ Items",
+            "name": "offer_faq",
+            "type": "repeater",
+            "instructions": "FAQ items that remove purchase objections. Keep it focused: 4–6 items is ideal.",
+            "required": 0,
+            "min": 0,
+            "max": 10,
+            "layout": "block",
+            "button_label": "Add FAQ Item",
+            "sub_fields": [
+                {
+                    "key": "field_offer_faq_question",
+                    "label": "Question",
+                    "name": "faq_question",
+                    "type": "text",
+                    "instructions": "The question.",
+                    "required": 1,
+                    "default_value": "",
+                    "maxlength": 150
+                },
+                {
+                    "key": "field_offer_faq_answer",
+                    "label": "Answer",
+                    "name": "faq_answer",
+                    "type": "textarea",
+                    "instructions": "The answer. HTML is allowed.",
+                    "required": 1,
+                    "default_value": "",
+                    "rows": 4,
+                    "new_lines": "br"
+                }
+            ]
+        },
+        {
+            "key": "field_offer_final_cta_text",
+            "label": "Final CTA Button Text",
+            "name": "offer_final_cta_text",
+            "type": "text",
+            "instructions": "Text for the final CTA button at the bottom. Leave empty to use the main CTA text.",
+            "required": 0,
+            "default_value": "",
+            "placeholder": "e.g. Claim My 3 Free Months",
+            "maxlength": 80
+        },
+        {
+            "key": "field_offer_urgency_line",
+            "label": "Urgency Line",
+            "name": "offer_urgency_line",
+            "type": "text",
+            "instructions": "Urgency/scarcity line shown below the final CTA button. E.g. \"Offer ends soon\"",
+            "required": 0,
+            "default_value": "Offer ends soon — don't miss out",
+            "placeholder": "e.g. Offer ends soon",
+            "maxlength": 100
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "page_template",
+                "operator": "==",
+                "value": "template-offer-landing.php"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Fields for the Offer Landing Page template — product selector, hero, features, steps, FAQ, and CTA.",
+    "modified": 1999999999
+}

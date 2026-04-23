@@ -1,0 +1,21 @@
+﻿ID,Name,"Attribute 1 name","Attribute 1 value(s)","Attribute 1 visible","Attribute 1 global"
+206,"1 Month Subscription",Devices,"1, 2, 3, 4",1,0
+211,"3 Months Subscription",Devices,"1, 2, 3, 4",1,0
+216,"6 Months Subscription",Devices,"1, 2, 3, 4",1,0
+221,"12 Months Subscription",Devices,"1, 2, 3, 4",1,0
+894,"1 Month Subscription - 1",Devices,1,,0
+896,"1 Month Subscription - 2",Devices,2,,0
+898,"1 Month Subscription - 3",Devices,3,,0
+900,"1 Month Subscription - 4",Devices,4,,0
+902,"3 Months Subscription - 1",Devices,1,,0
+904,"3 Months Subscription - 2",Devices,2,,0
+906,"3 Months Subscription - 3",Devices,3,,0
+908,"3 Months Subscription - 4",Devices,4,,0
+886,"6 Months Subscription - 1",Devices,1,,0
+888,"6 Months Subscription - 2",Devices,2,,0
+890,"6 Months Subscription - 3",Devices,3,,0
+892,"6 Months Subscription - 4",Devices,4,,0
+871,"12 Months Subscription - 1",Devices,1,,0
+873,"12 Months Subscription - 2",Devices,2,,0
+875,"12 Months Subscription - 3",Devices,3,,0
+877,"12 Months Subscription - 4",Devices,4,,0
