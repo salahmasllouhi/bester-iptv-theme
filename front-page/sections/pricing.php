@@ -142,7 +142,11 @@
                                     $variation = wc_get_product($child_id);
                                     if ($variation) {
                                         $attributes = $variation->get_attributes();
+                                        // Try global attribute (pa_devices) first, then local (devices)
                                         $device_attr = isset($attributes['pa_devices']) ? $attributes['pa_devices'] : '';
+                                        if (!$device_attr) {
+                                            $device_attr = isset($attributes['devices']) ? $attributes['devices'] : '';
+                                        }
                                         if ($device_attr) {
                                             $key = $device_attr . '-' . $months; // e.g., "1-12", "2-3"
                                             $variation_map[$key] = $child_id;

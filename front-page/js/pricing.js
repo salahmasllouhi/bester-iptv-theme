@@ -86,15 +86,14 @@
             const price = getPrice(selectedDevices, selectedDuration);
             const variationId = getVariationId(selectedDevices, selectedDuration);
             btnText.textContent = 'Complete Your Order  -  ' + formatPrice(price);
-            // Use main site URL for cross-site checkout
-            const mainSiteUrl = window.iptvMainSiteUrl || '';
+            const mainSiteUrl = (window.iptvMainSiteUrl || '').replace(/\/$/, '');
             if (variationId) {
-                btn.href = mainSiteUrl + '/checkout/?add-to-cart=' + variationId;
+                btn.href = mainSiteUrl + '/checkout/?add-to-cart=' + variationId + '&variation_id=' + variationId + '&attribute_devices=' + selectedDevices;
                 btn.style.opacity = '1';
                 btn.style.pointerEvents = 'auto';
             } else {
-                // Variation not found - fallback to shop page
-                btn.href = mainSiteUrl + '/shop/';
+                // Variation not found - still go to checkout, WooCommerce will handle it
+                btn.href = mainSiteUrl + '/checkout/';
                 btn.style.opacity = '0.7';
                 btn.style.pointerEvents = 'auto';
                 console.warn('Variation ID not found for:', selectedDevices, selectedDuration);
