@@ -17,12 +17,13 @@ $offer_checkout_url = '';
 if ($offer_product_id && class_exists('WooCommerce')) {
     $offer_product = wc_get_product($offer_product_id);
     if ($offer_product) {
+        // Use ?add-to-cart on the shop/home URL — WooCommerce handles the redirect to checkout.
+        // wc_get_checkout_url() can return the homepage when Polylang hasn't mapped the checkout page,
+        // so we always append add-to-cart params to home_url('/') and let WC redirect.
         if ($offer_product->is_type('variable')) {
-            // Find the variation for 1 device (default for offer display)
             $data_store = WC_Data_Store::load('product');
             $variation_id = $data_store->find_matching_product_variation($offer_product, ['devices' => '1']);
 
-            // Fall back to default attributes, then first child
             if (!$variation_id) {
                 $default_attrs = $offer_product->get_default_attributes();
                 if (!empty($default_attrs)) {
@@ -35,17 +36,16 @@ if ($offer_product_id && class_exists('WooCommerce')) {
             }
 
             if ($variation_id) {
-                // Build a proper cart URL with variation attributes so WooCommerce adds it correctly
                 $offer_checkout_url = add_query_arg([
-                    'add-to-cart'   => $variation_id,
-                    'variation_id'  => $variation_id,
+                    'add-to-cart'       => $variation_id,
+                    'variation_id'      => $variation_id,
                     'attribute_devices' => '1',
-                ], wc_get_checkout_url());
+                ], home_url('/'));
             } else {
                 $offer_checkout_url = get_permalink($offer_product_id);
             }
         } else {
-            $offer_checkout_url = add_query_arg('add-to-cart', $offer_product_id, wc_get_checkout_url());
+            $offer_checkout_url = add_query_arg('add-to-cart', $offer_product_id, home_url('/'));
         }
     }
 }
