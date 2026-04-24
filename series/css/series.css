@@ -37,10 +37,10 @@
   max-width: 45%;
 }
 
-.hero {
+.series-hero-section .hero {
   margin: 0 auto;
-  padding-left: 5%;
-  padding-right: 5%;
+  padding: 8rem 2rem 4rem;
+  max-width: 1400px;
   gap: 3rem;
   display: flex;
   flex-direction: column;
@@ -48,12 +48,8 @@
 
 /* ── Large screens (≥1280px) ── cap width and center */
 @media (min-width: 1280px) {
-  .hero {
-    max-width: 1400px;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 4rem;
-    padding-right: 4rem;
+  .series-hero-section .hero {
+    padding: 8rem 4rem 4rem;
     gap: 4rem;
   }
 

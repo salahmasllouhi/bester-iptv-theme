@@ -38,10 +38,10 @@
   max-width: 45%;
 }
 
-.hero {
+.sport-hero-section .hero {
   margin: 0 auto;
-  padding-left: 5%;
-  padding-right: 5%;
+  padding: 8rem 2rem 4rem;
+  max-width: 1400px;
   gap: 3rem;
   display: flex;
   flex-direction: column;
@@ -49,15 +49,8 @@
 
 /* ── Large screens (≥1280px) ── cap width and center */
 @media (min-width: 1280px) {
-  .hero {
-    max-width: 1400px;
-    /* cap at 1400px so it doesn't stretch on huge screens */
-    margin-left: auto;
-    /* auto margins = perfectly centered */
-    margin-right: auto;
-    padding-left: 4rem;
-    /* fixed rem = equal and predictable on all large screens */
-    padding-right: 4rem;
+  .sport-hero-section .hero {
+    padding: 8rem 4rem 4rem;
     gap: 4rem;
   }
 
