@@ -10,6 +10,22 @@
  */
 
 /* ============================================
+   HERO WRAPPER — Full-width background
+   ============================================ */
+
+.channel-hero-section {
+  width: 100%;
+  background: var(--bg-primary);
+  position: relative;
+}
+
+.channel-hero-section .hero {
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============================================
    HERO — TWO COLUMN LAYOUT (Channel Specific)
    ============================================ */
 

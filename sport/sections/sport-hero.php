@@ -45,6 +45,7 @@ $live_desc = spl_str('viewers streaming right now');
 $cta_url = '#pricing';
 ?>
 
+<div class="sport-hero-section">
 <div class="bg-aurora"></div>
 
 <section class="hero">
@@ -134,3 +135,4 @@ $cta_url = '#pricing';
             <?php endif; ?>
         </div>
 </section>
+</div><!-- /.sport-hero-section -->

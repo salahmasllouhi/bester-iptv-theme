@@ -10,6 +10,22 @@
  */
 
 /* ============================================
+   HERO WRAPPER — Full-width background
+   ============================================ */
+
+.series-hero-section {
+  width: 100%;
+  background: var(--bg-primary);
+  position: relative;
+}
+
+.series-hero-section .hero {
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============================================
    HERO — TWO COLUMN LAYOUT (Series Specific)
    ============================================ */
 
