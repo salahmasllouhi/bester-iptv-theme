@@ -37,11 +37,10 @@
   max-width: 45%;
 }
 
-/* Series hero padding — equal on both sides */
 .hero {
-  margin: 0;
-  padding-left: 6%;
-  padding-right: 4%;
+  margin: 0 auto;
+  padding-left: 5%;
+  padding-right: 5%;
   gap: 3rem;
   display: flex;
   flex-direction: column;
