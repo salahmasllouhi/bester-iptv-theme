@@ -579,6 +579,11 @@ require_once get_template_directory() . '/inc/admin-bulk-editor.php';
 // Include Price Sync Utility (for syncing variation prices from main site to subsites)
 require_once get_template_directory() . '/inc/sync-prices.php';
 
+// Include Polylang string helpers for channel / sport / series templates
+require_once get_template_directory() . '/inc/channel-strings.php';
+require_once get_template_directory() . '/sport/inc/sport-strings.php';
+require_once get_template_directory() . '/series/inc/series-strings.php';
+
 /**
  * WooCommerce: Redirect all cart operations to checkout page
  * Since the cart page is disabled, we redirect to checkout instead
