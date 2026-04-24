@@ -51,14 +51,6 @@ $cta_url = '#pricing';
 <section class="hero">
     <!-- Top Zone: Centered Content -->
     <div class="hero-top">
-        <!-- Live Viewer Counter -->
-        <div class="hero-live-counter">
-            <span class="live-dot"></span>
-            <span class="live-counter-label"><?php echo esc_html($live_label); ?></span>
-            <span class="stat-value live-counter-value" id="liveCounter">42,537</span>
-            <span class="live-counter-desc"><?php echo esc_html($live_desc); ?></span>
-        </div>
-
         <!-- Badges -->
         <div class="hero-badges-container">
             <!-- Badge 1: Sport Type -->

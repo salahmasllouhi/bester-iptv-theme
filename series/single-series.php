@@ -27,7 +27,6 @@ $shared_css = [
     'base.css',
     'header.css',
     'footer.css',
-    'hero.css',
     'pricing.css',
     'faq.css',
     'cta.css',
