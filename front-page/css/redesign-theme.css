@@ -10,31 +10,31 @@
    00 - VARIABLES & BASE
    ------------------------------------------- */
 :root {
-  --color-navy:         #0F2847;
-  --color-indigo:       #5B4FE8;
-  --color-indigo-hover: #4A3FD4;
-  --color-teal:         #00D4AA;
-  --color-coral:        #FF6B4A;
-  --color-gold:         #FFB830;
-  --color-live:         #FF4757;
+    --color-navy: #0F2847;
+    --color-indigo: #5B4FE8;
+    --color-indigo-hover: #4A3FD4;
+    --color-teal: #00D4AA;
+    --color-coral: #FF6B4A;
+    --color-gold: #FFB830;
+    --color-live: #FF4757;
 
-  --bg-page:            #F5F5FF;
-  --bg-section:         #EBEBFF;
-  --bg-card:            #FFFFFF;
-  --bg-nav:             #FFFFFF;
-  --bg-dark:            #0F2847;
-  --bg-footer:          #091E38;
+    --bg-page: #F5F5FF;
+    --bg-section: #EBEBFF;
+    --bg-card: #FFFFFF;
+    --bg-nav: #FFFFFF;
+    --bg-dark: #0F2847;
+    --bg-footer: #091E38;
 
-  --text-primary:       #0F2847;
-  --text-secondary:     #4A6282;
-  --text-muted:         #8B9DB8;
-  --text-inverse:       #FFFFFF;
-  --text-nav:           #4A4470;
+    --text-primary: #0F2847;
+    --text-secondary: #4A6282;
+    --text-muted: #8B9DB8;
+    --text-inverse: #FFFFFF;
+    --text-nav: #4A4470;
 
-  --border-subtle:      rgba(15, 40, 71, 0.07);
-  --border-indigo:      rgba(91, 79, 232, 0.15);
-  --border-teal:        rgba(0, 212, 170, 0.35);
-  --color-teal-text:    #0a9e82;
+    --border-subtle: rgba(15, 40, 71, 0.07);
+    --border-indigo: rgba(91, 79, 232, 0.15);
+    --border-teal: rgba(0, 212, 170, 0.35);
+    --color-teal-text: #0a9e82;
     --border-medium: rgba(15, 40, 71, 0.12);
     --shadow-sm: 0 2px 8px rgba(15, 40, 71, 0.06);
     --shadow-md: 0 8px 32px rgba(15, 40, 71, 0.08);
@@ -196,9 +196,9 @@ body {
     left: 0;
     z-index: -1;
     pointer-events: none;
-    background-image: 
-        radial-gradient(circle 400px at 20% 80%, rgba(0,212,170,0.2), transparent),
-        radial-gradient(circle 400px at 80% 20%, rgba(91,79,232,0.2), transparent);
+    background-image:
+        radial-gradient(circle 400px at 20% 80%, rgba(0, 212, 170, 0.2), transparent),
+        radial-gradient(circle 400px at 80% 20%, rgba(91, 79, 232, 0.2), transparent);
     background-size: 100% 100%, 100% 100%;
 }
 
