@@ -33,7 +33,7 @@
 }
 
 .site-header .nav-links a:hover {
-    color: var(--accent-primary);
+    color: var(--color-teal);
 }
 
 .site-header .mobile-menu-toggle span {
@@ -54,7 +54,7 @@
 }
 
 .logo span {
-    color: var(--accent-primary);
+    color: var(--color-teal);
 }
 
 .logo-img {
@@ -98,7 +98,7 @@
 }
 
 .header-cart:hover {
-    color: var(--accent-primary);
+    color: var(--color-teal);
     background: rgba(0, 212, 170, 0.1);
 }
 
@@ -106,7 +106,7 @@
     position: absolute;
     top: -2px;
     right: -2px;
-    background: var(--accent-primary);
+    background: var(--color-teal);
     color: #0F2847;
     font-size: 0.625rem;
     font-weight: 700;
@@ -120,12 +120,12 @@
 }
 
 .mobile-cart-link {
-    color: var(--accent-primary) !important;
+    color: var(--color-teal) !important;
     font-weight: 600 !important;
 }
 
 .mobile-cart-link .cart-count {
-    color: var(--accent-primary);
+    color: var(--color-teal);
 }
 
 .nav-right {
@@ -225,11 +225,11 @@
 
 .nav-btn-outline {
     border: 1px solid var(--border-medium);
-    color: var(--primary-deep);
+    color: var(--color-navy);
 }
 
 .nav-btn-primary {
-    background: linear-gradient(135deg, var(--accent-primary), var(--primary-light));
+    background: linear-gradient(135deg, var(--color-teal), var(--color-indigo-hover));
     color: #0F2847;
     box-shadow: var(--shadow-glow);
 }

@@ -10,30 +10,30 @@
    00 - VARIABLES & BASE
    ------------------------------------------- */
 :root {
-    /* Primary Blues - Trust & Professionalism */
-    --primary-deep: #0F2847;
-    --primary-mid: #1A4B7C;
-    --primary-light: #3D7AB8;
+  --color-navy:         #0F2847;
+  --color-indigo:       #5B4FE8;
+  --color-indigo-hover: #4A3FD4;
+  --color-teal:         #00D4AA;
+  --color-coral:        #FF6B4A;
+  --color-gold:         #FFB830;
+  --color-live:         #FF4757;
 
-    /* Accent Colors - Energy & Action */
-    --accent-primary: #00D4AA;
-    --accent-glow: #00F5C4;
-    --accent-warm: #FF6B4A;
-    --accent-gold: #FFB830;
+  --bg-page:            #F5F5FF;
+  --bg-section:         #EBEBFF;
+  --bg-card:            #FFFFFF;
+  --bg-nav:             #FFFFFF;
+  --bg-dark:            #0F2847;
+  --bg-footer:          #091E38;
 
-    /* Background Colors - Light Mode */
-    --bg-primary: #FAFCFF;
-    --bg-secondary: #F0F4FA;
-    --bg-card: #FFFFFF;
+  --text-primary:       #0F2847;
+  --text-secondary:     #4A6282;
+  --text-muted:         #8B9DB8;
+  --text-inverse:       #FFFFFF;
+  --text-nav:           #4A4470;
 
-    /* Text Colors */
-    --text-primary: #0F2847;
-    --text-secondary: #4A6282;
-    --text-muted: #8B9DB8;
-    --text-inverse: #FFFFFF;
-
-    /* Borders & Shadows */
-    --border-subtle: rgba(15, 40, 71, 0.08);
+  --border-subtle:      rgba(15, 40, 71, 0.07);
+  --border-indigo:      rgba(91, 79, 232, 0.15);
+  --border-teal:        rgba(0, 212, 170, 0.35);
     --border-medium: rgba(15, 40, 71, 0.12);
     --shadow-sm: 0 2px 8px rgba(15, 40, 71, 0.06);
     --shadow-md: 0 8px 32px rgba(15, 40, 71, 0.08);
@@ -59,7 +59,7 @@
 body {
     font-family: 'DM Sans', sans-serif;
     font-weight: 500;
-    background: var(--bg-primary);
+    background: var(--bg-page);
     color: var(--text-primary);
     line-height: 1.6;
 }
@@ -82,7 +82,7 @@ body {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--accent-primary), var(--primary-light));
+    background: linear-gradient(135deg, var(--color-teal), var(--color-indigo-hover));
     color: #ffffff !important;
     box-shadow: var(--shadow-glow);
 }
@@ -99,7 +99,7 @@ body {
 }
 
 .btn-secondary:hover {
-    border-color: var(--accent-primary);
+    border-color: var(--color-teal);
     background: rgba(0, 212, 170, 0.05);
 }
 
@@ -116,7 +116,7 @@ body {
     border-radius: var(--radius-full);
     font-size: 0.875rem;
     font-weight: 600;
-    color: var(--accent-primary);
+    color: var(--color-teal);
     margin-bottom: var(--space-sm);
     letter-spacing: 0.02em;
 }
@@ -129,7 +129,7 @@ body {
 }
 
 .section-title .gradient-text {
-    background: linear-gradient(135deg, var(--accent-primary), var(--primary-light));
+    background: linear-gradient(135deg, var(--color-teal), var(--color-indigo-hover));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -236,7 +236,7 @@ body {
     align-items: center;
     gap: 8px;
     padding: 8px 16px;
-    background: var(--primary-deep);
+    background: var(--color-navy);
     /* Dark text-safe background */
     border-radius: var(--radius-full);
     font-size: 0.85rem;
@@ -247,7 +247,7 @@ body {
 }
 
 .hero-rating .stars {
-    color: var(--accent-gold);
+    color: var(--color-gold);
     letter-spacing: 1px;
 }
 
@@ -270,14 +270,14 @@ body {
     font-size: 0.85rem;
     /* Match font size to rating */
     font-weight: 600;
-    color: var(--accent-primary);
+    color: var(--color-teal);
     margin-bottom: var(--space-sm);
     vertical-align: middle;
     /* Better inline alignment */
 }
 
 .hero-savings svg {
-    color: var(--accent-primary);
+    color: var(--color-teal);
     width: 16px;
     height: 16px;
 }
@@ -302,7 +302,7 @@ body {
 }
 
 .hero h1 .gradient-text {
-    background: linear-gradient(135deg, var(--accent-primary), var(--primary-light));
+    background: linear-gradient(135deg, var(--color-teal), var(--color-indigo-hover));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -345,12 +345,12 @@ body {
 }
 
 .hero-feature:hover {
-    border-color: var(--accent-primary);
+    border-color: var(--color-teal);
     background: rgba(0, 212, 170, 0.05);
 }
 
 .hero-feature svg {
-    color: var(--accent-primary);
+    color: var(--color-teal);
     flex-shrink: 0;
 }
 
@@ -391,7 +391,7 @@ body {
     top: 0;
     bottom: 0;
     width: 4px;
-    background: var(--accent-primary);
+    background: var(--color-teal);
     opacity: 0;
     transition: opacity 0.3s ease;
 }
@@ -461,11 +461,11 @@ body {
 }
 
 .stat-value.price {
-    color: var(--accent-primary);
+    color: var(--color-teal);
 }
 
 .stat-value.channels {
-    color: var(--accent-primary);
+    color: var(--color-teal);
 }
 
 .stat-desc {
@@ -550,7 +550,7 @@ body {
    ------------------------------------------- */
 .logos-bar {
     padding: var(--space-xl) var(--space-lg);
-    background: var(--bg-secondary);
+    background: var(--bg-section);
     border-top: 1px solid var(--border-subtle);
     border-bottom: 1px solid var(--border-subtle);
 }
@@ -643,7 +643,7 @@ h3 {
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, var(--accent-primary), var(--primary-light));
+    background: linear-gradient(90deg, var(--color-teal), var(--color-indigo-hover));
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.4s ease;
@@ -667,7 +667,7 @@ h3 {
     align-items: center;
     justify-content: center;
     margin-bottom: var(--space-md);
-    color: var(--accent-primary);
+    color: var(--color-teal);
 }
 
 .feature-title {
@@ -688,7 +688,7 @@ h3 {
    ------------------------------------------- */
 .sports {
     padding: var(--space-2xl) var(--space-lg);
-    background: var(--bg-secondary);
+    background: var(--bg-section);
 }
 
 .sports-container {
@@ -745,7 +745,7 @@ h3 {
     border-radius: var(--radius-full);
     font-size: 0.75rem;
     font-weight: 700;
-    color: var(--accent-primary);
+    color: var(--color-teal);
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
@@ -754,7 +754,7 @@ h3 {
     content: '';
     width: 6px;
     height: 6px;
-    background: var(--accent-primary);
+    background: var(--color-teal);
     border-radius: 50%;
     animation: pulse 2s infinite;
 }
@@ -794,12 +794,12 @@ h3 {
 }
 
 .comparison-card.without {
-    background: var(--bg-secondary);
+    background: var(--bg-section);
     border: 1px solid var(--border-subtle);
 }
 
 .comparison-card.with {
-    background: linear-gradient(135deg, var(--primary-deep), var(--primary-mid));
+    background: linear-gradient(135deg, var(--color-navy), var(--color-indigo));
     color: white;
     overflow: hidden;
 }
@@ -830,11 +830,11 @@ h3 {
 }
 
 .comparison-dot.red {
-    background: var(--accent-warm);
+    background: var(--color-coral);
 }
 
 .comparison-dot.green {
-    background: var(--accent-glow);
+    background: var(--color-teal);
 }
 
 .comparison-label {
@@ -877,7 +877,7 @@ h3 {
 }
 
 .comparison-item-value.included {
-    color: var(--accent-glow);
+    color: var(--color-teal);
 }
 
 .comparison-total {
@@ -911,11 +911,11 @@ h3 {
 }
 
 .comparison-total-value.expensive {
-    color: var(--accent-warm);
+    color: var(--color-coral);
 }
 
 .comparison-total-value.cheap {
-    color: var(--accent-glow);
+    color: var(--color-teal);
 }
 
 .comparison-per-month {
@@ -928,7 +928,7 @@ h3 {
     text-align: center;
     padding: var(--space-lg);
     background: linear-gradient(135deg, rgba(0, 212, 170, 0.08), rgba(26, 75, 124, 0.06));
-    border: 2px dashed var(--accent-primary);
+    border: 2px dashed var(--color-teal);
     border-radius: var(--radius-xl);
 }
 
@@ -941,7 +941,7 @@ h3 {
 .savings-value {
     font-size: 3.5rem;
     font-weight: 800;
-    color: var(--accent-primary);
+    color: var(--color-teal);
     font-family: 'DM Sans', sans-serif;
     letter-spacing: -0.02em;
 }
@@ -967,7 +967,7 @@ h3 {
    ------------------------------------------- */
 .steps {
     padding: var(--space-2xl) var(--space-lg);
-    background: var(--bg-secondary);
+    background: var(--bg-section);
 }
 
 .steps-container {
@@ -989,7 +989,7 @@ h3 {
     left: calc(16.66% + 50px);
     right: calc(16.66% + 50px);
     height: 3px;
-    background: linear-gradient(90deg, var(--accent-primary), var(--primary-light), var(--accent-primary));
+    background: linear-gradient(90deg, var(--color-teal), var(--color-indigo-hover), var(--color-teal));
     border-radius: 3px;
     z-index: 0;
 }
@@ -1004,7 +1004,7 @@ h3 {
     width: 100px;
     height: 100px;
     margin: 0 auto var(--space-md);
-    background: linear-gradient(135deg, var(--accent-primary), var(--primary-light));
+    background: linear-gradient(135deg, var(--color-teal), var(--color-indigo-hover));
     border-radius: 50%;
     display: flex;
     flex-direction: column;
@@ -1105,7 +1105,7 @@ h3 {
    ------------------------------------------- */
 .faq {
     padding: var(--space-2xl) var(--space-lg);
-    background: var(--bg-secondary);
+    background: var(--bg-section);
 }
 
 .faq-container {
@@ -1149,12 +1149,12 @@ h3 {
 }
 
 .faq-question:hover {
-    background: var(--bg-secondary);
+    background: var(--bg-section);
 }
 
 .faq-icon {
     font-size: 1.5rem;
-    color: var(--accent-primary);
+    color: var(--color-teal);
     transition: transform 0.3s ease;
     font-weight: 300;
 }
@@ -1184,7 +1184,7 @@ h3 {
    ------------------------------------------- */
 .cta {
     padding: var(--space-2xl) var(--space-lg);
-    background: linear-gradient(135deg, var(--primary-deep), var(--primary-mid));
+    background: linear-gradient(135deg, var(--color-navy), var(--color-indigo));
     text-align: center;
     color: white;
     position: relative;
@@ -1225,7 +1225,7 @@ h3 {
 
 .cta .btn-primary {
     background: white;
-    color: var(--primary-deep);
+    color: var(--color-navy);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
@@ -1251,7 +1251,7 @@ h3 {
 }
 
 .cta-feature svg {
-    color: var(--accent-glow);
+    color: var(--color-teal);
 }
 
 @media (max-width: 768px) {

@@ -289,7 +289,7 @@
    ============================================ */
 .cta {
     padding: var(--space-2xl) var(--space-lg);
-    background: linear-gradient(135deg, var(--primary-deep), var(--primary-mid));
+    background: linear-gradient(135deg, var(--color-navy), var(--color-indigo));
     text-align: center;
     color: #ffffff;
     position: relative;
@@ -332,7 +332,7 @@
 
 .cta .btn-primary {
     background: #ffffff !important;
-    color: var(--primary-deep) !important;
+    color: var(--color-navy) !important;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
@@ -360,7 +360,7 @@
 }
 
 .cta-feature svg {
-    color: var(--accent-glow);
+    color: var(--color-teal);
 }
 
 /* Responsive */

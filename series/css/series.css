@@ -15,7 +15,7 @@
 
 .series-hero-section {
   width: 100%;
-  background: var(--bg-primary);
+  background: var(--bg-page);
   position: relative;
 }
 
@@ -467,7 +467,7 @@
   display: block;
   width: 32px;
   height: 3px;
-  background: var(--accent-primary, #df0000);
+  background: var(--color-teal, #df0000);
   margin: 0 auto 0.75rem;
   border-radius: 2px;
 }

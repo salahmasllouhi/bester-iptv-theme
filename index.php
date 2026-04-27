@@ -26,7 +26,7 @@
         /* Minimal overrides if needed */
         body {
             font-family: 'Outfit', 'Inter', -apple-system, sans-serif;
-            background: var(--bg-secondary);
+            background: var(--bg-section);
             color: var(--text-primary);
             margin: 0;
             padding: 0;

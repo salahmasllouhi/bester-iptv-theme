@@ -128,7 +128,7 @@ $full_value_usd = $one_month_usd * $total;
 
 <style>
     .offer-pricing {
-        background: var(--bg-primary);
+        background: var(--bg-page);
         padding: 5rem 1.5rem;
     }
 
@@ -155,12 +155,12 @@ $full_value_usd = $one_month_usd * $total;
         left: 0;
         right: 0;
         height: 4px;
-        background: linear-gradient(90deg, var(--accent-primary), var(--primary-light));
+        background: linear-gradient(90deg, var(--color-teal), var(--color-indigo-hover));
     }
 
     .offer-pricing__badge {
         display: inline-block;
-        background: linear-gradient(135deg, var(--accent-gold), #FF8F3F);
+        background: linear-gradient(135deg, var(--color-gold), #FF8F3F);
         color: #fff;
         font-size: 0.875rem;
         font-weight: 700;
@@ -226,7 +226,7 @@ $full_value_usd = $one_month_usd * $total;
 
     .offer-pricing__strikethrough {
         text-decoration: line-through;
-        color: var(--accent-warm);
+        color: var(--color-coral);
         font-weight: 600;
     }
 
@@ -250,7 +250,7 @@ $full_value_usd = $one_month_usd * $total;
 
     .offer-pricing__guarantee svg {
         flex-shrink: 0;
-        color: var(--accent-primary);
+        color: var(--color-teal);
     }
 
     @media (max-width: 480px) {

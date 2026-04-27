@@ -6,19 +6,19 @@
 
 :root {
     /* Primary Blues - Trust & Professionalism */
-    --primary-deep: #0F2847;
-    --primary-mid: #1A4B7C;
-    --primary-light: #3D7AB8;
+    --color-navy: #0F2847;
+    --color-indigo: #1A4B7C;
+    --color-indigo-hover: #3D7AB8;
     
     /* Accent Colors - Energy & Action */
-    --accent-primary: #00D4AA;
-    --accent-glow: #00F5C4;
-    --accent-warm: #FF6B4A;
-    --accent-gold: #FFB830;
+    --color-teal: #00D4AA;
+    --color-teal: #00F5C4;
+    --color-coral: #FF6B4A;
+    --color-gold: #FFB830;
     
     /* Background Colors - Light Mode */
-    --bg-primary: #FAFCFF;
-    --bg-secondary: #F0F4FA;
+    --bg-page: #FAFCFF;
+    --bg-section: #F0F4FA;
     --bg-card: #FFFFFF;
     
     /* Text Colors */
@@ -66,7 +66,7 @@ html {
 
 body {
     font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--bg-primary);
+    background: var(--bg-page);
     color: var(--text-primary);
     line-height: 1.6;
     overflow-x: hidden;
@@ -126,7 +126,7 @@ body {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--accent-primary), var(--primary-light));
+    background: linear-gradient(135deg, var(--color-teal), var(--color-indigo-hover));
     color: white;
     box-shadow: var(--shadow-glow);
 }
@@ -143,7 +143,7 @@ body {
 }
 
 .btn-secondary:hover {
-    border-color: var(--accent-primary);
+    border-color: var(--color-teal);
     background: rgba(0, 212, 170, 0.05);
 }
 
@@ -162,7 +162,7 @@ body {
     border-radius: var(--radius-full);
     font-size: 0.875rem;
     font-weight: 600;
-    color: var(--accent-primary);
+    color: var(--color-teal);
     margin-bottom: var(--space-sm);
     letter-spacing: 0.02em;
 }
@@ -175,7 +175,7 @@ body {
 }
 
 .section-title .gradient-text {
-    background: linear-gradient(135deg, var(--accent-primary), var(--primary-light));
+    background: linear-gradient(135deg, var(--color-teal), var(--color-indigo-hover));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;

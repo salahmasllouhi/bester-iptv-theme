@@ -58,7 +58,7 @@ if (!empty($offer_features_rows)) {
 
 <style>
     .offer-features {
-        background: var(--bg-primary);
+        background: var(--bg-page);
         padding: 5rem 1.5rem;
     }
 

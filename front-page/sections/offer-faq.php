@@ -82,7 +82,7 @@ if (!empty($offer_faq_rows)) {
 
 <style>
     .offer-faq {
-        background: var(--bg-secondary);
+        background: var(--bg-section);
         padding: 5rem 1.5rem;
     }
 
@@ -102,7 +102,7 @@ if (!empty($offer_faq_rows)) {
     }
 
     .offer-faq__item.open {
-        border-color: var(--accent-primary);
+        border-color: var(--color-teal);
         box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.08);
     }
 
@@ -133,7 +133,7 @@ if (!empty($offer_faq_rows)) {
 
     .offer-faq__item.open .offer-faq__icon {
         transform: rotate(180deg);
-        color: var(--accent-primary);
+        color: var(--color-teal);
     }
 
     .offer-faq__answer {
@@ -154,7 +154,7 @@ if (!empty($offer_faq_rows)) {
     }
 
     .offer-faq__answer-inner a {
-        color: var(--accent-primary);
+        color: var(--color-teal);
         text-decoration: underline;
     }
 

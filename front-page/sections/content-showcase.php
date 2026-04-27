@@ -51,7 +51,7 @@
     /* Content Showcase Styles - Split Layout */
     .content-showcase {
         padding: var(--space-md) var(--space-lg);
-        background: var(--bg-secondary);
+        background: var(--bg-section);
         /* Light background to separate from hero */
         overflow: hidden;
     }
@@ -94,7 +94,7 @@
         width: 24px;
         height: 24px;
         background: rgba(0, 212, 170, 0.15);
-        color: var(--accent-primary);
+        color: var(--color-teal);
         border-radius: 50%;
         font-weight: 800;
         font-size: 0.8rem;

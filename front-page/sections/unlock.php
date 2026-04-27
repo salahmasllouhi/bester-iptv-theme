@@ -75,7 +75,7 @@
     }
 
     .device-text-item:hover {
-        color: var(--accent-primary);
+        color: var(--color-teal);
         opacity: 1;
         transform: scale(1.1);
     }

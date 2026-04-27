@@ -34,7 +34,7 @@
 <style>
     /* Inline critical styles for logo sizing */
     .logos-bar {
-        background: var(--primary-deep);
+        background: var(--color-navy);
         padding: 2rem 0;
         margin-top: -2px;
         overflow: hidden;
