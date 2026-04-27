@@ -61,14 +61,10 @@ body {
     font-family: 'DM Sans', sans-serif;
     font-weight: 500;
     background: #ffffff;
-    background-image: 
-        linear-gradient(to right, rgba(71,85,105,0.3) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(71,85,105,0.3) 1px, transparent 1px),
-        radial-gradient(circle 250px at 50% 50%, rgba(139,92,246,0.25) 0%, rgba(139,92,246,0.1) 40%, transparent 80%);
-    background-size: 32px 32px, 32px 32px, 100% 100%;
-    background-attachment: fixed;
     color: var(--text-primary);
     line-height: 1.6;
+    position: relative;
+    min-height: 100vh;
 }
 
 /* Base Buttons */
@@ -193,7 +189,17 @@ body {
 
 /* Aurora Background (Moved from base to avoid global issues, applied to hero or body) */
 .bg-aurora {
-    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: 
+        radial-gradient(circle 400px at 20% 80%, rgba(0,212,170,0.2), transparent),
+        radial-gradient(circle 400px at 80% 20%, rgba(91,79,232,0.2), transparent);
+    background-size: 100% 100%, 100% 100%;
 }
 
 .bg-aurora::before {
