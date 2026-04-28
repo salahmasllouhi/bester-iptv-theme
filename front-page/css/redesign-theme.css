@@ -397,12 +397,13 @@ body {
 .stat-card {
     background: var(--bg-card);
     border: 1px solid var(--border-subtle);
-    height: 200px;
     border-radius: var(--radius-lg);
     padding: var(--space-md) var(--space-lg);
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    width: clamp(220px, 30vw, 320px);
+    min-height: clamp(150px, 18vw, 220px);
 }
 
 .stat-card::before {
