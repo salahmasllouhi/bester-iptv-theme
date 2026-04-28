@@ -127,14 +127,16 @@ body {
 
 @media (max-width: 1440px) {
     .section-box {
-        margin: 0 var(--space-md);
+        margin: 0 auto;
+        padding-left: var(--space-md);
+        padding-right: var(--space-md);
     }
 }
 
 @media (max-width: 768px) {
     .section-box {
+        margin: 0 auto;
         padding: var(--space-xl) var(--space-md);
-        margin: 0 var(--space-sm);
         border-radius: var(--radius-lg);
     }
 }
@@ -617,13 +619,15 @@ h3 {
 
 @media (max-width: 1440px) {
     .features-inner {
-        margin: 0 var(--space-md);
+        margin: 0 auto;
+        padding-left: var(--space-md);
+        padding-right: var(--space-md);
     }
 }
 
 @media (max-width: 768px) {
     .features-inner {
-        margin: 0 var(--space-sm);
+        margin: 0 auto;
         padding: var(--space-xl) var(--space-md);
     }
 }
@@ -829,13 +833,15 @@ h3 {
 
 @media (max-width: 1440px) {
     .comparison-inner {
-        margin: 0 var(--space-md);
+        margin: 0 auto;
+        padding-left: var(--space-md);
+        padding-right: var(--space-md);
     }
 }
 
 @media (max-width: 768px) {
     .comparison-inner {
-        margin: 0 var(--space-sm);
+        margin: 0 auto;
         padding: var(--space-xl) var(--space-md);
     }
 }
@@ -1039,13 +1045,15 @@ h3 {
 
 @media (max-width: 1440px) {
     .steps .steps-container {
-        margin: 0 var(--space-md);
+        margin: 0 auto;
+        padding-left: var(--space-md);
+        padding-right: var(--space-md);
     }
 }
 
 @media (max-width: 768px) {
     .steps .steps-container {
-        margin: 0 var(--space-sm);
+        margin: 0 auto;
         border-radius: var(--radius-lg);
         padding: var(--space-xl) var(--space-md);
     }
@@ -1157,13 +1165,15 @@ h3 {
 
 @media (max-width: 1440px) {
     .devices-inner {
-        margin: 0 var(--space-md);
+        margin: 0 auto;
+        padding-left: var(--space-md);
+        padding-right: var(--space-md);
     }
 }
 
 @media (max-width: 768px) {
     .devices-inner {
-        margin: 0 var(--space-sm);
+        margin: 0 auto;
         padding: var(--space-xl) var(--space-md);
     }
 }
@@ -1236,13 +1246,15 @@ h3 {
 
 @media (max-width: 1440px) {
     .faq-container {
-        margin: 0 var(--space-md);
+        margin: 0 auto;
+        padding-left: var(--space-md);
+        padding-right: var(--space-md);
     }
 }
 
 @media (max-width: 768px) {
     .faq-container {
-        margin: 0 var(--space-sm);
+        margin: 0 auto;
         padding: var(--space-xl) var(--space-md);
     }
 }
@@ -1354,13 +1366,15 @@ h3 {
 
 @media (max-width: 1440px) {
     .cta-box {
-        margin: 0 var(--space-md);
+        margin: 0 auto;
+        padding-left: var(--space-md);
+        padding-right: var(--space-md);
     }
 }
 
 @media (max-width: 768px) {
     .cta-box {
-        margin: 0 var(--space-sm);
+        margin: 0 auto;
         border-radius: var(--radius-lg);
         padding: var(--space-xl) var(--space-md);
     }
