@@ -1038,19 +1038,14 @@ h3 {
 }
 
 @media (max-width: 1440px) {
-    .steps {
-        padding-left: var(--space-md);
-        padding-right: var(--space-md);
+    .steps .steps-container {
+        margin: 0 var(--space-md);
     }
 }
 
 @media (max-width: 768px) {
-    .steps {
-        padding-left: var(--space-sm);
-        padding-right: var(--space-sm);
-    }
-
     .steps .steps-container {
+        margin: 0 var(--space-sm);
         border-radius: var(--radius-lg);
         padding: var(--space-xl) var(--space-md);
     }
@@ -1240,19 +1235,14 @@ h3 {
 }
 
 @media (max-width: 1440px) {
-    .faq {
-        padding-left: var(--space-md);
-        padding-right: var(--space-md);
+    .faq-container {
+        margin: 0 var(--space-md);
     }
 }
 
 @media (max-width: 768px) {
-    .faq {
-        padding-left: var(--space-sm);
-        padding-right: var(--space-sm);
-    }
-
     .faq-container {
+        margin: 0 var(--space-sm);
         padding: var(--space-xl) var(--space-md);
     }
 }
@@ -1363,19 +1353,14 @@ h3 {
 }
 
 @media (max-width: 1440px) {
-    .cta {
-        padding-left: var(--space-md);
-        padding-right: var(--space-md);
+    .cta-box {
+        margin: 0 var(--space-md);
     }
 }
 
 @media (max-width: 768px) {
-    .cta {
-        padding-left: var(--space-sm);
-        padding-right: var(--space-sm);
-    }
-
     .cta-box {
+        margin: 0 var(--space-sm);
         border-radius: var(--radius-lg);
         padding: var(--space-xl) var(--space-md);
     }

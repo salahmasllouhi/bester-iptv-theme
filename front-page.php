@@ -44,7 +44,7 @@ $sections = array(
     'header',      // Front-page header (source of truth for all headers)
     'hero',        // Redesigned
     'content-showcase', // New Section
-    'brands',      // Redesigned (Logos)
+    // 'brands' removed per user request
     'features',    // Redesigned
     'sports',      // Redesigned
     'comparison',  // Redesigned (Price Comparison)

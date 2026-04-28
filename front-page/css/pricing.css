@@ -1,7 +1,7 @@
 /* Pricing Section Styles - Configurator */
 .pricing {
     padding: var(--space-lg) 0;
-    background: transparent;
+    background: #ffffff !important;
 }
 
 .pricing .container {
@@ -13,19 +13,14 @@
 }
 
 @media (max-width: 1440px) {
-    .pricing {
-        padding-left: var(--space-md);
-        padding-right: var(--space-md);
+    .pricing .container {
+        margin: 0 var(--space-md);
     }
 }
 
 @media (max-width: 768px) {
-    .pricing {
-        padding-left: var(--space-sm);
-        padding-right: var(--space-sm);
-    }
-
     .pricing .container {
+        margin: 0 var(--space-sm);
         padding: var(--space-xl) var(--space-md);
     }
 }
