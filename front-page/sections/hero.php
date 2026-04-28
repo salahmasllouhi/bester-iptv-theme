@@ -24,7 +24,8 @@
 
         <h1>
             <?php echo iptv_text('hero_title', 'Nordic IPTV.'); ?><br>
-            <span class="gradient-text"><?php echo iptv_text('hero_title_span', 'Premium Streaming Experience.'); ?></span><br>
+            <span
+                class="gradient-text"><?php echo iptv_text('hero_title_span', 'Premium Streaming Experience.'); ?></span><br>
             <?php echo iptv_text('hero_title_3', 'Any Device, No Limits'); ?>
         </h1>
 
@@ -47,26 +48,31 @@
         <div class="hero-stats">
             <!-- Card 1: Live Now (Animated) -->
             <div class="stat-card stat-live">
-                <div class="stat-value" id="liveCounter"><?php echo esc_html(iptv_text('hero_stat_1_val', '42,537')); ?></div>
+                <div class="stat-value" id="liveCounter"><?php echo esc_html(iptv_text('hero_stat_1_val', '42,537')); ?>
+                </div>
                 <div class="stat-header">
                     <span class="live-dot"></span>
                     <span class="stat-label">LIVE NOW</span>
                 </div>
-                <div class="stat-desc"><?php echo esc_html(iptv_text('hero_stat_1_desc', 'viewers streaming right now')); ?></div>
+                <div class="stat-desc"><?php echo esc_html(iptv_text('hero_stat_1_desc', 'active viewers')); ?></div>
             </div>
 
             <!-- Card 2: PPV Events -->
             <div class="stat-card stat-ppv">
                 <div class="stat-value price"><?php echo esc_html(iptv_text('hero_stat_2_val', '$0')); ?></div>
-                <div class="stat-label-large"><?php echo esc_html(iptv_text('hero_stat_2_label', 'PPV Events')); ?></div>
-                <div class="stat-desc"><?php echo esc_html(iptv_text('hero_stat_2_desc', 'UFC, Boxing - All Included')); ?></div>
+                <div class="stat-label-large"><?php echo esc_html(iptv_text('hero_stat_2_label', 'PPV Events')); ?>
+                </div>
+                <div class="stat-desc">
+                    <?php echo esc_html(iptv_text('hero_stat_2_desc', 'UFC, Boxing - All Included')); ?></div>
             </div>
 
             <!-- Card 3: Live Channels -->
             <div class="stat-card stat-channels">
                 <div class="stat-value channels"><?php echo esc_html(iptv_text('hero_stat_3_val', '35,000+')); ?></div>
-                <div class="stat-label-large"><?php echo esc_html(iptv_text('hero_stat_3_label', 'Live Channels')); ?></div>
-                <div class="stat-desc"><?php echo esc_html(iptv_text('hero_stat_3_desc', 'From 198 countries')); ?></div>
+                <div class="stat-label-large"><?php echo esc_html(iptv_text('hero_stat_3_label', 'Live Channels')); ?>
+                </div>
+                <div class="stat-desc"><?php echo esc_html(iptv_text('hero_stat_3_desc', 'From 198 countries')); ?>
+                </div>
             </div>
         </div>
     </div>
