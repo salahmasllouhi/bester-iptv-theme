@@ -1172,7 +1172,7 @@ h3 {
 .devices-inner {
     max-width: 1400px;
     margin: 0 auto;
-    padding: var(--space-2xl) var(--space-xl);
+    padding: var(--space-2xl) var(--space-xl) 0.1rem var(--space-xl);
 }
 
 @media (max-width: 1440px) {
