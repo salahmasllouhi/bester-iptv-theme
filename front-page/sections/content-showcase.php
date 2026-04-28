@@ -50,24 +50,41 @@
 <style>
     /* Content Showcase Styles - Split Layout */
     .content-showcase {
-        padding: var(--space-md) var(--space-lg);
-        background: var(--bg-section);
-        /* Light background to separate from hero */
-        overflow: hidden;
+        padding: var(--space-lg) 0;
+        background: transparent;
+        overflow: visible;
     }
 
     .showcase-container {
         max-width: 1400px;
         margin: 0 auto;
+        background: var(--bg-section);
+        border-radius: var(--radius-xl);
+        padding: var(--space-2xl) var(--space-xl);
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: var(--space-2xl);
         align-items: center;
+        overflow: hidden;
+    }
+
+    @media (max-width: 1440px) {
+        .showcase-container {
+            margin: 0 var(--space-md);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .showcase-container {
+            margin: 0 var(--space-sm);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl) var(--space-md);
+        }
     }
 
     /* Text Side */
     .showcase-content {
-        padding-right: var(--space-lg);
+        padding-right: var(--space-md);
     }
 
     .showcase-features {

@@ -1,15 +1,37 @@
 /* Reviews Section Styles */
 .reviews {
-    padding: 2.5rem 0;
-    /* Reduced padding */
+    padding: var(--space-lg) 0;
+    background: transparent;
+    overflow: visible;
+}
+
+.reviews .container {
+    max-width: 1400px;
+    margin: 0 auto;
     background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    padding: var(--space-2xl) 0;
     overflow: hidden;
-    /* Hide overflow for carousel */
+}
+
+@media (max-width: 1440px) {
+    .reviews .container {
+        margin: 0 var(--space-md);
+    }
+}
+
+@media (max-width: 768px) {
+    .reviews .container {
+        margin: 0 var(--space-sm);
+        border-radius: var(--radius-lg);
+        padding: var(--space-xl) 0;
+    }
 }
 
 .reviews-header {
     text-align: center;
     margin-bottom: 2rem;
+    padding: 0 var(--space-xl);
 }
 
 .reviews-header h2 {
@@ -113,6 +135,7 @@
 .reviews-cta {
     text-align: center;
     margin-top: 2rem;
+    padding: 0 var(--space-xl);
 }
 
 .reviews-cta .button {
