@@ -2,13 +2,13 @@
     <div class="features-inner">
     <div class="section-header">
         <div class="section-tag"><?php echo esc_html(iptv_text('features_tag', 'Features')); ?></div>
-        <h2 class="section-title"><?php echo iptv_text('features_title', 'Everything You Need in'); ?> <span
-                class="gradient-text"><?php echo iptv_text('features_title_span', 'One Place'); ?></span></h2>
+        <h2 class="section-title"><?php echo iptv_text('features_title', 'Why Choose'); ?> <span
+                class="gradient-text"><?php echo iptv_text('features_title_span', 'Nordic IPTV?'); ?></span></h2>
         <p class="section-subtitle">
             <?php echo esc_html(iptv_text('features_subtitle', 'No more juggling multiple subscriptions. Get it all with Nordic IPTV.')); ?>
         </p>
     </div>
-    <div class="features-grid">
+    <div class="features-grid" style="margin-bottom: var(--space-xl);">
         <!-- Feature 1 -->
         <div class="feature-card animate-on-scroll">
             <div class="feature-icon">
@@ -101,6 +101,16 @@
                 <?php echo esc_html(iptv_text('feature_6_desc', 'Real humans, real help via live chat or WhatsApp anytime.')); ?>
             </p>
         </div>
+    </div>
+    </div>
+    <div style="text-align:center;margin-top:var(--space-xl);">
+        <a href="#pricing" class="btn btn-primary">
+            <?php echo esc_html(iptv_text('features_cta', 'Get Access Now')); ?>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+            </svg>
+        </a>
     </div>
     </div>
 </section>
