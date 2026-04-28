@@ -701,23 +701,25 @@ h3 {
 .sports-container {
     max-width: 1400px;
     margin: 0 auto;
-    background: linear-gradient(135deg, var(--color-navy), var(--color-indigo));
+    background: rgba(240, 244, 250, 1);
     border-radius: var(--radius-xl);
     padding: var(--space-2xl) var(--space-xl);
-    color: white;
 }
 
 @media (max-width: 1440px) {
-    .sports-container {
-        margin: 0 var(--space-md);
-        max-width: calc(100% - 2 * var(--space-md));
+    .sports {
+        padding-left: var(--space-md);
+        padding-right: var(--space-md);
     }
 }
 
 @media (max-width: 768px) {
+    .sports {
+        padding-left: var(--space-sm);
+        padding-right: var(--space-sm);
+    }
+
     .sports-container {
-        margin: 0 var(--space-sm);
-        max-width: calc(100% - 2 * var(--space-sm));
         border-radius: var(--radius-lg);
         padding: var(--space-xl) var(--space-md);
     }
@@ -756,16 +758,18 @@ h3 {
     color: var(--text-primary);
 }
 
-/* Sports on dark bg — override section header colors */
-.sports-container .section-title,
-.sports-container .section-tag,
+/* Sports uses light bg — use standard dark text colors */
+.sports-container .section-title {
+    color: var(--text-primary);
+}
+
 .sports-container .section-subtitle {
-    color: white;
+    color: var(--text-secondary);
 }
 
 .sports-container .section-tag {
-    background: rgba(255, 255, 255, 0.15);
-    color: rgba(255, 255, 255, 0.9);
+    background: rgba(0, 212, 170, 0.1);
+    color: var(--color-teal-text);
 }
 
 .sport-leagues {
@@ -1028,21 +1032,25 @@ h3 {
 .steps .steps-container {
     max-width: 1200px;
     margin: 0 auto;
-    background: linear-gradient(135deg, var(--color-navy), var(--color-indigo));
+    background: rgba(240, 244, 250, 1);
     border-radius: var(--radius-xl);
     padding: var(--space-2xl) var(--space-xl);
-    color: white;
 }
 
 @media (max-width: 1440px) {
-    .steps .steps-container {
-        margin: 0 var(--space-md);
+    .steps {
+        padding-left: var(--space-md);
+        padding-right: var(--space-md);
     }
 }
 
 @media (max-width: 768px) {
+    .steps {
+        padding-left: var(--space-sm);
+        padding-right: var(--space-sm);
+    }
+
     .steps .steps-container {
-        margin: 0 var(--space-sm);
         border-radius: var(--radius-lg);
         padding: var(--space-xl) var(--space-md);
     }
@@ -1106,23 +1114,26 @@ h3 {
     line-height: 1.6;
 }
 
-/* Steps on dark bg — override colors */
-.steps .steps-container .section-title,
+/* Steps uses light bg — standard dark text */
+.steps .steps-container .section-title {
+    color: var(--text-primary);
+}
+
 .steps .steps-container .section-subtitle {
-    color: white;
+    color: var(--text-secondary);
 }
 
 .steps .steps-container .section-tag {
-    background: rgba(255, 255, 255, 0.15);
-    color: rgba(255, 255, 255, 0.9);
+    background: rgba(0, 212, 170, 0.1);
+    color: var(--color-teal-text);
 }
 
 .steps .steps-container .step-title {
-    color: white;
+    color: var(--text-primary);
 }
 
 .steps .steps-container .step-desc {
-    color: rgba(255, 255, 255, 0.75);
+    color: var(--text-secondary);
 }
 
 @media (max-width: 1024px) {
@@ -1229,14 +1240,19 @@ h3 {
 }
 
 @media (max-width: 1440px) {
-    .faq-container {
-        margin: 0 var(--space-md);
+    .faq {
+        padding-left: var(--space-md);
+        padding-right: var(--space-md);
     }
 }
 
 @media (max-width: 768px) {
+    .faq {
+        padding-left: var(--space-sm);
+        padding-right: var(--space-sm);
+    }
+
     .faq-container {
-        margin: 0 var(--space-sm);
         padding: var(--space-xl) var(--space-md);
     }
 }
@@ -1347,14 +1363,19 @@ h3 {
 }
 
 @media (max-width: 1440px) {
-    .cta-box {
-        margin: 0 var(--space-md);
+    .cta {
+        padding-left: var(--space-md);
+        padding-right: var(--space-md);
     }
 }
 
 @media (max-width: 768px) {
+    .cta {
+        padding-left: var(--space-sm);
+        padding-right: var(--space-sm);
+    }
+
     .cta-box {
-        margin: 0 var(--space-sm);
         border-radius: var(--radius-lg);
         padding: var(--space-xl) var(--space-md);
     }
