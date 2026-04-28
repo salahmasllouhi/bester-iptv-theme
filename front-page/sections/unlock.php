@@ -5,7 +5,7 @@
             <h2 class="section-title"><?php echo iptv_text('devices_title', 'Watch On'); ?> <span
                     class="gradient-text"><?php echo iptv_text('devices_title_span', 'Any Device'); ?></span></h2>
             <p class="section-subtitle">
-                    <?php echo esc_html(iptv_text('devices_subtitle', 'Works flawlessly on Smart TV, Android, iOS, Firestick, MAG, and more.')); ?>
+                <?php echo esc_html(iptv_text('devices_subtitle', 'Works flawlessly on Smart TV, Android, iOS, Firestick, MAG, and more.')); ?>
             </p>
         </div>
     </div>
@@ -34,7 +34,7 @@
     /* Devices Marquee Styles */
     .devices {
         overflow: hidden;
-        padding: var(--space-xl) 0;
+        padding: 0.5rem 0;
     }
 
     .devices-marquee {
