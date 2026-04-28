@@ -389,7 +389,7 @@ body {
 .hero-stats {
     animation: fadeInUp 0.8s ease-out 0.2s both;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: var(--space-md);
     width: 100%;
 }
@@ -494,6 +494,10 @@ body {
     color: var(--color-teal);
 }
 
+.stat-value.movies {
+    color: var(--color-indigo);
+}
+
 .stat-desc {
     font-size: 0.85rem;
     color: var(--text-muted);
@@ -519,7 +523,7 @@ body {
     }
 
     .hero-stats {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .stat-value {

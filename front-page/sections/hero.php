@@ -63,16 +63,22 @@
                 <div class="stat-label-large"><?php echo esc_html(iptv_text('hero_stat_2_label', 'PPV Events')); ?>
                 </div>
                 <div class="stat-desc">
-                    <?php echo esc_html(iptv_text('hero_stat_2_desc', 'UFC, Boxing - All Included')); ?></div>
+                    <?php echo esc_html(iptv_text('hero_stat_2_desc', 'UFC, Boxing - All Included')); ?>
+                </div>
             </div>
 
             <!-- Card 3: Live Channels -->
             <div class="stat-card stat-channels">
                 <div class="stat-value channels"><?php echo esc_html(iptv_text('hero_stat_3_val', '35,000+')); ?></div>
-                <div class="stat-label-large"><?php echo esc_html(iptv_text('hero_stat_3_label', 'Live Channels')); ?>
-                </div>
-                <div class="stat-desc"><?php echo esc_html(iptv_text('hero_stat_3_desc', 'From 198 countries')); ?>
-                </div>
+                <div class="stat-label-large"><?php echo esc_html(iptv_text('hero_stat_3_label', 'Live Channels')); ?></div>
+                <div class="stat-desc"><?php echo esc_html(iptv_text('hero_stat_3_desc', 'From 198 countries')); ?></div>
+            </div>
+
+            <!-- Card 4: Movies & Series -->
+            <div class="stat-card stat-movies">
+                <div class="stat-value movies"><?php echo esc_html(iptv_text('hero_stat_4_val', '150,000+')); ?></div>
+                <div class="stat-label-large"><?php echo esc_html(iptv_text('hero_stat_4_label', 'Movies & Series')); ?></div>
+                <div class="stat-desc"><?php echo esc_html(iptv_text('hero_stat_4_desc', 'All genres included')); ?></div>
             </div>
         </div>
     </div>
