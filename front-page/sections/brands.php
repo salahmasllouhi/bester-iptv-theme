@@ -34,11 +34,8 @@
 <style>
     /* Inline critical styles for logo sizing */
     .logos-bar {
-        background: var(--color-navy);
-        padding: 2rem 0;
-        margin-top: -2px;
-        overflow: hidden;
-        /* Hide overflow for marquee */
+        padding: var(--space-lg) 0;
+        overflow: visible;
     }
 
     .logos-label {

@@ -1,4 +1,5 @@
 <section class="devices">
+    <div class="devices-inner">
     <div class="section-header">
         <div class="section-tag"><?php echo esc_html(iptv_text('devices_tag', 'Compatibility')); ?></div>
         <h2 class="section-title"><?php echo iptv_text('devices_title', 'Watch On'); ?> <span
@@ -6,6 +7,7 @@
         <p class="section-subtitle">
             <?php echo esc_html(iptv_text('devices_subtitle', 'Works flawlessly on Smart TV, Android, iOS, Firestick, MAG, and more.')); ?>
         </p>
+    </div>
     </div>
     <!-- Devices Marquee -->
     <div class="devices-marquee">
