@@ -127,7 +127,7 @@ class IPTV_Content_Settings
 
                 // Row 5
                 'comp_row_5_label' => array('label' => 'Row 5 Label', 'type' => 'text', 'default' => 'PPV Events (yearly)'),
-                'comp_row_5_val_1' => array('label' => 'Row 5 Competitor', 'type' => 'text', 'default' => '$700+'),
+                'comp_row_5_val_1' => array('label' => 'Row 5 Competitor', 'type' => 'text', 'default' => '$700+/yr'),
                 'comp_row_5_val_2' => array('label' => 'Row 5 Us', 'type' => 'text', 'default' => 'Included'),
 
                 // Row 6
@@ -146,14 +146,14 @@ class IPTV_Content_Settings
                 'comp_row_8_val_2' => array('label' => 'Row 8 Us', 'type' => 'text', 'default' => '$0 Extra'),
 
                 // Row 9
-                'comp_row_9_label' => array('label' => 'Row 9 Label', 'type' => 'text', 'default' => '20,000+ Channels'),
-                'comp_row_9_val_1' => array('label' => 'Row 9 Competitor', 'type' => 'text', 'default' => 'Extra Fees'),
-                'comp_row_9_val_2' => array('label' => 'Row 9 Us', 'type' => 'text', 'default' => 'Included'),
+                'comp_row_9_label' => array('label' => 'Row 9 Label', 'type' => 'text', 'default' => 'Channels'),
+                'comp_row_9_val_1' => array('label' => 'Row 9 Competitor', 'type' => 'text', 'default' => 'Limited'),
+                'comp_row_9_val_2' => array('label' => 'Row 9 Us', 'type' => 'text', 'default' => '20,000+'),
 
                 // Row 10
-                'comp_row_10_label' => array('label' => 'Row 10 Label', 'type' => 'text', 'default' => '4K Quality'),
-                'comp_row_10_val_1' => array('label' => 'Row 10 Competitor', 'type' => 'text', 'default' => 'Extra Fees'),
-                'comp_row_10_val_2' => array('label' => 'Row 10 Us', 'type' => 'text', 'default' => 'Included'),
+                'comp_row_10_label' => array('label' => 'Row 10 Label', 'type' => 'text', 'default' => 'Quality'),
+                'comp_row_10_val_1' => array('label' => 'Row 10 Competitor', 'type' => 'text', 'default' => 'HD only'),
+                'comp_row_10_val_2' => array('label' => 'Row 10 Us', 'type' => 'text', 'default' => '4K Included'),
 
                 // Totals & Savings
                 'comp_total_label' => array('label' => 'Competitor Total Label', 'type' => 'text', 'default' => 'Annual Cost'),

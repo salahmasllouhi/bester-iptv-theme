@@ -845,7 +845,6 @@ h3 {
 
 @media (max-width: 1440px) {
     .comparison-inner {
-        margin: 0 auto;
         padding-left: var(--space-md);
         padding-right: var(--space-md);
     }
@@ -853,165 +852,180 @@ h3 {
 
 @media (max-width: 768px) {
     .comparison-inner {
-        margin: 0 auto;
         padding: var(--space-xl) var(--space-md);
     }
 }
 
-.comparison-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-lg);
+/* Table wrapper */
+.comp-table-wrap {
+    background: var(--color-navy);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
     margin-bottom: var(--space-xl);
 }
 
-.comparison-card {
-    border-radius: var(--radius-xl);
-    padding: var(--space-lg);
-    position: relative;
+/* Table base */
+.comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Outfit', sans-serif;
+    table-layout: fixed;
 }
 
-.comparison-card.without {
-    background: var(--bg-section);
-    border: 1px solid var(--border-subtle);
-}
-
-.comparison-card.with {
-    background: linear-gradient(135deg, var(--color-navy), var(--color-indigo));
-    color: white;
-    overflow: hidden;
-}
-
-.comparison-card.with::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -30%;
-    width: 80%;
-    height: 150%;
-    background: radial-gradient(circle, rgba(0, 212, 170, 0.15) 0%, transparent 60%);
-    pointer-events: none;
-}
-
-.comparison-header {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    margin-bottom: var(--space-md);
-    position: relative;
-}
-
-.comparison-dot {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-}
-
-.comparison-dot.red {
-    background: var(--color-coral);
-}
-
-.comparison-dot.green {
-    background: var(--color-teal);
-}
-
-.comparison-label {
-    font-weight: 700;
-    font-size: 0.9rem;
-    letter-spacing: 0.05em;
-}
-
-.comparison-items {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-sm);
-    position: relative;
-}
-
-.comparison-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--space-sm) 0;
-    border-bottom: 1px solid var(--border-subtle);
-}
-
-.comparison-card.with .comparison-item {
-    border-color: rgba(255, 255, 255, 0.1);
-}
-
-.comparison-item-name {
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-}
-
-.comparison-card.with .comparison-item-name {
-    color: rgba(255, 255, 255, 0.8);
-}
-
-.comparison-item-value {
-    font-weight: 600;
-    font-family: 'DM Sans', sans-serif;
-}
-
-.comparison-item-value.included {
-    color: var(--color-teal);
-}
-
-.comparison-total {
-    margin-top: var(--space-md);
-    padding: var(--space-md);
-    background: rgba(0, 0, 0, 0.04);
-    border-radius: var(--radius-md);
-    text-align: center;
-    position: relative;
-}
-
-.comparison-card.with .comparison-total {
-    background: rgba(0, 212, 170, 0.2);
-}
-
-.comparison-total-label {
+/* Header row */
+.comp-th {
+    padding: 18px 20px;
     font-size: 0.85rem;
-    color: var(--text-muted);
-    margin-bottom: 6px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.comparison-card.with .comparison-total-label {
+.comp-th-feature {
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.comp-th-cable {
+    color: rgba(255, 255, 255, 0.85);
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.comp-th-nordic {
+    color: var(--color-teal);
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 212, 170, 0.06);
+}
+
+/* Dot badges */
+.comp-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+}
+
+.comp-dot-red  { background: var(--color-coral); }
+.comp-dot-teal { background: var(--color-teal); }
+
+/* Body rows */
+.comp-row:not(.comp-row-total) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.comp-row:not(.comp-row-total):hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.comp-td {
+    padding: 14px 20px;
+    font-size: 0.95rem;
+    font-weight: 400;
+    vertical-align: middle;
+}
+
+.comp-td-feature {
     color: rgba(255, 255, 255, 0.7);
 }
 
-.comparison-total-value {
-    font-size: 2.75rem;
-    font-weight: 800;
-    font-family: 'DM Sans', sans-serif;
-    letter-spacing: -0.02em;
+.comp-td-cable {
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.comparison-total-value.expensive {
+.comp-td-nordic {
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 212, 170, 0.04);
+}
+
+/* Cell value variants */
+.comp-val-negative {
+    color: var(--color-coral);
+    font-weight: 600;
+}
+
+.comp-val-included {
+    color: var(--color-teal);
+    font-weight: 600;
+}
+
+.comp-val-ppv {
+    font-weight: 700;
+}
+
+.comp-val-ppv-free {
+    color: var(--color-teal);
+    font-weight: 700;
+    background: rgba(0, 212, 170, 0.12);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.88rem;
+}
+
+.comp-val-neutral {
+    color: rgba(255, 255, 255, 0.45);
+    font-weight: 400;
+}
+
+/* Annual cost row */
+.comp-row-total .comp-td {
+    border-top: 2px solid rgba(255, 255, 255, 0.18);
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.comp-td-total-label {
+    color: rgba(255, 255, 255, 0.55);
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.comp-td-total {
+    vertical-align: middle;
+}
+
+.comp-total-val {
+    display: block;
+    font-size: 2.25rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+}
+
+.comp-total-cable {
     color: var(--color-coral);
 }
 
-.comparison-total-value.cheap {
+.comp-total-nordic {
     color: var(--color-teal);
 }
 
-.comparison-per-month {
-    font-size: 0.9rem;
-    opacity: 0.7;
-    margin-top: 4px;
+.comp-total-sub {
+    display: block;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.45);
+    margin-top: 3px;
+    font-weight: 400;
 }
 
+/* Savings banner */
 .savings-banner {
     text-align: center;
     padding: var(--space-lg);
-    background: linear-gradient(135deg, rgba(0, 212, 170, 0.08), rgba(26, 75, 124, 0.06));
+    background: linear-gradient(135deg, rgba(0, 212, 170, 0.08), rgba(91, 79, 232, 0.06));
     border: 2px dashed var(--color-teal);
     border-radius: var(--radius-xl);
 }
 
 .savings-label {
     font-size: 0.95rem;
+    font-family: 'Outfit', sans-serif;
     color: var(--text-secondary);
     margin-bottom: var(--space-xs);
 }
@@ -1019,24 +1033,34 @@ h3 {
 .savings-value {
     font-size: 3.5rem;
     font-weight: 800;
+    font-family: 'Outfit', sans-serif;
     color: var(--color-teal);
-    font-family: 'DM Sans', sans-serif;
     letter-spacing: -0.02em;
 }
 
-@media (max-width: 1024px) {
-    .comparison-grid {
-        grid-template-columns: 1fr;
+/* Mobile */
+@media (max-width: 480px) {
+    .comp-th,
+    .comp-td {
+        padding: 10px 12px;
+        font-size: 0.82rem;
     }
-}
 
-@media (max-width: 768px) {
+    .comp-total-val {
+        font-size: 1.6rem;
+    }
+
+    .comp-total-sub {
+        font-size: 0.75rem;
+    }
+
     .savings-value {
-        font-size: 2.5rem;
+        font-size: 2.4rem;
     }
 
-    .comparison-total-value {
-        font-size: 2rem;
+    .comp-val-ppv-free {
+        padding: 2px 8px;
+        font-size: 0.8rem;
     }
 }
 
