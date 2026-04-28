@@ -46,7 +46,7 @@ class IPTV_Content_Settings
                 'hero_cta' => array('label' => 'CTA Button', 'type' => 'text', 'default' => 'Start Streaming Now'),
                 // New Hero Stats
                 'hero_stat_1_val' => array('label' => 'Stat 1 Value', 'type' => 'text', 'default' => '42,537'),
-                'hero_stat_1_desc' => array('label' => 'Stat 1 Description', 'type' => 'text', 'default' => 'viewers streaming right now'),
+                'hero_stat_1_desc' => array('label' => 'Stat 1 Description', 'type' => 'text', 'default' => 'active viewers'),
                 'hero_stat_2_val' => array('label' => 'Stat 2 Value', 'type' => 'text', 'default' => '$0'),
                 'hero_stat_2_label' => array('label' => 'Stat 2 Label', 'type' => 'text', 'default' => 'PPV Events'),
                 'hero_stat_2_desc' => array('label' => 'Stat 2 Description', 'type' => 'text', 'default' => 'UFC, Boxing - All Included'),

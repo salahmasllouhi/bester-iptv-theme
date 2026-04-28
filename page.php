@@ -32,7 +32,7 @@
     <style>
         /* Page-specific styles */
         .page-header {
-            background: linear-gradient(135deg, var(--primary-deep) 0%, var(--primary-mid) 100%);
+            background: linear-gradient(135deg, var(--color-navy) 0%, var(--color-indigo) 100%);
             padding: 8rem 0 3rem;
             text-align: center;
             margin-top: 0;
@@ -78,7 +78,7 @@
         .content-wrapper h2 {
             font-size: 1.5rem;
             padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--accent-primary);
+            border-bottom: 2px solid var(--color-teal);
         }
 
         .content-wrapper h3 {
@@ -103,7 +103,7 @@
         }
 
         .content-wrapper a {
-            color: var(--accent-primary);
+            color: var(--color-teal);
             text-decoration: none;
         }
 
@@ -116,10 +116,10 @@
         }
 
         .content-wrapper blockquote {
-            border-left: 4px solid var(--accent-primary);
+            border-left: 4px solid var(--color-teal);
             padding-left: 1rem;
             margin: 1.5rem 0;
-            background: var(--bg-secondary);
+            background: var(--bg-section);
             padding: 1rem;
             border-radius: 0 0.5rem 0.5rem 0;
         }

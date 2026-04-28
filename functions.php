@@ -91,7 +91,7 @@ function my_iptv_product_page_inline_css()
 
             /* ===== PRODUCT IMAGE ===== */
             .woocommerce div.product div.images {
-                background: linear-gradient(135deg, var(--bg-secondary) 0%, #FFFFFF 100%) !important;
+                background: linear-gradient(135deg, var(--bg-section) 0%, #FFFFFF 100%) !important;
                 border-radius: 12px !important;
                 padding: 1.25rem !important;
                 width: 100% !important;
@@ -125,7 +125,7 @@ function my_iptv_product_page_inline_css()
             .woocommerce div.product .summary>.price {
                 font-size: 1.5rem !important;
                 font-weight: 700 !important;
-                color: var(--accent-primary) !important;
+                color: var(--color-teal) !important;
                 margin: 0 0 1.25rem !important;
             }
 
@@ -207,7 +207,7 @@ function my_iptv_product_page_inline_css()
 
             .woocommerce div.product form.cart .button {
                 width: 100% !important;
-                background: linear-gradient(135deg, var(--accent-primary) 0%, var(--primary-light) 100%) !important;
+                background: linear-gradient(135deg, var(--color-teal) 0%, var(--color-indigo-hover) 100%) !important;
                 color: #fff !important;
                 padding: 1rem 2rem !important;
                 border-radius: 8px !important;
@@ -273,7 +273,7 @@ function my_iptv_product_page_inline_css()
 
             .woocommerce div.product .woocommerce-tabs ul.tabs li.active a {
                 background: #fff !important;
-                color: var(--accent-primary) !important;
+                color: var(--color-teal) !important;
                 box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
             }
 
@@ -317,7 +317,7 @@ function my_iptv_product_page_inline_css()
             }
 
             .woocommerce .related.products ul.products::-webkit-scrollbar-thumb {
-                background: var(--accent-primary) !important;
+                background: var(--color-teal) !important;
                 border-radius: 3px !important;
             }
 
@@ -336,7 +336,7 @@ function my_iptv_product_page_inline_css()
                 width: 100% !important;
                 height: 100px !important;
                 object-fit: contain !important;
-                background: var(--bg-secondary) !important;
+                background: var(--bg-section) !important;
                 padding: 0.5rem !important;
             }
 
@@ -350,7 +350,7 @@ function my_iptv_product_page_inline_css()
 
             .woocommerce .related.products ul.products li.product .price {
                 font-size: 0.8rem !important;
-                color: var(--accent-primary) !important;
+                color: var(--color-teal) !important;
                 font-weight: 600 !important;
                 padding: 0 0.5rem 0.5rem !important;
             }
@@ -359,7 +359,7 @@ function my_iptv_product_page_inline_css()
                 display: block !important;
                 margin: 0 0.5rem 0.5rem !important;
                 padding: 0.4rem !important;
-                background: var(--accent-primary) !important;
+                background: var(--color-teal) !important;
                 color: #fff !important;
                 border-radius: 6px !important;
                 font-size: 0.75rem !important;

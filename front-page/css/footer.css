@@ -1,6 +1,6 @@
 /* Footer Styles */
 .site-footer {
-    background: var(--primary-deep);
+    background: var(--color-navy);
     color: var(--text-inverse);
     padding: 4rem 0 2rem;
 }
@@ -19,7 +19,7 @@
 }
 
 .footer-brand span {
-    color: var(--accent-primary);
+    color: var(--color-teal);
 }
 
 .footer-logo-img {

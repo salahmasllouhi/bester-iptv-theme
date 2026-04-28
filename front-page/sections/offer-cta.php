@@ -52,7 +52,7 @@ $cta = !empty($offer_final_cta_text) ? $offer_final_cta_text : $offer_cta_text;
 
 <style>
     .offer-final-cta {
-        background: linear-gradient(135deg, var(--primary-deep) 0%, var(--primary-mid) 100%);
+        background: linear-gradient(135deg, var(--color-navy) 0%, var(--color-indigo) 100%);
         padding: 5rem 1.5rem;
         text-align: center;
         position: relative;
@@ -107,7 +107,7 @@ $cta = !empty($offer_final_cta_text) ? $offer_final_cta_text : $offer_cta_text;
 
     .offer-final-cta__urgency svg {
         flex-shrink: 0;
-        color: var(--accent-gold);
+        color: var(--color-gold);
     }
 
     @media (max-width: 480px) {

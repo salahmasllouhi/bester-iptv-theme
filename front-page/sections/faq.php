@@ -6,6 +6,7 @@ $faq_subtitle = iptv_text('faq_subtitle', 'Find answers to commonly asked questi
 
 <section class="faq" id="faq">
     <div class="faq-container">
+        <div class="faq-inner">
         <div class="section-header">
             <div class="section-tag">FAQ</div>
             <h2 class="section-title">
@@ -94,6 +95,7 @@ $faq_subtitle = iptv_text('faq_subtitle', 'Find answers to commonly asked questi
                     </div>
                 </div>
             <?php endforeach; ?>
+        </div>
         </div>
     </div>
 </section>

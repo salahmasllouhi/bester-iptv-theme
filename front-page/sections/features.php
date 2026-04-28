@@ -1,4 +1,5 @@
 <section class="features" id="features">
+    <div class="features-inner">
     <div class="section-header">
         <div class="section-tag"><?php echo esc_html(iptv_text('features_tag', 'Features')); ?></div>
         <h2 class="section-title"><?php echo iptv_text('features_title', 'Everything You Need in'); ?> <span
@@ -100,5 +101,6 @@
                 <?php echo esc_html(iptv_text('feature_6_desc', 'Real humans, real help via live chat or WhatsApp anytime.')); ?>
             </p>
         </div>
+    </div>
     </div>
 </section>

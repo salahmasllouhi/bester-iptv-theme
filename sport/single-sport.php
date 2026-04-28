@@ -62,17 +62,17 @@ echo '</style>';
     <?php include get_template_directory() . '/sport/sections/sport-hero.php'; ?>
 
     <!-- 2. Features Section (6 cards) -->
-    <div style="background:var(--bg-secondary);width:100%">
+    <div style="background:var(--bg-section);width:100%">
         <?php include get_template_directory() . '/sport/sections/sport-features.php'; ?>
     </div>
 
     <!-- 3. Steps Section (direct reuse from front page) -->
-    <div style="background:var(--bg-primary);width:100%">
+    <div style="background:var(--bg-page);width:100%">
         <?php include get_template_directory() . '/front-page/sections/steps.php'; ?>
     </div>
 
     <!-- 4. Pricing Section -->
-    <div style="background:var(--bg-secondary);width:100%">
+    <div style="background:var(--bg-section);width:100%">
         <?php
         $pricing_title_override = sprintf(
             spl_str('Start Watching <span class="gradient-text">%s</span> Today'),
@@ -87,7 +87,7 @@ echo '</style>';
     </div>
 
     <!-- 5. FAQ Section -->
-    <div style="background:var(--bg-primary);width:100%">
+    <div style="background:var(--bg-page);width:100%">
         <?php include get_template_directory() . '/sport/sections/sport-faq.php'; ?>
     </div>
 

@@ -153,7 +153,7 @@ $type_icon = $channel_type && isset($type_icons[$channel_type]) ? $type_icons[$c
         display: inline-flex;
         align-items: center;
         gap: .4rem;
-        background: var(--bg-secondary);
+        background: var(--bg-section);
         border: 1px solid var(--border-light, #e2e8f0);
         border-radius: var(--radius-full, 100px);
         padding: .375rem .875rem;
@@ -168,7 +168,7 @@ $type_icon = $channel_type && isset($type_icons[$channel_type]) ? $type_icons[$c
     }
 
     .ch-info-pill a {
-        color: var(--accent-primary);
+        color: var(--color-teal);
         text-decoration: none;
         font-weight: 600;
     }
@@ -233,7 +233,7 @@ $type_icon = $channel_type && isset($type_icons[$channel_type]) ? $type_icons[$c
     }
 
     .channel-content a {
-        color: var(--accent-primary);
+        color: var(--color-teal);
         text-decoration: underline;
     }
 
@@ -243,7 +243,7 @@ $type_icon = $channel_type && isset($type_icons[$channel_type]) ? $type_icons[$c
     }
 
     .ch-shows {
-        background: var(--bg-secondary);
+        background: var(--bg-section);
         border-radius: var(--radius-lg, 20px);
         padding: 1.5rem;
         margin-bottom: 2rem;
@@ -261,7 +261,7 @@ $type_icon = $channel_type && isset($type_icons[$channel_type]) ? $type_icons[$c
     }
 
     .ch-shows-title svg {
-        color: var(--accent-gold, #FFB830);
+        color: var(--color-gold, #FFB830);
     }
 
     .ch-shows-grid {
@@ -284,7 +284,7 @@ $type_icon = $channel_type && isset($type_icons[$channel_type]) ? $type_icons[$c
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background: var(--accent-primary);
+        background: var(--color-teal);
         flex-shrink: 0;
         margin-top: 5px;
     }

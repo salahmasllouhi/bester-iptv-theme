@@ -1,11 +1,13 @@
 <section class="devices">
-    <div class="section-header">
-        <div class="section-tag"><?php echo esc_html(iptv_text('devices_tag', 'Compatibility')); ?></div>
-        <h2 class="section-title"><?php echo iptv_text('devices_title', 'Watch On'); ?> <span
-                class="gradient-text"><?php echo iptv_text('devices_title_span', 'Any Device'); ?></span></h2>
-        <p class="section-subtitle">
-            <?php echo esc_html(iptv_text('devices_subtitle', 'Works flawlessly on Smart TV, Android, iOS, Firestick, MAG, and more.')); ?>
-        </p>
+    <div class="devices-inner">
+        <div class="section-header">
+            <div class="section-tag"><?php echo esc_html(iptv_text('devices_tag', 'Compatibility')); ?></div>
+            <h2 class="section-title"><?php echo iptv_text('devices_title', 'Watch On'); ?> <span
+                    class="gradient-text"><?php echo iptv_text('devices_title_span', 'Any Device'); ?></span></h2>
+            <p class="section-subtitle">
+                <?php echo esc_html(iptv_text('devices_subtitle', 'Works flawlessly on Smart TV, Android, iOS, Firestick, MAG, and more.')); ?>
+            </p>
+        </div>
     </div>
     <!-- Devices Marquee -->
     <div class="devices-marquee">
@@ -32,7 +34,7 @@
     /* Devices Marquee Styles */
     .devices {
         overflow: hidden;
-        padding: var(--space-xl) 0;
+        padding: 0.5rem 0;
     }
 
     .devices-marquee {
@@ -50,7 +52,7 @@
         gap: var(--space-xl);
         width: max-content;
         animation: scrollDevices 30s linear infinite;
-        padding: var(--space-md) 0;
+        padding: 0.1rem 0;
     }
 
     @keyframes scrollDevices {
@@ -75,7 +77,7 @@
     }
 
     .device-text-item:hover {
-        color: var(--accent-primary);
+        color: var(--color-teal);
         opacity: 1;
         transform: scale(1.1);
     }

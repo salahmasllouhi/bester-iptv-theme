@@ -23,7 +23,7 @@
 }
 
 .steps-header h2 .text-gradient {
-    background: linear-gradient(135deg, var(--accent-primary), var(--primary-light));
+    background: linear-gradient(135deg, var(--color-teal), var(--color-indigo-hover));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -63,7 +63,7 @@
 .step-badge {
     display: inline-block;
     background: rgba(0, 212, 170, 0.1);
-    color: var(--accent-primary);
+    color: var(--color-teal);
     padding: 0.375rem 1rem;
     border-radius: 2rem;
     font-size: 0.75rem;
@@ -90,14 +90,14 @@
 .step-icon svg {
     width: 32px;
     height: 32px;
-    stroke: var(--accent-primary);
+    stroke: var(--color-teal);
     stroke-width: 1.5;
     transition: all 0.4s;
 }
 
 /* Icon Hover State - Solid Purple & Scale */
 .step-card:hover .step-icon {
-    background: linear-gradient(135deg, var(--accent-primary), var(--primary-light));
+    background: linear-gradient(135deg, var(--color-teal), var(--color-indigo-hover));
     border-color: transparent;
     transform: scale(1.1);
 }

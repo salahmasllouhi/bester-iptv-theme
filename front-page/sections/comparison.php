@@ -1,4 +1,5 @@
 <section class="comparison">
+    <div class="comparison-inner">
     <div class="section-header">
         <div class="section-tag">
             <?php echo esc_html(iptv_text('comp_badge', 'Save Money')); ?>
@@ -153,5 +154,6 @@
         <div class="savings-value">
             <?php echo esc_html(iptv_text('comp_savings_val', '$1,100+')); ?>
         </div>
+    </div>
     </div>
 </section>

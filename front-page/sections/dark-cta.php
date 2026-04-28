@@ -1,4 +1,5 @@
 <section class="cta">
+    <div class="cta-box">
     <div class="cta-content">
         <h2>
             <?php echo esc_html(iptv_text('cta_title', 'Ready to Start Streaming?')); ?>
@@ -33,5 +34,6 @@
                 <?php echo esc_html(iptv_text('cta_f3', '24/7 Customer Support')); ?>
             </div>
         </div>
+    </div>
     </div>
 </section>

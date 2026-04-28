@@ -86,7 +86,7 @@ if (!empty($offer_steps_rows)) {
 
 <style>
     .offer-steps {
-        background: var(--bg-secondary);
+        background: var(--bg-section);
         padding: 5rem 1.5rem;
     }
 
@@ -114,7 +114,7 @@ if (!empty($offer_steps_rows)) {
         flex-shrink: 0;
         width: 60px;
         height: 2px;
-        background: linear-gradient(90deg, var(--accent-primary), var(--primary-light));
+        background: linear-gradient(90deg, var(--color-teal), var(--color-indigo-hover));
         margin-top: 2rem;
         opacity: 0.5;
         align-self: flex-start;
@@ -125,7 +125,7 @@ if (!empty($offer_steps_rows)) {
         width: 3rem;
         height: 3rem;
         border-radius: 50%;
-        background: linear-gradient(135deg, var(--accent-primary), var(--primary-light));
+        background: linear-gradient(135deg, var(--color-teal), var(--color-indigo-hover));
         color: #fff;
         font-size: 1.25rem;
         font-weight: 800;
@@ -174,7 +174,7 @@ if (!empty($offer_steps_rows)) {
             width: 2px;
             height: 2rem;
             margin: 0 0 0 1.4rem;
-            background: linear-gradient(180deg, var(--accent-primary), var(--primary-light));
+            background: linear-gradient(180deg, var(--color-teal), var(--color-indigo-hover));
         }
 
         .offer-steps__circle {

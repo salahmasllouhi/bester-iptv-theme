@@ -23,7 +23,7 @@
 }
 
 .nordic-header h2 .text-highlight {
-    background: linear-gradient(135deg, var(--accent-primary), var(--primary-light));
+    background: linear-gradient(135deg, var(--color-teal), var(--color-indigo-hover));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -73,14 +73,14 @@
 .feature-card .icon-wrapper svg {
     width: 28px;
     height: 28px;
-    stroke: var(--accent-primary);
+    stroke: var(--color-teal);
     stroke-width: 1.5;
     transition: all 0.4s;
 }
 
 /* Icon Hover - Solid Purple Background, White Icon */
 .feature-card:hover .icon-wrapper {
-    background: var(--accent-primary);
+    background: var(--color-teal);
     transform: scale(1.05);
 }
 

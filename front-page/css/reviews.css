@@ -1,22 +1,29 @@
 /* Reviews Section Styles */
 .reviews {
-    padding: 2.5rem 0;
-    /* Reduced padding */
-    background: var(--bg-card);
+    padding: var(--space-lg) 0;
+    background: transparent;
+    overflow: visible;
+}
+
+.reviews .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: transparent;
+    padding: var(--space-2xl) 0;
     overflow: hidden;
-    /* Hide overflow for carousel */
 }
 
 .reviews-header {
     text-align: center;
     margin-bottom: 2rem;
+    padding: 0 var(--space-xl);
 }
 
 .reviews-header h2 {
     font-size: 2rem;
     font-size: 2rem;
     font-weight: 800;
-    color: var(--primary-deep);
+    color: var(--color-navy);
     margin-bottom: 0.5rem;
 }
 
@@ -29,7 +36,7 @@
 }
 
 .reviews-header .stars {
-    color: var(--accent-gold);
+    color: var(--color-gold);
     font-size: 1.25rem;
 }
 
@@ -87,11 +94,11 @@
 .review-card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-lg);
-    border-color: var(--accent-primary);
+    border-color: var(--color-teal);
 }
 
 .review-stars {
-    color: var(--accent-gold);
+    color: var(--color-gold);
     margin-bottom: 0.75rem;
 }
 
@@ -105,7 +112,7 @@
 
 .review-author {
     font-weight: 700;
-    color: var(--primary-deep);
+    color: var(--color-navy);
     font-size: 0.875rem;
 }
 
@@ -113,12 +120,13 @@
 .reviews-cta {
     text-align: center;
     margin-top: 2rem;
+    padding: 0 var(--space-xl);
 }
 
 .reviews-cta .button {
     padding: 0.75rem 2rem;
     font-size: 1.1rem;
-    background: linear-gradient(135deg, var(--accent-primary), var(--primary-light));
+    background: linear-gradient(135deg, var(--color-teal), var(--color-indigo-hover));
     color: #ffffff;
     border-radius: 9999px;
     /* Pill shape */
