@@ -288,25 +288,9 @@
    GENERIC CTA SECTION STYLES (Used by dark-cta.php)
    ============================================ */
 .cta {
-    padding: var(--space-2xl) var(--space-lg);
-    background: linear-gradient(135deg, var(--color-navy), var(--color-indigo));
+    padding: var(--space-lg) 0;
+    background: transparent;
     text-align: center;
-    color: #ffffff;
-    position: relative;
-    overflow: hidden;
-}
-
-.cta::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background:
-        radial-gradient(circle at 20% 50%, rgba(0, 212, 170, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 50%, rgba(0, 245, 196, 0.1) 0%, transparent 50%);
-    pointer-events: none;
 }
 
 .cta-content {

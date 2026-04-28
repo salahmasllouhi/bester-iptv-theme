@@ -145,10 +145,28 @@ body {
     background: transparent;
 }
 
+/* Ensure all boxed section containers are always centered */
+.sports-container,
+.steps .steps-container,
+.pricing .container,
+.faq-container,
+.reviews .container,
+.cta-box,
+.logos-bar,
+.features-inner,
+.devices-inner,
+.comparison-inner {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 /* Section Common */
 .section-header {
     text-align: center;
     margin-bottom: var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .section-tag {
@@ -575,62 +593,6 @@ body {
     padding: var(--space-lg) 0;
 }
 
-.logos-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    background: var(--color-navy);
-    border-radius: var(--radius-xl);
-    padding: var(--space-xl) var(--space-lg);
-    overflow: hidden;
-}
-
-@media (max-width: 1440px) {
-    .logos-container {
-        margin: 0 var(--space-md);
-    }
-}
-
-@media (max-width: 768px) {
-    .logos-container {
-        margin: 0 var(--space-sm);
-        border-radius: var(--radius-lg);
-        padding: var(--space-lg) var(--space-md);
-    }
-}
-
-.logos-label {
-    text-align: center;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 30px;
-    font-weight: 700;
-    color: #ffffff;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    margin-bottom: var(--space-md);
-}
-
-.logos-grid {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: var(--space-xl);
-    flex-wrap: wrap;
-    opacity: 0.5;
-    filter: grayscale(100%);
-    transition: all 0.3s ease;
-}
-
-.logos-grid:hover {
-    opacity: 0.7;
-}
-
-.logos-grid span {
-    font-weight: 700;
-    font-size: 2rem;
-    color: var(--text-secondary);
-    letter-spacing: -0.02em;
-}
-
 h1,
 h2,
 h3 {
@@ -638,16 +600,6 @@ h3 {
     font-weight: 700;
     color: var(--text-primary);
     letter-spacing: -0.02em;
-}
-
-@media (max-width: 768px) {
-    .logos-grid {
-        gap: var(--space-md);
-    }
-
-    .logos-grid span {
-        font-size: 1.1rem;
-    }
 }
 
 /* -------------------------------------------
@@ -749,20 +701,23 @@ h3 {
 .sports-container {
     max-width: 1400px;
     margin: 0 auto;
-    background: var(--bg-section);
+    background: linear-gradient(135deg, var(--color-navy), var(--color-indigo));
     border-radius: var(--radius-xl);
     padding: var(--space-2xl) var(--space-xl);
+    color: white;
 }
 
 @media (max-width: 1440px) {
     .sports-container {
         margin: 0 var(--space-md);
+        max-width: calc(100% - 2 * var(--space-md));
     }
 }
 
 @media (max-width: 768px) {
     .sports-container {
         margin: 0 var(--space-sm);
+        max-width: calc(100% - 2 * var(--space-sm));
         border-radius: var(--radius-lg);
         padding: var(--space-xl) var(--space-md);
     }
@@ -799,6 +754,18 @@ h3 {
     font-size: 1.1rem;
     margin-bottom: 6px;
     color: var(--text-primary);
+}
+
+/* Sports on dark bg — override section header colors */
+.sports-container .section-title,
+.sports-container .section-tag,
+.sports-container .section-subtitle {
+    color: white;
+}
+
+.sports-container .section-tag {
+    background: rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .sport-leagues {
@@ -1058,22 +1025,23 @@ h3 {
     padding: var(--space-lg) 0;
 }
 
-.steps-container {
+.steps .steps-container {
     max-width: 1200px;
     margin: 0 auto;
-    background: var(--bg-section);
+    background: linear-gradient(135deg, var(--color-navy), var(--color-indigo));
     border-radius: var(--radius-xl);
     padding: var(--space-2xl) var(--space-xl);
+    color: white;
 }
 
 @media (max-width: 1440px) {
-    .steps-container {
+    .steps .steps-container {
         margin: 0 var(--space-md);
     }
 }
 
 @media (max-width: 768px) {
-    .steps-container {
+    .steps .steps-container {
         margin: 0 var(--space-sm);
         border-radius: var(--radius-lg);
         padding: var(--space-xl) var(--space-md);
@@ -1136,6 +1104,25 @@ h3 {
     max-width: 280px;
     margin: 0 auto;
     line-height: 1.6;
+}
+
+/* Steps on dark bg — override colors */
+.steps .steps-container .section-title,
+.steps .steps-container .section-subtitle {
+    color: white;
+}
+
+.steps .steps-container .section-tag {
+    background: rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.steps .steps-container .step-title {
+    color: white;
+}
+
+.steps .steps-container .step-desc {
+    color: rgba(255, 255, 255, 0.75);
 }
 
 @media (max-width: 1024px) {
@@ -1232,8 +1219,7 @@ h3 {
 .faq-container {
     max-width: 1200px;
     margin: 0 auto;
-    background: var(--bg-section);
-    border-radius: var(--radius-xl);
+    background: transparent;
     padding: var(--space-2xl) var(--space-xl);
 }
 
@@ -1251,7 +1237,6 @@ h3 {
 @media (max-width: 768px) {
     .faq-container {
         margin: 0 var(--space-sm);
-        border-radius: var(--radius-lg);
         padding: var(--space-xl) var(--space-md);
     }
 }
@@ -1327,6 +1312,7 @@ h3 {
    ------------------------------------------- */
 .cta {
     padding: var(--space-lg) 0;
+    background: transparent;
 }
 
 .cta-box {
@@ -1371,56 +1357,5 @@ h3 {
         margin: 0 var(--space-sm);
         border-radius: var(--radius-lg);
         padding: var(--space-xl) var(--space-md);
-    }
-}
-
-.cta h2 {
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 700;
-    margin-bottom: var(--space-sm);
-    letter-spacing: -0.02em;
-}
-
-.cta p {
-    font-size: 1.15rem;
-    opacity: 0.9;
-    margin-bottom: var(--space-lg);
-}
-
-.cta .btn-primary {
-    background: white;
-    color: var(--color-navy);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-}
-
-.cta .btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
-}
-
-.cta-features {
-    display: flex;
-    justify-content: center;
-    gap: var(--space-lg);
-    margin-top: var(--space-lg);
-    flex-wrap: wrap;
-}
-
-.cta-feature {
-    display: flex;
-    align-items: center;
-    gap: var(--space-xs);
-    font-size: 0.9rem;
-    opacity: 0.9;
-}
-
-.cta-feature svg {
-    color: var(--color-teal);
-}
-
-@media (max-width: 768px) {
-    .cta-features {
-        flex-direction: column;
-        align-items: center;
     }
 }
