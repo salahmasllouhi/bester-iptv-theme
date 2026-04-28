@@ -1,4 +1,4 @@
-<!-- Hero Section (Strearena Style) -->
+<!-- Hero Section -->
 <div class="bg-aurora"></div>
 
 <section class="hero">
@@ -32,28 +32,8 @@
             <?php echo wp_kses_post(iptv_text('hero_subtitle', 'Stop paying for <strong>6+ streaming services</strong>. Get every sport, every show, every PPV event in one place. <strong>No blackouts. No restrictions.</strong>')); ?>
         </p>
 
-        <div class="hero-features">
-            <div class="hero-feature">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <polyline points="20 6 9 17 4 12" />
-                </svg>
-                35,000+ Channels
-            </div>
-            <div class="hero-feature">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <polyline points="20 6 9 17 4 12" />
-                </svg>
-                PPV $0 Extra
-            </div>
-            <div class="hero-feature">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <polyline points="20 6 9 17 4 12" />
-                </svg>
-                4K Ultra HD
-            </div>
-        </div>
-
-        <div class="hero-actions">
+        <!-- CTA with glow container -->
+        <div class="hero-cta-wrap">
             <a href="#pricing" class="btn btn-primary">
                 <?php echo esc_html(iptv_text('hero_cta', 'Start Streaming Now')); ?>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -62,39 +42,31 @@
                 </svg>
             </a>
         </div>
-    </div>
 
-    <!-- Stats Cards - 3 Stacked -->
-    <div class="hero-stats">
-        <div class="stats-stack">
+        <!-- Stats Row -->
+        <div class="hero-stats">
             <!-- Card 1: Live Now (Animated) -->
             <div class="stat-card stat-live">
                 <div class="stat-header">
                     <span class="live-dot"></span>
                     <span class="stat-label">LIVE NOW</span>
                 </div>
-                <div class="stat-value" id="liveCounter"><?php echo esc_html(iptv_text('hero_stat_1_val', '42,537')); ?>
-                </div>
-                <div class="stat-desc">
-                    <?php echo esc_html(iptv_text('hero_stat_1_desc', 'viewers streaming right now')); ?></div>
+                <div class="stat-value" id="liveCounter"><?php echo esc_html(iptv_text('hero_stat_1_val', '42,537')); ?></div>
+                <div class="stat-desc"><?php echo esc_html(iptv_text('hero_stat_1_desc', 'viewers streaming right now')); ?></div>
             </div>
 
             <!-- Card 2: PPV Events -->
             <div class="stat-card stat-ppv">
                 <div class="stat-value price"><?php echo esc_html(iptv_text('hero_stat_2_val', '$0')); ?></div>
-                <div class="stat-label-large"><?php echo esc_html(iptv_text('hero_stat_2_label', 'PPV Events')); ?>
-                </div>
-                <div class="stat-desc">
-                    <?php echo esc_html(iptv_text('hero_stat_2_desc', 'UFC, Boxing - All Included')); ?></div>
+                <div class="stat-label-large"><?php echo esc_html(iptv_text('hero_stat_2_label', 'PPV Events')); ?></div>
+                <div class="stat-desc"><?php echo esc_html(iptv_text('hero_stat_2_desc', 'UFC, Boxing - All Included')); ?></div>
             </div>
 
             <!-- Card 3: Live Channels -->
             <div class="stat-card stat-channels">
                 <div class="stat-value channels"><?php echo esc_html(iptv_text('hero_stat_3_val', '35,000+')); ?></div>
-                <div class="stat-label-large"><?php echo esc_html(iptv_text('hero_stat_3_label', 'Live Channels')); ?>
-                </div>
-                <div class="stat-desc"><?php echo esc_html(iptv_text('hero_stat_3_desc', 'From 198 countries')); ?>
-                </div>
+                <div class="stat-label-large"><?php echo esc_html(iptv_text('hero_stat_3_label', 'Live Channels')); ?></div>
+                <div class="stat-desc"><?php echo esc_html(iptv_text('hero_stat_3_desc', 'From 198 countries')); ?></div>
             </div>
         </div>
     </div>
