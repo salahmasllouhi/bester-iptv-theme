@@ -143,7 +143,7 @@ body {
 
 /* Section outer wrapper (transparent, provides vertical spacing) */
 .section-outer {
-    padding: var(--space-lg) 0;
+    padding: 0.45rem 0;
     background: transparent;
 }
 
@@ -592,7 +592,7 @@ body {
    02 - LOGOS BAR CSS
    ------------------------------------------- */
 .logos-bar {
-    padding: var(--space-lg) 0;
+    padding: 0.45rem 0;
 }
 
 h1,
@@ -608,7 +608,7 @@ h3 {
    03 - FEATURES SECTION CSS
    ------------------------------------------- */
 .features {
-    padding: var(--space-lg) 0;
+    padding: 0.45rem 0;
 }
 
 .features-inner {
@@ -699,7 +699,7 @@ h3 {
    04 - SPORTS SECTION CSS
    ------------------------------------------- */
 .sports {
-    padding: var(--space-lg) 0;
+    padding: 0.45rem 0;
 }
 
 .sports-container {
@@ -822,7 +822,7 @@ h3 {
    05 - COMPARISON SECTION CSS
    ------------------------------------------- */
 .comparison {
-    padding: var(--space-lg) 0;
+    padding: 0.45rem 0;
 }
 
 .comparison-inner {
@@ -1032,7 +1032,7 @@ h3 {
    06 - STEPS SECTION CSS
    ------------------------------------------- */
 .steps {
-    padding: var(--space-lg) 0;
+    padding: 0.45rem 0;
 }
 
 .steps .steps-container {
@@ -1154,7 +1154,7 @@ h3 {
    07 - DEVICES SECTION CSS
    ------------------------------------------- */
 .devices {
-    padding: var(--space-lg) 0;
+    padding: 0.45rem 0;
 }
 
 .devices-inner {
@@ -1229,7 +1229,7 @@ h3 {
    08 - FAQ SECTION CSS
    ------------------------------------------- */
 .faq {
-    padding: var(--space-lg) 0;
+    padding: 0.45rem 0;
 }
 
 .faq-container {
@@ -1329,7 +1329,7 @@ h3 {
    09 - FINAL CTA SECTION CSS
    ------------------------------------------- */
 .cta {
-    padding: var(--space-lg) 0;
+    padding: 0.45rem 0;
     background: transparent;
 }
 
