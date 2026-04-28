@@ -1,7 +1,7 @@
 /* Pricing Section Styles - Configurator */
 .pricing {
     padding: var(--space-lg) 0;
-    background: #ffffff !important;
+    background: transparent;
 }
 
 .pricing .container {
