@@ -228,24 +228,24 @@
     justify-content: center !important;
     width: 100% !important;
     padding: 1.15rem 2rem !important;
-    background: linear-gradient(270deg, #00D4AA, #5B4FE8, #7C3AED, #00D4AA) !important;
-    background-size: 300% 300% !important;
+    background: linear-gradient(90deg, #5B4FE8 0%, #7E72FF 100%) !important;
+    background-size: unset !important;
     color: #ffffff !important;
     border-radius: var(--radius-full) !important;
     font-weight: 800 !important;
     font-size: 1.15rem !important;
     letter-spacing: 0.02em !important;
     text-decoration: none !important;
-    box-shadow: 0 6px 28px rgba(91, 79, 232, 0.5), 0 2px 8px rgba(0, 212, 170, 0.3) !important;
-    animation: cta-shimmer 4s ease infinite !important;
+    box-shadow: 0 6px 28px rgba(91, 79, 232, 0.45) !important;
+    animation: none !important;
     transition: transform 0.3s ease, box-shadow 0.3s ease !important;
     margin-bottom: 1rem !important;
 }
 
 .cta-btn:hover {
     transform: translateY(-3px) scale(1.015) !important;
-    box-shadow: 0 14px 48px rgba(91, 79, 232, 0.65), 0 4px 16px rgba(0, 212, 170, 0.4) !important;
-    animation: cta-shimmer 2s ease infinite !important;
+    box-shadow: 0 14px 48px rgba(91, 79, 232, 0.6) !important;
+    animation: none !important;
 }
 
 /* Mobile Responsive */
