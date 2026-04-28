@@ -384,21 +384,21 @@ body {
 }
 
 /* ============================================
-   STATS CARDS - 3 HORIZONTAL
+   STATS CARDS - 4 HORIZONTAL
    ============================================ */
 .hero-stats {
     animation: fadeInUp 0.8s ease-out 0.2s both;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
     gap: var(--space-md);
     width: 100%;
+    justify-content: center;
 }
 
 .stat-card {
     background: var(--bg-card);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-lg);
-    padding: var(--space-md) var(--space-lg);
+    padding: 1rem 1.5rem;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
@@ -406,7 +406,9 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: center;
+    flex: 1;
+    min-width: 0;
 }
 
 .stat-card::before {
@@ -480,22 +482,10 @@ body {
 .stat-value {
     font-size: 1.875rem;
     font-weight: 800;
-    color: var(--text-primary);
+    color: var(--color-indigo);
     font-family: 'DM Sans', sans-serif;
     letter-spacing: -0.02em;
     line-height: 1.2;
-}
-
-.stat-value.price {
-    color: var(--color-teal);
-}
-
-.stat-value.channels {
-    color: var(--color-teal);
-}
-
-.stat-value.movies {
-    color: var(--color-indigo);
 }
 
 .stat-desc {
@@ -523,7 +513,11 @@ body {
     }
 
     .hero-stats {
-        grid-template-columns: repeat(2, 1fr);
+        flex-direction: column;
+    }
+
+    .stat-card {
+        width: 100%;
     }
 
     .stat-value {
