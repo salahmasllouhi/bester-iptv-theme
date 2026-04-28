@@ -6,14 +6,13 @@
 <section id="pricing" class="pricing">
     <div class="container">
         <div style="text-align:center;margin-bottom:1rem;">
-            <span
-                style="display:inline-block;background:var(--blue-100);color:var(--blue-600);padding:0.5rem 1rem;border-radius:2rem;font-size:0.875rem;font-weight:600;">
+            <span class="section-tag">
                 <?php echo esc_html(iptv_text('pricing_badge', 'Stream Smarter, Pay Less – Start Today!')); ?>
             </span>
         </div>
         <div class="pricing-header">
             <h2 class="mobile-split-title"><?php echo esc_html(iptv_text('pricing_title', 'Unlimited Streaming')); ?>
-                <span><?php echo esc_html(iptv_text('pricing_title_span', 'at a fair price')); ?></span>
+                <span class="gradient-text"><?php echo esc_html(iptv_text('pricing_title_span', 'at a fair price')); ?></span>
             </h2>
             <p style="color:var(--text-secondary);margin-top:0.5rem;">
                 <?php echo esc_html(iptv_text('pricing_subtitle', '35,000+ live channels and 150,000+ movies & series in 4K.')); ?>
@@ -48,7 +47,7 @@
             style="display:flex;align-items:center;justify-content:center;gap:1rem;margin-bottom:2rem;flex-wrap:wrap;">
             <div style="display:flex;align-items:center;gap:0.5rem;">
                 <span
-                    style="width:1.75rem;height:1.75rem;background:var(--blue-600);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;">1</span>
+                    style="width:1.75rem;height:1.75rem;background:var(--color-teal);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;">1</span>
                 <span class="step-label"
                     style="font-weight:600;font-size:0.875rem;"><?php echo esc_html(iptv_text('step_1_label', 'Select Devices')); ?></span>
             </div>
@@ -76,7 +75,7 @@
                 style="background:var(--bg);border-radius:0.75rem;padding:1.25rem;margin-bottom:1.25rem;">
                 <div class="config-title" style="margin-bottom:1rem;">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        style="width:1.25rem;height:1.25rem;color:var(--blue-600);">
+                        style="width:1.25rem;height:1.25rem;color:var(--color-teal);">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
@@ -107,7 +106,7 @@
                 style="background:var(--bg);border-radius:0.75rem;padding:1.25rem;margin-bottom:1.25rem;">
                 <div class="config-title" style="margin-bottom:1rem;">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        style="width:1.25rem;height:1.25rem;color:var(--blue-600);">
+                        style="width:1.25rem;height:1.25rem;color:var(--color-teal);">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
@@ -220,12 +219,9 @@
 
             <!-- Trust Badges -->
             <div class="trust-badges">
-                <div
-                    style="background:var(--bg);border-radius:0.5rem;padding:1rem;display:flex;align-items:flex-start;gap:0.75rem;">
-                    <div
-                        style="width:2.5rem;height:2.5rem;background:var(--blue-50);border-radius:0.5rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                        <svg fill="none" stroke="var(--blue-600)" viewBox="0 0 24 24"
-                            style="width:1.25rem;height:1.25rem;">
+                <div>
+                    <div style="width:2.5rem;height:2.5rem;background:rgba(0,212,170,0.1);border-radius:0.5rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <svg fill="none" stroke="var(--color-teal)" viewBox="0 0 24 24" style="width:1.25rem;height:1.25rem;">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
@@ -239,12 +235,9 @@
                         </div>
                     </div>
                 </div>
-                <div
-                    style="background:var(--bg);border-radius:0.5rem;padding:1rem;display:flex;align-items:flex-start;gap:0.75rem;">
-                    <div
-                        style="width:2.5rem;height:2.5rem;background:var(--blue-50);border-radius:0.5rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                        <svg fill="none" stroke="var(--blue-600)" viewBox="0 0 24 24"
-                            style="width:1.25rem;height:1.25rem;">
+                <div>
+                    <div style="width:2.5rem;height:2.5rem;background:rgba(0,212,170,0.1);border-radius:0.5rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <svg fill="none" stroke="var(--color-teal)" viewBox="0 0 24 24" style="width:1.25rem;height:1.25rem;">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
@@ -258,12 +251,9 @@
                         </div>
                     </div>
                 </div>
-                <div
-                    style="background:var(--bg);border-radius:0.5rem;padding:1rem;display:flex;align-items:flex-start;gap:0.75rem;">
-                    <div
-                        style="width:2.5rem;height:2.5rem;background:var(--blue-50);border-radius:0.5rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                        <svg fill="none" stroke="var(--blue-600)" viewBox="0 0 24 24"
-                            style="width:1.25rem;height:1.25rem;">
+                <div>
+                    <div style="width:2.5rem;height:2.5rem;background:rgba(0,212,170,0.1);border-radius:0.5rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <svg fill="none" stroke="var(--color-teal)" viewBox="0 0 24 24" style="width:1.25rem;height:1.25rem;">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                         </svg>

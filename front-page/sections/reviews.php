@@ -36,6 +36,7 @@ if (empty($reviews)) {
 
         <!-- Header -->
         <div class="reviews-header">
+            <div class="section-tag" style="margin-bottom:1rem;"><?php echo esc_html(iptv_text('reviews_tag', 'Customer Reviews')); ?></div>
             <h2>
                 <?php echo esc_html($title); ?>
             </h2>
