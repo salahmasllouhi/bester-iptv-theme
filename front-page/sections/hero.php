@@ -47,11 +47,11 @@
         <div class="hero-stats">
             <!-- Card 1: Live Now (Animated) -->
             <div class="stat-card stat-live">
+                <div class="stat-value" id="liveCounter"><?php echo esc_html(iptv_text('hero_stat_1_val', '42,537')); ?></div>
                 <div class="stat-header">
                     <span class="live-dot"></span>
                     <span class="stat-label">LIVE NOW</span>
                 </div>
-                <div class="stat-value" id="liveCounter"><?php echo esc_html(iptv_text('hero_stat_1_val', '42,537')); ?></div>
                 <div class="stat-desc"><?php echo esc_html(iptv_text('hero_stat_1_desc', 'viewers streaming right now')); ?></div>
             </div>
 

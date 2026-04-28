@@ -402,8 +402,11 @@ body {
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    width: clamp(220px, 32vw, 360px);
-    min-height: clamp(97px, 11.7vw, 143px);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
 }
 
 .stat-card::before {
@@ -432,6 +435,7 @@ body {
 .stat-header {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
     margin-bottom: 8px;
 }
@@ -474,7 +478,7 @@ body {
 }
 
 .stat-value {
-    font-size: 2.5rem;
+    font-size: 1.875rem;
     font-weight: 800;
     color: var(--text-primary);
     font-family: 'DM Sans', sans-serif;
@@ -519,7 +523,7 @@ body {
     }
 
     .stat-value {
-        font-size: 2rem;
+        font-size: 1.875rem;
     }
 
     .hero-cta-wrap {
