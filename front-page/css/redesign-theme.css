@@ -402,8 +402,8 @@ body {
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    width: clamp(220px, 30vw, 320px);
-    min-height: clamp(150px, 18vw, 220px);
+    width: clamp(220px, 32vw, 360px);
+    min-height: clamp(97px, 11.7vw, 143px);
 }
 
 .stat-card::before {
