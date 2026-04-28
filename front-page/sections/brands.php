@@ -1,7 +1,5 @@
 <div class="logos-bar">
     <div class="logos-container">
-        <div class="logos-label"><?php echo esc_html(iptv_text('logos_label', 'Access Premium Content From')); ?></div>
-
         <!-- Marquee Wrapper -->
         <div class="logos-marquee">
             <div class="logos-track">
