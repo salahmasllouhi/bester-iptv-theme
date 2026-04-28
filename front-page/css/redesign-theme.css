@@ -625,7 +625,7 @@ body {
 
 .logos-grid span {
     font-weight: 700;
-    font-size: 1.4rem;
+    font-size: 2rem;
     color: var(--text-secondary);
     letter-spacing: -0.02em;
 }
