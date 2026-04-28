@@ -39,11 +39,7 @@
     }
 
     .logos-label {
-        color: rgba(255, 255, 255, 0.6);
-        text-align: center;
         margin-bottom: 1.5rem;
-        font-size: 0.875rem;
-        font-weight: 500;
     }
 
     .logos-marquee {

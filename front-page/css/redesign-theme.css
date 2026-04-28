@@ -600,9 +600,10 @@ body {
 
 .logos-label {
     text-align: center;
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: #ffffff;
     text-transform: uppercase;
     letter-spacing: 0.12em;
     margin-bottom: var(--space-md);
