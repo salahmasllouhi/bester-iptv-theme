@@ -26,8 +26,8 @@
             <?php echo iptv_text('hero_title', 'Nordic IPTV'); ?><br>
             <span
                 class="gradient-text"><?php echo iptv_text('hero_title_span', 'Premium Streaming Experience,'); ?></span><br>
-            <?php echo iptv_text('hero_title_3', 'Seamlessly Delivered'); ?><br>
-            <?php echo iptv_text('hero_title_4', 'Zero Limits.'); ?>
+            <?php echo iptv_text('hero_title_3', 'Seamlessly Delivered'); ?>
+            <?php $hero_title_4 = iptv_text('hero_title_4', ''); if ($hero_title_4) : ?><br><?php echo $hero_title_4; ?><?php endif; ?>
         </h1>
 
         <p class="hero-subtitle">
@@ -35,9 +35,21 @@
         </p>
 
         <!-- CTA with glow container -->
+        <?php
+        $cta_text = iptv_text('hero_cta', 'Start Streaming Now');
+        $cta_href = '#pricing';
+        if (function_exists('get_field')) {
+            $front_page_id = get_option('page_on_front');
+            $cta_link = $front_page_id ? get_field('hero_cta', $front_page_id) : get_field('hero_cta');
+            if (is_array($cta_link)) {
+                $cta_text = !empty($cta_link['title']) ? $cta_link['title'] : $cta_text;
+                $cta_href = !empty($cta_link['url']) ? $cta_link['url'] : $cta_href;
+            }
+        }
+        ?>
         <div class="hero-cta-wrap">
-            <a href="#pricing" class="btn btn-primary">
-                <?php echo esc_html(iptv_text('hero_cta', 'Start Streaming Now')); ?>
+            <a href="<?php echo esc_url($cta_href); ?>" class="btn btn-primary">
+                <?php echo esc_html($cta_text); ?>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <line x1="5" y1="12" x2="19" y2="12" />
                     <polyline points="12 5 19 12 12 19" />

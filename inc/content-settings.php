@@ -3080,12 +3080,15 @@ class IPTV_Content_Settings
             'hero_title_span' => 'hero_title_gradient_text',
         );
 
+        // Keys that return non-string ACF types (e.g. link arrays) — handled directly in templates
+        $acf_skip_keys = array('hero_cta');
+
         // Check ACF first (field attached to the front page post)
-        if (function_exists('get_field')) {
+        if (function_exists('get_field') && !in_array($key, $acf_skip_keys)) {
             $front_page_id = get_option('page_on_front');
             $acf_field_name = isset($acf_key_map[$key]) ? $acf_key_map[$key] : $key;
             $acf_value = $front_page_id ? get_field($acf_field_name, $front_page_id) : get_field($acf_field_name);
-            if ($acf_value !== null && $acf_value !== '') {
+            if ($acf_value !== null && $acf_value !== '' && !is_array($acf_value)) {
                 return $acf_value;
             }
         }
