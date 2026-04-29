@@ -41,7 +41,8 @@ class IPTV_Content_Settings
                 'hero_savings_badge' => array('label' => 'Savings Badge', 'type' => 'text', 'default' => 'Save Over $1,500 Annually!'),
                 'hero_title' => array('label' => 'Hero Title Line 1', 'type' => 'text', 'default' => 'Watch Everything.'),
                 'hero_title_span' => array('label' => 'Hero Title Highlight', 'type' => 'text', 'default' => 'One Subscription.'),
-                'hero_title_3' => array('label' => 'Hero Title Line 3', 'type' => 'text', 'default' => 'Zero Limits.'),
+                'hero_title_3' => array('label' => 'Hero Title Line 3', 'type' => 'text', 'default' => 'Seamlessly Delivered'),
+                'hero_title_4' => array('label' => 'Hero Title Line 4', 'type' => 'text', 'default' => 'Zero Limits.'),
                 'hero_subtitle' => array('label' => 'Hero Subtitle', 'type' => 'textarea', 'default' => 'Stop paying for <strong>6+ streaming services</strong>. Get every sport, every show, every PPV event in one place. <strong>No blackouts. No restrictions.</strong>'),
                 'hero_cta' => array('label' => 'CTA Button', 'type' => 'text', 'default' => 'Start Streaming Now'),
                 // New Hero Stats
@@ -88,6 +89,7 @@ class IPTV_Content_Settings
                 'feature_5_desc' => array('label' => 'Feature 5 Description', 'type' => 'textarea', 'default' => 'Ultra HD quality on all devices. No buffering, no lag.'),
                 'feature_6_title' => array('label' => 'Feature 6 Title', 'type' => 'text', 'default' => '24/7 Support'),
                 'feature_6_desc' => array('label' => 'Feature 6 Description', 'type' => 'textarea', 'default' => 'Real humans, real help via live chat or WhatsApp anytime.'),
+                'features_cta' => array('label' => 'Features CTA Button', 'type' => 'text', 'default' => 'Get Access Now'),
             )
         ),
         'comparison' => array(
@@ -100,6 +102,9 @@ class IPTV_Content_Settings
                 'comp_desc' => array('label' => 'Description Text', 'type' => 'textarea', 'default' => 'Why waste money? Get instant access to 33,000+ live channels and 150,000+ movies & shows in stunning 4K. No contracts, no hidden fees—just pure entertainment.'),
                 'comp_cta_text' => array('label' => 'CTA Button Text', 'type' => 'text', 'default' => 'Start Watching Now →'),
                 'comp_cta_link' => array('label' => 'CTA Button Link', 'type' => 'text', 'default' => '#pricing'),
+
+                // Table Header
+                'comp_th_feature' => array('label' => 'Feature Column Header', 'type' => 'text', 'default' => 'Feature'),
 
                 // Right Column (Table Header)
                 'comp_col_1' => array('label' => 'Competitor Name', 'type' => 'text', 'default' => 'Traditional Cable'),
@@ -115,10 +120,11 @@ class IPTV_Content_Settings
                 'comp_row_2_val_1' => array('label' => 'Row 2 Competitor', 'type' => 'text', 'default' => '$12.99/mo'),
                 'comp_row_2_val_2' => array('label' => 'Row 2 Us', 'type' => 'text', 'default' => '150,000+ titles'),
 
-                // Row 3 (Price)
+                // Row 3
                 'comp_row_3_label' => array('label' => 'Row 3 Label', 'type' => 'text', 'default' => 'HBO Max'),
                 'comp_row_3_val_1' => array('label' => 'Row 3 Competitor', 'type' => 'text', 'default' => '$14.99/mo'),
-                'comp_price' => array('label' => 'Row 3 Us (Price)', 'type' => 'text', 'default' => '$69.99'), // Specific key for currency translation
+                'comp_row_3_val_2' => array('label' => 'Row 3 Us', 'type' => 'text', 'default' => 'Included'),
+                'comp_price' => array('label' => 'Annual Price (Us)', 'type' => 'text', 'default' => '$69.99'),
 
                 // Row 4
                 'comp_row_4_label' => array('label' => 'Row 4 Label', 'type' => 'text', 'default' => 'Sports Package'),
@@ -162,11 +168,13 @@ class IPTV_Content_Settings
                 'comp_price_sub' => array('label' => 'Our Price Subtext', 'type' => 'text', 'default' => 'Just ~$5.83/month'),
                 'comp_savings_label' => array('label' => 'Savings Banner Label', 'type' => 'text', 'default' => 'Your Annual Savings'),
                 'comp_savings_val' => array('label' => 'Savings Amount', 'type' => 'text', 'default' => '$1,100+'),
+                'comp_cta' => array('label' => 'Comparison CTA Button', 'type' => 'text', 'default' => 'Start Saving Today'),
             )
         ),
         'steps' => array(
             'label' => 'Steps Section',
             'fields' => array(
+                'steps_tag' => array('label' => 'Steps Tag', 'type' => 'text', 'default' => 'Easy Setup'),
                 'steps_title' => array('label' => 'Steps Title', 'type' => 'text', 'default' => 'Start Streaming in'),
                 'steps_title_span' => array('label' => 'Steps Title Highlight', 'type' => 'text', 'default' => '3 Steps'),
                 'steps_subtitle' => array('label' => 'Steps Subtitle', 'type' => 'text', 'default' => 'Get up and running in minutes, not hours.'),
@@ -179,6 +187,7 @@ class IPTV_Content_Settings
                 'step_3_badge' => array('label' => 'Step 3 Badge', 'type' => 'text', 'default' => '3'),
                 'step_3_title' => array('label' => 'Step 3 Title', 'type' => 'text', 'default' => 'Start Watching'),
                 'step_3_desc' => array('label' => 'Step 3 Description', 'type' => 'textarea', 'default' => 'Our team will configure your account and send login credentials via email. Download the app and enjoy!'),
+                'steps_cta' => array('label' => 'Steps CTA Button', 'type' => 'text', 'default' => 'Get Started Now'),
             )
         ),
         'unlock' => array(
@@ -266,6 +275,7 @@ class IPTV_Content_Settings
         'reviews' => array(
             'label' => 'Reviews Section',
             'fields' => array(
+                'reviews_tag' => array('label' => 'Reviews Tag', 'type' => 'text', 'default' => 'Customer Reviews'),
                 'reviews_title' => array('label' => 'Section Title', 'type' => 'text', 'default' => 'Rated 4.9/5 on Trustpilot'),
                 'reviews_subtitle' => array('label' => 'Section Subtitle', 'type' => 'text', 'default' => 'Based on 2,500+ reviews'),
 
@@ -343,7 +353,7 @@ class IPTV_Content_Settings
                 // Sport 6: UFC/Boxing
                 'sport_6_name' => array('label' => 'Sport 6 Name', 'type' => 'text', 'default' => 'UFC/Boxing'),
                 'sport_6_subtitle' => array('label' => 'Sport 6 Subtitle', 'type' => 'text', 'default' => 'All PPV Events Free'),
-                // Sports Card Leagues - Adding explicit fields for better control if needed, but subtitles cover most.
+                'sports_cta' => array('label' => 'Sports CTA Button', 'type' => 'text', 'default' => 'Watch All Sports Now'),
             )
         ),
         'footer' => array(
