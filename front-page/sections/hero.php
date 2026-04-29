@@ -23,10 +23,11 @@
         </div>
 
         <h1>
-            <?php echo iptv_text('hero_title', 'Nordic IPTV.'); ?><br>
+            <?php echo iptv_text('hero_title', 'Nordic IPTV'); ?><br>
             <span
-                class="gradient-text"><?php echo iptv_text('hero_title_span', 'Premium Streaming Experience.'); ?></span><br>
-            <?php echo iptv_text('hero_title_3', 'Any Device, No Limits'); ?>
+                class="gradient-text"><?php echo iptv_text('hero_title_span', 'Premium Streaming Experience,'); ?></span><br>
+            <?php echo iptv_text('hero_title_3', 'Seamlessly Delivered'); ?><br>
+            <?php echo iptv_text('hero_title_4', 'Zero Limits.'); ?>
         </h1>
 
         <p class="hero-subtitle">

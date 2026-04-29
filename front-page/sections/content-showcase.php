@@ -167,7 +167,6 @@
         .showcase-content {
             padding-right: 0;
             order: 1;
-            /* Text first */
         }
 
         .section-subtitle {
@@ -184,14 +183,12 @@
             order: 2;
             padding: 0 var(--space-md);
         }
+    }
 
-        .image-wrapper {
-            transform: none;
-            /* Disable 3D on mobile for simplicity */
-        }
-
-        .image-wrapper:hover {
-            transform: none;
+    @media (max-width: 640px) {
+        .showcase-features {
+            grid-template-columns: 1fr;
+            gap: 1rem;
         }
     }
 </style>

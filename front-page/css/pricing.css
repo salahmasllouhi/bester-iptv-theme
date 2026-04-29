@@ -260,11 +260,33 @@
     }
 
     .config-title {
-        white-space: nowrap;
         font-size: 0.9rem;
     }
 
-    .card-grid {
+    /* Devices: always 4 columns */
+    #devices.card-grid {
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 0.4rem;
+    }
+
+    #devices.card-grid .select-card {
+        padding: 0.6rem 0.25rem !important;
+    }
+
+    #devices.card-grid .select-card .num {
+        font-size: 0.72rem !important;
+        white-space: nowrap;
+    }
+
+    #devices.card-grid .select-card svg {
+        width: 1rem !important;
+        height: 1rem !important;
+        margin-bottom: 0.2rem !important;
+    }
+
+    /* Durations: 2 per row */
+    #durations.card-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
         gap: 0.5rem;
     }
 
@@ -286,5 +308,12 @@
 
     .trust-badges {
         grid-template-columns: 1fr;
+    }
+
+    /* CTA button: keep text on one line */
+    .cta-btn {
+        font-size: 1rem !important;
+        padding: 1rem 1.5rem !important;
+        white-space: nowrap;
     }
 }

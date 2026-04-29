@@ -180,5 +180,14 @@
                 <?php echo esc_html(iptv_text('comp_savings_val', '$1,100+')); ?>
             </div>
         </div>
+        <div style="text-align:center;margin-top:var(--space-xl);">
+            <a href="#pricing" class="btn btn-primary">
+                <?php echo esc_html(iptv_text('comp_cta', 'Start Saving Today')); ?>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                </svg>
+            </a>
+        </div>
     </div>
 </section>
