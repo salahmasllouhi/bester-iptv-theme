@@ -856,259 +856,124 @@ h3 {
     }
 }
 
-/* Table wrapper */
-.comp-table-wrap {
-    background: var(--color-navy);
-    border-radius: var(--radius-xl);
-    overflow: hidden;
-    margin-bottom: var(--space-xl);
-}
-
-/* Table base */
-.comp-table {
-    width: 100%;
-    border-collapse: collapse;
+/* Comparison card layout */
+.comp-cards-wrap {
+    max-width: 580px;
+    margin: 0 auto var(--space-xl);
     font-family: 'Outfit', sans-serif;
-    table-layout: fixed;
 }
 
-/* Header row */
-.comp-th {
-    padding: 18px 20px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    text-align: left;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+.feat-card {
+    background: #1e293b;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.comp-th-feature {
-    color: rgba(255, 255, 255, 0.45);
+.fc-left {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
 }
 
-.comp-th-cable {
-    color: rgba(255, 255, 255, 0.85);
-    border-left: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.comp-th-nordic {
-    color: var(--color-teal);
-    border-left: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(0, 212, 170, 0.06);
-}
-
-/* Dot badges */
-.comp-dot {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    margin-right: 8px;
-    vertical-align: middle;
-    position: relative;
-    top: -1px;
-}
-
-.comp-dot-red  { background: var(--color-coral); }
-.comp-dot-teal { background: var(--color-teal); }
-
-/* Body rows */
-.comp-row:not(.comp-row-total) {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.comp-row:not(.comp-row-total):hover {
-    background: rgba(255, 255, 255, 0.03);
-}
-
-.comp-td {
-    padding: 14px 20px;
-    font-size: 0.95rem;
-    font-weight: 400;
-    vertical-align: middle;
-}
-
-.comp-td-feature {
-    color: rgba(255, 255, 255, 0.7);
-}
-
-.comp-td-cable {
-    border-left: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.comp-td-nordic {
-    border-left: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(0, 212, 170, 0.04);
-}
-
-/* Cell value variants */
-.comp-val-negative {
-    color: var(--color-coral);
-    font-weight: 600;
-}
-
-.comp-val-included {
-    color: var(--color-teal);
-    font-weight: 600;
-}
-
-.comp-val-ppv {
-    font-weight: 700;
-}
-
-.comp-val-ppv-free {
-    color: var(--color-teal);
-    font-weight: 700;
-    background: rgba(0, 212, 170, 0.12);
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 0.88rem;
-}
-
-.comp-val-neutral {
-    color: rgba(255, 255, 255, 0.45);
-    font-weight: 400;
-}
-
-/* Annual cost row */
-.comp-row-total .comp-td {
-    border-top: 2px solid rgba(255, 255, 255, 0.18);
-    padding-top: 20px;
-    padding-bottom: 20px;
-}
-
-.comp-td-total-label {
-    color: rgba(255, 255, 255, 0.55);
-    font-weight: 700;
+.fc-name {
     font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    color: #e2e8f0;
+    font-weight: 500;
 }
 
-.comp-td-total {
-    vertical-align: middle;
-}
-
-.comp-total-val {
-    display: block;
-    font-size: 2.25rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-}
-
-.comp-total-cable {
-    color: var(--color-coral);
-}
-
-.comp-total-nordic {
-    color: var(--color-teal);
-}
-
-.comp-total-sub {
-    display: block;
-    font-size: 0.82rem;
-    color: rgba(255, 255, 255, 0.45);
-    margin-top: 3px;
-    font-weight: 400;
-}
-
-/* Savings banner */
-.savings-banner {
-    text-align: center;
-    padding: var(--space-lg);
-    background: linear-gradient(135deg, rgba(0, 212, 170, 0.08), rgba(91, 79, 232, 0.06));
-    border: 2px dashed var(--color-teal);
-    border-radius: var(--radius-xl);
-}
-
-.savings-label {
+.fc-cable {
     font-size: 0.95rem;
-    font-family: 'Outfit', sans-serif;
-    color: var(--text-secondary);
-    margin-bottom: var(--space-xs);
+    color: var(--color-coral);
+    text-decoration: line-through;
+    opacity: 0.65;
+    font-weight: 600;
 }
 
-.savings-value {
-    font-size: 3.5rem;
+.fc-right {
+    font-size: 0.9rem;
+    color: var(--color-teal);
+    font-weight: 600;
+    white-space: nowrap;
+    margin-left: 12px;
+}
+
+/* Annual cost card */
+.annual-card {
+    background: #0d1f35;
+    border: 1px solid rgba(0, 212, 170, 0.25);
+    border-radius: 10px;
+    padding: 16px;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ac-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ac-label {
+    font-size: 0.7rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.ac-cable {
+    font-size: 1.1rem;
+    color: var(--color-coral);
+    text-decoration: line-through;
+    opacity: 0.65;
+    font-weight: 700;
+}
+
+.ac-right {
+    text-align: right;
+}
+
+.ac-price {
+    font-size: 1.75rem;
     font-weight: 800;
-    font-family: 'Outfit', sans-serif;
     color: var(--color-teal);
     letter-spacing: -0.02em;
 }
 
-/* Mobile */
-@media (max-width: 640px) {
-    .comparison-inner {
-        padding-left: var(--space-sm);
-        padding-right: var(--space-sm);
-    }
-
-    .comp-table-wrap {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        border-radius: var(--radius-lg);
-    }
-
-    .comp-table {
-        min-width: 320px;
-        table-layout: auto;
-    }
-
-    .comp-th,
-    .comp-td {
-        padding: 10px 8px;
-        font-size: 0.78rem;
-    }
-
-    .comp-th-feature,
-    .comp-td-feature {
-        min-width: 90px;
-        max-width: 110px;
-        word-break: break-word;
-    }
-
-    .comp-th-cable,
-    .comp-th-nordic,
-    .comp-td-cable,
-    .comp-td-nordic {
-        min-width: 90px;
-        text-align: center;
-    }
-
-    .comp-total-val {
-        font-size: 1.4rem;
-    }
-
-    .comp-total-sub {
-        font-size: 0.72rem;
-    }
-
-    .savings-value {
-        font-size: 2.2rem;
-    }
-
-    .savings-banner {
-        padding: var(--space-md);
-    }
-
-    .comp-val-ppv-free {
-        padding: 2px 6px;
-        font-size: 0.75rem;
-    }
+.ac-sub {
+    font-size: 0.7rem;
+    color: #64748b;
+    margin-top: 2px;
 }
 
-@media (max-width: 480px) {
-    .comp-th,
-    .comp-td {
-        padding: 8px 6px;
-        font-size: 0.75rem;
-    }
+/* Savings bar */
+.savings-bar {
+    margin-top: 12px;
+    background: rgba(0, 212, 170, 0.08);
+    border: 1px solid rgba(0, 212, 170, 0.2);
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+}
 
-    .comp-total-val {
-        font-size: 1.3rem;
-    }
+.sav-label {
+    font-size: 0.7rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+}
+
+.sav-val {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--color-teal);
+    letter-spacing: -0.02em;
 }
 
 /* -------------------------------------------
