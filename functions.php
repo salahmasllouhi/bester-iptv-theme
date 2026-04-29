@@ -817,9 +817,11 @@ add_action('wp_footer', function () {
                         return;
                     }
 
-                    // Redirect to main site checkout with SKU (main site will lookup by SKU)
-                    const url = mainSiteUrl + '/checkout/?add-by-sku=' + encodeURIComponent(skuToUse);
-                    window.location.href = url;
+                    // Redirect to panel instead of main site checkout
+                    window.location.href = 'https://panel.nordictv.io/';
+                    // NOTE: Commented out — redirects now go to https://panel.nordictv.io/
+                    // const url = mainSiteUrl + '/checkout/?add-by-sku=' + encodeURIComponent(skuToUse);
+                    // window.location.href = url;
                 });
             }
         })();
