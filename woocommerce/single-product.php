@@ -9,31 +9,25 @@
 defined('ABSPATH') || exit;
 
 get_header('shop');
-?>
 
-<link rel="stylesheet"
-    href="<?php echo get_template_directory_uri(); ?>/front-page/css/variables.css?v=<?php echo time(); ?>">
-<link rel="stylesheet"
-    href="<?php echo get_template_directory_uri(); ?>/front-page/css/base.css?v=<?php echo time(); ?>">
-<link rel="stylesheet"
-    href="<?php echo get_template_directory_uri(); ?>/front-page/css/header.css?v=<?php echo time(); ?>">
-<link rel="stylesheet"
-    href="<?php echo get_template_directory_uri(); ?>/front-page/css/footer.css?v=<?php echo time(); ?>">
-<link rel="stylesheet"
-    href="<?php echo get_template_directory_uri(); ?>/front-page/css/responsive.css?v=<?php echo time(); ?>">
-<link rel="stylesheet"
-    href="<?php echo get_template_directory_uri(); ?>/front-page/css/product-page.css?v=<?php echo time(); ?>">
-
-<style>
-    /* Fix Header Logo Size */
-    .site-header .site-logo img,
-    .main-header .logo img,
-    header .logo img,
-    .header .logo img {
-        max-width: 120px !important;
-        height: auto !important;
+$css_files = [
+    'variables.css',
+    'redesign-theme.css',
+    'base.css',
+    'header.css',
+    'footer.css',
+    'responsive.css',
+    'product-page.css',
+];
+echo '<style>';
+foreach ($css_files as $file) {
+    $path = get_template_directory() . '/front-page/css/' . $file;
+    if (file_exists($path)) {
+        echo file_get_contents($path);
     }
-</style>
+}
+echo '</style>';
+?>
 
 <!-- Universal Header -->
 <?php include get_template_directory() . '/inc/universal-header.php'; ?>
