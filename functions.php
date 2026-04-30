@@ -745,9 +745,8 @@ add_action('template_redirect', function () {
     }
 });
 
-// Cross-site cart: Output main site URL on product pages for JS redirection
+// Product page: redirect "Buy Now" to panel on the main site
 add_action('wp_footer', function () {
-    // Only run if WooCommerce is active
     if (!class_exists('WooCommerce') || !function_exists('is_product'))
         return;
     if (!is_product())
@@ -756,11 +755,25 @@ add_action('wp_footer', function () {
     $main_site_url = defined('IPTV_MAIN_SITE_URL') ? IPTV_MAIN_SITE_URL : home_url();
     $current_site_url = home_url();
 
-    // Only add redirect script on subsites (not main site)
-    if ($main_site_url === $current_site_url)
+    // On the main site, intercept the cart form and redirect to panel
+    if ($main_site_url === $current_site_url) {
+        ?>
+        <script>
+            (function () {
+                var form = document.querySelector('form.cart');
+                if (form) {
+                    form.addEventListener('submit', function (e) {
+                        e.preventDefault();
+                        window.location.href = 'https://panel.nordictv.io/';
+                    });
+                }
+            })();
+        </script>
+        <?php
         return;
+    }
 
-    // Get current product SKU for main site lookup
+    // Get current product SKU for main site lookup (subsite flow)
     global $product;
     $product_sku = $product ? $product->get_sku() : '';
 
