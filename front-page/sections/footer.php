@@ -66,6 +66,7 @@
                 <?php else: ?>
                     <a href="#features">Features</a>
                     <a href="#pricing">Pricing</a>
+                    <a href="https://panel.nordictv.io/login">My Account</a>
                 <?php endif; ?>
             </div>
             <?php if (has_nav_menu('footer_2')): ?>

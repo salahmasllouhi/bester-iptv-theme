@@ -49,6 +49,7 @@ $sections = array(
     'sports',      // Redesigned
     'comparison',  // Redesigned (Price Comparison)
     'steps',       // Redesigned
+    'dashboard',   // New: Member Dashboard
     'unlock',      // Redesigned (Devices)
     'pricing',     // Existing (User said: "Your Existing Pricing Section Goes Here")
     'reviews',     // Existing

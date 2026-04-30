@@ -579,6 +579,9 @@ require_once get_template_directory() . '/inc/admin-bulk-editor.php';
 // Include Price Sync Utility (for syncing variation prices from main site to subsites)
 require_once get_template_directory() . '/inc/sync-prices.php';
 
+// ACF field group: front-page hero CTAs + member dashboard section
+require_once get_template_directory() . '/inc/front-page-acf-fields.php';
+
 // Include Polylang string helpers for channel / sport / series templates
 require_once get_template_directory() . '/inc/channel-strings.php';
 require_once get_template_directory() . '/sport/inc/sport-strings.php';
