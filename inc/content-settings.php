@@ -113,12 +113,12 @@ class IPTV_Content_Settings
                 // Row 1
                 'comp_row_1_label' => array('label' => 'Row 1 Label', 'type' => 'text', 'default' => 'Netflix'),
                 'comp_row_1_val_1' => array('label' => 'Row 1 Competitor', 'type' => 'text', 'default' => '$17.99/mo'),
-                'comp_row_1_val_2' => array('label' => 'Row 1 Us', 'type' => 'text', 'default' => '35,000+'),
+                'comp_row_1_val_2' => array('label' => 'Row 1 Us', 'type' => 'text', 'default' => 'Included'),
 
                 // Row 2
                 'comp_row_2_label' => array('label' => 'Row 2 Label', 'type' => 'text', 'default' => 'Disney+'),
                 'comp_row_2_val_1' => array('label' => 'Row 2 Competitor', 'type' => 'text', 'default' => '$12.99/mo'),
-                'comp_row_2_val_2' => array('label' => 'Row 2 Us', 'type' => 'text', 'default' => '150,000+ titles'),
+                'comp_row_2_val_2' => array('label' => 'Row 2 Us', 'type' => 'text', 'default' => 'Included'),
 
                 // Row 3
                 'comp_row_3_label' => array('label' => 'Row 3 Label', 'type' => 'text', 'default' => 'HBO Max'),
@@ -152,14 +152,14 @@ class IPTV_Content_Settings
                 'comp_row_8_val_2' => array('label' => 'Row 8 Us', 'type' => 'text', 'default' => '$0 Extra'),
 
                 // Row 9
-                'comp_row_9_label' => array('label' => 'Row 9 Label', 'type' => 'text', 'default' => 'Channels'),
-                'comp_row_9_val_1' => array('label' => 'Row 9 Competitor', 'type' => 'text', 'default' => 'Limited'),
-                'comp_row_9_val_2' => array('label' => 'Row 9 Us', 'type' => 'text', 'default' => '20,000+'),
+                'comp_row_9_label' => array('label' => 'Row 9 Label', 'type' => 'text', 'default' => '20,000+ Channels'),
+                'comp_row_9_val_1' => array('label' => 'Row 9 Competitor', 'type' => 'text', 'default' => 'Extra Fees'),
+                'comp_row_9_val_2' => array('label' => 'Row 9 Us', 'type' => 'text', 'default' => 'Included'),
 
                 // Row 10
-                'comp_row_10_label' => array('label' => 'Row 10 Label', 'type' => 'text', 'default' => 'Quality'),
-                'comp_row_10_val_1' => array('label' => 'Row 10 Competitor', 'type' => 'text', 'default' => 'HD only'),
-                'comp_row_10_val_2' => array('label' => 'Row 10 Us', 'type' => 'text', 'default' => '4K Included'),
+                'comp_row_10_label' => array('label' => 'Row 10 Label', 'type' => 'text', 'default' => '4K Quality'),
+                'comp_row_10_val_1' => array('label' => 'Row 10 Competitor', 'type' => 'text', 'default' => 'Extra Fees'),
+                'comp_row_10_val_2' => array('label' => 'Row 10 Us', 'type' => 'text', 'default' => 'Included'),
 
                 // Totals & Savings
                 'comp_total_label' => array('label' => 'Competitor Total Label', 'type' => 'text', 'default' => 'Annual Cost'),
@@ -543,6 +543,17 @@ class IPTV_Content_Settings
             $content[$lang] = array_map('sanitize_textarea_field', wp_unslash($_POST['iptv_content']));
             update_option('iptv_content', $content);
             echo '<div class="notice notice-success"><p>✅ Content saved!</p></div>';
+        }
+
+        // One-time migration: reset comp_row_1/2 _val_2 if still showing old channel count values
+        $content = get_option('iptv_content', array());
+        $old_val_1 = isset($content['en']['comp_row_1_val_2']) ? $content['en']['comp_row_1_val_2'] : '';
+        $old_val_2 = isset($content['en']['comp_row_2_val_2']) ? $content['en']['comp_row_2_val_2'] : '';
+        if (in_array($old_val_1, array('35,000+', '35000+')) || in_array($old_val_2, array('150,000+ titles', '150000+ titles'))) {
+            $content['en']['comp_row_1_val_2'] = 'Included';
+            $content['en']['comp_row_2_val_2'] = 'Included';
+            update_option('iptv_content', $content);
+            echo '<div class="notice notice-info"><p>✅ Comparison table row values updated to match current design.</p></div>';
         }
 
         // One-time migration for Comparison Table (if user has old defaults saved)
