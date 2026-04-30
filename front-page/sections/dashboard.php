@@ -1,11 +1,20 @@
 <?php
-$front_page_id   = get_option('page_on_front');
-$badge           = get_field('dashboard_badge', $front_page_id)    ?: 'Member Area';
-$title           = get_field('dashboard_title', $front_page_id)    ?: 'Your Personal Streaming Dashboard';
-$subtitle        = get_field('dashboard_subtitle', $front_page_id) ?: 'Once you subscribe, manage everything in one place.';
-$cta_label       = get_field('dashboard_cta_label', $front_page_id) ?: 'Access Your Dashboard →';
-$cta_url         = get_field('dashboard_cta_url', $front_page_id)   ?: 'https://panel.nordictv.io/login';
-$features        = get_field('dashboard_features', $front_page_id);
+$front_page_id = get_option('page_on_front');
+$badge         = 'Member Area';
+$title         = 'Your Personal Streaming Dashboard';
+$subtitle      = 'Once you subscribe, manage everything in one place.';
+$cta_label     = 'Access Your Dashboard →';
+$cta_url       = 'https://panel.nordictv.io/login';
+$features      = array();
+
+if (function_exists('get_field')) {
+    $badge     = get_field('dashboard_badge', $front_page_id)     ?: $badge;
+    $title     = get_field('dashboard_title', $front_page_id)     ?: $title;
+    $subtitle  = get_field('dashboard_subtitle', $front_page_id)  ?: $subtitle;
+    $cta_label = get_field('dashboard_cta_label', $front_page_id) ?: $cta_label;
+    $cta_url   = get_field('dashboard_cta_url', $front_page_id)   ?: $cta_url;
+    $features  = get_field('dashboard_features', $front_page_id)  ?: array();
+}
 
 if (!$features) {
     $features = array(
