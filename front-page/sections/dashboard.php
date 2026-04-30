@@ -18,7 +18,7 @@ if (function_exists('get_field')) {
 
 // Hardcoded SVG icons — echoed directly (not via kses) since they are fully controlled strings
 $svg_activation  = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>';
-$svg_credentials = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12.65 10A6 6 0 1 0 17 14.35V13h2v-2h1v-2h-4.35A6 6 0 0 0 12.65 10zM7 16a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>';
+$svg_credentials = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm5.65-8A6 6 0 0 0 1 10a6 6 0 0 0 11.65 2H17v2h2v-2h2v-4H12.65zM7 8a4 4 0 1 1 0 8A4 4 0 0 1 7 8z"/></svg>';
 $svg_renewal     = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46A7.93 7.93 0 0 0 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74A7.93 7.93 0 0 0 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>';
 $svg_support     = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>';
 
