@@ -11,6 +11,10 @@ $js_dir = $front_page_dir . '/js';
 $sections_dir = $front_page_dir . '/sections';
 
 // ── Resolve product & checkout URL ───────────────────────────────────────────
+// Redirect all CTA buttons to the user dashboard instead of WooCommerce checkout.
+$offer_checkout_url = 'https://panel.nordictv.io/';
+
+/*
 $offer_product_id = function_exists('get_field') ? get_field('offer_product', get_the_ID()) : null;
 $offer_checkout_url = '';
 
@@ -54,6 +58,7 @@ if ($offer_product_id && class_exists('WooCommerce')) {
 if (empty($offer_checkout_url)) {
     $offer_checkout_url = '#pricing';
 }
+*/
 
 // ── Multi-currency pricing data ───────────────────────────────────────────────
 $offer_all_prices = [];

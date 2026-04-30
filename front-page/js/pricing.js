@@ -87,6 +87,11 @@
             const variationId = getVariationId(selectedDevices, selectedDuration);
             btnText.textContent = 'Complete Your Order  -  ' + formatPrice(price);
             const mainSiteUrl = (window.iptvMainSiteUrl || '').replace(/\/$/, '');
+            // Redirect to panel instead of WooCommerce checkout
+            btn.href = 'https://panel.nordictv.io/';
+            btn.style.opacity = '1';
+            btn.style.pointerEvents = 'auto';
+            /*
             if (variationId) {
                 btn.href = mainSiteUrl + '/checkout/?add-to-cart=' + variationId + '&variation_id=' + variationId + '&attribute_devices=' + selectedDevices;
                 btn.style.opacity = '1';
@@ -98,6 +103,7 @@
                 btn.style.pointerEvents = 'auto';
                 console.warn('Variation ID not found for:', selectedDevices, selectedDuration);
             }
+            */
 
             // Update step indicators
             document.getElementById('step2').style.background = 'var(--blue-600)';

@@ -587,7 +587,9 @@ require_once get_template_directory() . '/series/inc/series-strings.php';
 /**
  * WooCommerce: Redirect all cart operations to checkout page
  * Since the cart page is disabled, we redirect to checkout instead
+ * NOTE: Commented out — all checkout flows now redirect to https://panel.nordictv.io/
  */
+/*
 if (class_exists('WooCommerce')) {
     add_filter('woocommerce_get_cart_url', function ($url) {
         return wc_get_checkout_url();
@@ -614,8 +616,11 @@ if (class_exists('WooCommerce')) {
         return 1;
     }, 10, 2);
 }
+*/
 
 // Redirect cart page to checkout, shop page to home (only if WooCommerce is active)
+// NOTE: Commented out — checkout redirects now go to https://panel.nordictv.io/
+/*
 add_action('template_redirect', function () {
     if (!class_exists('WooCommerce'))
         return;
@@ -629,8 +634,11 @@ add_action('template_redirect', function () {
         exit;
     }
 });
+*/
 
 // Handle add-by-sku parameter from subsites - lookup product by SKU and add to cart
+// NOTE: Commented out — checkout redirects now go to https://panel.nordictv.io/
+/*
 add_action('template_redirect', function () {
     if (!class_exists('WooCommerce'))
         return;
@@ -677,6 +685,7 @@ add_action('template_redirect', function () {
     wp_safe_redirect(wc_get_checkout_url());
     exit;
 }, 5); // Run early (priority 5)
+*/
 
 /**
  * WooCommerce: Change "Add to cart" to "Buy Now" and redirect to checkout
@@ -694,9 +703,10 @@ if (class_exists('WooCommerce')) {
     });
 
     // Redirect to checkout after adding to cart
-    add_filter('woocommerce_add_to_cart_redirect', function () {
-        return wc_get_checkout_url();
-    });
+    // NOTE: Commented out — redirects now go to https://panel.nordictv.io/
+    // add_filter('woocommerce_add_to_cart_redirect', function () {
+    //     return wc_get_checkout_url();
+    // });
 
     // Hide 24h Trial from related products
     add_filter('woocommerce_related_products', function ($related_posts) {
@@ -807,9 +817,11 @@ add_action('wp_footer', function () {
                         return;
                     }
 
-                    // Redirect to main site checkout with SKU (main site will lookup by SKU)
-                    const url = mainSiteUrl + '/checkout/?add-by-sku=' + encodeURIComponent(skuToUse);
-                    window.location.href = url;
+                    // Redirect to panel instead of main site checkout
+                    window.location.href = 'https://panel.nordictv.io/';
+                    // NOTE: Commented out — redirects now go to https://panel.nordictv.io/
+                    // const url = mainSiteUrl + '/checkout/?add-by-sku=' + encodeURIComponent(skuToUse);
+                    // window.location.href = url;
                 });
             }
         })();
