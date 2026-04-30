@@ -69,6 +69,7 @@ if (isset($site_currency_map[$site_slug])) {
                 <a href="<?php echo home_url('/blog/'); ?>">Blog</a>
                 <a href="<?php echo home_url('/user-guide/'); ?>">User Guide</a>
                 <a href="<?php echo home_url('/#contact'); ?>">Contact</a>
+                <a href="https://panel.nordictv.io/login">My Account</a>
             </nav>
         <?php endif; ?>
         <div class="nav-right">
@@ -135,6 +136,7 @@ if (isset($site_currency_map[$site_slug])) {
         <a href="<?php echo home_url('/blog/'); ?>">Blog</a>
         <a href="<?php echo home_url('/user-guide/'); ?>">User Guide</a>
         <a href="<?php echo home_url('/#contact'); ?>">Contact</a>
+        <a href="https://panel.nordictv.io/login">My Account</a>
     <?php endif; ?>
 
     <!-- Language Selector in Mobile Menu -->

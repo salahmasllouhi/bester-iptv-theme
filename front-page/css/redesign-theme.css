@@ -1328,3 +1328,103 @@ h3 {
         padding: var(--space-xl) var(--space-md);
     }
 }
+
+/* ============================================
+   MEMBER DASHBOARD SECTION
+   ============================================ */
+/* Outer section — same minimal wrapper as .steps */
+.member-dashboard {
+    padding: 0.45rem 0;
+}
+
+/* Boxed inner — mirrors .steps .steps-container */
+.dashboard-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    border-radius: var(--radius-xl);
+    padding: var(--space-2xl) var(--space-xl);
+    text-align: center;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg);
+    margin: var(--space-2xl) 0;
+    text-align: left;
+}
+
+.dashboard-card {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+    background: #fff;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.dashboard-card:hover {
+    border-color: var(--color-teal);
+    transform: translateY(-3px);
+}
+
+.dashboard-card-icon {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(0,212,170,0.12), rgba(99,102,241,0.10));
+    border-radius: var(--radius-md);
+    color: var(--color-teal);
+}
+
+.dashboard-card-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.dashboard-feature-img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.dashboard-card-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.4rem;
+}
+
+.dashboard-card-desc {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.6;
+}
+
+.dashboard-cta {
+    margin-top: var(--space-xl);
+}
+
+@media (max-width: 1440px) {
+    .dashboard-inner {
+        margin: 0 auto;
+        padding-left: var(--space-md);
+        padding-right: var(--space-md);
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    .dashboard-inner {
+        padding: var(--space-xl) var(--space-md);
+        border-radius: var(--radius-lg);
+    }
+}

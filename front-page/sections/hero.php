@@ -36,24 +36,28 @@
 
         <!-- CTA with glow container -->
         <?php
-        $cta_text = iptv_text('hero_cta', 'Start Streaming Now');
-        $cta_href = '#pricing';
+        $front_page_id   = get_option('page_on_front');
+        $primary_label   = 'Get Started';
+        $primary_url     = '#plans';
+        $secondary_label = 'My Dashboard';
+        $secondary_url   = 'https://panel.nordictv.io/login';
         if (function_exists('get_field')) {
-            $front_page_id = get_option('page_on_front');
-            $cta_link = $front_page_id ? get_field('hero_cta', $front_page_id) : get_field('hero_cta');
-            if (is_array($cta_link)) {
-                $cta_text = !empty($cta_link['title']) ? $cta_link['title'] : $cta_text;
-                $cta_href = !empty($cta_link['url']) ? $cta_link['url'] : $cta_href;
-            }
+            $primary_label   = get_field('hero_primary_cta_label', $front_page_id)   ?: $primary_label;
+            $primary_url     = get_field('hero_primary_cta_url', $front_page_id)     ?: $primary_url;
+            $secondary_label = get_field('hero_secondary_cta_label', $front_page_id) ?: $secondary_label;
+            $secondary_url   = get_field('hero_secondary_cta_url', $front_page_id)   ?: $secondary_url;
         }
         ?>
-        <div class="hero-cta-wrap">
-            <a href="<?php echo esc_url($cta_href); ?>" class="btn btn-primary">
-                <?php echo esc_html($cta_text); ?>
+        <div class="hero-cta-wrap" style="gap:1rem;flex-wrap:wrap;">
+            <a href="<?php echo esc_url($primary_url); ?>" class="btn btn-primary">
+                <?php echo esc_html($primary_label); ?>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <line x1="5" y1="12" x2="19" y2="12" />
                     <polyline points="12 5 19 12 12 19" />
                 </svg>
+            </a>
+            <a href="<?php echo esc_url($secondary_url); ?>" class="btn btn-secondary">
+                <?php echo esc_html($secondary_label); ?>
             </a>
         </div>
 
