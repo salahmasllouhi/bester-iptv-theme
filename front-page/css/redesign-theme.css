@@ -1341,7 +1341,6 @@ h3 {
 .dashboard-inner {
     max-width: 1200px;
     margin: 0 auto;
-    background: rgba(240, 244, 250, 1);
     border-radius: var(--radius-xl);
     padding: var(--space-2xl) var(--space-xl);
     text-align: center;
