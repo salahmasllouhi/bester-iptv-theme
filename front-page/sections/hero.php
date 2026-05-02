@@ -36,17 +36,10 @@
 
         <!-- CTA with glow container -->
         <?php
-        $front_page_id   = get_option('page_on_front');
-        $primary_label   = 'Get Started';
-        $primary_url     = '#plans';
-        $secondary_label = 'My Dashboard';
-        $secondary_url   = 'https://panel.nordictv.io/login';
-        if (function_exists('get_field')) {
-            $primary_label   = get_field('hero_primary_cta_label', $front_page_id)   ?: $primary_label;
-            $primary_url     = get_field('hero_primary_cta_url', $front_page_id)     ?: $primary_url;
-            $secondary_label = get_field('hero_secondary_cta_label', $front_page_id) ?: $secondary_label;
-            $secondary_url   = get_field('hero_secondary_cta_url', $front_page_id)   ?: $secondary_url;
-        }
+        $primary_label   = iptv_text('hero_primary_cta_label', 'Get Started');
+        $primary_url     = iptv_text('hero_primary_cta_url', 'https://nordictv.io/#pricing');
+        $secondary_label = iptv_text('hero_secondary_cta_label', 'My Dashboard');
+        $secondary_url   = iptv_text('hero_secondary_cta_url', 'https://panel.nordictv.io/login');
         ?>
         <div class="hero-cta-wrap" style="gap:1rem;flex-wrap:wrap;">
             <a href="<?php echo esc_url($primary_url); ?>" class="btn btn-primary">
