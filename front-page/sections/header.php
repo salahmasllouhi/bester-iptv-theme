@@ -18,9 +18,9 @@ if (empty($site_slug)) {
     $first_segment = isset($path_parts[0]) ? $path_parts[0] : '';
     // Only use if it's actually a language code
     // NOTE: Non-Swedish languages temporarily disabled - see Project_dyali.md
-    if (in_array($first_segment, array('se'))) {
+    if (in_array($first_segment, array('sv'))) {
         // LANG-DISABLED: no, dk, fi, is - See Project_dyali.md "Language Reactivation Guide" to revert
-        // Original: array('se', 'no', 'dk', 'fi', 'is')
+        // Original: array('sv', 'no', 'dk', 'fi', 'is')
         $site_slug = $first_segment;
     }
 }
@@ -28,7 +28,7 @@ if (empty($site_slug)) {
 // Map subsite to currency
 // NOTE: Non-Swedish languages temporarily disabled - see Project_dyali.md
 $site_currency_map = array(
-    'se' => array('flag' => '🇸🇪', 'code' => 'SEK', 'symbol' => 'kr'),
+    'sv' => array('flag' => '🇸🇪', 'code' => 'SEK', 'symbol' => 'kr'),
     // LANG-DISABLED: no - See Project_dyali.md "Language Reactivation Guide" to revert
     // 'no' => array('flag' => '🇳🇴', 'code' => 'NOK', 'symbol' => 'kr'),
     // LANG-DISABLED: dk - See Project_dyali.md "Language Reactivation Guide" to revert

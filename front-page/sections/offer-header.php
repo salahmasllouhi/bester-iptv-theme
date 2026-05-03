@@ -21,13 +21,13 @@ if (empty($site_slug)) {
     $request_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
     $path_parts = explode('/', trim($request_uri, '/'));
     $first = isset($path_parts[0]) ? $path_parts[0] : '';
-    if (in_array($first, ['se'])) {
+    if (in_array($first, ['sv'])) {
         $site_slug = $first;
     }
 }
 
 $site_currency_map = [
-    'se' => ['flag' => '🇸🇪', 'code' => 'SEK'],
+    'sv' => ['flag' => '🇸🇪', 'code' => 'SEK'],
 ];
 $default_flag = '🇺🇸';
 $default_code = 'USD';
