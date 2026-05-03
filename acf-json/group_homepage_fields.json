@@ -5,7 +5,7 @@
         "fields": [
             {
                 "key": "tab_hero",
-                "label": "🦸 Hero Section",
+                "label": "\ud83e\uddb8 Hero Section",
                 "name": "",
                 "aria-label": "",
                 "type": "tab",
@@ -35,7 +35,7 @@
                     "class": "",
                     "id": ""
                 },
-                "default_value": "4.8\/5 from 53,000+ customers",
+                "default_value": "4.8/5 from 53,000+ customers",
                 "maxlength": "",
                 "placeholder": "",
                 "prepend": "",
@@ -307,7 +307,7 @@
                     "class": "",
                     "id": ""
                 },
-                "default_value": "Access Your Dashboard →",
+                "default_value": "Access Your Dashboard \u2192",
                 "maxlength": "",
                 "placeholder": "",
                 "prepend": "",
@@ -492,7 +492,7 @@
             },
             {
                 "key": "tab_showcase",
-                "label": "📺 Content Showcase",
+                "label": "\ud83d\udcfa Content Showcase",
                 "name": "",
                 "aria-label": "",
                 "type": "tab",
@@ -688,7 +688,7 @@
             },
             {
                 "key": "tab_features",
-                "label": "⭐ Features",
+                "label": "\u2b50 Features",
                 "name": "",
                 "aria-label": "",
                 "type": "tab",
@@ -818,7 +818,7 @@
                     "class": "",
                     "id": ""
                 },
-                "default_value": "Sports, news, entertainment, kids content — from 198 countries worldwide.",
+                "default_value": "Sports, news, entertainment, kids content \u2014 from 198 countries worldwide.",
                 "new_lines": "",
                 "maxlength": "",
                 "placeholder": "",
@@ -858,7 +858,7 @@
                     "class": "",
                     "id": ""
                 },
-                "default_value": "UFC, Boxing, Wrestling — all Pay-Per-View events included free.",
+                "default_value": "UFC, Boxing, Wrestling \u2014 all Pay-Per-View events included free.",
                 "new_lines": "",
                 "maxlength": "",
                 "placeholder": "",
@@ -898,7 +898,7 @@
                     "class": "",
                     "id": ""
                 },
-                "default_value": "EPL, La Liga, Champions League, NFL, NBA, F1 — every game, live.",
+                "default_value": "EPL, La Liga, Champions League, NFL, NBA, F1 \u2014 every game, live.",
                 "new_lines": "",
                 "maxlength": "",
                 "placeholder": "",
@@ -998,7 +998,7 @@
                     "class": "",
                     "id": ""
                 },
-                "default_value": "24\/7 Support",
+                "default_value": "24/7 Support",
                 "maxlength": "",
                 "placeholder": "",
                 "prepend": "",
@@ -1044,7 +1044,7 @@
             },
             {
                 "key": "tab_sports",
-                "label": "⚽ Sports",
+                "label": "\u26bd Sports",
                 "name": "",
                 "aria-label": "",
                 "type": "tab",
@@ -1354,7 +1354,7 @@
                     "class": "",
                     "id": ""
                 },
-                "default_value": "UFC\/Boxing",
+                "default_value": "UFC/Boxing",
                 "maxlength": "",
                 "placeholder": "",
                 "prepend": "",
@@ -1420,7 +1420,7 @@
             },
             {
                 "key": "tab_comparison",
-                "label": "💰 Comparison",
+                "label": "\ud83d\udcb0 Comparison",
                 "name": "",
                 "aria-label": "",
                 "type": "tab",
@@ -1477,174 +1477,424 @@
                 "append": ""
             },
             {
-                "key": "field_comp_col_1_label",
-                "label": "Column 1 Label (Without)",
-                "name": "comp_col_1_label",
+                "key": "field_comp_row_1_label",
+                "label": "Row 1 Label",
+                "name": "comp_row_1_label",
                 "aria-label": "",
                 "type": "text",
                 "instructions": "",
                 "required": false,
                 "conditional_logic": false,
                 "wrapper": {
-                    "width": "",
+                    "width": "40",
                     "class": "",
                     "id": ""
                 },
-                "default_value": "WITHOUT NORDIC IPTV",
+                "default_value": "Netflix",
                 "maxlength": "",
                 "placeholder": "",
                 "prepend": "",
                 "append": ""
             },
             {
-                "key": "field_comp_col_1_rows",
-                "label": "Column 1 Rows (Without Nordic IPTV)",
-                "name": "comp_col_1_rows",
-                "aria-label": "",
-                "type": "repeater",
-                "instructions": "",
-                "required": false,
-                "conditional_logic": false,
-                "wrapper": {
-                    "width": "",
-                    "class": "",
-                    "id": ""
-                },
-                "layout": "table",
-                "button_label": "Add Row",
-                "min": 0,
-                "max": 0,
-                "rows_per_page": 20,
-                "collapsed": "",
-                "sub_fields": [
-                    {
-                        "key": "field_comp_col_1_label_sub",
-                        "label": "Service Name",
-                        "name": "label",
-                        "aria-label": "",
-                        "type": "text",
-                        "instructions": "",
-                        "required": false,
-                        "conditional_logic": false,
-                        "wrapper": {
-                            "width": "",
-                            "class": "",
-                            "id": ""
-                        },
-                        "default_value": "Netflix",
-                        "maxlength": "",
-                        "placeholder": "",
-                        "prepend": "",
-                        "append": "",
-                        "parent_repeater": "field_comp_col_1_rows"
-                    },
-                    {
-                        "key": "field_comp_col_1_value_sub",
-                        "label": "Price \/ Value",
-                        "name": "value",
-                        "aria-label": "",
-                        "type": "text",
-                        "instructions": "",
-                        "required": false,
-                        "conditional_logic": false,
-                        "wrapper": {
-                            "width": "",
-                            "class": "",
-                            "id": ""
-                        },
-                        "default_value": "$17.99\/mo",
-                        "maxlength": "",
-                        "placeholder": "",
-                        "prepend": "",
-                        "append": "",
-                        "parent_repeater": "field_comp_col_1_rows"
-                    }
-                ]
-            },
-            {
-                "key": "field_comp_col_2_label",
-                "label": "Column 2 Label (With)",
-                "name": "comp_col_2_label",
+                "key": "field_comp_row_1_val_1",
+                "label": "Row 1 Without",
+                "name": "comp_row_1_val_1",
                 "aria-label": "",
                 "type": "text",
                 "instructions": "",
                 "required": false,
                 "conditional_logic": false,
                 "wrapper": {
-                    "width": "",
+                    "width": "30",
                     "class": "",
                     "id": ""
                 },
-                "default_value": "WITH NORDIC IPTV",
+                "default_value": "$17.99/mo",
                 "maxlength": "",
                 "placeholder": "",
                 "prepend": "",
                 "append": ""
             },
             {
-                "key": "field_comp_col_2_rows",
-                "label": "Column 2 Rows (With Nordic IPTV)",
-                "name": "comp_col_2_rows",
+                "key": "field_comp_row_1_val_2",
+                "label": "Row 1 With Nordic IPTV",
+                "name": "comp_row_1_val_2",
                 "aria-label": "",
-                "type": "repeater",
+                "type": "text",
                 "instructions": "",
                 "required": false,
                 "conditional_logic": false,
                 "wrapper": {
-                    "width": "",
+                    "width": "30",
                     "class": "",
                     "id": ""
                 },
-                "layout": "table",
-                "button_label": "Add Row",
-                "min": 0,
-                "max": 0,
-                "rows_per_page": 20,
-                "collapsed": "",
-                "sub_fields": [
-                    {
-                        "key": "field_comp_col_2_label_sub",
-                        "label": "Feature Name",
-                        "name": "label",
-                        "aria-label": "",
-                        "type": "text",
-                        "instructions": "",
-                        "required": false,
-                        "conditional_logic": false,
-                        "wrapper": {
-                            "width": "",
-                            "class": "",
-                            "id": ""
-                        },
-                        "default_value": "All Content",
-                        "maxlength": "",
-                        "placeholder": "",
-                        "prepend": "",
-                        "append": "",
-                        "parent_repeater": "field_comp_col_2_rows"
-                    },
-                    {
-                        "key": "field_comp_col_2_value_sub",
-                        "label": "Value",
-                        "name": "value",
-                        "aria-label": "",
-                        "type": "text",
-                        "instructions": "",
-                        "required": false,
-                        "conditional_logic": false,
-                        "wrapper": {
-                            "width": "",
-                            "class": "",
-                            "id": ""
-                        },
-                        "default_value": "Included",
-                        "maxlength": "",
-                        "placeholder": "",
-                        "prepend": "",
-                        "append": "",
-                        "parent_repeater": "field_comp_col_2_rows"
-                    }
-                ]
+                "default_value": "Included",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_comp_row_2_label",
+                "label": "Row 2 Label",
+                "name": "comp_row_2_label",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": false,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "40",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Disney+",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_comp_row_2_val_1",
+                "label": "Row 2 Without",
+                "name": "comp_row_2_val_1",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": false,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "30",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "$12.99/mo",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_comp_row_2_val_2",
+                "label": "Row 2 With Nordic IPTV",
+                "name": "comp_row_2_val_2",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": false,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "30",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Included",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_comp_row_3_label",
+                "label": "Row 3 Label",
+                "name": "comp_row_3_label",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": false,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "40",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "HBO Max",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_comp_row_3_val_1",
+                "label": "Row 3 Without",
+                "name": "comp_row_3_val_1",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": false,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "30",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "$14.99/mo",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_comp_row_3_val_2",
+                "label": "Row 3 With Nordic IPTV",
+                "name": "comp_row_3_val_2",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": false,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "30",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Included",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_comp_row_4_label",
+                "label": "Row 4 Label",
+                "name": "comp_row_4_label",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": false,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "40",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Sports Package",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_comp_row_4_val_1",
+                "label": "Row 4 Without",
+                "name": "comp_row_4_val_1",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": false,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "30",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "$35.00/mo",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_comp_row_4_val_2",
+                "label": "Row 4 With Nordic IPTV",
+                "name": "comp_row_4_val_2",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": false,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "30",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Included",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_comp_row_5_label",
+                "label": "Row 5 Label",
+                "name": "comp_row_5_label",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": false,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "40",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "PPV Events (yearly)",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_comp_row_5_val_1",
+                "label": "Row 5 Without",
+                "name": "comp_row_5_val_1",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": false,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "30",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "$700+",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_comp_row_5_val_2",
+                "label": "Row 5 With Nordic IPTV",
+                "name": "comp_row_5_val_2",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": false,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "30",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "$0 Extra",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_comp_row_6_label",
+                "label": "Row 6 Label",
+                "name": "comp_row_6_label",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": false,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "40",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "20,000+ Channels",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_comp_row_6_val_1",
+                "label": "Row 6 Without",
+                "name": "comp_row_6_val_1",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": false,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "30",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Extra Fees",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_comp_row_6_val_2",
+                "label": "Row 6 With Nordic IPTV",
+                "name": "comp_row_6_val_2",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": false,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "30",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Included",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_comp_row_7_label",
+                "label": "Row 7 Label",
+                "name": "comp_row_7_label",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": false,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "40",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "4K Quality",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_comp_row_7_val_1",
+                "label": "Row 7 Without",
+                "name": "comp_row_7_val_1",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": false,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "30",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Extra Fees",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_comp_row_7_val_2",
+                "label": "Row 7 With Nordic IPTV",
+                "name": "comp_row_7_val_2",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": false,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "30",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "Included",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
             },
             {
                 "key": "field_comp_c1_total_label",
@@ -1740,7 +1990,7 @@
                     "class": "",
                     "id": ""
                 },
-                "default_value": "Just ~$5.83\/month",
+                "default_value": "Just ~$5.83/month",
                 "maxlength": "",
                 "placeholder": "",
                 "prepend": "",
@@ -1840,7 +2090,7 @@
                     "class": "",
                     "id": ""
                 },
-                "default_value": "Just ~$5.83\/month",
+                "default_value": "Just ~$5.83/month",
                 "maxlength": "",
                 "placeholder": "",
                 "prepend": "",
@@ -1886,7 +2136,7 @@
             },
             {
                 "key": "tab_pricing",
-                "label": "💳 Pricing",
+                "label": "\ud83d\udcb3 Pricing",
                 "name": "",
                 "aria-label": "",
                 "type": "tab",
@@ -1916,7 +2166,7 @@
                     "class": "",
                     "id": ""
                 },
-                "default_value": "Stream Smarter, Pay Less – Start Today!",
+                "default_value": "Stream Smarter, Pay Less \u2013 Start Today!",
                 "maxlength": "",
                 "placeholder": "",
                 "prepend": "",
@@ -2464,7 +2714,7 @@
             },
             {
                 "key": "tab_steps",
-                "label": "📋 Steps",
+                "label": "\ud83d\udccb Steps",
                 "name": "",
                 "aria-label": "",
                 "type": "tab",
@@ -2700,7 +2950,7 @@
             },
             {
                 "key": "tab_devices",
-                "label": "📱 Devices",
+                "label": "\ud83d\udcf1 Devices",
                 "name": "",
                 "aria-label": "",
                 "type": "tab",
@@ -2798,7 +3048,7 @@
             },
             {
                 "key": "tab_faq",
-                "label": "❓ FAQ",
+                "label": "\u2753 FAQ",
                 "name": "",
                 "aria-label": "",
                 "type": "tab",
@@ -2921,7 +3171,7 @@
             },
             {
                 "key": "tab_cta",
-                "label": "🚀 CTA",
+                "label": "\ud83d\ude80 CTA",
                 "name": "",
                 "aria-label": "",
                 "type": "tab",
@@ -3049,7 +3299,7 @@
                     "class": "",
                     "id": ""
                 },
-                "default_value": "24\/7 Customer Support",
+                "default_value": "24/7 Customer Support",
                 "maxlength": "",
                 "placeholder": "",
                 "prepend": "",
@@ -3057,7 +3307,7 @@
             },
             {
                 "key": "tab_footer",
-                "label": "📝 Footer",
+                "label": "\ud83d\udcdd Footer",
                 "name": "",
                 "aria-label": "",
                 "type": "tab",
@@ -3141,6 +3391,6 @@
         "show_in_rest": 1,
         "display_title": "",
         "pll_display_field_instructions": 1,
-        "modified": 1799999999
+        "modified": 1800000001
     }
 ]

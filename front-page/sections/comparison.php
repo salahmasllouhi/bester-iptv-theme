@@ -1,33 +1,3 @@
-<?php
-$front_page_id = get_option('page_on_front');
-
-$col1_rows = $front_page_id ? get_field('comp_col_1_rows', $front_page_id) : get_field('comp_col_1_rows');
-$col2_rows = $front_page_id ? get_field('comp_col_2_rows', $front_page_id) : get_field('comp_col_2_rows');
-
-$default_rows = [
-    ['label' => 'Netflix',             'val_1' => '$17.99/mo',   'val_2' => 'Included'],
-    ['label' => 'Disney+',             'val_1' => '$12.99/mo',   'val_2' => 'Included'],
-    ['label' => 'HBO Max',             'val_1' => '$14.99/mo',   'val_2' => 'Included'],
-    ['label' => 'Sports Package',      'val_1' => '$35.00/mo',   'val_2' => 'Included'],
-    ['label' => 'PPV Events (yearly)', 'val_1' => '$700+',       'val_2' => '$0 Extra'],
-    ['label' => '20,000+ Channels',    'val_1' => 'Extra Fees',  'val_2' => 'Included'],
-    ['label' => '4K Quality',          'val_1' => 'Extra Fees',  'val_2' => 'Included'],
-];
-
-$rows = [];
-if (!empty($col1_rows) || !empty($col2_rows)) {
-    $count = max(count((array) $col1_rows), count((array) $col2_rows));
-    for ($i = 0; $i < $count; $i++) {
-        $rows[] = [
-            'label' => isset($col1_rows[$i]['label']) ? $col1_rows[$i]['label'] : '',
-            'val_1' => isset($col1_rows[$i]['value']) ? $col1_rows[$i]['value'] : '',
-            'val_2' => isset($col2_rows[$i]['value']) ? $col2_rows[$i]['value'] : '',
-        ];
-    }
-} else {
-    $rows = $default_rows;
-}
-?>
 <section class="comparison">
     <div class="comparison-inner">
         <div class="section-header">
@@ -46,13 +16,25 @@ if (!empty($col1_rows) || !empty($col2_rows)) {
 
         <div class="comp-cards-wrap">
 
-            <?php foreach ($rows as $row) : ?>
+            <?php
+            $comp_rows = [
+                ['label' => 'Netflix',             'val_1' => '$17.99/mo',   'val_2' => 'Included'],
+                ['label' => 'Disney+',             'val_1' => '$12.99/mo',   'val_2' => 'Included'],
+                ['label' => 'HBO Max',             'val_1' => '$14.99/mo',   'val_2' => 'Included'],
+                ['label' => 'Sports Package',      'val_1' => '$35.00/mo',   'val_2' => 'Included'],
+                ['label' => 'PPV Events (yearly)', 'val_1' => '$700+',       'val_2' => '$0 Extra'],
+                ['label' => '20,000+ Channels',    'val_1' => 'Extra Fees',  'val_2' => 'Included'],
+                ['label' => '4K Quality',          'val_1' => 'Extra Fees',  'val_2' => 'Included'],
+            ];
+            foreach ($comp_rows as $i => $defaults) :
+                $n = $i + 1;
+            ?>
             <div class="feat-card">
                 <div class="fc-left">
-                    <div class="fc-name"><?php echo esc_html($row['label']); ?></div>
-                    <div class="fc-cable"><?php echo esc_html($row['val_1']); ?></div>
+                    <div class="fc-name"><?php echo esc_html(iptv_text("comp_row_{$n}_label", $defaults['label'])); ?></div>
+                    <div class="fc-cable"><?php echo esc_html(iptv_text("comp_row_{$n}_val_1", $defaults['val_1'])); ?></div>
                 </div>
-                <div class="fc-right"><?php echo esc_html($row['val_2']); ?></div>
+                <div class="fc-right"><?php echo esc_html(iptv_text("comp_row_{$n}_val_2", $defaults['val_2'])); ?></div>
             </div>
             <?php endforeach; ?>
 
