@@ -1,4 +1,4 @@
-// Currency Selector JavaScript
+// Currency Selector JavaScript v2
 function toggleCountryDropdown() {
     const dropdown = document.getElementById('countryDropdown');
     dropdown.classList.toggle('active');
