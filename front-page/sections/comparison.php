@@ -1,3 +1,20 @@
+<?php
+$front_page_id = get_option('page_on_front');
+
+$col1_rows  = $front_page_id ? get_field('comp_col_1_rows', $front_page_id) : get_field('comp_col_1_rows');
+$col2_rows  = $front_page_id ? get_field('comp_col_2_rows', $front_page_id) : get_field('comp_col_2_rows');
+
+// Merge col1 (left/without) and col2 (right/with) rows by index
+$rows = [];
+$count = max(count((array) $col1_rows), count((array) $col2_rows));
+for ($i = 0; $i < $count; $i++) {
+    $rows[] = [
+        'label'  => isset($col1_rows[$i]['label']) ? $col1_rows[$i]['label'] : '',
+        'val_1'  => isset($col1_rows[$i]['value']) ? $col1_rows[$i]['value'] : '',
+        'val_2'  => isset($col2_rows[$i]['value']) ? $col2_rows[$i]['value'] : '',
+    ];
+}
+?>
 <section class="comparison">
     <div class="comparison-inner">
         <div class="section-header">
@@ -16,68 +33,21 @@
 
         <div class="comp-cards-wrap">
 
-            <!-- Feature rows -->
+            <?php foreach ($rows as $row) : ?>
             <div class="feat-card">
                 <div class="fc-left">
-                    <div class="fc-name"><?php echo esc_html(iptv_text('comp_row_1_label', 'Netflix')); ?></div>
-                    <div class="fc-cable"><?php echo esc_html(iptv_text('comp_row_1_val_1', '$17.99/mo')); ?></div>
+                    <div class="fc-name"><?php echo esc_html($row['label']); ?></div>
+                    <div class="fc-cable"><?php echo esc_html($row['val_1']); ?></div>
                 </div>
-                <div class="fc-right"><?php echo esc_html(iptv_text('comp_row_1_val_2', 'Included')); ?></div>
+                <div class="fc-right"><?php echo esc_html($row['val_2']); ?></div>
             </div>
-
-            <div class="feat-card">
-                <div class="fc-left">
-                    <div class="fc-name"><?php echo esc_html(iptv_text('comp_row_2_label', 'Disney+')); ?></div>
-                    <div class="fc-cable"><?php echo esc_html(iptv_text('comp_row_2_val_1', '$12.99/mo')); ?></div>
-                </div>
-                <div class="fc-right"><?php echo esc_html(iptv_text('comp_row_2_val_2', 'Included')); ?></div>
-            </div>
-
-            <div class="feat-card">
-                <div class="fc-left">
-                    <div class="fc-name"><?php echo esc_html(iptv_text('comp_row_3_label', 'HBO Max')); ?></div>
-                    <div class="fc-cable"><?php echo esc_html(iptv_text('comp_row_3_val_1', '$14.99/mo')); ?></div>
-                </div>
-                <div class="fc-right"><?php echo esc_html(iptv_text('comp_row_3_val_2', 'Included')); ?></div>
-            </div>
-
-            <div class="feat-card">
-                <div class="fc-left">
-                    <div class="fc-name"><?php echo esc_html(iptv_text('comp_row_4_label', 'Sports Package')); ?></div>
-                    <div class="fc-cable"><?php echo esc_html(iptv_text('comp_row_4_val_1', '$35.00/mo')); ?></div>
-                </div>
-                <div class="fc-right"><?php echo esc_html(iptv_text('comp_row_4_val_2', 'Included')); ?></div>
-            </div>
-
-            <div class="feat-card">
-                <div class="fc-left">
-                    <div class="fc-name"><?php echo esc_html(iptv_text('comp_row_5_label', 'PPV Events (yearly)')); ?></div>
-                    <div class="fc-cable"><?php echo esc_html(iptv_text('comp_row_5_val_1', '$700+/yr')); ?></div>
-                </div>
-                <div class="fc-right"><?php echo esc_html(iptv_text('comp_row_8_val_2', '$0 Extra')); ?></div>
-            </div>
-
-            <div class="feat-card">
-                <div class="fc-left">
-                    <div class="fc-name"><?php echo esc_html(iptv_text('comp_row_9_label', '20,000+ Channels')); ?></div>
-                    <div class="fc-cable"><?php echo esc_html(iptv_text('comp_row_9_val_1', 'Extra Fees')); ?></div>
-                </div>
-                <div class="fc-right"><?php echo esc_html(iptv_text('comp_row_9_val_2', 'Included')); ?></div>
-            </div>
-
-            <div class="feat-card">
-                <div class="fc-left">
-                    <div class="fc-name"><?php echo esc_html(iptv_text('comp_row_10_label', '4K Quality')); ?></div>
-                    <div class="fc-cable"><?php echo esc_html(iptv_text('comp_row_10_val_1', 'Extra Fees')); ?></div>
-                </div>
-                <div class="fc-right"><?php echo esc_html(iptv_text('comp_row_10_val_2', 'Included')); ?></div>
-            </div>
+            <?php endforeach; ?>
 
             <!-- Annual Cost card -->
             <div class="annual-card">
                 <div class="ac-left">
                     <div class="ac-label"><?php echo esc_html(iptv_text('comp_total_label', 'Annual Cost')); ?></div>
-                    <div class="ac-cable"><?php echo esc_html(iptv_text('comp_total_val_1', '$1,200+')); ?> cable</div>
+                    <div class="ac-cable"><?php echo esc_html(iptv_text('comp_c1_total_val', '$1,200+')); ?> cable</div>
                 </div>
                 <div class="ac-right">
                     <div class="ac-price"><?php echo esc_html(iptv_text('comp_price', '$69.99')); ?></div>
