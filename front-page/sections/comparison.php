@@ -1,3 +1,11 @@
+<?php
+// DEBUG - remove after confirming ACF saves correctly
+if (current_user_can('manage_options')) {
+    $fp = get_option('page_on_front');
+    $v = $fp ? get_field('comp_row_1_label', $fp) : get_field('comp_row_1_label');
+    echo '<!-- ACF comp_row_1_label = ' . esc_html(var_export($v, true)) . ' -->';
+}
+?>
 <section class="comparison">
     <div class="comparison-inner">
         <div class="section-header">
