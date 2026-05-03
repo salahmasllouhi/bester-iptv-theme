@@ -3,20 +3,27 @@
 // Detect current subsite for default currency/flag
 $site_slug = '';
 
-// Method 1: Use WordPress Multisite blog path (most reliable)
-if (is_multisite() && function_exists('get_blog_details')) {
+// Method 1: Polylang language detection (most reliable on this site)
+if (function_exists('pll_current_language')) {
+    $pll_lang = pll_current_language('slug');
+    if (!empty($pll_lang) && $pll_lang !== 'en') {
+        $site_slug = $pll_lang;
+    }
+}
+
+// Method 2: WordPress Multisite blog path
+if (empty($site_slug) && is_multisite() && function_exists('get_blog_details')) {
     $blog_details = get_blog_details();
     if ($blog_details && !empty($blog_details->path)) {
         $site_slug = trim($blog_details->path, '/');
     }
 }
 
-// Method 2: Fallback to REQUEST_URI parsing (only if blog path didn't work)
+// Method 3: Fallback to REQUEST_URI parsing
 if (empty($site_slug)) {
     $request_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
     $path_parts = explode('/', trim($request_uri, '/'));
     $first_segment = isset($path_parts[0]) ? $path_parts[0] : '';
-    // Only use if it's actually a language code
     // NOTE: Non-Swedish languages temporarily disabled - see Project_dyali.md
     if (in_array($first_segment, array('sv'))) {
         // LANG-DISABLED: no, dk, fi, is - See Project_dyali.md "Language Reactivation Guide" to revert

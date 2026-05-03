@@ -11,12 +11,21 @@
 
 // ── Currency detection (copied from header.php) ────────────────────────────
 $site_slug = '';
-if (is_multisite() && function_exists('get_blog_details')) {
+// Method 1: Polylang
+if (function_exists('pll_current_language')) {
+    $pll_lang = pll_current_language('slug');
+    if (!empty($pll_lang) && $pll_lang !== 'en') {
+        $site_slug = $pll_lang;
+    }
+}
+// Method 2: Multisite
+if (empty($site_slug) && is_multisite() && function_exists('get_blog_details')) {
     $blog_details = get_blog_details();
     if ($blog_details && !empty($blog_details->path)) {
         $site_slug = trim($blog_details->path, '/');
     }
 }
+// Method 3: REQUEST_URI fallback
 if (empty($site_slug)) {
     $request_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
     $path_parts = explode('/', trim($request_uri, '/'));
