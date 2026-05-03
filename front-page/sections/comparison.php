@@ -1,18 +1,31 @@
 <?php
 $front_page_id = get_option('page_on_front');
 
-$col1_rows  = $front_page_id ? get_field('comp_col_1_rows', $front_page_id) : get_field('comp_col_1_rows');
-$col2_rows  = $front_page_id ? get_field('comp_col_2_rows', $front_page_id) : get_field('comp_col_2_rows');
+$col1_rows = $front_page_id ? get_field('comp_col_1_rows', $front_page_id) : get_field('comp_col_1_rows');
+$col2_rows = $front_page_id ? get_field('comp_col_2_rows', $front_page_id) : get_field('comp_col_2_rows');
 
-// Merge col1 (left/without) and col2 (right/with) rows by index
+$default_rows = [
+    ['label' => 'Netflix',             'val_1' => '$17.99/mo',   'val_2' => 'Included'],
+    ['label' => 'Disney+',             'val_1' => '$12.99/mo',   'val_2' => 'Included'],
+    ['label' => 'HBO Max',             'val_1' => '$14.99/mo',   'val_2' => 'Included'],
+    ['label' => 'Sports Package',      'val_1' => '$35.00/mo',   'val_2' => 'Included'],
+    ['label' => 'PPV Events (yearly)', 'val_1' => '$700+',       'val_2' => '$0 Extra'],
+    ['label' => '20,000+ Channels',    'val_1' => 'Extra Fees',  'val_2' => 'Included'],
+    ['label' => '4K Quality',          'val_1' => 'Extra Fees',  'val_2' => 'Included'],
+];
+
 $rows = [];
-$count = max(count((array) $col1_rows), count((array) $col2_rows));
-for ($i = 0; $i < $count; $i++) {
-    $rows[] = [
-        'label'  => isset($col1_rows[$i]['label']) ? $col1_rows[$i]['label'] : '',
-        'val_1'  => isset($col1_rows[$i]['value']) ? $col1_rows[$i]['value'] : '',
-        'val_2'  => isset($col2_rows[$i]['value']) ? $col2_rows[$i]['value'] : '',
-    ];
+if (!empty($col1_rows) || !empty($col2_rows)) {
+    $count = max(count((array) $col1_rows), count((array) $col2_rows));
+    for ($i = 0; $i < $count; $i++) {
+        $rows[] = [
+            'label' => isset($col1_rows[$i]['label']) ? $col1_rows[$i]['label'] : '',
+            'val_1' => isset($col1_rows[$i]['value']) ? $col1_rows[$i]['value'] : '',
+            'val_2' => isset($col2_rows[$i]['value']) ? $col2_rows[$i]['value'] : '',
+        ];
+    }
+} else {
+    $rows = $default_rows;
 }
 ?>
 <section class="comparison">
