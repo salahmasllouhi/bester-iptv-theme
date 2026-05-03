@@ -77,7 +77,7 @@ function getDefaultCurrency() {
 // Detect current currency from URL
 function getCurrentCurrencyFromUrl() {
     const currentPath = window.location.pathname;
-    if (currentPath.startsWith('/se')) return 'sek';
+    if (currentPath.startsWith('/sv')) return 'sek';
     if (currentPath.startsWith('/no')) return 'nok';
     if (currentPath.startsWith('/dk')) return 'dkk';
     if (currentPath.startsWith('/fi')) return 'eur';
@@ -185,7 +185,7 @@ function checkForSmartRedirect() {
     const currentPath = window.location.pathname;
     // Only redirect if we are on the main domain (root) or a non-specific path
     // Avoid circular redirects if already on correct subsite
-    if (currentPath.startsWith('/se') || currentPath.startsWith('/no') || currentPath.startsWith('/dk') || currentPath.startsWith('/fi') || currentPath.startsWith('/is')) {
+    if (currentPath.startsWith('/sv') || currentPath.startsWith('/no') || currentPath.startsWith('/dk') || currentPath.startsWith('/fi') || currentPath.startsWith('/is')) {
         return;
     }
 
