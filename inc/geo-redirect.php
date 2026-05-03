@@ -105,7 +105,7 @@ function nordic_iptv_geo_redirect()
     // Country to sub-site mapping
     // NOTE: Non-Swedish languages temporarily disabled - see Project_dyali.md "Language Reactivation Guide"
     $redirect_map = array(
-        'SE' => '/se/',  // Sweden
+        'SE' => '/sv/',  // Sweden
         // LANG-DISABLED: no - See Project_dyali.md "Language Reactivation Guide" to revert
         // 'NO' => '/no/',  // Norway
         // LANG-DISABLED: dk - See Project_dyali.md "Language Reactivation Guide" to revert

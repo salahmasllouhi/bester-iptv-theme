@@ -58,7 +58,7 @@ include get_template_directory() . '/front-page/sections/header.php';
         const countryUrls = {
             usd: '/',
             eur: '/fi/',
-            sek: '/se/',
+            sek: '/sv/',
             nok: '/no/',
             dkk: '/dk/',
             isk: '/is/'

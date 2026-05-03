@@ -15,7 +15,7 @@ function redirectToRegion(currency) {
     const countryUrls = {
         usd: '/',
         eur: '/fi/',
-        sek: '/se/',
+        sek: '/sv/',
         nok: '/no/',
         dkk: '/dk/',
         isk: '/is/'
@@ -62,7 +62,7 @@ const currencyData = {
 const countryUrls = {
     usd: '/',
     eur: '/fi/',
-    sek: '/se/',
+    sek: '/sv/',
     nok: '/no/',
     dkk: '/dk/',
     isk: '/is/'
@@ -196,7 +196,7 @@ function checkForSmartRedirect() {
 
     // Redirect Logic
     if (primaryLang === 'sv') {
-        window.location.href = window.location.origin + '/se/';
+        window.location.href = window.location.origin + '/sv/';
     }
 }
 
