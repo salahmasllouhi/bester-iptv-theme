@@ -51,9 +51,15 @@
                 </p>
             </div>
         </div>
+        <?php
+        $steps_cta_field  = function_exists('get_field') ? get_field('steps_cta', get_option('page_on_front')) : null;
+        $steps_cta_url    = (!empty($steps_cta_field['url'])) ? $steps_cta_field['url'] : '#pricing';
+        $steps_cta_label  = (!empty($steps_cta_field['title'])) ? $steps_cta_field['title'] : iptv_text('steps_cta', 'Get Started Now');
+        $steps_cta_target = (!empty($steps_cta_field['target'])) ? ' target="' . esc_attr($steps_cta_field['target']) . '"' : '';
+        ?>
         <div style="text-align:center;margin-top:var(--space-xl);">
-            <a href="#pricing" class="btn btn-primary">
-                <?php echo esc_html(iptv_text('steps_cta', 'Get Started Now')); ?>
+            <a href="<?php echo esc_url($steps_cta_url); ?>" class="btn btn-primary"<?php echo $steps_cta_target; ?>>
+                <?php echo esc_html($steps_cta_label); ?>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <line x1="5" y1="12" x2="19" y2="12" />
                     <polyline points="12 5 19 12 12 19" />

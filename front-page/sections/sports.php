@@ -64,9 +64,15 @@
                 <div class="sport-live"><?php echo esc_html(iptv_text('sport_live_text', 'LIVE NOW')); ?></div>
             </div>
         </div>
+        <?php
+        $sports_cta_field  = function_exists('get_field') ? get_field('sports_cta', get_option('page_on_front')) : null;
+        $sports_cta_url    = (!empty($sports_cta_field['url'])) ? $sports_cta_field['url'] : '#pricing';
+        $sports_cta_label  = (!empty($sports_cta_field['title'])) ? $sports_cta_field['title'] : iptv_text('sports_cta', 'Watch All Sports Now');
+        $sports_cta_target = (!empty($sports_cta_field['target'])) ? ' target="' . esc_attr($sports_cta_field['target']) . '"' : '';
+        ?>
         <div style="text-align:center;margin-top:var(--space-xl);">
-            <a href="#pricing" class="btn btn-primary">
-                <?php echo esc_html(iptv_text('sports_cta', 'Watch All Sports Now')); ?>
+            <a href="<?php echo esc_url($sports_cta_url); ?>" class="btn btn-primary"<?php echo $sports_cta_target; ?>>
+                <?php echo esc_html($sports_cta_label); ?>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <line x1="5" y1="12" x2="19" y2="12" />
                     <polyline points="12 5 19 12 12 19" />

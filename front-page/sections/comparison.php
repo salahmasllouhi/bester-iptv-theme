@@ -1,11 +1,3 @@
-<?php
-// DEBUG v2 - remove after confirming ACF saves correctly
-if (current_user_can('manage_options')) {
-    $fp = get_option('page_on_front');
-    $v = $fp ? get_field('comp_row_1_label', $fp) : get_field('comp_row_1_label');
-    echo '<!-- ACF comp_row_1_label = ' . esc_html(var_export($v, true)) . ' -->';
-}
-?>
 <section class="comparison">
     <div class="comparison-inner">
         <div class="section-header">
@@ -49,7 +41,7 @@ if (current_user_can('manage_options')) {
             <!-- Annual Cost card -->
             <div class="annual-card">
                 <div class="ac-left">
-                    <div class="ac-label"><?php echo esc_html(iptv_text('comp_total_label', 'Annual Cost')); ?></div>
+                    <div class="ac-label"><?php echo esc_html(iptv_text('comp_c1_total_label', 'Annual Cost')); ?></div>
                     <div class="ac-cable"><?php echo esc_html(iptv_text('comp_c1_total_val', '$1,200+')); ?> cable</div>
                 </div>
                 <div class="ac-right">
@@ -66,9 +58,15 @@ if (current_user_can('manage_options')) {
 
         </div>
 
+        <?php
+        $comp_cta_field  = function_exists('get_field') ? get_field('comp_cta_text', get_option('page_on_front')) : null;
+        $comp_cta_url    = (!empty($comp_cta_field['url'])) ? $comp_cta_field['url'] : '#pricing';
+        $comp_cta_label  = (!empty($comp_cta_field['title'])) ? $comp_cta_field['title'] : iptv_text('comp_cta', 'Start Saving Today');
+        $comp_cta_target = (!empty($comp_cta_field['target'])) ? ' target="' . esc_attr($comp_cta_field['target']) . '"' : '';
+        ?>
         <div style="text-align:center;margin-top:var(--space-xl);">
-            <a href="#pricing" class="btn btn-primary">
-                <?php echo esc_html(iptv_text('comp_cta', 'Start Saving Today')); ?>
+            <a href="<?php echo esc_url($comp_cta_url); ?>" class="btn btn-primary"<?php echo $comp_cta_target; ?>>
+                <?php echo esc_html($comp_cta_label); ?>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <line x1="5" y1="12" x2="19" y2="12" />
                     <polyline points="12 5 19 12 12 19" />

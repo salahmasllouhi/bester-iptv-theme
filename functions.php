@@ -3,6 +3,24 @@
  * My IPTV Theme - Functions and definitions
  */
 
+// TEMP: Force ACF to delete and re-import group_homepage_fields from JSON.
+// Remove this block after visiting the site once (the field group will be re-synced).
+add_action('acf/init', function () {
+    if (!function_exists('acf_get_field_groups')) return;
+    $transient = 'iptv_acf_reimport_done';
+    if (get_transient($transient)) return;
+
+    // Delete the existing field group from the DB so ACF imports fresh from JSON
+    $groups = acf_get_field_groups();
+    foreach ($groups as $group) {
+        if ($group['key'] === 'group_homepage_fields') {
+            acf_delete_field_group($group['ID']);
+            break;
+        }
+    }
+    set_transient($transient, 1, DAY_IN_SECONDS);
+}, 5);
+
 // Main site URL for cross-site cart (all subsites use main site checkout)
 define('IPTV_MAIN_SITE_URL', 'https://nordictv.io');
 

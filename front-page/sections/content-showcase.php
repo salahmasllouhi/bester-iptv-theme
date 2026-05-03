@@ -34,8 +34,14 @@
                 </li>
             </ul>
 
-            <a href="#pricing" class="btn btn-primary" style="margin-top: 2rem;">
-                <?php echo esc_html(iptv_text('showcase_cta', 'Get Access Now')); ?>
+            <?php
+            $showcase_cta_field  = function_exists('get_field') ? get_field('showcase_cta', get_option('page_on_front')) : null;
+            $showcase_cta_url    = (!empty($showcase_cta_field['url'])) ? $showcase_cta_field['url'] : '#pricing';
+            $showcase_cta_label  = (!empty($showcase_cta_field['title'])) ? $showcase_cta_field['title'] : iptv_text('showcase_cta', 'Get Access Now');
+            $showcase_cta_target = (!empty($showcase_cta_field['target'])) ? ' target="' . esc_attr($showcase_cta_field['target']) . '"' : '';
+            ?>
+            <a href="<?php echo esc_url($showcase_cta_url); ?>" class="btn btn-primary" style="margin-top: 2rem;"<?php echo $showcase_cta_target; ?>>
+                <?php echo esc_html($showcase_cta_label); ?>
             </a>
         </div>
 

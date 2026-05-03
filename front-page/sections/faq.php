@@ -18,79 +18,49 @@ $faq_subtitle = iptv_text('faq_subtitle', 'Find answers to commonly asked questi
         </div>
         <div class="faq-list">
             <?php
-            // Default Questions and Answers (Fallback content)
-            $faqs = [
-                1 => [
-                    'q' => 'What is IPTV?',
-                    'a' => 'IPTV (Internet Protocol Television) is a modern way to watch TV channels, movies, and series using an internet connection instead of traditional cable or satellite services.'
-                ],
-                2 => [
-                    'q' => 'What is NordicTV?',
-                    'a' => 'NordicTV is a premium IPTV service offering 35,000+ live channels, 150,000+ movies & series, stunning 4K Ultra HD quality, and 24/7 customer support, accessible on multiple devices.'
-                ],
-                3 => [
-                    'q' => 'How do I subscribe to NordicTV?',
-                    'a' => 'Choose a subscription plan on nordictv.io, complete your order, and you will receive your activation details by email with clear setup instructions.'
-                ],
-                4 => [
-                    'q' => 'Which devices are supported?',
-                    'a' => 'NordicTV works on most popular devices, including: Smart TVs, Android TV & Android phones, iPhone & iPad, Amazon Firestick / Fire TV, MAG boxes, Windows & macOS. If you need help setting up, our support team is available 24/7.'
-                ],
-                5 => [
-                    'q' => 'How many devices can I use at the same time?',
-                    'a' => 'Each subscription allows up to 4 simultaneous connections. You can watch on multiple devices at the same time within this limit.'
-                ],
-                6 => [
-                    'q' => 'What kind of content do you offer?',
-                    'a' => 'NordicTV provides: 35K+ Live TV Channels (sports, entertainment, news, international), 150K+ Movies & TV Series, 4K Ultra HD and HD quality streams, and a constantly updated content library.'
-                ],
-                7 => [
-                    'q' => 'How will I receive my subscription details?',
-                    'a' => 'After payment confirmation, your login details (username, password, or playlist) will be sent to your email. Delivery usually takes a few minutes, but can take up to 8 hours in some cases.'
-                ],
-                8 => [
-                    'q' => 'Do you offer sports and premium channels?',
-                    'a' => 'Yes. NordicTV includes a wide selection of sports, premium entertainment, and international channels, including live events and major leagues.'
-                ],
-                9 => [
-                    'q' => 'What payment methods do you accept?',
-                    'a' => 'We accept secure payments via Credit / Debit Cards and PayPal (where available). All payments are processed through secure gateways.'
-                ],
-                10 => [
-                    'q' => 'Do you offer refunds?',
-                    'a' => 'Customer satisfaction is important to us. If you experience serious issues with the service, please contact our support team and we will do our best to assist you.'
-                ],
-                11 => [
-                    'q' => 'How can I contact support?',
-                    'a' => 'You can reach our support team 24/7 at: <a href="mailto:support@nordictv.io">support@nordictv.io</a>'
-                ],
-                12 => [
-                    'q' => 'Can I become a reseller?',
-                    'a' => 'Yes, reseller opportunities are available. Please contact us at <a href="mailto:support@nordictv.io">support@nordictv.io</a> for more information.'
-                ]
-            ];
+            // Try ACF faq_list repeater first
+            $faq_items = [];
+            if (function_exists('get_field')) {
+                $front_page_id = get_option('page_on_front');
+                $acf_items     = $front_page_id ? get_field('faq_list', $front_page_id) : get_field('faq_list');
+                if (!empty($acf_items) && is_array($acf_items)) {
+                    foreach ($acf_items as $row) {
+                        if (!empty($row['question'])) {
+                            $faq_items[] = ['q' => $row['question'], 'a' => isset($row['answer']) ? $row['answer'] : ''];
+                        }
+                    }
+                }
+            }
 
-            // Loop through questions
-            foreach ($faqs as $i => $data) :
-                $q_key = "faq_q_{$i}";
-                $a_key = "faq_a_{$i}";
+            // Fallback: hardcoded defaults
+            if (empty($faq_items)) {
+                $faq_items = [
+                    ['q' => 'What is IPTV?',                          'a' => 'IPTV (Internet Protocol Television) is a modern way to watch TV channels, movies, and series using an internet connection instead of traditional cable or satellite services.'],
+                    ['q' => 'What is NordicTV?',                      'a' => 'NordicTV is a premium IPTV service offering 35,000+ live channels, 150,000+ movies & series, stunning 4K Ultra HD quality, and 24/7 customer support, accessible on multiple devices.'],
+                    ['q' => 'How do I subscribe to NordicTV?',        'a' => 'Choose a subscription plan on nordictv.io, complete your order, and you will receive your activation details by email with clear setup instructions.'],
+                    ['q' => 'Which devices are supported?',           'a' => 'NordicTV works on most popular devices, including: Smart TVs, Android TV & Android phones, iPhone & iPad, Amazon Firestick / Fire TV, MAG boxes, Windows & macOS. If you need help setting up, our support team is available 24/7.'],
+                    ['q' => 'How many devices can I use at once?',    'a' => 'Each subscription allows up to 4 simultaneous connections. You can watch on multiple devices at the same time within this limit.'],
+                    ['q' => 'What kind of content do you offer?',     'a' => 'NordicTV provides: 35K+ Live TV Channels (sports, entertainment, news, international), 150K+ Movies & TV Series, 4K Ultra HD and HD quality streams, and a constantly updated content library.'],
+                    ['q' => 'How will I receive my subscription details?', 'a' => 'After payment confirmation, your login details (username, password, or playlist) will be sent to your email. Delivery usually takes a few minutes, but can take up to 8 hours in some cases.'],
+                    ['q' => 'Do you offer sports and premium channels?', 'a' => 'Yes. NordicTV includes a wide selection of sports, premium entertainment, and international channels, including live events and major leagues.'],
+                    ['q' => 'What payment methods do you accept?',    'a' => 'We accept secure payments via Credit / Debit Cards and PayPal (where available). All payments are processed through secure gateways.'],
+                    ['q' => 'Do you offer refunds?',                  'a' => 'Customer satisfaction is important to us. If you experience serious issues with the service, please contact our support team and we will do our best to assist you.'],
+                    ['q' => 'How can I contact support?',             'a' => 'You can reach our support team 24/7 at: <a href="mailto:support@nordictv.io">support@nordictv.io</a>'],
+                    ['q' => 'Can I become a reseller?',               'a' => 'Yes, reseller opportunities are available. Please contact us at <a href="mailto:support@nordictv.io">support@nordictv.io</a> for more information.'],
+                ];
+            }
 
-                // Get content with fallbacks
-                $question = iptv_text($q_key, $data['q']);
-                $answer = iptv_text($a_key, $data['a']);
-
-                // Skip if empty question (allows user to have fewer than 12)
-                if (empty($question))
-                    continue;
+            foreach ($faq_items as $item) :
+                if (empty($item['q'])) continue;
                 ?>
                 <div class="faq-item">
                     <button class="faq-question">
-                        <?php echo esc_html($question); ?>
+                        <?php echo esc_html($item['q']); ?>
                         <span class="faq-icon">+</span>
                     </button>
                     <div class="faq-answer">
                         <div class="faq-answer-content">
-                            <?php echo wp_kses_post($answer); ?>
+                            <?php echo wp_kses_post($item['a']); ?>
                         </div>
                     </div>
                 </div>

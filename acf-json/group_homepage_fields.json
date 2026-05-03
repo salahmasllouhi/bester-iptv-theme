@@ -234,6 +234,24 @@
                 "placeholder": ""
             },
             {
+                "key": "tab_dashboard",
+                "label": "🖥️ Member Dashboard",
+                "name": "",
+                "aria-label": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0,
+                "selected": 0
+            },
+            {
                 "key": "field_dashboard_badge",
                 "label": "Dashboard Badge",
                 "name": "dashboard_badge",
@@ -329,6 +347,80 @@
                 },
                 "default_value": "https://panel.nordictv.io/login",
                 "placeholder": ""
+            },
+            {
+                "key": "field_dashboard_features",
+                "label": "Dashboard Feature Cards",
+                "name": "dashboard_features",
+                "aria-label": "",
+                "type": "repeater",
+                "instructions": "Each card shown in the member dashboard grid.",
+                "required": false,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "layout": "block",
+                "button_label": "Add Feature Card",
+                "min": 0,
+                "max": 0,
+                "rows_per_page": 10,
+                "collapsed": "",
+                "sub_fields": [
+                    {
+                        "key": "field_dashboard_feature_title",
+                        "label": "Title",
+                        "name": "title",
+                        "aria-label": "",
+                        "type": "text",
+                        "instructions": "",
+                        "required": false,
+                        "conditional_logic": false,
+                        "wrapper": { "width": "50", "class": "", "id": "" },
+                        "default_value": "",
+                        "maxlength": "",
+                        "placeholder": "",
+                        "prepend": "",
+                        "append": "",
+                        "parent_repeater": "field_dashboard_features"
+                    },
+                    {
+                        "key": "field_dashboard_feature_description",
+                        "label": "Description",
+                        "name": "description",
+                        "aria-label": "",
+                        "type": "textarea",
+                        "instructions": "",
+                        "required": false,
+                        "conditional_logic": false,
+                        "wrapper": { "width": "50", "class": "", "id": "" },
+                        "default_value": "",
+                        "new_lines": "",
+                        "maxlength": "",
+                        "placeholder": "",
+                        "rows": 2,
+                        "parent_repeater": "field_dashboard_features"
+                    },
+                    {
+                        "key": "field_dashboard_feature_icon",
+                        "label": "Icon (SVG or emoji)",
+                        "name": "icon",
+                        "aria-label": "",
+                        "type": "text",
+                        "instructions": "Paste an SVG string or a single emoji character.",
+                        "required": false,
+                        "conditional_logic": false,
+                        "wrapper": { "width": "", "class": "", "id": "" },
+                        "default_value": "",
+                        "maxlength": "",
+                        "placeholder": "",
+                        "prepend": "",
+                        "append": "",
+                        "parent_repeater": "field_dashboard_features"
+                    }
+                ]
             },
             {
                 "key": "field_hero_stat_1_val",
@@ -485,6 +577,54 @@
                     "id": ""
                 },
                 "default_value": "From 198 countries",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_hero_stat_4_val",
+                "label": "Stat 4 Value (Movies & Series)",
+                "name": "hero_stat_4_val",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": false,
+                "conditional_logic": false,
+                "wrapper": { "width": "", "class": "", "id": "" },
+                "default_value": "150,000+",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_hero_stat_4_label",
+                "label": "Stat 4 Label",
+                "name": "hero_stat_4_label",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": false,
+                "conditional_logic": false,
+                "wrapper": { "width": "", "class": "", "id": "" },
+                "default_value": "Movies & Series",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_hero_stat_4_desc",
+                "label": "Stat 4 Description",
+                "name": "hero_stat_4_desc",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": false,
+                "conditional_logic": false,
+                "wrapper": { "width": "", "class": "", "id": "" },
+                "default_value": "All genres included",
                 "maxlength": "",
                 "placeholder": "",
                 "prepend": "",
@@ -3391,6 +3531,6 @@
         "show_in_rest": 1,
         "display_title": "",
         "pll_display_field_instructions": 1,
-        "modified": 1800000001
+        "modified": 1777798310
     }
 ]
