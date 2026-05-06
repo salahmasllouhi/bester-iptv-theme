@@ -55,6 +55,30 @@ function my_iptv_enqueue_styles()
 }
 add_action('wp_enqueue_scripts', 'my_iptv_enqueue_styles', 20);
 
+// Register FAQ custom post type with a clean /faq/ permalink base
+function iptv_register_faq_post_type() {
+    register_post_type('faq', [
+        'labels' => [
+            'name'               => 'FAQs',
+            'singular_name'      => 'FAQ',
+            'add_new_item'       => 'Add New FAQ',
+            'edit_item'          => 'Edit FAQ',
+            'view_item'          => 'View FAQ',
+            'search_items'       => 'Search FAQs',
+            'not_found'          => 'No FAQs found',
+            'not_found_in_trash' => 'No FAQs found in trash',
+        ],
+        'public'            => true,
+        'show_in_rest'      => true,
+        'supports'          => ['title', 'editor', 'thumbnail', 'excerpt', 'revisions'],
+        'has_archive'       => false,
+        'rewrite'           => ['slug' => 'faq', 'with_front' => false],
+        'menu_icon'         => 'dashicons-editor-help',
+        'show_in_nav_menus' => false,
+    ]);
+}
+add_action('init', 'iptv_register_faq_post_type');
+
 // Add inline CSS for product page fixes
 function my_iptv_product_page_inline_css()
 {
