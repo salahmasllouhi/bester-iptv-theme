@@ -35,30 +35,30 @@ echo '<\/style>';
 
 <style>
 /* ── FAQ Single Page ─────────────────────────────────────────────── */
-.faq-single-hero {
-    background: linear-gradient(135deg, #0F2847 0%, #1a3a6b 100%);
-    padding: 7rem 1.5rem 3rem;
-    text-align: center;
-}
-
-.faq-single-hero__title {
-    font-size: clamp(1.75rem, 4vw, 2.75rem);
-    font-weight: 700;
-    color: #ffffff;
-    letter-spacing: -0.02em;
-    line-height: 1.25;
-    margin: 0;
-}
-
 .faq-single {
-    padding: 3rem 0 var(--space-lg, 3rem);
+    padding: 8rem 0 var(--space-lg, 3rem);
     background: var(--bg-page, #F5F5FF);
+}
+
+/* Push content below the absolute-positioned floating header */
+body.single-faq .faq-single {
+    padding-top: calc(80px + 3rem);
 }
 
 .faq-single__container {
     max-width: 800px;
     margin: 0 auto;
     padding: 0 var(--space-md, 1.5rem);
+}
+
+.faq-single__title {
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    font-weight: 700;
+    color: var(--text-primary, #0F2847);
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin-bottom: var(--space-lg, 2.5rem);
+    text-align: center;
 }
 
 /* First paragraph — highlighted answer capsule */
@@ -103,13 +103,11 @@ echo '<\/style>';
 
 <?php while (have_posts()) : the_post(); ?>
 
-    <!-- 1. Dark hero banner — sits behind the floating header -->
-    <section class="faq-single-hero">
-        <h1 class="faq-single-hero__title"><?php the_title(); ?></h1>
-    </section>
-
     <section class="faq-single">
         <div class="faq-single__container">
+
+            <!-- 1. Post title -->
+            <h1 class="faq-single__title"><?php the_title(); ?></h1>
 
             <?php
             // Split the post content: extract the first <p> for the capsule,
