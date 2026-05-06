@@ -36,7 +36,7 @@ echo '<\/style>';
 <style>
 /* ── FAQ Single Page ─────────────────────────────────────────────── */
 .faq-single {
-    padding: 6rem 0 var(--space-lg, 3rem);
+    padding: 9rem 0 var(--space-lg, 3rem);
     background: var(--bg-page, #F5F5FF);
 }
 
