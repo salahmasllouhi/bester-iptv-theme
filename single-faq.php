@@ -76,10 +76,15 @@ body.single-faq .faq-single {
 
 /* Remaining Q&A blocks */
 .faq-single__body h2 {
-    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
-    font-weight: 600;
+    font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+    font-weight: 700;
     color: var(--text-primary, #0F2847);
-    margin: var(--space-lg, 2rem) 0 var(--space-xs, 0.5rem);
+    margin: 2.5rem 0 0.6rem;
+    padding: 0.75rem 1rem 0.75rem 1.25rem;
+    background: var(--bg-card, #FFFFFF);
+    border-left: 3px solid var(--color-indigo, #5B4FE8);
+    border-radius: 0 var(--radius-md, 12px) var(--radius-md, 12px) 0;
+    box-shadow: var(--shadow-sm, 0 2px 8px rgba(15,40,71,0.06));
 }
 
 .faq-single__body h2:first-child {
@@ -90,11 +95,74 @@ body.single-faq .faq-single {
     color: var(--text-secondary, #4A6282);
     line-height: 1.75;
     margin-bottom: var(--space-sm, 1rem);
+    padding: 0 0.25rem;
 }
 
 .faq-single__body a {
     color: var(--color-teal, #00D4AA);
     text-decoration: underline;
+}
+
+/* ── Related FAQs ────────────────────────────────────────────────── */
+.faq-related {
+    padding: 4rem 0 5rem;
+    background: var(--bg-section, #EBEBFF);
+}
+
+.faq-related__container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 var(--space-md, 1.5rem);
+}
+
+.faq-related__heading {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text-primary, #0F2847);
+    margin-bottom: 1.5rem;
+}
+
+.faq-related__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+@media (max-width: 600px) {
+    .faq-related__grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.faq-related__card {
+    display: block;
+    background: var(--bg-card, #FFFFFF);
+    border-radius: var(--radius-lg, 20px);
+    padding: 1.25rem 1.5rem;
+    text-decoration: none;
+    box-shadow: var(--shadow-sm, 0 2px 8px rgba(15,40,71,0.06));
+    border: 1px solid transparent;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.faq-related__card:hover {
+    border-color: var(--color-teal, #00D4AA);
+    box-shadow: var(--shadow-glow, 0 8px 40px rgba(0,212,170,0.25));
+    transform: translateY(-2px);
+}
+
+.faq-related__card-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary, #0F2847);
+    line-height: 1.4;
+    margin-bottom: 0.4rem;
+}
+
+.faq-related__card-arrow {
+    font-size: 0.8rem;
+    color: var(--color-teal, #00D4AA);
+    font-weight: 600;
 }
 </style>
 
@@ -202,6 +270,31 @@ body.single-faq .faq-single {
             </div>
         </div>
     </section>
+
+    <!-- 5. Related FAQs -->
+    <?php
+    $related = new WP_Query([
+        'post_type'      => 'faq',
+        'posts_per_page' => 6,
+        'post__not_in'   => [get_the_ID()],
+        'orderby'        => 'rand',
+    ]);
+    if ($related->have_posts()) :
+    ?>
+    <section class="faq-related">
+        <div class="faq-related__container">
+            <h2 class="faq-related__heading">Related questions</h2>
+            <div class="faq-related__grid">
+                <?php while ($related->have_posts()) : $related->the_post(); ?>
+                    <a href="<?php the_permalink(); ?>" class="faq-related__card">
+                        <div class="faq-related__card-title"><?php the_title(); ?></div>
+                        <div class="faq-related__card-arrow">Read answer →</div>
+                    </a>
+                <?php endwhile; wp_reset_postdata(); ?>
+            </div>
+        </div>
+    </section>
+    <?php endif; ?>
 
 <?php endwhile; ?>
 
