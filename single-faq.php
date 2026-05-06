@@ -36,7 +36,7 @@ echo '<\/style>';
 <style>
 /* ── FAQ Single Page ─────────────────────────────────────────────── */
 .faq-single {
-    padding: var(--space-xl, 5rem) 0 var(--space-lg, 3rem);
+    padding: 6rem 0 var(--space-lg, 3rem);
     background: var(--bg-page, #F5F5FF);
 }
 
@@ -53,6 +53,7 @@ echo '<\/style>';
     letter-spacing: -0.02em;
     line-height: 1.25;
     margin-bottom: var(--space-lg, 2.5rem);
+    text-align: center;
 }
 
 /* First paragraph — highlighted answer capsule */
