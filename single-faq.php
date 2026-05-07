@@ -74,6 +74,13 @@ body.single-faq .faq-single {
     color: var(--text-primary, #0F2847);
 }
 
+.faq-single__answer-capsule p {
+    margin: 0;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+}
+
 /* Remaining Q&A blocks */
 .faq-single__body h2 {
     font-size: clamp(1.05rem, 2.5vw, 1.25rem);
