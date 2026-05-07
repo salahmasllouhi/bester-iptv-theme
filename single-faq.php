@@ -85,13 +85,15 @@ body.single-faq .faq-single {
 .faq-single__body h2 {
     font-size: clamp(1.05rem, 2.5vw, 1.25rem);
     font-weight: 700;
-    color: var(--text-primary, #0F2847);
+    color: #0F2847;
     margin: 2.5rem 0 0.6rem;
-    padding: 0.75rem 1rem 0.75rem 1.25rem;
-    background: var(--bg-card, #FFFFFF);
-    border-left: 3px solid var(--color-indigo, #5B4FE8);
-    border-radius: 0 var(--radius-md, 12px) var(--radius-md, 12px) 0;
-    box-shadow: var(--shadow-sm, 0 2px 8px rgba(15,40,71,0.06));
+    padding: 0.85rem 1.25rem 0.85rem 1.25rem;
+    background: #ffffff;
+    border: 1px solid #e8e8f0;
+    border-left: 4px solid #5B4FE8;
+    border-radius: 0 12px 12px 0;
+    box-shadow: 0 2px 8px rgba(15,40,71,0.06);
+    display: block;
 }
 
 .faq-single__body h2:first-child {
@@ -195,6 +197,11 @@ body.single-faq .faq-single {
             $found_first    = false;
 
             foreach ($blocks as $block) {
+                // Skip null/whitespace-only blocks Gutenberg inserts between blocks
+                if (empty($block['blockName']) && empty(trim($block['innerHTML'] ?? ''))) {
+                    continue;
+                }
+
                 $rendered = render_block($block);
 
                 if (!$found_first && $block['blockName'] === 'core/paragraph') {
@@ -206,12 +213,12 @@ body.single-faq .faq-single {
                 $remaining_html .= $rendered;
             }
 
-            // Fallback: if no blocks (classic editor), regex-split on first <p>
-            if (empty($first_p_html) && empty($remaining_html)) {
+            // Fallback: classic editor or if block parsing missed — split on first <p>
+            if (empty($first_p_html)) {
                 $content = apply_filters('the_content', $raw);
-                if (preg_match('/^(\s*<p>.*?<\/p>)/is', $content, $m)) {
+                if (preg_match('/(<p[^>]*>.*?<\/p>)/is', $content, $m)) {
                     $first_p_html   = $m[1];
-                    $remaining_html = substr($content, strlen($m[0]));
+                    $remaining_html = substr($content, strpos($content, $m[0]) + strlen($m[0]));
                 } else {
                     $remaining_html = $content;
                 }
