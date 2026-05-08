@@ -79,6 +79,18 @@ function iptv_register_faq_post_type() {
 }
 add_action('init', 'iptv_register_faq_post_type');
 
+function iptv_register_faq_rest_meta() {
+    $fields = ['rank_math_focus_keyword', 'rank_math_title', 'rank_math_description'];
+    foreach ($fields as $field) {
+        register_post_meta('faq', $field, [
+            'show_in_rest' => true,
+            'single'       => true,
+            'type'         => 'string',
+        ]);
+    }
+}
+add_action('rest_api_init', 'iptv_register_faq_rest_meta');
+
 // Add inline CSS for product page fixes
 function my_iptv_product_page_inline_css()
 {
