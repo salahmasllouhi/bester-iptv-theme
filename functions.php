@@ -91,6 +91,18 @@ function iptv_register_faq_rest_meta() {
 }
 add_action('rest_api_init', 'iptv_register_faq_rest_meta');
 
+add_filter('is_protected_meta', function($protected, $meta_key) {
+    $rank_math_fields = [
+        'rank_math_focus_keyword',
+        'rank_math_title',
+        'rank_math_description',
+    ];
+    if (in_array($meta_key, $rank_math_fields)) {
+        return false;
+    }
+    return $protected;
+}, 10, 2);
+
 // Add inline CSS for product page fixes
 function my_iptv_product_page_inline_css()
 {
