@@ -6,6 +6,19 @@
 // Main site URL for cross-site cart (all subsites use main site checkout)
 define('IPTV_MAIN_SITE_URL', 'https://nordictv.io');
 
+// Prevent LiteSpeed Cache from caching Rank Math sitemap URLs.
+// LiteSpeed sometimes caches the blog page and serves it for sitemap_index.xml,
+// causing the sitemap to intermittently show the blog instead of XML.
+add_action('init', function () {
+    $request_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+    if (strpos($request_uri, 'sitemap') !== false || strpos($request_uri, 'sitemap_index.xml') !== false) {
+        if (!headers_sent()) {
+            header('X-LiteSpeed-Cache-Control: no-cache, no-store');
+            header('Cache-Control: no-cache, no-store, must-revalidate');
+        }
+    }
+}, 1);
+
 // Disable WordPress Twemoji to use native system emojis
 remove_action('wp_head', 'print_emoji_detection_script', 7);
 remove_action('wp_print_styles', 'print_emoji_styles');
