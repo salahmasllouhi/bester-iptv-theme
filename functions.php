@@ -6,15 +6,27 @@
 // Main site URL for cross-site cart (all subsites use main site checkout)
 define('IPTV_MAIN_SITE_URL', 'https://nordictv.io');
 
-// Prevent LiteSpeed Cache from caching Rank Math sitemap URLs.
-// LiteSpeed sometimes caches the blog page and serves it for sitemap_index.xml,
-// causing the sitemap to intermittently show the blog instead of XML.
+// Auto-flush rewrite rules when Rank Math sitemap rules go missing.
+// On Hostinger/LiteSpeed, rewrite rules can get wiped after server restarts or
+// plugin updates, causing sitemap_index.xml to 404 and fall through to the blog page.
 add_action('init', function () {
-    $request_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
-    if (strpos($request_uri, 'sitemap') !== false || strpos($request_uri, 'sitemap_index.xml') !== false) {
+    $request_uri = $_SERVER['REQUEST_URI'] ?? '';
+
+    // Prevent LiteSpeed from caching any sitemap response
+    if (strpos($request_uri, 'sitemap') !== false) {
         if (!headers_sent()) {
             header('X-LiteSpeed-Cache-Control: no-cache, no-store');
             header('Cache-Control: no-cache, no-store, must-revalidate');
+        }
+    }
+
+    // If a sitemap URL is requested but Rank Math's rewrite rule isn't registered,
+    // flush rewrite rules once so WordPress picks them up without manual intervention.
+    if (strpos($request_uri, 'sitemap') !== false) {
+        $rules = get_option('rewrite_rules');
+        $has_sitemap_rule = !empty($rules) && !empty(preg_grep('/sitemap/', array_keys($rules)));
+        if (!$has_sitemap_rule) {
+            flush_rewrite_rules(false);
         }
     }
 }, 1);
