@@ -38,14 +38,18 @@ $secondary_url   = iptv_text('hero_secondary_cta_url', '#pricing');
             </span>
         </div>
 
+        <?php
+        // Two lines. hero_title_3 is deliberately not rendered: iptv_text() falls
+        // back to its default whenever the ACF value is blank, so a third line can
+        // only be removed here, not by clearing the field in the editor.
+        ?>
         <h1 class="dv2-hero-title">
-            <?php echo esc_html(iptv_text('hero_title', 'Watch Everything.')); ?>
-            <span class="dv2-hero-accent"><?php echo esc_html(iptv_text('hero_title_span', 'Pay Almost Nothing.')); ?></span>
-            <?php echo esc_html(iptv_text('hero_title_3', 'Cancel Anytime.')); ?>
+            <?php echo esc_html(iptv_text('hero_title', 'Nordic IPTV Without Limits. Every Match. Every Channel.')); ?>
+            <span class="dv2-hero-accent"><?php echo esc_html(iptv_text('hero_title_span', 'One Subscription. $1,000 Saved. Zero Compromises.')); ?></span>
         </h1>
 
         <p class="dv2-hero-sub">
-            <?php echo wp_kses_post(iptv_text('hero_subtitle', 'As a premier IPTV service provider, NordicTV offers 35,000+ channels, 150,000+ VODs, and all sports in 4K/8K. Stream premium content on any device today.')); ?>
+            <?php echo wp_kses_post(iptv_text('hero_subtitle', 'Looking for Nordic IPTV? NordicTV offers 40,000+ live channels, 200,000+ movies & series, and every sport in 4K/8K — on any device, instantly.')); ?>
         </p>
 
         <div class="dv2-hero-actions">
