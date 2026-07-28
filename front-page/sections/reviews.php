@@ -36,12 +36,6 @@ if (empty($reviews)) {
     ];
 }
 
-$score_rows = [
-    1 => 'Streaming Quality',
-    2 => 'Sports Coverage',
-    3 => 'Support',
-];
-
 /**
  * The reviews run as two infinite marquee rows. Each row needs enough cards to
  * overflow a wide viewport before it can loop seamlessly, so the row's slice is
@@ -100,21 +94,6 @@ $render_review = function ($review, $clone = false) {
             <p><?php echo esc_html($subtitle); ?></p>
         </div>
 
-        <div class="dv2-reviews-grid">
-            <div class="dv2-score-card">
-                <div class="dv2-score-value">
-                    <?php echo esc_html(iptv_text('reviews_score', '4.8')); ?>
-                    <small><?php echo esc_html(iptv_text('reviews_score_basis', 'Based on 2,500+ Reviews')); ?></small>
-                </div>
-                <div class="dv2-score-brand">★ Trustpilot &nbsp; ★★★★★</div>
-                <?php foreach ($score_rows as $n => $label) : ?>
-                    <div class="dv2-score-row">
-                        <?php echo esc_html(iptv_text("reviews_score_row_{$n}", $label)); ?>
-                        <span aria-hidden="true">★★★★★</span>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
     </div>
 
     <div class="dv2-review-marquee">

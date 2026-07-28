@@ -47,17 +47,11 @@ $secondary_url   = iptv_text('hero_secondary_cta_url', '#pricing');
             <?php echo wp_kses_post(iptv_text('hero_subtitle', 'As a premier IPTV service provider, NordicTV offers 35,000+ channels, 150,000+ VODs, and all sports in 4K/8K. Stream premium content on any device today.')); ?>
         </p>
 
-        <div class="dv2-live-pill">
-            <span class="dv2-live-dot" aria-hidden="true"></span>
-            <strong id="liveCounter"><?php echo esc_html(iptv_text('hero_stat_1_val', '12,849')); ?></strong>
-            <?php echo esc_html(iptv_text('hero_stat_1_desc', 'users watching now')); ?>
-        </div>
-
         <div class="dv2-hero-actions">
-            <a href="<?php echo esc_url($primary_url); ?>" class="dv2-btn dv2-btn-green">
+            <a href="<?php echo esc_url($primary_url); ?>" class="dv2-btn dv2-btn-primary dv2-btn-lg">
                 ▶ <?php echo esc_html($primary_label); ?>
             </a>
-            <a href="<?php echo esc_url($secondary_url); ?>" class="dv2-hero-link">
+            <a href="<?php echo esc_url($secondary_url); ?>" class="dv2-btn dv2-btn-lg dv2-hero-link">
                 <?php echo esc_html($secondary_label); ?>
             </a>
         </div>

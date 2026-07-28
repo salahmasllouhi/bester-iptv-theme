@@ -191,10 +191,13 @@
    ------------------------------------------- */
 .dv2-hero {
     display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    gap: 56px;
+    /* Media capped at 500px - 20% down from the 624px the old 1fr/1.2fr split
+       gave it - so the image stops dominating the fold. Gap and top padding
+       pulled in to match. */
+    grid-template-columns: minmax(0, 1fr) minmax(0, min(500px, 45%));
+    gap: 36px;
     align-items: center;
-    padding: 56px var(--dv2-gutter) 0;
+    padding: 45px var(--dv2-gutter) 0;
 }
 
 .dv2-trustpilot {
@@ -234,9 +237,9 @@
 .dv2-hero-title {
     font-family: var(--dv2-font-display);
     font-weight: 800;
-    font-size: 64px;
+    font-size: 51px;
     line-height: 1.05;
-    letter-spacing: -2px;
+    letter-spacing: -1.6px;
     color: var(--dv2-ink);
     margin: 26px 0 0;
 }
@@ -249,38 +252,6 @@
     margin: 24px 0 0;
 }
 
-.dv2-live-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--dv2-surface);
-    border: 1px solid var(--dv2-border-medium);
-    border-radius: var(--dv2-radius-pill);
-    padding: 9px 18px;
-    margin-top: 26px;
-    font-size: 14px;
-    color: var(--dv2-body);
-    box-shadow: 0 2px 10px rgba(76, 29, 149, 0.05);
-}
-
-.dv2-live-pill strong {
-    color: var(--dv2-ink);
-}
-
-.dv2-live-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: var(--dv2-radius-pill);
-    background: var(--dv2-green);
-    box-shadow: 0 0 10px rgba(0, 182, 122, 0.5);
-    animation: dv2Pulse 2s ease-in-out infinite;
-}
-
-@keyframes dv2Pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.45; }
-}
-
 .dv2-hero-actions {
     margin-top: 26px;
     display: flex;
@@ -289,11 +260,21 @@
     flex-wrap: wrap;
 }
 
+/* Secondary hero CTA: a white button rather than a bare text link, so the
+   pair reads as two actions. Border and shadow give it an edge against the
+   near-white page background. */
 .dv2-hero-link {
-    color: var(--dv2-purple);
-    font-family: var(--dv2-font-display);
-    font-weight: 700;
-    font-size: 18px;
+    background: #ffffff;
+    color: var(--dv2-purple-700);
+    border: 1px solid var(--dv2-border-strong);
+    box-shadow: 0 6px 20px rgba(76, 29, 149, 0.08);
+}
+
+.dv2-hero-link:hover {
+    background: #ffffff;
+    color: var(--dv2-purple-600);
+    border-color: var(--dv2-purple);
+    box-shadow: 0 10px 26px rgba(124, 58, 237, 0.16);
 }
 
 .dv2-hero-media {
@@ -755,29 +736,12 @@
 /* -------------------------------------------
    REVIEWS
    ------------------------------------------- */
-.dv2-reviews-grid {
-    display: flex;
-    justify-content: center;
-    margin-top: 40px;
-    text-align: left;
-}
-
-.dv2-score-card {
-    background: var(--dv2-surface);
-    border: 1px solid var(--dv2-border);
-    border-radius: var(--dv2-radius-md);
-    padding: 24px 32px;
-    box-shadow: var(--dv2-shadow-sm);
-    width: 100%;
-    max-width: 420px;
-}
-
 /* Two rows of reviews scrolling on a loop. Each track prints its cards twice
    and travels exactly -50%, so the clone lands where the original started and
    the seam is invisible. Cards use margin-right rather than a flex gap so that
    half the track width is a whole number of cards. */
 .dv2-review-marquee {
-    margin-top: 32px;
+    margin-top: 44px;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -825,39 +789,6 @@
     to {
         transform: translateX(0);
     }
-}
-
-.dv2-score-value {
-    font-family: var(--dv2-font-display);
-    font-weight: 800;
-    font-size: 40px;
-    color: var(--dv2-ink);
-    line-height: 1.1;
-}
-
-.dv2-score-value small {
-    font-size: 15px;
-    font-weight: 400;
-    color: var(--dv2-body);
-    margin-left: 8px;
-}
-
-.dv2-score-brand {
-    color: var(--dv2-green);
-    font-weight: 700;
-    margin: 8px 0 18px;
-}
-
-.dv2-score-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 6px 0;
-    color: var(--dv2-body);
-    font-size: 15px;
-}
-
-.dv2-score-row span {
-    color: var(--dv2-amber);
 }
 
 .dv2-review-card {
@@ -2011,13 +1942,21 @@
 
     .dv2-hero {
         grid-template-columns: 1fr;
-        gap: 40px;
-        padding: 32px var(--dv2-gutter) 0;
+        gap: 28px;
+        padding: 26px var(--dv2-gutter) 0;
+    }
+
+    /* Stacked, the media has the full column width, so cap it or the image
+       row swallows the fold. */
+    .dv2-hero-media {
+        max-width: 560px;
+        width: 100%;
+        margin: 0 auto;
     }
 
     .dv2-hero-title {
-        font-size: 44px;
-        letter-spacing: -1.2px;
+        font-size: 35px;
+        letter-spacing: -1px;
     }
 
     .dv2-hero-sub {
@@ -2112,7 +2051,7 @@
     }
 
     .dv2-hero-title {
-        font-size: 34px;
+        font-size: 27px;
     }
 
     .dv2-split,

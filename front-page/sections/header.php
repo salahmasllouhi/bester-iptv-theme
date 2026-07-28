@@ -73,7 +73,7 @@ if (isset($site_currency_map[$site_slug])) {
                 <a href="<?php echo home_url('/'); ?>">Home</a>
                 <a href="<?php echo home_url('/#features'); ?>">Features</a>
                 <a href="<?php echo home_url('/#pricing'); ?>">Pricing</a>
-                <a href="<?php echo home_url('/blog/'); ?>">Blog</a>
+                <!-- Blog lives in the footer only. -->
                 <a href="<?php echo home_url('/user-guide/'); ?>">User Guide</a>
                 <a href="<?php echo home_url('/#contact'); ?>">Contact</a>
                 <a href="https://panel.nordictv.io/login">My Account</a>
@@ -140,7 +140,7 @@ if (isset($site_currency_map[$site_slug])) {
         <a href="<?php echo home_url('/'); ?>">Home</a>
         <a href="<?php echo home_url('/#features'); ?>">Features</a>
         <a href="<?php echo home_url('/#pricing'); ?>">Pricing</a>
-        <a href="<?php echo home_url('/blog/'); ?>">Blog</a>
+        <!-- Blog lives in the footer only. -->
         <a href="<?php echo home_url('/user-guide/'); ?>">User Guide</a>
         <a href="<?php echo home_url('/#contact'); ?>">Contact</a>
         <a href="https://panel.nordictv.io/login">My Account</a>

@@ -312,17 +312,10 @@ h6,
     color: #ffffff;
 }
 
-.dv2-btn-green {
-    background: var(--dv2-green);
-    color: #ffffff;
+/* Size modifier for the hero pair of CTAs. */
+.dv2-btn-lg {
     font-size: 19px;
     padding: 20px 34px;
-    box-shadow: var(--dv2-shadow-green);
-}
-
-.dv2-btn-green:hover {
-    background: #009e6a;
-    color: #ffffff;
 }
 
 .dv2-btn-ink,
