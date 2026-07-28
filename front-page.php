@@ -46,22 +46,22 @@ $sections_dir = $front_page_dir . '/sections';
 $sections = array(
     'header',           // Front-page header (source of truth for all headers)
     'hero',             // Split hero with Trustpilot badge
-    'features',         // Eight capability chips
+    'features',         // Eight capability cards
     'content-showcase', // Channels panel + VOD panel
     'sports',           // Sports panel with mosaic
     'cta-bar',          // Full-width savings bar
-    'comparison',       // NordicTV vs. traditional services
-    'reviews',          // Score card + review grid
     'pricing',          // Device/duration configurator (WooCommerce)
+    'steps',            // Onboarding panel - sits directly under pricing
     'unlock',           // Supported device chips
-    'dashboard',        // Member Dashboard
+    'reviews',          // Score card + two-row review marquee
     'faq',              // Accordion
-    'steps',            // Journey panel - closing CTA in this design
     'contact',          // Support cards
     'footer'
-    // 'dark-cta' is intentionally not in this list: the journey panel is the
-    // closing CTA in this design. The section and its styles still exist -
-    // add it back here if you want a second CTA block.
+    // Not in this list (files and styles still exist - add the slug back to
+    // render them again):
+    //   'comparison'  - NordicTV vs. traditional services
+    //   'dashboard'   - Member area promo
+    //   'dark-cta'    - second CTA block; the journey panel closes this design
 );
 
 foreach ($sections as $section) {

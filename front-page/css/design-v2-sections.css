@@ -317,8 +317,25 @@
 }
 
 /* -------------------------------------------
-   FEATURE CHIPS
+   FEATURE CARDS
+
+   The rotating accent glow on the card edge is an animated conic gradient.
+   --dv2-border-angle is registered as an <angle> below so the browser can
+   interpolate it; without @property support the gradient simply sits still,
+   which still reads as a tinted hairline.
    ------------------------------------------- */
+@property --dv2-border-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}
+
+@keyframes dv2-border-spin {
+    to {
+        --dv2-border-angle: 360deg;
+    }
+}
+
 .dv2-feature-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -327,33 +344,76 @@
     text-align: left;
 }
 
-.dv2-feature-chip {
+.dv2-feature-card {
+    position: relative;
     background: var(--dv2-surface);
     border: 1px solid var(--dv2-border);
     border-radius: var(--dv2-radius-md);
     padding: 22px;
     display: flex;
-    align-items: center;
-    gap: 14px;
+    flex-direction: column;
+    gap: 10px;
     box-shadow: var(--dv2-shadow-sm);
     transition: transform .18s ease, box-shadow .18s ease;
 }
 
-.dv2-feature-chip:hover {
+/* The gradient ring: painted over the whole card, then masked down to the
+   border band so only the edge lights up. */
+.dv2-feature-card::before,
+.dv2-total-card::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: conic-gradient(from var(--dv2-border-angle),
+            transparent 0%,
+            var(--dv2-purple) 12%,
+            transparent 28%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: dv2-border-spin 4s linear infinite;
+    pointer-events: none;
+}
+
+.dv2-feature-card:hover {
     transform: translateY(-2px);
     box-shadow: var(--dv2-shadow-md);
 }
 
-.dv2-feature-chip svg {
+.dv2-feature-card-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.dv2-feature-card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--dv2-purple);
     flex-shrink: 0;
 }
 
-.dv2-feature-chip-label {
+.dv2-feature-card-title {
     font-family: var(--dv2-font-display);
     font-weight: 700;
     font-size: 17px;
     line-height: 1.3;
+    letter-spacing: -0.2px;
     color: var(--dv2-ink);
+    margin: 0;
+    min-width: 0;
+}
+
+.dv2-feature-card-desc {
+    color: var(--dv2-body);
+    font-size: 14px;
+    line-height: 1.55;
+    margin: 0;
 }
 
 .dv2-chip-badge {
@@ -696,10 +756,9 @@
    REVIEWS
    ------------------------------------------- */
 .dv2-reviews-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    margin-top: 48px;
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
     text-align: left;
 }
 
@@ -707,8 +766,65 @@
     background: var(--dv2-surface);
     border: 1px solid var(--dv2-border);
     border-radius: var(--dv2-radius-md);
-    padding: 24px;
+    padding: 24px 32px;
     box-shadow: var(--dv2-shadow-sm);
+    width: 100%;
+    max-width: 420px;
+}
+
+/* Two rows of reviews scrolling on a loop. Each track prints its cards twice
+   and travels exactly -50%, so the clone lands where the original started and
+   the seam is invisible. Cards use margin-right rather than a flex gap so that
+   half the track width is a whole number of cards. */
+.dv2-review-marquee {
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+.dv2-review-row {
+    overflow: hidden;
+}
+
+.dv2-review-track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+}
+
+.dv2-review-row--rtl .dv2-review-track {
+    animation: dv2-marquee-rtl 64s linear infinite;
+}
+
+.dv2-review-row--ltr .dv2-review-track {
+    animation: dv2-marquee-ltr 78s linear infinite;
+}
+
+.dv2-review-marquee:hover .dv2-review-track {
+    animation-play-state: paused;
+}
+
+@keyframes dv2-marquee-rtl {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+@keyframes dv2-marquee-ltr {
+    from {
+        transform: translateX(-50%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
 }
 
 .dv2-score-value {
@@ -752,6 +868,10 @@
     display: flex;
     flex-direction: column;
     box-shadow: var(--dv2-shadow-sm);
+    /* Fixed width keeps every track half the same length. */
+    width: 360px;
+    flex: 0 0 360px;
+    margin-right: 16px;
 }
 
 .dv2-review-top {
@@ -812,26 +932,105 @@
     color: var(--dv2-ink);
 }
 
-.dv2-pricing-perks {
+/* "Your total" summary. Carries the same rotating conic-gradient border as the
+   feature cards (see .dv2-feature-card::before, which this shares). */
+.dv2-total-card {
+    position: relative;
+    background: var(--dv2-surface-alt);
+    border: 1px solid var(--dv2-border);
+    border-radius: var(--dv2-radius-lg);
+    padding: 26px 28px;
+    margin-top: 28px;
+    text-align: left;
+}
+
+.dv2-total-label {
+    display: block;
+    font-family: var(--dv2-font-display);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dv2-muted);
+}
+
+.dv2-total-main {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    margin-top: 10px;
+}
+
+.dv2-total-price {
+    font-family: var(--dv2-font-display);
+    font-weight: 800;
+    font-size: 54px;
+    line-height: 1;
+    letter-spacing: -2px;
+    color: var(--dv2-ink);
+}
+
+.dv2-total-aside {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    text-align: right;
+}
+
+.dv2-total-aside.is-hidden,
+.dv2-total-lock.is-hidden {
+    display: none;
+}
+
+.dv2-total-was {
+    color: var(--dv2-muted);
+    font-size: 19px;
+    text-decoration: line-through;
+}
+
+.dv2-total-save {
+    font-family: var(--dv2-font-display);
+    font-weight: 700;
+    font-size: 19px;
+    color: var(--dv2-green);
+}
+
+.dv2-total-meta {
+    color: var(--dv2-body);
+    font-size: 15px;
+    margin: 14px 0 0;
+}
+
+.dv2-total-lock {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 34px;
-    margin-top: 26px;
-    color: var(--dv2-ink-2);
-    font-size: 16px;
-}
-
-.dv2-pricing-perks span {
-    display: flex;
-    align-items: center;
     gap: 8px;
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid var(--dv2-border-medium);
+    color: var(--dv2-body);
+    font-size: 15px;
 }
 
-.dv2-pricing-perks span::before {
-    content: "✓";
+.dv2-total-lock strong {
+    font-family: var(--dv2-font-display);
+    font-weight: 700;
     color: var(--dv2-purple);
+    font-variant-numeric: tabular-nums;
+}
+
+.dv2-total-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--dv2-radius-pill);
+    background: var(--dv2-green);
+    box-shadow: 0 0 0 4px rgba(0, 182, 122, 0.16);
+    flex-shrink: 0;
 }
 
 /* Single centred panel, per the annotated spec. */
@@ -1365,26 +1564,35 @@
 }
 
 /* -------------------------------------------
-   JOURNEY / 3 STEPS
+   ONBOARDING / 3 STEPS
+
+   One accent panel framed by a thick page-coloured border, so it reads as a
+   card floating on the page. Copy column is deliberately the narrower of the
+   two: an even split squeezes the step cards and wraps their titles.
    ------------------------------------------- */
 .dv2-journey {
     width: calc(100% - 2 * var(--dv2-gutter));
     max-width: calc(var(--dv2-shell) - 2 * var(--dv2-gutter));
     margin: 64px auto 0;
     background: radial-gradient(ellipse at 30% 20%, #a855f7, #6d28d9 70%);
-    border-radius: var(--dv2-radius-xl);
-    padding: 56px;
+    border: 8px solid var(--dv2-bg);
+    border-radius: 32px;
+    padding: 48px;
     display: grid;
-    grid-template-columns: 1fr 1.15fr;
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
     gap: 40px;
     align-items: center;
+}
+
+.dv2-journey-copy {
+    min-width: 0;
 }
 
 .dv2-journey-title {
     font-family: var(--dv2-font-display);
     font-weight: 800;
-    font-size: 52px;
-    line-height: 1.05;
+    font-size: 46px;
+    line-height: 1.08;
     letter-spacing: -1.5px;
     color: #ffffff;
     margin: 0;
@@ -1412,71 +1620,180 @@
     flex-shrink: 0;
 }
 
+.dv2-journey-cta {
+    max-width: 100%;
+}
+
 .dv2-journey-cards {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 14px;
+    align-items: stretch;
 }
 
 .dv2-journey-card {
+    position: relative;
+    overflow: hidden;
     background: #ffffff;
+    border: 1px solid rgba(76, 29, 149, 0.08);
     border-radius: var(--dv2-radius-md);
-    padding: 16px;
+    padding: 18px 16px 16px;
     display: flex;
     flex-direction: column;
     gap: 12px;
+    min-width: 0;
+    box-shadow: 0 6px 18px rgba(46, 16, 101, 0.12);
+    transition: transform .2s ease, box-shadow .2s ease;
 }
 
-.dv2-journey-visual {
-    height: 80px;
+/* Accent hairline across the top edge of each card. */
+.dv2-journey-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--dv2-purple), var(--dv2-purple-soft));
+}
+
+.dv2-journey-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 34px rgba(46, 16, 101, 0.22);
+}
+
+.dv2-journey-head {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    justify-content: center;
-}
-
-.dv2-journey-bar {
-    height: 12px;
-    background: var(--dv2-surface-tint);
-    border-radius: 4px;
-}
-
-.dv2-journey-chip {
-    background: var(--dv2-purple);
-    color: #ffffff;
-    text-align: center;
-    padding: 6px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 700;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
 }
 
 .dv2-journey-num {
     width: 26px;
     height: 26px;
     border-radius: var(--dv2-radius-pill);
-    border: 1.5px solid var(--dv2-purple-800);
+    background: var(--dv2-purple);
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    font-family: var(--dv2-font-display);
     font-weight: 700;
     font-size: 13px;
-    color: var(--dv2-ink);
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(124, 58, 237, 0.35);
+    flex-shrink: 0;
 }
 
 .dv2-journey-card h3 {
     font-family: var(--dv2-font-display);
     font-weight: 700;
-    color: var(--dv2-ink);
-    font-size: 15px;
+    color: #111111;
+    font-size: 16px;
+    line-height: 1.25;
     margin: 0;
+    min-width: 0;
+}
+
+/* Decorative mock-up. flex:1 makes it soak up the leftover height so all three
+   cards line up no matter how long each description runs. */
+.dv2-journey-visual {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    min-height: 92px;
+    background: var(--dv2-surface-alt);
+    border: 1px solid #efe9fb;
+    border-radius: var(--dv2-radius-sm);
+    padding: 12px;
+}
+
+.dv2-journey-bar {
+    display: block;
+    height: 12px;
+    background: #ffffff;
+    border: 1px solid #e4dcf5;
+    border-radius: 4px;
+}
+
+.dv2-journey-bar--short {
+    width: 70%;
+}
+
+.dv2-journey-hint {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--dv2-faint);
+}
+
+.dv2-journey-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: var(--dv2-purple);
+    color: #ffffff;
+    text-align: center;
+    padding: 7px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.dv2-journey-chip--sm {
+    align-self: flex-start;
+    padding: 7px 16px;
+}
+
+.dv2-journey-chip--ink {
+    align-self: flex-start;
+    background: #111111;
+    border-radius: var(--dv2-radius-pill);
+    padding: 7px 14px;
+}
+
+.dv2-journey-tiles {
+    display: flex;
+    gap: 6px;
+}
+
+.dv2-journey-tile {
+    width: 28px;
+    height: 28px;
+    border: 1px solid #e4dcf5;
+    border-radius: 6px;
+    background: #ffffff;
+    color: var(--dv2-purple);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.dv2-journey-formats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.dv2-journey-format {
+    border: 1px solid #ddd0f7;
+    border-radius: var(--dv2-radius-pill);
+    padding: 3px 9px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--dv2-purple-700);
+    background: #ffffff;
 }
 
 .dv2-journey-card p {
-    color: var(--dv2-faint);
+    color: #555555;
     font-size: 12px;
     line-height: 1.5;
-    margin: 4px 0 0;
+    margin: 0;
 }
 
 /* -------------------------------------------
@@ -1680,10 +1997,6 @@
     .dv2-feature-grid {
         grid-template-columns: repeat(3, 1fr);
     }
-
-    .dv2-reviews-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
 }
 
 @media (max-width: 1024px) {
@@ -1719,9 +2032,14 @@
     }
 
     .dv2-split-title,
-    .dv2-split-title--lg,
-    .dv2-journey-title {
+    .dv2-split-title--lg {
         font-size: 36px;
+        letter-spacing: -1px;
+    }
+
+    /* Two steps down from the desktop size, per the spec. */
+    .dv2-journey-title {
+        font-size: 34px;
         letter-spacing: -1px;
     }
 
@@ -1745,20 +2063,52 @@
         gap: 12px;
     }
 
-    .dv2-feature-chip {
+    .dv2-feature-card {
         padding: 16px;
-        gap: 10px;
+        gap: 8px;
     }
 
-    .dv2-feature-chip-label {
+    .dv2-feature-card-title {
         font-size: 15px;
     }
 
-    .dv2-reviews-grid,
+    .dv2-feature-card-desc {
+        font-size: 13px;
+    }
+
     .dv2-support-grid,
     .dv2-journey-cards,
     .trust-badges {
         grid-template-columns: 1fr;
+    }
+
+    .dv2-review-card {
+        width: 300px;
+        flex-basis: 300px;
+        padding: 20px;
+    }
+
+    .dv2-total-card {
+        padding: 20px;
+    }
+
+    .dv2-total-price {
+        font-size: 40px;
+        letter-spacing: -1.4px;
+    }
+
+    .dv2-total-main {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .dv2-total-aside {
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .dv2-total-lock {
+        justify-content: flex-start;
     }
 
     .dv2-hero-title {
@@ -1848,5 +2198,76 @@
 
     .dv2-hero-actions .dv2-btn {
         width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .dv2-journey {
+        border-width: 3px;
+        border-radius: 20px;
+        padding: 20px;
+    }
+
+    .dv2-journey-title {
+        font-size: clamp(22px, 6.4vw, 28px);
+        letter-spacing: -0.6px;
+    }
+
+    /* One line, never wrapped: long translations truncate instead of blowing
+       the button open on a narrow screen. */
+    .dv2-journey-cta {
+        display: block;
+        width: 100%;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .dv2-review-card {
+        width: 268px;
+        flex-basis: 268px;
+    }
+}
+
+/* -------------------------------------------
+   REDUCED MOTION
+   ------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+
+    .dv2-feature-card::before,
+    .dv2-total-card::before {
+        animation: none;
+    }
+
+    .dv2-journey-card:hover {
+        transform: none;
+    }
+
+    /* Stop the loop and let the rows wrap into a plain, readable list. The
+       duplicated half of each track exists only to hide the loop seam, so it
+       is dropped here rather than shown twice. */
+    .dv2-review-track {
+        animation: none !important;
+        flex-wrap: wrap;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .dv2-review-row {
+        overflow: visible;
+    }
+
+    .dv2-review-track > [aria-hidden="true"] {
+        display: none;
+    }
+
+    .dv2-review-marquee {
+        -webkit-mask-image: none;
+        mask-image: none;
+    }
+
+    .dv2-review-card {
+        margin-bottom: 16px;
     }
 }

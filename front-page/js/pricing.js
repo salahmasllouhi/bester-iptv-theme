@@ -91,6 +91,85 @@
         updateSavings(deviceCount);
     }
 
+    // "Your total" card. The struck-through price is the same plan bought month
+    // by month, so the saving shown is a real comparison rather than a markup.
+    const totalAside = document.getElementById('total-aside');
+    const totalLock = document.getElementById('total-lock');
+    const lockCopy = document.getElementById('total-lock-copy');
+    const lockFormat = lockCopy ? lockCopy.textContent.trim().replace(/\d+%/, '{pct}%') : '';
+
+    function updateTotal(devices, months) {
+        if (!devices || !months) return;
+
+        const now = getPrice(devices, months);
+        const rate = getPrice(devices, 1);
+        const was = rate * months;
+        const off = Math.max(0, was - now);
+        const pct = was > 0 ? Math.round((off / was) * 100) : 0;
+
+        setText('total-price', formatPrice(now));
+        setText('total-was', formatPrice(was));
+        setText('total-save', 'Save ' + formatPrice(off) + ' (' + pct + '%)');
+        setText(
+            'total-meta',
+            months === 1
+                ? 'one-time · ' + formatPrice(now) + '/mo'
+                : 'one-time · ' + formatPrice(now / months) + '/mo'
+        );
+
+        // A 1-month plan is the reference price, so there is nothing to compare
+        // it against and no discount to hold.
+        const discounted = months > 1 && off > 0.005;
+
+        if (totalAside) totalAside.classList.toggle('is-hidden', !discounted);
+        if (totalLock) totalLock.classList.toggle('is-hidden', !discounted);
+
+        if (lockCopy && lockFormat) {
+            lockCopy.textContent = lockFormat.replace('{pct}', pct);
+        }
+    }
+
+    // Countdown for the locked discount. The deadline is stored locally so it
+    // keeps ticking down across visits instead of restarting on every load.
+    (function startCountdown() {
+        const lock = document.querySelector('[data-offer-days]');
+        const out = document.getElementById('total-countdown');
+        if (!lock || !out) return;
+
+        const days = parseInt(lock.dataset.offerDays, 10) || 5;
+        const window_ms = days * 24 * 60 * 60 * 1000;
+        const key = 'iptvOfferDeadline';
+
+        let deadline = 0;
+        try {
+            deadline = parseInt(localStorage.getItem(key), 10) || 0;
+        } catch (e) {
+            deadline = 0;
+        }
+
+        // Seed on first visit, and re-seed once the window has fully elapsed.
+        if (!deadline || deadline <= Date.now()) {
+            deadline = Date.now() + window_ms;
+            try { localStorage.setItem(key, String(deadline)); } catch (e) { /* private mode */ }
+        }
+
+        function pad(n) { return n < 10 ? '0' + n : String(n); }
+
+        function tick() {
+            let left = Math.max(0, deadline - Date.now());
+            const d = Math.floor(left / 86400000);
+            left -= d * 86400000;
+            const h = Math.floor(left / 3600000);
+            left -= h * 3600000;
+            const m = Math.floor(left / 60000);
+            const s = Math.floor((left - m * 60000) / 1000);
+            out.textContent = d + 'd ' + pad(h) + ':' + pad(m) + ':' + pad(s);
+        }
+
+        tick();
+        setInterval(tick, 1000);
+    })();
+
     // panel.nordictv.io/checkout?connections=<1|2|3|4>&duration=<1|3|6|12>
     // The panel derives the price from these two params - nothing else is passed.
     function checkoutUrl(devices, months) {
@@ -101,6 +180,8 @@
     const ctaLabel = btnText.textContent.trim() || 'Start watching';
 
     function updateButton() {
+        updateTotal(selectedDevices, selectedDuration);
+
         if (selectedDevices && selectedDuration) {
             const price = getPrice(selectedDevices, selectedDuration);
             btnText.textContent = price

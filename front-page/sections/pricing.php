@@ -110,12 +110,6 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
             </p>
         </div>
 
-        <div class="dv2-pricing-perks">
-            <span><?php echo esc_html(iptv_text('pricing_perk_1', '35,000+ live channels')); ?></span>
-            <span><?php echo esc_html(iptv_text('pricing_perk_2', 'All sports & PPV included')); ?></span>
-            <span><?php echo esc_html(iptv_text('pricing_perk_3', 'Anti-freeze, stable servers')); ?></span>
-        </div>
-
         <div class="configurator">
             <!-- Step 1: screens -->
             <div class="config-section">
@@ -178,6 +172,66 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
                             </span>
                         </button>
                     <?php endforeach; ?>
+                </div>
+            </div>
+
+            <!-- Your total. Every number here is recomputed by pricing.js on
+                 every screen/duration/currency change; the PHP values below are
+                 only the pre-JS paint for the default selection. -->
+            <?php
+            $default_device_key = $default_screens === 1 ? '1_device' : $default_screens . '_devices';
+            $total_now  = isset($all_prices[$durations[$default_months]['key']][$default_device_key]['usd'])
+                ? (float) $all_prices[$durations[$default_months]['key']][$default_device_key]['usd']
+                : 0;
+            $total_rate = isset($all_prices['1_month'][$default_device_key]['usd'])
+                ? (float) $all_prices['1_month'][$default_device_key]['usd']
+                : 0;
+            // "Was" is the same plan bought month by month, so the saving is real.
+            $total_was  = $total_rate * $default_months;
+            $total_off  = max(0, $total_was - $total_now);
+            $total_pct  = ($total_was > 0) ? (int) round(($total_off / $total_was) * 100) : 0;
+            $has_saving = ($default_months > 1 && $total_off > 0.005);
+            ?>
+            <div class="dv2-total-card" id="total-card">
+                <span class="dv2-total-label"><?php echo esc_html(iptv_text('total_label', 'Your total')); ?></span>
+
+                <div class="dv2-total-main">
+                    <span class="dv2-total-price" id="total-price">$<?php echo esc_html(number_format($total_now, 2)); ?></span>
+                    <div class="dv2-total-aside<?php echo $has_saving ? '' : ' is-hidden'; ?>" id="total-aside">
+                        <span class="dv2-total-was" id="total-was">$<?php echo esc_html(number_format($total_was, 2)); ?></span>
+                        <span class="dv2-total-save" id="total-save">
+                            <?php echo esc_html(sprintf(
+                                iptv_text('total_save_format', 'Save %1$s (%2$d%%)'),
+                                '$' . number_format($total_off, 2),
+                                $total_pct
+                            )); ?>
+                        </span>
+                    </div>
+                </div>
+
+                <p class="dv2-total-meta" id="total-meta">
+                    <?php echo esc_html(sprintf(
+                        iptv_text('total_meta_format', 'one-time · %s/mo'),
+                        '$' . number_format($total_now / max(1, $default_months), 2)
+                    )); ?>
+                </p>
+
+                <?php
+                // Days the discount is held for a returning visitor. pricing.js
+                // stores the deadline locally so the timer does not reset on
+                // every page view.
+                $offer_days = max(1, (int) iptv_text('offer_lock_days', '5'));
+                ?>
+                <div class="dv2-total-lock<?php echo $has_saving ? '' : ' is-hidden'; ?>" id="total-lock"
+                    data-offer-days="<?php echo (int) $offer_days; ?>">
+                    <span class="dv2-total-dot" aria-hidden="true"></span>
+                    <span id="total-lock-copy">
+                        <?php echo esc_html(sprintf(
+                            iptv_text('total_lock_format', 'Your %d%% discount is locked for'),
+                            $total_pct
+                        )); ?>
+                    </span>
+                    <strong id="total-countdown"><?php echo (int) $offer_days; ?>d 00:00:00</strong>
                 </div>
             </div>
 

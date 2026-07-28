@@ -41,6 +41,57 @@ $score_rows = [
     2 => 'Sports Coverage',
     3 => 'Support',
 ];
+
+/**
+ * The reviews run as two infinite marquee rows. Each row needs enough cards to
+ * overflow a wide viewport before it can loop seamlessly, so the row's slice is
+ * repeated until it holds at least $row_min cards. The track then prints that
+ * set twice and the keyframes translate it by exactly -50%, which lands the
+ * clone where the original started.
+ */
+// 8 cards is ~3000px of track, so even an ultrawide viewport never sees the
+// end of a set before the clone has taken over.
+$row_min = 8;
+$rows    = [];
+
+if (!empty($reviews)) {
+    $half = (int) ceil(count($reviews) / 2);
+    $rows = [array_slice($reviews, 0, $half), array_slice($reviews, $half)];
+
+    foreach ($rows as $i => $row) {
+        // A single review leaves the second slice empty; fall back to the full
+        // set so both rows still have something to scroll.
+        if (empty($row)) {
+            $row = $reviews;
+            $rows[$i] = $reviews;
+        }
+        while (count($rows[$i]) < $row_min) {
+            $rows[$i] = array_merge($rows[$i], $row);
+        }
+    }
+}
+
+/**
+ * Renders one review card. $clone marks the duplicated half of a track, which
+ * is hidden from assistive tech so each review is only announced once.
+ */
+$render_review = function ($review, $clone = false) {
+    ?>
+    <div class="dv2-review-card"<?php echo $clone ? ' aria-hidden="true"' : ''; ?>>
+        <div class="dv2-review-top">
+            <span class="dv2-review-stars" aria-hidden="true">★★★★★</span>
+            <?php if (!empty($review['when'])) : ?>
+                <span class="dv2-review-when"><?php echo esc_html($review['when']); ?></span>
+            <?php endif; ?>
+        </div>
+        <?php if (!empty($review['title'])) : ?>
+            <div class="dv2-review-title"><?php echo esc_html($review['title']); ?></div>
+        <?php endif; ?>
+        <p class="dv2-review-body"><?php echo esc_html($review['text']); ?></p>
+        <div class="dv2-review-name"><?php echo esc_html($review['author']); ?></div>
+    </div>
+    <?php
+};
 ?>
 <section class="reviews dv2-section">
     <div class="container">
@@ -63,22 +114,24 @@ $score_rows = [
                     </div>
                 <?php endforeach; ?>
             </div>
-
-            <?php foreach ($reviews as $review) : ?>
-                <div class="dv2-review-card">
-                    <div class="dv2-review-top">
-                        <span class="dv2-review-stars" aria-hidden="true">★★★★★</span>
-                        <?php if (!empty($review['when'])) : ?>
-                            <span class="dv2-review-when"><?php echo esc_html($review['when']); ?></span>
-                        <?php endif; ?>
-                    </div>
-                    <?php if (!empty($review['title'])) : ?>
-                        <div class="dv2-review-title"><?php echo esc_html($review['title']); ?></div>
-                    <?php endif; ?>
-                    <p class="dv2-review-body"><?php echo esc_html($review['text']); ?></p>
-                    <div class="dv2-review-name"><?php echo esc_html($review['author']); ?></div>
-                </div>
-            <?php endforeach; ?>
         </div>
+    </div>
+
+    <div class="dv2-review-marquee">
+        <?php foreach ($rows as $i => $row) : ?>
+            <div class="dv2-review-row dv2-review-row--<?php echo $i === 0 ? 'rtl' : 'ltr'; ?>">
+                <div class="dv2-review-track">
+                    <?php
+                    foreach ($row as $review) {
+                        $render_review($review, false);
+                    }
+                    // Second pass is the seam that makes the loop look endless.
+                    foreach ($row as $review) {
+                        $render_review($review, true);
+                    }
+                    ?>
+                </div>
+            </div>
+        <?php endforeach; ?>
     </div>
 </section>
