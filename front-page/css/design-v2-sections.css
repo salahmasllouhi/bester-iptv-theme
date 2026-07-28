@@ -483,21 +483,22 @@
     padding: 16px;
 }
 
-/* Artwork variant: the image is the panel, so drop the inner padding and let it
-   bleed to the rounded corners. The artwork is transparent, so the purple sits
-   behind it rather than on it. */
+/* Artwork variant: same purple field as the journey panel (.dv2-journey), with
+   the artwork floated inside a 10% inset rather than bleeding to the edges. */
 .dv2-split-aside--image {
-    padding: 0;
+    padding: 10%;
     overflow: hidden;
-    background: var(--dv2-purple);
-    border-color: var(--dv2-purple);
+    background: radial-gradient(ellipse at 30% 20%, #a855f7, #6d28d9 70%);
+    border-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .dv2-split-aside--image img {
     display: block;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
 }
 
 /* Channel list */
@@ -611,12 +612,14 @@
     gap: 12px;
 }
 
-/* Single-artwork variant, replacing the six-tile grid. */
+/* Single-artwork variant, replacing the six-tile grid. Matches the journey
+   panel's purple field, with the artwork inset by 10%. */
 .dv2-sport-mosaic--image {
     display: block;
     border-radius: var(--dv2-radius-md);
     overflow: hidden;
-    background: var(--dv2-purple);
+    background: radial-gradient(ellipse at 30% 20%, #a855f7, #6d28d9 70%);
+    padding: 10%;
 }
 
 .dv2-sport-mosaic--image img {
@@ -1776,6 +1779,33 @@
 /* -------------------------------------------
    SUPPORT
    ------------------------------------------- */
+/* The support block is a purple panel, matching .dv2-journey — same gradient,
+   same 8px page-coloured border and 32px radius. The white background lives on
+   .contact in contact.css, so it is cleared here by the higher-specificity ID.
+   The panel is the .container, not the section, so the tint stays inset. */
+#contact.contact {
+    background: none;
+    padding: 0;
+}
+
+#contact .container {
+    width: calc(100% - 2 * var(--dv2-gutter));
+    max-width: calc(var(--dv2-shell) - 2 * var(--dv2-gutter));
+    /* No bottom margin: the footer's 80px top padding provides the gap, and it
+       sits inside the footer's tint so no band of page colour appears. */
+    margin: 64px auto 0;
+    background: radial-gradient(ellipse at 30% 20%, #a855f7, #6d28d9 70%);
+    border: 8px solid var(--dv2-bg);
+    border-radius: 32px;
+    padding: 48px;
+}
+
+/* Heading and subtitle default to dark ink, which disappears on purple. */
+#contact .dv2-section-head h2,
+#contact .dv2-section-head p {
+    color: #ffffff;
+}
+
 .dv2-support-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -2020,6 +2050,10 @@
         padding: 36px;
     }
 
+    #contact .container {
+        padding: 36px;
+    }
+
     .dv2-split-title,
     .dv2-split-title--lg {
         font-size: 29px;
@@ -2106,6 +2140,11 @@
 
     .dv2-split,
     .dv2-journey {
+        padding: 24px;
+        border-radius: var(--dv2-radius-md);
+    }
+
+    #contact .container {
         padding: 24px;
         border-radius: var(--dv2-radius-md);
     }
