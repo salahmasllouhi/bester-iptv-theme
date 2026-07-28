@@ -102,7 +102,6 @@
             </p>
         </div>
     </div>
-    </div>
     <?php
     $features_cta_field = function_exists('get_field') ? get_field('features_cta', get_option('page_on_front')) : null;
     $features_cta_url   = (!empty($features_cta_field['url'])) ? $features_cta_field['url'] : '#pricing';
