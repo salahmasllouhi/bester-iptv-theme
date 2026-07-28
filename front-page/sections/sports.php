@@ -21,7 +21,7 @@ $sports_cta_target = (!empty($sports_cta_field['target'])) ? ' target="' . esc_a
         <p>
             <?php echo esc_html(iptv_text('sports_desc', 'Never miss a game again. Every major league, every tournament, every PPV event — NFL, NBA, Formula 1, football, boxing and more, in HD and 4K.')); ?>
         </p>
-        <a href="<?php echo esc_url($sports_cta_url); ?>" class="dv2-btn dv2-btn-primary"<?php echo $sports_cta_target; ?>>
+        <a href="<?php echo esc_url($sports_cta_url); ?>" class="dv2-btn dv2-btn-white"<?php echo $sports_cta_target; ?>>
             <?php echo esc_html($sports_cta_label); ?>
             <span class="dv2-btn-arrow" aria-hidden="true">→</span>
         </a>

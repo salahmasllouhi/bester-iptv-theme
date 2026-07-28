@@ -32,7 +32,7 @@ $highlight_row = 2;
         <p>
             <?php echo esc_html(iptv_text('showcase_subtitle', 'From local Nordic news to global sports, entertainment, kids, and international channels — 198 countries covered.')); ?>
         </p>
-        <a href="<?php echo esc_url($showcase_cta_url); ?>" class="dv2-btn dv2-btn-ink"<?php echo $showcase_cta_target; ?>>
+        <a href="<?php echo esc_url($showcase_cta_url); ?>" class="dv2-btn dv2-btn-white"<?php echo $showcase_cta_target; ?>>
             <?php echo esc_html($showcase_cta_label); ?>
             <span class="dv2-btn-arrow" aria-hidden="true">→</span>
         </a>
@@ -70,7 +70,7 @@ $vod_cta_target = (!empty($vod_cta_field['target'])) ? ' target="' . esc_attr($v
         <p>
             <?php echo esc_html(iptv_text('vod_subtitle', 'All genres and languages, on demand whenever it suits you. Full electronic program guide with daily content updates and multi-language subtitles.')); ?>
         </p>
-        <a href="<?php echo esc_url($vod_cta_url); ?>" class="dv2-btn dv2-btn-primary"<?php echo $vod_cta_target; ?>>
+        <a href="<?php echo esc_url($vod_cta_url); ?>" class="dv2-btn dv2-btn-white"<?php echo $vod_cta_target; ?>>
             <?php echo esc_html($vod_cta_label); ?>
             <span class="dv2-btn-arrow" aria-hidden="true">→</span>
         </a>

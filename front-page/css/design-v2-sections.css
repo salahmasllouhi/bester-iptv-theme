@@ -430,8 +430,9 @@
     width: calc(100% - 2 * var(--dv2-gutter));
     max-width: calc(var(--dv2-shell) - 2 * var(--dv2-gutter));
     margin: 26px auto 0;
-    background: var(--dv2-surface);
-    border: 1px solid var(--dv2-border-strong);
+    /* --dv2-ink is #1c1033. Dark panels, light type. */
+    background: var(--dv2-ink);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--dv2-radius-xl);
     padding: 52px;
     display: grid;
@@ -455,7 +456,7 @@
     font-size: 37px;
     line-height: 1.05;
     letter-spacing: -1.2px;
-    color: var(--dv2-ink);
+    color: #ffffff;
     margin: 0;
 }
 
@@ -463,15 +464,17 @@
     font-size: 42px;
 }
 
+/* The lighter purple: --dv2-purple (#7c3aed) is too close to the #1c1033 panel
+   to read as an accent. */
 .dv2-split-title em {
     font-style: normal;
-    color: var(--dv2-purple);
+    color: var(--dv2-purple-soft);
 }
 
 .dv2-split-copy p {
     font-size: 18px;
     line-height: 1.55;
-    color: var(--dv2-body);
+    color: rgba(255, 255, 255, 0.72);
     max-width: 440px;
     margin: 22px 0 30px;
 }
@@ -483,13 +486,12 @@
     padding: 16px;
 }
 
-/* Artwork variant: same purple field as the journey panel (.dv2-journey), with
-   the artwork floated inside a 10% inset rather than bleeding to the edges. */
+/* Artwork variant: no panel of its own. The image sits directly on the split
+   section's dark background. */
 .dv2-split-aside--image {
-    padding: 10%;
-    overflow: hidden;
-    background: radial-gradient(ellipse at 30% 20%, #a855f7, #6d28d9 70%);
-    border-color: transparent;
+    padding: 0;
+    background: none;
+    border: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -612,14 +614,12 @@
     gap: 12px;
 }
 
-/* Single-artwork variant, replacing the six-tile grid. Matches the journey
-   panel's purple field, with the artwork inset by 10%. */
+/* Single-artwork variant, replacing the six-tile grid. No panel of its own —
+   the image sits directly on the split section's dark background. */
 .dv2-sport-mosaic--image {
     display: block;
-    border-radius: var(--dv2-radius-md);
-    overflow: hidden;
-    background: radial-gradient(ellipse at 30% 20%, #a855f7, #6d28d9 70%);
-    padding: 10%;
+    background: none;
+    padding: 0;
 }
 
 .dv2-sport-mosaic--image img {
