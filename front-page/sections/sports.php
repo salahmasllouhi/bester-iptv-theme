@@ -1,7 +1,7 @@
 <?php
 /**
  * Section: Sports (Design v2)
- * Split panel with a six-tile mosaic.
+ * Split panel with a single artwork alongside the copy.
  */
 
 $sports_cta_field  = function_exists('get_field') ? get_field('sports_cta', get_option('page_on_front')) : null;
@@ -9,17 +9,8 @@ $sports_cta_url    = (!empty($sports_cta_field['url'])) ? $sports_cta_field['url
 $sports_cta_label  = (!empty($sports_cta_field['title'])) ? $sports_cta_field['title'] : iptv_text('sports_cta', 'Watch live sport now');
 $sports_cta_target = (!empty($sports_cta_field['target'])) ? ' target="' . esc_attr($sports_cta_field['target']) . '"' : '';
 
-$img_base = get_template_directory_uri() . '/images/sport%20images/';
-
-// Mosaic: three photo tiles interleaved with three solid league tiles.
-$mosaic = [
-    ['type' => 'photo', 'src' => $img_base . 'Corners-IPTV-USA-Prime.png',            'key' => 'sport_1_name', 'default' => 'Football'],
-    ['type' => 'photo', 'src' => $img_base . 'More-than-machine-IPTV-Provider-USA.png', 'key' => 'sport_5_name', 'default' => 'Formula 1'],
-    ['type' => 'solid', 'key' => 'sport_4_name', 'default' => 'NFL'],
-    ['type' => 'solid', 'key' => 'sport_2_name', 'default' => 'NBA'],
-    ['type' => 'photo', 'src' => $img_base . 'Canelo-IPTV-subscription.png',          'key' => 'sport_6_name', 'default' => 'Boxing'],
-    ['type' => 'solid', 'key' => 'sport_3_name', 'default' => 'NHL'],
-];
+// The six-tile mosaic was replaced by a single artwork. The sport_N_name fields
+// it used are still in the ACF group and still drive the sport landing pages.
 ?>
 <section class="dv2-split">
     <div class="dv2-split-copy">
@@ -36,17 +27,9 @@ $mosaic = [
         </a>
     </div>
 
-    <div class="dv2-sport-mosaic">
-        <?php foreach ($mosaic as $tile) :
-            $label = iptv_text($tile['key'], $tile['default']);
-            ?>
-            <?php if ($tile['type'] === 'photo') : ?>
-                <div class="dv2-sport-tile dv2-sport-tile--photo">
-                    <img src="<?php echo esc_url($tile['src']); ?>" alt="<?php echo esc_attr($label); ?>" loading="lazy">
-                </div>
-            <?php else : ?>
-                <div class="dv2-sport-tile dv2-sport-tile--solid"><?php echo esc_html($label); ?></div>
-            <?php endif; ?>
-        <?php endforeach; ?>
+    <div class="dv2-sport-mosaic dv2-sport-mosaic--image">
+        <img src="https://nordictv.io/wp-content/uploads/2026/07/sports.webp"
+             alt="<?php echo esc_attr(iptv_text('sports_image_alt', 'Live sport available on NordicTV')); ?>"
+             loading="lazy">
     </div>
 </section>

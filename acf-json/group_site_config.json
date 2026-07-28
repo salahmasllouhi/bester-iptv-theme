@@ -1,0 +1,185 @@
+[
+	{
+		"key": "group_site_config",
+		"title": "Site Config",
+		"fields": [
+			{
+				"key": "tab_config_checkout",
+				"label": "\ud83d\uded2 Checkout",
+				"name": "",
+				"aria-label": "",
+				"type": "tab",
+				"instructions": "",
+				"required": 0,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"placement": "top",
+				"endpoint": 0,
+				"selected": 0
+			},
+			{
+				"key": "field_checkout_base_url",
+				"label": "Checkout URL",
+				"name": "checkout_base_url",
+				"aria-label": "",
+				"type": "url",
+				"instructions": "Where the pricing panel sends buyers. Plan parameters are appended to this URL.",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "https://panel.nordictv.io/checkout",
+				"placeholder": ""
+			},
+			{
+				"key": "field_trial_url",
+				"label": "Trial URL",
+				"name": "trial_url",
+				"aria-label": "",
+				"type": "url",
+				"instructions": "Destination for the 24-hour trial link under the pricing panel.",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "https://panel.nordictv.io/checkout/trial",
+				"placeholder": ""
+			},
+			{
+				"key": "tab_config_pricing",
+				"label": "\ud83d\udcb3 Pricing Defaults",
+				"name": "",
+				"aria-label": "",
+				"type": "tab",
+				"instructions": "",
+				"required": 0,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"placement": "top",
+				"endpoint": 0,
+				"selected": 0
+			},
+			{
+				"key": "field_pricing_default_months",
+				"label": "Default Duration (months)",
+				"name": "pricing_default_months",
+				"aria-label": "",
+				"type": "number",
+				"instructions": "Plan length preselected when the page loads.",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "33",
+					"class": "",
+					"id": ""
+				},
+				"default_value": 12,
+				"min": "",
+				"max": "",
+				"placeholder": "",
+				"step": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_pricing_default_screens",
+				"label": "Default Screens",
+				"name": "pricing_default_screens",
+				"aria-label": "",
+				"type": "number",
+				"instructions": "Screen count preselected when the page loads.",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "33",
+					"class": "",
+					"id": ""
+				},
+				"default_value": 1,
+				"min": "",
+				"max": "",
+				"placeholder": "",
+				"step": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_pricing_popular_screens",
+				"label": "\"Popular\" Screens",
+				"name": "pricing_popular_screens",
+				"aria-label": "",
+				"type": "number",
+				"instructions": "Which screen count carries the POPULAR badge.",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "33",
+					"class": "",
+					"id": ""
+				},
+				"default_value": 2,
+				"min": "",
+				"max": "",
+				"placeholder": "",
+				"step": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_offer_lock_days",
+				"label": "Discount Lock (days)",
+				"name": "offer_lock_days",
+				"aria-label": "",
+				"type": "number",
+				"instructions": "Number of days quoted in the discount-lock line.",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "100",
+					"class": "",
+					"id": ""
+				},
+				"default_value": 5,
+				"min": "",
+				"max": "",
+				"placeholder": "",
+				"step": "",
+				"prepend": "",
+				"append": ""
+			}
+		],
+		"location": [
+			[
+				{
+					"param": "options_page",
+					"operator": "==",
+					"value": "nordictv-site-config"
+				}
+			]
+		],
+		"menu_order": 0,
+		"position": "normal",
+		"style": "default",
+		"label_placement": "top",
+		"instruction_placement": "label",
+		"hide_on_screen": "",
+		"active": true,
+		"description": "Configuration values for the pricing configurator and checkout links.",
+		"show_in_rest": 0,
+		"modified": 1785251681
+	}
+]

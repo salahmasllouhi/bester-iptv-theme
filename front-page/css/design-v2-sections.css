@@ -244,6 +244,12 @@
     margin: 26px 0 0;
 }
 
+/* Second line of the hero headline. Matches .dv2-split-title em, which is how
+   the split sections already mark their accent words. */
+.dv2-hero-accent {
+    color: var(--dv2-purple);
+}
+
 .dv2-hero-sub {
     font-size: 20px;
     line-height: 1.5;
@@ -434,18 +440,20 @@
     margin-right: auto;
 }
 
+/* Sizes are 20% down from the original 46px / 52px so the split headings sit
+   below the hero rather than competing with it. */
 .dv2-split-title {
     font-family: var(--dv2-font-display);
     font-weight: 800;
-    font-size: 46px;
+    font-size: 37px;
     line-height: 1.05;
-    letter-spacing: -1.5px;
+    letter-spacing: -1.2px;
     color: var(--dv2-ink);
     margin: 0;
 }
 
 .dv2-split-title--lg {
-    font-size: 52px;
+    font-size: 42px;
 }
 
 .dv2-split-title em {
@@ -466,6 +474,20 @@
     border: 1px solid var(--dv2-border);
     border-radius: var(--dv2-radius-md);
     padding: 16px;
+}
+
+/* Artwork variant: the image is the panel, so drop the inner padding and let it
+   bleed to the rounded corners. */
+.dv2-split-aside--image {
+    padding: 0;
+    overflow: hidden;
+}
+
+.dv2-split-aside--image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 /* Channel list */
@@ -577,6 +599,19 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
+}
+
+/* Single-artwork variant, replacing the six-tile grid. */
+.dv2-sport-mosaic--image {
+    display: block;
+    border-radius: var(--dv2-radius-md);
+    overflow: hidden;
+}
+
+.dv2-sport-mosaic--image img {
+    display: block;
+    width: 100%;
+    height: auto;
 }
 
 .dv2-sport-tile {
@@ -1837,10 +1872,14 @@
    FOOTER
    Design v2 footer is light, not navy.
    ------------------------------------------- */
+/* No margin-top here. The footer is tinted (--dv2-surface-alt) while the page
+   behind it is not, so any margin above it showed as a band of page colour
+   between the support section and the footer. The gap is padding instead, which
+   sits inside the tinted area. */
 .site-footer {
     border-top: 1px solid var(--dv2-border);
-    margin-top: 80px;
-    padding: 56px 0 40px;
+    margin-top: 0;
+    padding: 80px 0 40px;
     background: var(--dv2-surface-alt);
     color: var(--dv2-body);
 }
@@ -1972,8 +2011,8 @@
 
     .dv2-split-title,
     .dv2-split-title--lg {
-        font-size: 36px;
-        letter-spacing: -1px;
+        font-size: 29px;
+        letter-spacing: -0.8px;
     }
 
     /* Two steps down from the desktop size, per the spec. */
@@ -2061,7 +2100,10 @@
     }
 
     .dv2-split-title,
-    .dv2-split-title--lg,
+    .dv2-split-title--lg {
+        font-size: 22px;
+    }
+
     .dv2-journey-title {
         font-size: 28px;
     }

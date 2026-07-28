@@ -234,6 +234,86 @@
 				"placeholder": ""
 			},
 			{
+				"key": "field_hero_trust_label",
+				"label": "Trustpilot Rating Word",
+				"name": "hero_trust_label",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Excellent",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_hero_trust_score",
+				"label": "Trustpilot Score",
+				"name": "hero_trust_score",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "4.9",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_hero_trust_suffix",
+				"label": "Trustpilot Score Suffix",
+				"name": "hero_trust_suffix",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "out of 5",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_hero_image_alt",
+				"label": "Hero Image Alt Text",
+				"name": "hero_image_alt",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "NordicTV live sports and entertainment",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
 				"key": "tab_dashboard",
 				"label": "\ud83d\udda5\ufe0f Member Dashboard",
 				"name": "",
@@ -859,6 +939,246 @@
 				"return_format": "array",
 				"translations": "copy_once",
 				"allow_in_bindings": 0
+			},
+			{
+				"key": "field_showcase_title_3",
+				"label": "Title Line 3",
+				"name": "showcase_title_3",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "live TV channels",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_showcase_channel_more",
+				"label": "Channels Panel Footnote",
+				"name": "showcase_channel_more",
+				"aria-label": "",
+				"type": "textarea",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "+40,000 live TV channels from 198 countries",
+				"new_lines": "",
+				"maxlength": "",
+				"placeholder": "",
+				"rows": ""
+			},
+			{
+				"key": "field_vod_title",
+				"label": "VOD Title Line 1",
+				"name": "vod_title",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Indulge in",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_vod_title_span",
+				"label": "VOD Title Highlight",
+				"name": "vod_title_span",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "150,000+",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_vod_title_3",
+				"label": "VOD Title Line 3",
+				"name": "vod_title_3",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "movies and series",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_vod_subtitle",
+				"label": "VOD Subtitle",
+				"name": "vod_subtitle",
+				"aria-label": "",
+				"type": "textarea",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "All genres and languages, on demand whenever it suits you. Full electronic program guide with daily content updates and multi-language subtitles.",
+				"new_lines": "",
+				"maxlength": "",
+				"placeholder": "",
+				"rows": ""
+			},
+			{
+				"key": "field_vod_row_1",
+				"label": "VOD Row 1 Label",
+				"name": "vod_row_1",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "New release \u2014 4K",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_vod_row_2",
+				"label": "VOD Row 2 Label",
+				"name": "vod_row_2",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Hit series \u2014 full season",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_vod_note",
+				"label": "VOD Note",
+				"name": "vod_note",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Updated daily, all genres & languages",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_vod_cta",
+				"label": "VOD CTA Label",
+				"name": "vod_cta",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Start watching today",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_vod_search_placeholder",
+				"label": "VOD Search Placeholder",
+				"name": "vod_search_placeholder",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Search 150,000+ titles",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_vod_image_alt",
+				"label": "VOD Image Alt Text",
+				"name": "vod_image_alt",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "A selection of movies and series available on NordicTV",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
 			},
 			{
 				"key": "tab_features",
@@ -1591,6 +1911,26 @@
 				"return_format": "array",
 				"translations": "copy_once",
 				"allow_in_bindings": 0
+			},
+			{
+				"key": "field_sports_image_alt",
+				"label": "Sports Image Alt Text",
+				"name": "sports_image_alt",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Live sport available on NordicTV",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
 			},
 			{
 				"key": "tab_comparison",
@@ -2887,6 +3227,266 @@
 				"append": ""
 			},
 			{
+				"key": "field_screens_title",
+				"label": "Screens Question",
+				"name": "screens_title",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "How many screens?",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_screen_singular",
+				"label": "Screen (singular)",
+				"name": "screen_singular",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Screen",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_screen_plural",
+				"label": "Screen (plural)",
+				"name": "screen_plural",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Screens",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_popular_badge",
+				"label": "Popular Badge",
+				"name": "popular_badge",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "POPULAR",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_plan_includes_title",
+				"label": "Plan Includes Title",
+				"name": "plan_includes_title",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Every plan is fully loaded",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_total_label",
+				"label": "Total Label",
+				"name": "total_label",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Your total",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_payments_label",
+				"label": "Payments Label",
+				"name": "payments_label",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Secure checkout",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_checkout_slots_line",
+				"label": "Scarcity Line",
+				"name": "checkout_slots_line",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "\ud83d\udd25 Only 32 activation slots left this month",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_checkout_trust_1",
+				"label": "Checkout Trust 1",
+				"name": "checkout_trust_1",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "14-day money-back",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_checkout_trust_2",
+				"label": "Checkout Trust 2",
+				"name": "checkout_trust_2",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Instant activation",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_checkout_trust_3",
+				"label": "Checkout Trust 3",
+				"name": "checkout_trust_3",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "No auto-renew",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_trial_prompt",
+				"label": "Trial Prompt",
+				"name": "trial_prompt",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Not ready to buy?",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_trial_cta",
+				"label": "Trial CTA",
+				"name": "trial_cta",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Start a 24-hour trial \u2014 no card",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
 				"key": "tab_steps",
 				"label": "\ud83d\udccb Steps",
 				"name": "",
@@ -3123,6 +3723,106 @@
 				"allow_in_bindings": 0
 			},
 			{
+				"key": "field_step_1_visual",
+				"label": "Step 1 Visual Label",
+				"name": "step_1_visual",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Sign up",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_step_2_visual",
+				"label": "Step 2 Visual Label",
+				"name": "step_2_visual",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Select your device",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_step_2_visual_cta",
+				"label": "Step 2 Visual Button",
+				"name": "step_2_visual_cta",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Download",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_step_3_visual",
+				"label": "Step 3 Visual Label",
+				"name": "step_3_visual",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Enter your credentials",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_step_3_visual_cta",
+				"label": "Step 3 Visual Button",
+				"name": "step_3_visual_cta",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Watch now",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
 				"key": "tab_devices",
 				"label": "\ud83d\udcf1 Devices",
 				"name": "",
@@ -3219,6 +3919,46 @@
 				"placeholder": "",
 				"prepend": "",
 				"append": ""
+			},
+			{
+				"key": "field_devices_section_title",
+				"label": "Devices Section Title",
+				"name": "devices_section_title",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Works on every screen",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_device_list",
+				"label": "Device List",
+				"name": "device_list",
+				"aria-label": "",
+				"type": "textarea",
+				"instructions": "Comma separated. Each entry renders as a device chip.",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Smart TV, Android TV, Apple TV, Fire Stick, iPhone / iPad, Android Phone, Windows, Mac, Set-Top Box, Chromecast, Roku, Kodi",
+				"new_lines": "",
+				"maxlength": "",
+				"placeholder": "",
+				"rows": ""
 			},
 			{
 				"key": "tab_faq",
@@ -3480,6 +4220,26 @@
 				"append": ""
 			},
 			{
+				"key": "field_cta_bar_label",
+				"label": "Savings Bar Label",
+				"name": "cta_bar_label",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "SAVE 90% VS TRADITIONAL SERVICES",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
 				"key": "tab_footer",
 				"label": "\ud83d\udcdd Footer",
 				"name": "",
@@ -3536,6 +4296,514 @@
 				"placeholder": "",
 				"prepend": "",
 				"append": ""
+			},
+			{
+				"key": "tab_reviews",
+				"label": "\u2b50 Reviews",
+				"name": "",
+				"aria-label": "",
+				"type": "tab",
+				"instructions": "",
+				"required": 0,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"placement": "top",
+				"endpoint": 0,
+				"selected": 0
+			},
+			{
+				"key": "field_reviews_title",
+				"label": "Section Title",
+				"name": "reviews_title",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "What our customers actually say",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_reviews_subtitle",
+				"label": "Section Subtitle",
+				"name": "reviews_subtitle",
+				"aria-label": "",
+				"type": "textarea",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Join thousands of cord-cutters across Scandinavia who've switched to NordicTV.",
+				"new_lines": "",
+				"maxlength": "",
+				"placeholder": "",
+				"rows": 2
+			},
+			{
+				"key": "field_reviews_list",
+				"label": "Review Cards",
+				"name": "reviews_list",
+				"aria-label": "",
+				"type": "repeater",
+				"instructions": "Leave empty to use the built-in set of seven reviews.",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"layout": "block",
+				"button_label": "Add Review",
+				"min": 0,
+				"max": 0,
+				"rows_per_page": 10,
+				"collapsed": "",
+				"sub_fields": [
+					{
+						"key": "field_review_title",
+						"label": "Headline",
+						"name": "review_title",
+						"aria-label": "",
+						"type": "text",
+						"instructions": "",
+						"required": false,
+						"conditional_logic": false,
+						"wrapper": {
+							"width": "30",
+							"class": "",
+							"id": ""
+						},
+						"default_value": "",
+						"maxlength": "",
+						"placeholder": "",
+						"prepend": "",
+						"append": "",
+						"parent_repeater": "field_reviews_list"
+					},
+					{
+						"key": "field_review_when",
+						"label": "Date Label",
+						"name": "review_when",
+						"aria-label": "",
+						"type": "text",
+						"instructions": "",
+						"required": false,
+						"conditional_logic": false,
+						"wrapper": {
+							"width": "20",
+							"class": "",
+							"id": ""
+						},
+						"default_value": "",
+						"maxlength": "",
+						"placeholder": "",
+						"prepend": "",
+						"append": "",
+						"parent_repeater": "field_reviews_list"
+					},
+					{
+						"key": "field_review_author",
+						"label": "Author",
+						"name": "review_author",
+						"aria-label": "",
+						"type": "text",
+						"instructions": "",
+						"required": false,
+						"conditional_logic": false,
+						"wrapper": {
+							"width": "50",
+							"class": "",
+							"id": ""
+						},
+						"default_value": "",
+						"maxlength": "",
+						"placeholder": "",
+						"prepend": "",
+						"append": "",
+						"parent_repeater": "field_reviews_list"
+					},
+					{
+						"key": "field_review_text",
+						"label": "Review",
+						"name": "review_text",
+						"aria-label": "",
+						"type": "textarea",
+						"instructions": "",
+						"required": false,
+						"conditional_logic": false,
+						"wrapper": {
+							"width": "",
+							"class": "",
+							"id": ""
+						},
+						"default_value": "",
+						"new_lines": "",
+						"maxlength": "",
+						"placeholder": "",
+						"rows": 3,
+						"parent_repeater": "field_reviews_list"
+					}
+				]
+			},
+			{
+				"key": "tab_support",
+				"label": "\u2709\ufe0f Support",
+				"name": "",
+				"aria-label": "",
+				"type": "tab",
+				"instructions": "",
+				"required": 0,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"placement": "top",
+				"endpoint": 0,
+				"selected": 0
+			},
+			{
+				"key": "field_contact_title",
+				"label": "Section Title",
+				"name": "contact_title",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "We're here to help",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_contact_subtitle",
+				"label": "Section Subtitle",
+				"name": "contact_subtitle",
+				"aria-label": "",
+				"type": "textarea",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Reach out anytime via email, WhatsApp, or Telegram. Our support team typically responds within minutes.",
+				"new_lines": "",
+				"maxlength": "",
+				"placeholder": "",
+				"rows": 2
+			},
+			{
+				"key": "field_contact_cards",
+				"label": "Support Cards",
+				"name": "contact_cards",
+				"aria-label": "",
+				"type": "repeater",
+				"instructions": "Leave empty to use the built-in email / WhatsApp / Telegram cards.",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"layout": "block",
+				"button_label": "Add Support Card",
+				"min": 0,
+				"max": 0,
+				"rows_per_page": 10,
+				"collapsed": "",
+				"sub_fields": [
+					{
+						"key": "field_contact_card_label",
+						"label": "Label",
+						"name": "card_label",
+						"aria-label": "",
+						"type": "text",
+						"instructions": "",
+						"required": false,
+						"conditional_logic": false,
+						"wrapper": {
+							"width": "30",
+							"class": "",
+							"id": ""
+						},
+						"default_value": "",
+						"maxlength": "",
+						"placeholder": "",
+						"prepend": "",
+						"append": "",
+						"parent_repeater": "field_contact_cards"
+					},
+					{
+						"key": "field_contact_card_value",
+						"label": "Value",
+						"name": "card_value",
+						"aria-label": "",
+						"type": "text",
+						"instructions": "",
+						"required": false,
+						"conditional_logic": false,
+						"wrapper": {
+							"width": "35",
+							"class": "",
+							"id": ""
+						},
+						"default_value": "",
+						"maxlength": "",
+						"placeholder": "",
+						"prepend": "",
+						"append": "",
+						"parent_repeater": "field_contact_cards"
+					},
+					{
+						"key": "field_contact_card_link",
+						"label": "Link",
+						"name": "card_link",
+						"aria-label": "",
+						"type": "text",
+						"instructions": "",
+						"required": false,
+						"conditional_logic": false,
+						"wrapper": {
+							"width": "25",
+							"class": "",
+							"id": ""
+						},
+						"default_value": "",
+						"maxlength": "",
+						"placeholder": "",
+						"prepend": "",
+						"append": "",
+						"parent_repeater": "field_contact_cards"
+					},
+					{
+						"key": "field_contact_card_blank",
+						"label": "New tab",
+						"name": "card_blank",
+						"aria-label": "",
+						"type": "true_false",
+						"instructions": "",
+						"required": false,
+						"conditional_logic": false,
+						"wrapper": {
+							"width": "10",
+							"class": "",
+							"id": ""
+						},
+						"message": "",
+						"default_value": 0,
+						"ui": 1,
+						"ui_on_text": "",
+						"ui_off_text": "",
+						"parent_repeater": "field_contact_cards"
+					}
+				]
+			},
+			{
+				"key": "tab_header",
+				"label": "\ud83e\udded Header",
+				"name": "",
+				"aria-label": "",
+				"type": "tab",
+				"instructions": "",
+				"required": 0,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"placement": "top",
+				"endpoint": 0,
+				"selected": 0
+			},
+			{
+				"key": "field_nav_cta_label",
+				"label": "Header CTA Button",
+				"name": "nav_cta_label",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Get Access Now",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_nav_region_label",
+				"label": "Mobile Region Label",
+				"name": "nav_region_label",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Region / Currency",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_nav_link_home",
+				"label": "Nav: Home",
+				"name": "nav_link_home",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "33",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Home",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_nav_link_features",
+				"label": "Nav: Features",
+				"name": "nav_link_features",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "33",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Features",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_nav_link_pricing",
+				"label": "Nav: Pricing",
+				"name": "nav_link_pricing",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "34",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Pricing",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_nav_link_guide",
+				"label": "Nav: User Guide",
+				"name": "nav_link_guide",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "33",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "User Guide",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_nav_link_contact",
+				"label": "Nav: Contact",
+				"name": "nav_link_contact",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "33",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "Contact",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
+			},
+			{
+				"key": "field_nav_link_account",
+				"label": "Nav: My Account",
+				"name": "nav_link_account",
+				"aria-label": "",
+				"type": "text",
+				"instructions": "",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "34",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "My Account",
+				"maxlength": "",
+				"placeholder": "",
+				"prepend": "",
+				"append": ""
 			}
 		],
 		"location": [
@@ -3565,6 +4833,6 @@
 		"show_in_rest": 1,
 		"display_title": "",
 		"pll_display_field_instructions": 1,
-		"modified": 1777800527
+		"modified": 1785253017
 	}
 ]

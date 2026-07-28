@@ -12,21 +12,21 @@ $all_prices     = IPTV_Currency_Settings::calculate_all_prices();
 $default_device = '1_device';
 
 // Which screen count is pre-selected. Clamped to the 1-4 range we sell.
-$default_screens = (int) iptv_text('pricing_default_screens', '1');
+$default_screens = (int) iptv_config('pricing_default_screens', 1);
 if ($default_screens < 1 || $default_screens > 4) {
     $default_screens = 1;
 }
 
 // Which duration is pre-selected. The panel expects a duration on load, so the
 // default landing URL is ?connections=1&duration=12.
-$default_months = (int) iptv_text('pricing_default_months', '12');
+$default_months = (int) iptv_config('pricing_default_months', 12);
 if (!in_array($default_months, array(1, 3, 6, 12), true)) {
     $default_months = 12;
 }
 
 // Panel checkout endpoints. The panel derives the price from the two params.
-$checkout_base = iptv_text('checkout_base_url', 'https://panel.nordictv.io/checkout');
-$trial_url     = iptv_text('trial_url', 'https://panel.nordictv.io/checkout/trial');
+$checkout_base = iptv_config('checkout_base_url', 'https://panel.nordictv.io/checkout');
+$trial_url     = iptv_config('trial_url', 'https://panel.nordictv.io/checkout/trial');
 
 /**
  * Savings badge percentages are derived from the real prices rather than
@@ -53,7 +53,7 @@ $durations = array(
 );
 
 // Screen count that carries the "POPULAR" flag.
-$popular_screens = (int) iptv_text('pricing_popular_screens', '2');
+$popular_screens = (int) iptv_config('pricing_popular_screens', 2);
 
 // Variation ID map for checkout URLs. WooCommerce may be inactive (e.g. fresh
 // install): degrade to an empty map.
@@ -220,7 +220,7 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
                 // Days the discount is held for a returning visitor. pricing.js
                 // stores the deadline locally so the timer does not reset on
                 // every page view.
-                $offer_days = max(1, (int) iptv_text('offer_lock_days', '5'));
+                $offer_days = max(1, (int) iptv_config('offer_lock_days', 5));
                 ?>
                 <div class="dv2-total-lock<?php echo $has_saving ? '' : ' is-hidden'; ?>" id="total-lock"
                     data-offer-days="<?php echo (int) $offer_days; ?>">

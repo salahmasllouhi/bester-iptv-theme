@@ -650,8 +650,10 @@ require_once get_template_directory() . '/inc/network-cloner.php';
 // Include Multi-Currency Pricing Settings
 require_once get_template_directory() . '/inc/currency-settings.php';
 
-// Include Front Page Content Settings with OpenAI Translation
-require_once get_template_directory() . '/inc/content-settings.php';
+// Front page copy lookup: ACF on the translated front page, then Polylang strings.
+// Replaces the old "Content Localizing" admin screen (inc/content-settings.php),
+// which stored copy in an `iptv_content` option keyed by the retired multisite slugs.
+require_once get_template_directory() . '/inc/iptv-text.php';
 
 // Include User Guide Shortcode (displays posts from user-guide category)
 require_once get_template_directory() . '/inc/user-guide-shortcode.php';
@@ -670,6 +672,14 @@ require_once get_template_directory() . '/inc/sync-prices.php';
 require_once get_template_directory() . '/inc/channel-strings.php';
 require_once get_template_directory() . '/sport/inc/sport-strings.php';
 require_once get_template_directory() . '/series/inc/series-strings.php';
+require_once get_template_directory() . '/inc/front-page-strings.php';
+require_once get_template_directory() . '/inc/offer-strings.php';
+
+// Site Config options page (checkout URLs + pricing configurator defaults)
+require_once get_template_directory() . '/inc/site-config.php';
+
+// "Translate ACF Fields" metabox on the page editor
+require_once get_template_directory() . '/inc/acf-translate-metabox.php';
 
 /**
  * WooCommerce: Redirect all cart operations to checkout page

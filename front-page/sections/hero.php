@@ -14,7 +14,7 @@ if (function_exists('get_field')) {
     }
 }
 if (!$hero_image_url) {
-    $hero_image_url = 'https://nordictv.io/wp-content/uploads/2026/01/content.png';
+    $hero_image_url = 'https://nordictv.io/wp-content/uploads/2026/07/hero-image-1.webp';
 }
 
 $primary_label   = iptv_text('hero_primary_cta_label', 'Get Access Now');
@@ -40,7 +40,8 @@ $secondary_url   = iptv_text('hero_secondary_cta_url', '#pricing');
 
         <h1 class="dv2-hero-title">
             <?php echo esc_html(iptv_text('hero_title', 'Watch Everything.')); ?>
-            <?php echo esc_html(iptv_text('hero_title_span', 'Pay Almost Nothing.')); ?>
+            <span class="dv2-hero-accent"><?php echo esc_html(iptv_text('hero_title_span', 'Pay Almost Nothing.')); ?></span>
+            <?php echo esc_html(iptv_text('hero_title_3', 'Cancel Anytime.')); ?>
         </h1>
 
         <p class="dv2-hero-sub">

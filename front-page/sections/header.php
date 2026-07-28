@@ -70,13 +70,13 @@ if (isset($site_currency_map[$site_slug])) {
             )); ?>
         <?php else: ?>
             <nav class="nav-links">
-                <a href="<?php echo home_url('/'); ?>">Home</a>
-                <a href="<?php echo home_url('/#features'); ?>">Features</a>
-                <a href="<?php echo home_url('/#pricing'); ?>">Pricing</a>
+                <a href="<?php echo home_url('/'); ?>"><?php echo esc_html(iptv_text('nav_link_home', 'Home')); ?></a>
+                <a href="<?php echo home_url('/#features'); ?>"><?php echo esc_html(iptv_text('nav_link_features', 'Features')); ?></a>
+                <a href="<?php echo home_url('/#pricing'); ?>"><?php echo esc_html(iptv_text('nav_link_pricing', 'Pricing')); ?></a>
                 <!-- Blog lives in the footer only. -->
-                <a href="<?php echo home_url('/user-guide/'); ?>">User Guide</a>
-                <a href="<?php echo home_url('/#contact'); ?>">Contact</a>
-                <a href="https://panel.nordictv.io/login">My Account</a>
+                <a href="<?php echo home_url('/user-guide/'); ?>"><?php echo esc_html(iptv_text('nav_link_guide', 'User Guide')); ?></a>
+                <a href="<?php echo home_url('/#contact'); ?>"><?php echo esc_html(iptv_text('nav_link_contact', 'Contact')); ?></a>
+                <a href="https://panel.nordictv.io/login"><?php echo esc_html(iptv_text('nav_link_account', 'My Account')); ?></a>
             </nav>
         <?php endif; ?>
         <div class="nav-right">
@@ -117,7 +117,7 @@ if (isset($site_currency_map[$site_slug])) {
                     -->
                 </div>
             </div>
-            <a href="<?php echo home_url('/#pricing'); ?>" class="nav-btn nav-btn-primary">Get Access Now</a>
+            <a href="<?php echo home_url('/#pricing'); ?>" class="nav-btn nav-btn-primary"><?php echo esc_html(iptv_text('nav_cta_label', 'Get Access Now')); ?></a>
         </div>
         <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
             <span></span><span></span><span></span>
@@ -137,18 +137,18 @@ if (isset($site_currency_map[$site_slug])) {
             'fallback_cb' => false,
         )); ?>
     <?php else: ?>
-        <a href="<?php echo home_url('/'); ?>">Home</a>
-        <a href="<?php echo home_url('/#features'); ?>">Features</a>
-        <a href="<?php echo home_url('/#pricing'); ?>">Pricing</a>
+        <a href="<?php echo home_url('/'); ?>"><?php echo esc_html(iptv_text('nav_link_home', 'Home')); ?></a>
+        <a href="<?php echo home_url('/#features'); ?>"><?php echo esc_html(iptv_text('nav_link_features', 'Features')); ?></a>
+        <a href="<?php echo home_url('/#pricing'); ?>"><?php echo esc_html(iptv_text('nav_link_pricing', 'Pricing')); ?></a>
         <!-- Blog lives in the footer only. -->
-        <a href="<?php echo home_url('/user-guide/'); ?>">User Guide</a>
-        <a href="<?php echo home_url('/#contact'); ?>">Contact</a>
-        <a href="https://panel.nordictv.io/login">My Account</a>
+        <a href="<?php echo home_url('/user-guide/'); ?>"><?php echo esc_html(iptv_text('nav_link_guide', 'User Guide')); ?></a>
+        <a href="<?php echo home_url('/#contact'); ?>"><?php echo esc_html(iptv_text('nav_link_contact', 'Contact')); ?></a>
+        <a href="https://panel.nordictv.io/login"><?php echo esc_html(iptv_text('nav_link_account', 'My Account')); ?></a>
     <?php endif; ?>
 
     <!-- Language Selector in Mobile Menu -->
     <div class="mobile-language-selector">
-        <span class="mobile-language-label">Region / Currency</span>
+        <span class="mobile-language-label"><?php echo esc_html(iptv_text('nav_region_label', 'Region / Currency')); ?></span>
         <div class="mobile-language-options">
             <button class="mobile-lang-btn" data-currency="usd" onclick="redirectToRegion('usd')">🇺🇸 USD</button>
             <!-- LANG-DISABLED: eur - See Project_dyali.md "Language Reactivation Guide" to revert
@@ -164,6 +164,5 @@ if (isset($site_currency_map[$site_slug])) {
     </div>
 
     <a href="<?php echo home_url('/#pricing'); ?>" class="nav-btn nav-btn-primary" style="margin-top:1rem;"
-        onclick="toggleMobileMenu()">Get Access
-        Now</a>
+        onclick="toggleMobileMenu()"><?php echo esc_html(iptv_text('nav_cta_label', 'Get Access Now')); ?></a>
 </div>

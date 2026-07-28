@@ -47,7 +47,7 @@ $highlight_row = 2;
                 </div>
             <?php endforeach; ?>
             <div class="dv2-channel-more">
-                <?php echo esc_html(iptv_text('showcase_channel_more', '+35,000 live TV channels from 198 countries')); ?>
+                <?php echo esc_html(iptv_text('showcase_channel_more', '+40,000 live TV channels from 198 countries')); ?>
             </div>
         </div>
     </div>
@@ -76,25 +76,9 @@ $vod_cta_target = (!empty($vod_cta_field['target'])) ? ' target="' . esc_attr($v
         </a>
     </div>
 
-    <div class="dv2-split-aside">
-        <div class="dv2-vod-search">
-            <span><?php echo esc_html(iptv_text('vod_search_placeholder', 'Search 150,000+ titles')); ?></span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8a80a3" stroke-width="1.8" aria-hidden="true">
-                <circle cx="11" cy="11" r="7"></circle>
-                <path d="M21 21l-4-4"></path>
-            </svg>
-        </div>
-        <div class="dv2-vod-row">
-            <span class="dv2-vod-poster" aria-hidden="true"></span>
-            <span><?php echo esc_html(iptv_text('vod_row_1', 'New release — 4K')); ?></span>
-        </div>
-        <div class="dv2-vod-row">
-            <span class="dv2-vod-poster" aria-hidden="true"></span>
-            <span><?php echo esc_html(iptv_text('vod_row_2', 'Hit series — full season')); ?></span>
-        </div>
-        <div class="dv2-vod-note">
-            <span class="dv2-vod-note-mark" aria-hidden="true">+</span>
-            <?php echo esc_html(iptv_text('vod_note', 'Updated daily, all genres & languages')); ?>
-        </div>
+    <div class="dv2-split-aside dv2-split-aside--image">
+        <img src="https://nordictv.io/wp-content/uploads/2026/07/movies.webp"
+             alt="<?php echo esc_attr(iptv_text('vod_image_alt', 'A selection of movies and series available on NordicTV')); ?>"
+             loading="lazy">
     </div>
 </section>

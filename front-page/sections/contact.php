@@ -3,30 +3,50 @@
  * Section: Support (Design v2)
  * Three contact cards. Values still come from the content settings option.
  */
-$content  = get_option('iptv_content', []);
-$title    = $content['contact_title']    ?? 'We\'re here to help';
-$subtitle = $content['contact_subtitle'] ?? 'Reach out anytime via email, WhatsApp, or Telegram. Our support team typically responds within minutes.';
+$title    = iptv_text('contact_title', 'We\'re here to help');
+$subtitle = iptv_text('contact_subtitle', 'Reach out anytime via email, WhatsApp, or Telegram. Our support team typically responds within minutes.');
 
-$cards = [
-    [
-        'label' => $content['contact_email'] ?? 'Email Support',
-        'value' => $content['contact_email_text'] ?? 'support@nordictv.io',
-        'link'  => $content['contact_email_link'] ?? 'mailto:support@nordictv.io',
-        'blank' => false,
-    ],
-    [
-        'label' => $content['contact_whatsapp'] ?? 'WhatsApp',
-        'value' => $content['contact_whatsapp_text'] ?? 'Chat with us live',
-        'link'  => $content['contact_whatsapp_link'] ?? 'https://wa.me/1234567890',
-        'blank' => true,
-    ],
-    [
-        'label' => $content['contact_telegram'] ?? 'Telegram',
-        'value' => $content['contact_telegram_text'] ?? '@NordicTV',
-        'link'  => $content['contact_telegram_link'] ?? 'https://t.me/NordicTV',
-        'blank' => true,
-    ],
-];
+// Cards come from the `contact_cards` repeater on the front page so they are
+// translated per language. An empty repeater falls back to the defaults below.
+$cards = [];
+$card_rows = function_exists('get_field') ? get_field('contact_cards', get_option('page_on_front')) : null;
+
+if (is_array($card_rows)) {
+    foreach ($card_rows as $row) {
+        if (empty($row['card_label'])) {
+            continue;
+        }
+        $cards[] = [
+            'label' => $row['card_label'],
+            'value' => $row['card_value'] ?? '',
+            'link'  => $row['card_link'] ?? '',
+            'blank' => !empty($row['card_blank']),
+        ];
+    }
+}
+
+if (empty($cards)) {
+    $cards = [
+        [
+            'label' => 'Email Support',
+            'value' => 'support@nordictv.io',
+            'link'  => 'mailto:support@nordictv.io',
+            'blank' => false,
+        ],
+        [
+            'label' => 'WhatsApp',
+            'value' => 'Chat with us live',
+            'link'  => 'https://wa.me/33745476690',
+            'blank' => true,
+        ],
+        [
+            'label' => 'Telegram',
+            'value' => '@NordicTV',
+            'link'  => 'https://t.me/NordicTV',
+            'blank' => true,
+        ],
+    ];
+}
 ?>
 <section id="contact" class="contact dv2-section">
     <div class="container">

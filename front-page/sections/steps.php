@@ -18,11 +18,11 @@ $steps_cta_target = (!empty($steps_cta_field['target'])) ? ' target="' . esc_att
 <section class="dv2-journey" id="how-it-works">
     <div class="dv2-journey-copy">
         <h2 class="dv2-journey-title">
-            <?php echo esc_html(iptv_text('steps_title', 'Begin your journey in under 2 minutes')); ?>
+            <?php echo esc_html(iptv_text('steps_title', 'Start Streaming in 2 min')); ?>
         </h2>
         <div class="dv2-journey-note">
             <span class="dv2-journey-note-mark" aria-hidden="true">$</span>
-            <?php echo esc_html(iptv_text('steps_subtitle', '14-Day Money-Back Guarantee')); ?>
+            <?php echo esc_html(iptv_text('steps_subtitle', 'Subscribing and watching is easy and smooth — in 2 minutes you\'re ready to watch.')); ?>
         </div>
         <a href="<?php echo esc_url($steps_cta_url); ?>" class="dv2-btn dv2-btn-white dv2-journey-cta"<?php echo $steps_cta_target; ?>>
             <?php echo esc_html($steps_cta_label); ?>

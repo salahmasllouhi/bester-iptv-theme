@@ -4,23 +4,28 @@
  * Score card plus a grid of customer reviews.
  */
 
-$content  = get_option('iptv_content', []);
-$title    = $content['reviews_title']    ?? 'What our customers actually say';
-$subtitle = $content['reviews_subtitle'] ?? 'Join thousands of cord-cutters across Scandinavia who\'ve switched to NordicTV.';
+$title    = iptv_text('reviews_title', 'What our customers actually say');
+$subtitle = iptv_text('reviews_subtitle', 'Join thousands of cord-cutters across Scandinavia who\'ve switched to NordicTV.');
 
-// Reviews come from the content settings screen; title and date are optional.
+// Reviews come from the `reviews_list` repeater on the front page, so they are
+// translated per language alongside the rest of the page copy. Title and date are
+// optional; a row without text and author is skipped.
 $reviews = [];
-for ($i = 1; $i <= 7; $i++) {
-    $text = $content["review_{$i}_text"] ?? '';
-    $author = $content["review_{$i}_author"] ?? '';
+$review_rows = function_exists('get_field') ? get_field('reviews_list', get_option('page_on_front')) : null;
 
-    if ($text && $author) {
-        $reviews[] = [
-            'text'   => $text,
-            'author' => $author,
-            'title'  => $content["review_{$i}_title"] ?? '',
-            'when'   => $content["review_{$i}_when"] ?? '',
-        ];
+if (is_array($review_rows)) {
+    foreach ($review_rows as $row) {
+        $text   = $row['review_text']   ?? '';
+        $author = $row['review_author'] ?? '';
+
+        if ($text && $author) {
+            $reviews[] = [
+                'text'   => $text,
+                'author' => $author,
+                'title'  => $row['review_title'] ?? '',
+                'when'   => $row['review_when'] ?? '',
+            ];
+        }
     }
 }
 

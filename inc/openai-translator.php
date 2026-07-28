@@ -1,10 +1,16 @@
 <?php
 /**
- * OpenAI Translation Service
- * 
- * Provides secure translation for website content.
- * API key stored in WordPress options (database), never hardcoded.
- * 
+ * AI Translation Service
+ *
+ * Provides secure translation for website content via DeepSeek (default) or
+ * OpenAI. Both expose the same /chat/completions contract, so one client covers
+ * both — see the $providers map below.
+ *
+ * API keys are stored in WordPress options (database), never hardcoded.
+ *
+ * The class name is kept as Theme_OpenAI_Translator because existing callers in
+ * inc/network-cloner.php reference it.
+ *
  * @package Nordic_IPTV
  */
 
@@ -16,9 +22,38 @@ if (!defined('ABSPATH')) {
 class Theme_OpenAI_Translator
 {
     /**
-     * OpenAI API endpoint
+     * Supported providers.
+     *
+     * DeepSeek exposes an OpenAI-compatible API — same /chat/completions body,
+     * same Bearer auth — so one client covers both. Only the base URL, the key
+     * option and the default model differ.
      */
-    private $api_url = 'https://api.openai.com/v1/chat/completions';
+    private $providers = array(
+        'deepseek' => array(
+            'label'      => 'DeepSeek',
+            'base'       => 'https://api.deepseek.com/v1',
+            'key_option' => 'deepseek_api_key',
+            'default'    => 'deepseek-chat',
+            'hint'       => 'deepseek-chat tracks the current DeepSeek V-series model.',
+        ),
+        'openai' => array(
+            'label'      => 'OpenAI',
+            'base'       => 'https://api.openai.com/v1',
+            'key_option' => 'openai_api_key',
+            'default'    => 'gpt-4o-mini',
+            'hint'       => 'Any model ID your account can reach.',
+        ),
+    );
+
+    /**
+     * Active provider slug
+     */
+    private $provider = 'deepseek';
+
+    /**
+     * Chat completions endpoint for the active provider
+     */
+    private $api_url = '';
 
     /**
      * API Key - retrieved from WordPress options (never hardcoded)
@@ -26,9 +61,9 @@ class Theme_OpenAI_Translator
     private $api_key = '';
 
     /**
-     * Selected model
+     * Selected model. Free-form: whatever the provider accepts.
      */
-    private $model = 'gpt-4o-mini';
+    private $model = '';
 
     /**
      * Last error message
@@ -36,20 +71,14 @@ class Theme_OpenAI_Translator
     private $last_error = null;
 
     /**
-     * Available models
-     */
-    private $available_models = array(
-        'gpt-4o' => 'GPT-4o (High Quality)',
-        'gpt-4o-mini' => 'GPT-4o Mini (Fast, Affordable)',
-        'gpt-4-turbo' => 'GPT-4 Turbo',
-        'gpt-3.5-turbo' => 'GPT-3.5 Turbo (Legacy)',
-    );
-
-    /**
-     * Language mapping (site slug => language name)
+     * Language mapping (language slug => language name)
+     *
+     * Polylang uses `sv`; `se` is kept because the multisite cloner still passes
+     * blog-path slugs.
      * NOTE: Non-Swedish languages temporarily disabled - see Project_dyali.md
      */
     private $language_map = array(
+        'sv' => 'Swedish',
         'se' => 'Swedish',
         // LANG-DISABLED: no - See Project_dyali.md "Language Reactivation Guide" to revert
         // 'no' => 'Norwegian',
@@ -66,18 +95,34 @@ class Theme_OpenAI_Translator
      */
     public function __construct()
     {
-        // API key and model stored securely in WordPress options table
-        $this->api_key = get_option('openai_api_key', '');
-        $this->model = get_option('openai_model', 'gpt-4o-mini');
-
-        // Fallback if selected model is no longer available (e.g. invalid 'gpt-5' values)
-        if (!array_key_exists($this->model, $this->available_models)) {
-            $this->model = 'gpt-4o-mini';
+        $provider = get_option('translator_provider', 'deepseek');
+        if (!isset($this->providers[$provider])) {
+            $provider = 'deepseek';
         }
+        $this->provider = $provider;
+
+        $config = $this->providers[$provider];
+
+        // Key and model stored in the WordPress options table, never hardcoded.
+        $this->api_key = get_option($config['key_option'], '');
+        $this->api_url = $config['base'] . '/chat/completions';
+
+        // `openai_model` is the pre-provider option name; read it as a fallback so
+        // an existing install keeps its model on first load after the upgrade.
+        $model = get_option('translator_model', '');
+        if ($model === '') {
+            $model = get_option('openai_model', '');
+        }
+        $this->model = $model !== '' ? $model : $config['default'];
+
+        // No whitelist. A model this theme has never heard of is the caller's
+        // choice, not an error — silently resetting it is what made new models
+        // look broken.
 
         // Add settings page
         add_action('admin_menu', array($this, 'add_settings_page'));
         add_action('admin_init', array($this, 'register_settings'));
+        add_action('wp_ajax_iptv_fetch_translator_models', array($this, 'ajax_fetch_models'));
     }
 
     /**
@@ -89,7 +134,7 @@ class Theme_OpenAI_Translator
     }
 
     /**
-     * Get target language name for a site slug
+     * Get target language name for a language / site slug
      */
     public function get_target_language($site_slug)
     {
@@ -102,6 +147,31 @@ class Theme_OpenAI_Translator
     public function get_model()
     {
         return $this->model;
+    }
+
+    /**
+     * Get the active provider slug
+     */
+    public function get_provider()
+    {
+        return $this->provider;
+    }
+
+    /**
+     * Human-readable name of the active provider, for errors and notices
+     */
+    public function get_provider_label()
+    {
+        return $this->providers[$this->provider]['label'];
+    }
+
+    /**
+     * Does the active provider use OpenAI's reasoning-model parameters?
+     */
+    private function uses_reasoning_params()
+    {
+        return $this->provider === 'openai'
+            && (strpos($this->model, 'gpt-5') !== false || strpos($this->model, 'o1') !== false);
     }
 
     /**
@@ -159,8 +229,8 @@ Do NOT explain. Do NOT add quotes. Do NOT allow markdown blocks (```html).";
         );
 
         // Add model-specific parameters
-        if (strpos($this->model, 'gpt-5') !== false || strpos($this->model, 'o1') !== false) {
-            // Newer reasoning models use max_completion_tokens and usually fixed temperature
+        if ($this->uses_reasoning_params()) {
+            // OpenAI reasoning models use max_completion_tokens and a fixed temperature
             $body_args['max_completion_tokens'] = 1000;
         } else {
             // Standard models
@@ -181,7 +251,7 @@ Do NOT explain. Do NOT add quotes. Do NOT allow markdown blocks (```html).";
 
         if (is_wp_error($response)) {
             $this->last_error = 'WordPress HTTP Error: ' . $response->get_error_message();
-            error_log('OpenAI Translation Error: ' . $response->get_error_message());
+            error_log($this->get_provider_label() . ' Translation Error: ' . $response->get_error_message());
             return $text;
         }
 
@@ -190,8 +260,8 @@ Do NOT explain. Do NOT add quotes. Do NOT allow markdown blocks (```html).";
 
         if ($response_code !== 200) {
             $error_msg = isset($body['error']['message']) ? $body['error']['message'] : 'Unknown error';
-            $this->last_error = "OpenAI API Error ($response_code): $error_msg";
-            error_log('OpenAI API Error - Code: ' . $response_code . ' Body: ' . print_r($body, true));
+            $this->last_error = $this->get_provider_label() . " API Error ($response_code): $error_msg";
+            error_log($this->get_provider_label() . ' API Error - Code: ' . $response_code . ' Body: ' . print_r($body, true));
             return $text;
         }
 
@@ -253,7 +323,7 @@ Return ONLY the JSON.";
         );
 
         // Add model-specific parameters
-        if (strpos($this->model, 'gpt-5') !== false || strpos($this->model, 'o1') !== false) {
+        if ($this->uses_reasoning_params()) {
              $body_args['max_completion_tokens'] = 4000; // ample space for JSON
         } else {
              $body_args['max_tokens'] = 4000;
@@ -279,7 +349,17 @@ Return ONLY the JSON.";
         }
 
         $body = json_decode(wp_remote_retrieve_body($response), true);
-        
+
+        // A bad key or unknown model returns a well-formed error body with no
+        // `choices`, which would otherwise surface as "No content in response".
+        $response_code = wp_remote_retrieve_response_code($response);
+        if ($response_code !== 200) {
+            $error_msg = isset($body['error']['message']) ? $body['error']['message'] : 'Unknown error';
+            $this->last_error = $this->get_provider_label() . " API Error ($response_code): $error_msg";
+            error_log($this->last_error);
+            throw new Exception($this->last_error);
+        }
+
         if (isset($body['choices'][0]['message']['content'])) {
             $translated_json = $body['choices'][0]['message']['content'];
             
@@ -310,7 +390,7 @@ Return ONLY the JSON.";
             }
         } else {
              $this->last_error = 'No content in response';
-             error_log('OpenAI Error: ' . print_r($body, true));
+             error_log($this->get_provider_label() . ' Error: ' . print_r($body, true));
              throw new Exception($this->last_error);
         }
     }
@@ -419,9 +499,10 @@ Return ONLY the JSON.";
     public function add_settings_page()
     {
         add_options_page(
-            'OpenAI API Settings',
-            '🤖 OpenAI API',
+            'AI Translation Settings',
+            '🤖 AI Translation',
             'manage_options',
+            // Slug kept from the OpenAI-only version so existing bookmarks work.
             'openai-api-settings',
             array($this, 'render_settings_page')
         );
@@ -432,14 +513,79 @@ Return ONLY the JSON.";
      */
     public function register_settings()
     {
-        register_setting('openai_api_settings', 'openai_api_key', array(
+        register_setting('openai_api_settings', 'translator_provider', array(
             'type' => 'string',
             'sanitize_callback' => 'sanitize_text_field',
         ));
-        register_setting('openai_api_settings', 'openai_model', array(
+        register_setting('openai_api_settings', 'translator_model', array(
             'type' => 'string',
             'sanitize_callback' => 'sanitize_text_field',
         ));
+        foreach ($this->providers as $config) {
+            register_setting('openai_api_settings', $config['key_option'], array(
+                'type' => 'string',
+                'sanitize_callback' => 'sanitize_text_field',
+            ));
+        }
+    }
+
+    /**
+     * Ask the active provider which models the key can reach.
+     *
+     * Both APIs expose GET /models, so this works for either provider and means
+     * the theme never has to ship a model whitelist.
+     */
+    public function ajax_fetch_models()
+    {
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error('Insufficient permissions.', 403);
+        }
+        check_ajax_referer('iptv_fetch_models', 'nonce');
+
+        $provider = isset($_POST['provider']) ? sanitize_text_field(wp_unslash($_POST['provider'])) : $this->provider;
+        if (!isset($this->providers[$provider])) {
+            wp_send_json_error('Unknown provider.');
+        }
+
+        $config = $this->providers[$provider];
+
+        // Prefer the key typed into the form so it can be tested before saving.
+        $key = isset($_POST['api_key']) ? sanitize_text_field(wp_unslash($_POST['api_key'])) : '';
+        if ($key === '') {
+            $key = get_option($config['key_option'], '');
+        }
+        if ($key === '') {
+            wp_send_json_error('No API key for ' . $config['label'] . '.');
+        }
+
+        $response = wp_remote_get($config['base'] . '/models', array(
+            'timeout' => 30,
+            'headers' => array('Authorization' => 'Bearer ' . $key),
+        ));
+
+        if (is_wp_error($response)) {
+            wp_send_json_error($config['label'] . ': ' . $response->get_error_message());
+        }
+
+        $code = wp_remote_retrieve_response_code($response);
+        $body = json_decode(wp_remote_retrieve_body($response), true);
+
+        if ($code !== 200) {
+            $message = isset($body['error']['message']) ? $body['error']['message'] : 'HTTP ' . $code;
+            wp_send_json_error($config['label'] . ': ' . $message);
+        }
+
+        $models = array();
+        if (!empty($body['data']) && is_array($body['data'])) {
+            foreach ($body['data'] as $model) {
+                if (!empty($model['id'])) {
+                    $models[] = $model['id'];
+                }
+            }
+        }
+        sort($models);
+
+        wp_send_json_success($models);
     }
 
     /**
@@ -453,17 +599,35 @@ Return ONLY the JSON.";
         }
 
         // Save settings
-        if (isset($_POST['openai_api_key']) && check_admin_referer('openai_settings_nonce')) {
-            update_option('openai_api_key', sanitize_text_field($_POST['openai_api_key']));
-            update_option('openai_model', sanitize_text_field($_POST['openai_model']));
+        if (isset($_POST['translator_provider']) && check_admin_referer('openai_settings_nonce')) {
+            $posted_provider = sanitize_text_field(wp_unslash($_POST['translator_provider']));
+            if (isset($this->providers[$posted_provider])) {
+                update_option('translator_provider', $posted_provider);
+                $this->provider = $posted_provider;
+            }
+
+            $config = $this->providers[$this->provider];
+
+            if (isset($_POST['translator_api_key'])) {
+                update_option($config['key_option'], sanitize_text_field(wp_unslash($_POST['translator_api_key'])));
+            }
+            if (isset($_POST['translator_model'])) {
+                update_option('translator_model', sanitize_text_field(wp_unslash($_POST['translator_model'])));
+            }
+
             echo '<div class="notice notice-success"><p>✅ Settings saved successfully!</p></div>';
-            $this->api_key = get_option('openai_api_key', '');
-            $this->model = get_option('openai_model', 'gpt-4o-mini');
+
+            $this->api_key = get_option($config['key_option'], '');
+            $this->api_url = $config['base'] . '/chat/completions';
+            $model = get_option('translator_model', '');
+            $this->model = $model !== '' ? $model : $config['default'];
         }
+
+        $config = $this->providers[$this->provider];
         ?>
         <div class="wrap">
-            <h1>🤖 OpenAI API Settings</h1>
-            <p>Configure OpenAI for automatic translation. API key is stored securely in your WordPress database.</p>
+            <h1>🤖 AI Translation Settings</h1>
+            <p>Choose a provider and model for automatic translation. Keys are stored in your WordPress database, one per provider.</p>
 
             <div style="background:#fff;padding:20px;border-radius:8px;max-width:600px;margin-top:20px;border:1px solid #ddd;">
                 <form method="post">
@@ -472,30 +636,52 @@ Return ONLY the JSON.";
                     <table class="form-table">
                         <tr>
                             <th scope="row">
-                                <label for="openai_api_key">API Key</label>
+                                <label for="translator_provider">Provider</label>
                             </th>
                             <td>
-                                <input type="password" name="openai_api_key" id="openai_api_key"
-                                    value="<?php echo esc_attr($this->api_key); ?>" class="regular-text" placeholder="sk-..." />
+                                <select name="translator_provider" id="translator_provider" class="regular-text">
+                                    <?php foreach ($this->providers as $slug => $p): ?>
+                                        <option value="<?php echo esc_attr($slug); ?>" <?php selected($this->provider, $slug); ?>>
+                                            <?php echo esc_html($p['label']); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
                                 <p class="description">
-                                    Get your API key from <a href="https://platform.openai.com/api-keys" target="_blank">OpenAI Dashboard</a>
+                                    Switching providers reloads the key field. Each provider keeps its own key.
                                 </p>
                             </td>
                         </tr>
                         <tr>
                             <th scope="row">
-                                <label for="openai_model">Model</label>
+                                <label for="translator_api_key"><?php echo esc_html($config['label']); ?> API Key</label>
                             </th>
                             <td>
-                                <select name="openai_model" id="openai_model" class="regular-text">
-                                    <?php foreach ($this->available_models as $model_id => $model_name): ?>
-                                        <option value="<?php echo esc_attr($model_id); ?>" <?php selected($this->model, $model_id); ?>>
-                                            <?php echo esc_html($model_name); ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
+                                <input type="password" name="translator_api_key" id="translator_api_key"
+                                    value="<?php echo esc_attr($this->api_key); ?>" class="regular-text" placeholder="sk-..." />
                                 <p class="description">
-                                    GPT-4o Mini is recommended for fast, cost-effective translations.
+                                    <?php if ($this->provider === 'deepseek'): ?>
+                                        Get your key from <a href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener">DeepSeek Platform</a>
+                                    <?php else: ?>
+                                        Get your key from <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">OpenAI Dashboard</a>
+                                    <?php endif; ?>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <label for="translator_model">Model</label>
+                            </th>
+                            <td>
+                                <input type="text" name="translator_model" id="translator_model" list="translator_model_list"
+                                    value="<?php echo esc_attr($this->model); ?>" class="regular-text"
+                                    placeholder="<?php echo esc_attr($config['default']); ?>" />
+                                <datalist id="translator_model_list"></datalist>
+                                <button type="button" class="button" id="fetch-models-btn">Fetch available models</button>
+                                <span id="fetch-models-status" style="margin-left:8px;"></span>
+                                <p class="description">
+                                    Any model ID the provider accepts — nothing is whitelisted here, so new
+                                    models work as soon as they ship.
+                                    <?php echo esc_html($config['hint']); ?>
                                 </p>
                             </td>
                         </tr>
@@ -506,13 +692,50 @@ Return ONLY the JSON.";
                     </p>
                 </form>
 
+                <script>
+                    (function () {
+                        var btn = document.getElementById('fetch-models-btn');
+                        if (!btn) return;
+
+                        btn.addEventListener('click', function () {
+                            var status = document.getElementById('fetch-models-status');
+                            var list = document.getElementById('translator_model_list');
+                            status.textContent = 'Fetching…';
+
+                            var body = new URLSearchParams({
+                                action: 'iptv_fetch_translator_models',
+                                nonce: '<?php echo esc_js(wp_create_nonce('iptv_fetch_models')); ?>',
+                                provider: document.getElementById('translator_provider').value,
+                                api_key: document.getElementById('translator_api_key').value
+                            });
+
+                            fetch(ajaxurl, { method: 'POST', body: body, credentials: 'same-origin' })
+                                .then(function (r) { return r.json(); })
+                                .then(function (res) {
+                                    if (!res.success) {
+                                        status.textContent = '⚠️ ' + res.data;
+                                        return;
+                                    }
+                                    list.innerHTML = '';
+                                    res.data.forEach(function (id) {
+                                        var opt = document.createElement('option');
+                                        opt.value = id;
+                                        list.appendChild(opt);
+                                    });
+                                    status.textContent = '✅ ' + res.data.length + ' models — click the field to pick one.';
+                                })
+                                .catch(function (e) { status.textContent = '⚠️ ' + e.message; });
+                        });
+                    })();
+                </script>
+
                 <?php if ($this->is_configured()): ?>
                     <div style="margin-top:15px;padding:10px;background:#d4edda;border-radius:4px;color:#155724;">
-                        ✅ OpenAI API configured | Model: <strong><?php echo esc_html($this->available_models[$this->model] ?? $this->model); ?></strong>
+                        ✅ <?php echo esc_html($config['label']); ?> configured | Model: <strong><?php echo esc_html($this->model); ?></strong>
                     </div>
                 <?php else: ?>
                     <div style="margin-top:15px;padding:10px;background:#fff3cd;border-radius:4px;color:#856404;">
-                        ⚠️ No API key configured. Translation will not work.
+                        ⚠️ No <?php echo esc_html($config['label']); ?> API key configured. Translation will not work.
                     </div>
                 <?php endif; ?>
             </div>
