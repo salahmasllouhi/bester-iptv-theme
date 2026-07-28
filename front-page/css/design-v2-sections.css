@@ -234,14 +234,21 @@
     color: var(--dv2-ink);
 }
 
+/* 20% down from the original 51px. */
 .dv2-hero-title {
     font-family: var(--dv2-font-display);
     font-weight: 800;
-    font-size: 51px;
-    line-height: 1.05;
-    letter-spacing: -1.6px;
+    font-size: 41px;
+    line-height: 1.1;
+    letter-spacing: -1.3px;
     color: var(--dv2-ink);
     margin: 26px 0 0;
+}
+
+/* Each headline line is its own block, so the two lines break where the copy
+   says they should instead of wherever the container happens to run out. */
+.dv2-hero-line {
+    display: block;
 }
 
 /* Second line of the hero headline. Matches .dv2-split-title em, which is how
@@ -477,10 +484,13 @@
 }
 
 /* Artwork variant: the image is the panel, so drop the inner padding and let it
-   bleed to the rounded corners. */
+   bleed to the rounded corners. The artwork is transparent, so the purple sits
+   behind it rather than on it. */
 .dv2-split-aside--image {
     padding: 0;
     overflow: hidden;
+    background: var(--dv2-purple);
+    border-color: var(--dv2-purple);
 }
 
 .dv2-split-aside--image img {
@@ -606,6 +616,7 @@
     display: block;
     border-radius: var(--dv2-radius-md);
     overflow: hidden;
+    background: var(--dv2-purple);
 }
 
 .dv2-sport-mosaic--image img {
@@ -1994,8 +2005,8 @@
     }
 
     .dv2-hero-title {
-        font-size: 35px;
-        letter-spacing: -1px;
+        font-size: 28px;
+        letter-spacing: -0.8px;
     }
 
     .dv2-hero-sub {
@@ -2090,7 +2101,7 @@
     }
 
     .dv2-hero-title {
-        font-size: 27px;
+        font-size: 22px;
     }
 
     .dv2-split,

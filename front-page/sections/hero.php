@@ -39,13 +39,18 @@ $secondary_url   = iptv_text('hero_secondary_cta_url', '#pricing');
         </div>
 
         <?php
-        // Two lines. hero_title_3 is deliberately not rendered: iptv_text() falls
-        // back to its default whenever the ACF value is blank, so a third line can
-        // only be removed here, not by clearing the field in the editor.
+        // Two lines, each a block so the break is deliberate rather than left to
+        // wrapping. The second line is split so only its opening phrase
+        // (hero_title_span) takes the purple accent.
         ?>
         <h1 class="dv2-hero-title">
-            <?php echo esc_html(iptv_text('hero_title', 'Nordic IPTV Without Limits. Every Match. Every Channel.')); ?>
-            <span class="dv2-hero-accent"><?php echo esc_html(iptv_text('hero_title_span', 'One Subscription. $1,000 Saved. Zero Compromises.')); ?></span>
+            <span class="dv2-hero-line">
+                <?php echo esc_html(iptv_text('hero_title', 'Nordic IPTV Without Limits. Every Match. Every Channel.')); ?>
+            </span>
+            <span class="dv2-hero-line">
+                <span class="dv2-hero-accent"><?php echo esc_html(iptv_text('hero_title_span', 'One Subscription.')); ?></span>
+                <?php echo esc_html(iptv_text('hero_title_3', '$1,000 Saved. Zero Compromises.')); ?>
+            </span>
         </h1>
 
         <p class="dv2-hero-sub">
