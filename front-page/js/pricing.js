@@ -1,13 +1,5 @@
 // Pricing JavaScript - Screen/Duration configurator
 (function () {
-    // Get variation ID from dynamically generated map (from pricing.php)
-    function getVariationId(devices, duration) {
-        if (window.iptvVariationIds) {
-            return window.iptvVariationIds[devices + '-' + duration] || null;
-        }
-        return null;
-    }
-
     let selectedDevices = null;
     let selectedDuration = null;
 
@@ -99,35 +91,28 @@
         updateSavings(deviceCount);
     }
 
+    // panel.nordictv.io/checkout?connections=<1|2|3|4>&duration=<1|3|6|12>
+    // The panel derives the price from these two params - nothing else is passed.
+    function checkoutUrl(devices, months) {
+        const base = window.iptvCheckoutBase || 'https://panel.nordictv.io/checkout';
+        return base + '?connections=' + devices + '&duration=' + months;
+    }
+
+    const ctaLabel = btnText.textContent.trim() || 'Start watching';
+
     function updateButton() {
         if (selectedDevices && selectedDuration) {
             const price = getPrice(selectedDevices, selectedDuration);
-            const variationId = getVariationId(selectedDevices, selectedDuration);
-            btnText.textContent = 'Complete Your Order  -  ' + formatPrice(price);
-            const mainSiteUrl = (window.iptvMainSiteUrl || '').replace(/\/$/, '');
-            // Redirect to panel instead of WooCommerce checkout
-            btn.href = 'https://panel.nordictv.io/';
+            btnText.textContent = price
+                ? ctaLabel + ' · ' + formatPrice(price)
+                : ctaLabel;
+            btn.href = checkoutUrl(selectedDevices, selectedDuration);
             btn.style.opacity = '1';
             btn.style.pointerEvents = 'auto';
-            /*
-            if (variationId) {
-                btn.href = mainSiteUrl + '/checkout/?add-to-cart=' + variationId + '&variation_id=' + variationId + '&attribute_devices=' + selectedDevices;
-                btn.style.opacity = '1';
-                btn.style.pointerEvents = 'auto';
-            } else {
-                // Variation not found - still go to checkout, WooCommerce will handle it
-                btn.href = mainSiteUrl + '/checkout/';
-                btn.style.opacity = '0.7';
-                btn.style.pointerEvents = 'auto';
-                console.warn('Variation ID not found for:', selectedDevices, selectedDuration);
-            }
-            */
-        } else if (selectedDevices) {
-            btnText.textContent = 'Select a plan duration';
-            btn.style.opacity = '0.6';
-            btn.style.pointerEvents = 'none';
         } else {
-            btnText.textContent = 'Complete Your Order';
+            // Both pickers default to a value, so this is only reachable if the
+            // markup is missing a default.
+            btnText.textContent = ctaLabel;
             btn.style.opacity = '0.6';
             btn.style.pointerEvents = 'none';
         }
@@ -193,17 +178,22 @@
     bindKeys(deviceCards, chooseDevice);
     bindKeys(durationCards, chooseDuration);
 
-    // Pre-select the default screen count so prices are live on load.
+    // Pre-select both pickers so prices and the checkout URL are live on load
+    // (default landing URL: ?connections=1&duration=12).
     const defaultScreens = parseInt(window.iptvDefaultScreens, 10) || 1;
-    const defaultCard = deviceCards.find(function (card) {
+    const defaultMonths = parseInt(window.iptvDefaultMonths, 10) || 12;
+
+    const defaultDeviceCard = deviceCards.find(function (card) {
         return parseInt(card.dataset.devices, 10) === defaultScreens;
     }) || deviceCards[0];
 
-    if (defaultCard) {
-        chooseDevice(defaultCard, false);
-    } else {
-        updateButton();
-    }
+    const defaultDurationCard = durationCards.find(function (card) {
+        return parseInt(card.dataset.duration, 10) === defaultMonths;
+    }) || durationCards[0];
+
+    if (defaultDeviceCard) chooseDevice(defaultDeviceCard, false);
+    if (defaultDurationCard) chooseDuration(defaultDurationCard, false);
+    updateButton();
 
     // currency.js calls this after switching currency so the per-month lines,
     // savings badges and CTA price all re-render, not just the headline price.

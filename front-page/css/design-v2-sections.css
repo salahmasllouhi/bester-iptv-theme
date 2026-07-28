@@ -955,11 +955,125 @@
     display: none;
 }
 
+.dv2-scarcity {
+    text-align: center;
+    color: var(--dv2-ink);
+    font-family: var(--dv2-font-display);
+    font-weight: 700;
+    font-size: 15px;
+    margin: 4px 0 14px;
+}
+
+/* Trust row directly under the CTA */
+.dv2-checkout-trust {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px 28px;
+    list-style: none;
+    margin: 16px 0 0;
+    padding: 0;
+}
+
+.dv2-checkout-trust li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--dv2-ink-2);
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.dv2-checkout-trust li::before {
+    content: "✓";
+    color: var(--dv2-green);
+    font-weight: 700;
+}
+
 .dv2-guarantee {
     text-align: center;
     color: var(--dv2-muted);
     font-size: 14px;
-    margin: 14px 0 0;
+    margin: 12px 0 0;
+}
+
+/* "Every plan is fully loaded" */
+.dv2-loaded {
+    margin-top: 22px;
+    background: var(--dv2-bg);
+    border: 1px solid var(--dv2-border);
+    border-radius: var(--dv2-radius-md);
+    padding: 24px;
+}
+
+.dv2-loaded-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--dv2-font-display);
+    font-weight: 800;
+    font-size: 19px;
+    color: var(--dv2-ink);
+    margin: 0 0 18px;
+}
+
+.dv2-loaded-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 24px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dv2-loaded-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: var(--dv2-body);
+    font-size: 15px;
+    line-height: 1.45;
+}
+
+.dv2-loaded-list li::before {
+    content: "✓";
+    color: var(--dv2-purple);
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+/* Trial bar */
+.dv2-trial {
+    margin-top: 18px;
+    background: var(--dv2-surface-tint);
+    border: 1px solid var(--dv2-border-strong);
+    border-radius: var(--dv2-radius-md);
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.dv2-trial-copy {
+    font-family: var(--dv2-font-display);
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--dv2-ink);
+}
+
+.dv2-trial-btn {
+    background: var(--dv2-purple);
+    color: #ffffff;
+    font-size: 15px;
+    padding: 13px 22px;
+    box-shadow: none;
+}
+
+.dv2-trial-btn:hover {
+    background: var(--dv2-purple-600);
+    color: #ffffff;
 }
 
 /* Payment methods */
@@ -1698,6 +1812,21 @@
     }
 
     .dv2-screen-pill {
+        font-size: 14px;
+    }
+
+    .dv2-loaded-list {
+        grid-template-columns: 1fr;
+    }
+
+    .dv2-trial {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+
+    .dv2-checkout-trust {
+        gap: 8px 18px;
         font-size: 14px;
     }
 

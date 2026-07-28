@@ -17,6 +17,17 @@ if ($default_screens < 1 || $default_screens > 4) {
     $default_screens = 1;
 }
 
+// Which duration is pre-selected. The panel expects a duration on load, so the
+// default landing URL is ?connections=1&duration=12.
+$default_months = (int) iptv_text('pricing_default_months', '12');
+if (!in_array($default_months, array(1, 3, 6, 12), true)) {
+    $default_months = 12;
+}
+
+// Panel checkout endpoints. The panel derives the price from the two params.
+$checkout_base = iptv_text('checkout_base_url', 'https://panel.nordictv.io/checkout');
+$trial_url     = iptv_text('trial_url', 'https://panel.nordictv.io/checkout/trial');
+
 /**
  * Savings badge percentages are derived from the real prices rather than
  * hard-coded, so the claim stays true if prices change. pricing.js recomputes
@@ -86,6 +97,8 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
     window.iptvPrices = <?php echo json_encode($all_prices); ?>;
     window.iptvVariationIds = <?php echo json_encode($variation_map); ?>;
     window.iptvDefaultScreens = <?php echo (int) $default_screens; ?>;
+    window.iptvDefaultMonths = <?php echo (int) $default_months; ?>;
+    window.iptvCheckoutBase = '<?php echo esc_js($checkout_base); ?>';
 </script>
 
 <section id="pricing" class="pricing dv2-section">
@@ -142,13 +155,14 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
                     aria-label="<?php echo esc_attr(iptv_text('duration_title', 'How long?')); ?>">
                     <?php foreach ($durations as $months => $d) :
                         $price   = isset($all_prices[$d['key']][$default_device]['usd']) ? $all_prices[$d['key']][$default_device]['usd'] : 0;
-                        $suffix  = $months === 1 ? 'mo' : 'mo';
-                        $slug    = $months . $suffix; // price-1mo, price-3mo, ...
+                        $slug    = $months . 'mo'; // price-1mo, price-3mo, ...
+                        $is_default = ($months === $default_months);
                         ?>
                         <button type="button"
-                            class="select-card duration-card dv2-duration-card"
+                            class="select-card duration-card dv2-duration-card<?php echo $is_default ? ' active' : ''; ?>"
                             data-duration="<?php echo $months; ?>" data-months="<?php echo $months; ?>"
-                            role="radio" aria-checked="false" tabindex="-1">
+                            role="radio" aria-checked="<?php echo $is_default ? 'true' : 'false'; ?>"
+                            tabindex="<?php echo $is_default ? '0' : '-1'; ?>">
                             <span class="badge badge-green<?php echo $d['save'] ? '' : ' is-hidden'; ?>"
                                 id="save-<?php echo esc_attr($slug); ?>">
                                 <?php echo esc_html(sprintf(iptv_text('save_percent_format', 'Save %d%%'), $d['save'])); ?>
@@ -167,14 +181,26 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
                 </div>
             </div>
 
-            <!-- Checkout -->
-            <a href="#" id="checkout-btn" class="cta-btn">
-                <span id="button-text"><?php echo esc_html(iptv_text('checkout_button', 'Complete Your Order')); ?></span>
-                <span aria-hidden="true" style="margin-left:0.5rem;">→</span>
+            <!-- Scarcity -->
+            <?php $slots_line = iptv_text('checkout_slots_line', '🔥 Only 32 activation slots left this month'); ?>
+            <?php if ($slots_line) : ?>
+                <p class="dv2-scarcity"><?php echo esc_html($slots_line); ?></p>
+            <?php endif; ?>
+
+            <!-- Checkout. href and price are recomputed by pricing.js on every change. -->
+            <a href="<?php echo esc_url($checkout_base . '?connections=' . $default_screens . '&duration=' . $default_months); ?>"
+                id="checkout-btn" class="cta-btn">
+                <span id="button-text"><?php echo esc_html(iptv_text('checkout_button', 'Start watching')); ?></span>
             </a>
 
+            <ul class="dv2-checkout-trust">
+                <li><?php echo esc_html(iptv_text('checkout_trust_1', '14-day money-back')); ?></li>
+                <li><?php echo esc_html(iptv_text('checkout_trust_2', 'Instant activation')); ?></li>
+                <li><?php echo esc_html(iptv_text('checkout_trust_3', 'No auto-renew')); ?></li>
+            </ul>
+
             <p class="dv2-guarantee">
-                <?php echo esc_html(iptv_text('guarantee_text', '14-day money-back guarantee. No questions asked.')); ?>
+                <?php echo esc_html(iptv_text('guarantee_text', 'Watching in 60 seconds · Secure checkout · Pay once, no auto-renew')); ?>
             </p>
 
             <!-- Payment methods -->
@@ -197,6 +223,41 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
                     <li class="dv2-payment-badge dv2-payment-badge--paypal">PayPal</li>
                     <li class="dv2-payment-badge dv2-payment-badge--btc">₿ Bitcoin</li>
                 </ul>
+            </div>
+
+            <!-- What every plan includes -->
+            <?php
+            $plan_includes = array(
+                1  => '40,000+ Live TV Channels',
+                2  => '200,000+ Movies & Series (VOD)',
+                3  => '4K, Ultra HD & HD quality',
+                4  => 'Stable, fast servers',
+                5  => 'Full TV guide (EPG)',
+                6  => 'Anti-Buffer™ 9.8',
+                7  => 'SHL, NHL, Premier League & handball',
+                8  => 'Pay-Per-View (PPV) events',
+                9  => 'Auto-updating channels & VOD',
+                10 => '24/7 support',
+            );
+            ?>
+            <div class="dv2-loaded">
+                <h3 class="dv2-loaded-title">
+                    <span aria-hidden="true">⚡</span>
+                    <?php echo esc_html(iptv_text('plan_includes_title', 'Every plan is fully loaded')); ?>
+                </h3>
+                <ul class="dv2-loaded-list">
+                    <?php foreach ($plan_includes as $n => $item) : ?>
+                        <li><?php echo esc_html(iptv_text("plan_includes_{$n}", $item)); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+
+            <!-- Trial -->
+            <div class="dv2-trial">
+                <span class="dv2-trial-copy"><?php echo esc_html(iptv_text('trial_prompt', 'Not ready to buy?')); ?></span>
+                <a href="<?php echo esc_url($trial_url); ?>" class="dv2-btn dv2-trial-btn">
+                    <?php echo esc_html(iptv_text('trial_cta', 'Start a 24-hour trial — no card')); ?>
+                </a>
             </div>
         </div>
     </div>
