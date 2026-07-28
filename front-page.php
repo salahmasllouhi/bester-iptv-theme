@@ -24,9 +24,11 @@ $sections_dir = $front_page_dir . '/sections';
         'contact',        // Existing Contact form styling
         'footer',         // Existing Footer
         'responsive',     // Existing Responsive
-        'redesign-theme', // NEW REDESIGN (Overrides + New Sections)
+        'redesign-theme', // Previous redesign (Overrides + New Sections)
         'cta',            // CTA Section Styles
-        'activity-ticker' // Social proof notifications
+        'activity-ticker', // Social proof notifications
+        'design-v2',      // DESIGN V2 tokens (light purple) - must come after the old layers
+        'design-v2-sections' // DESIGN V2 section components
     );
 
     foreach ($css_files as $file) {
@@ -40,22 +42,26 @@ $sections_dir = $front_page_dir . '/sections';
 
 <?php
 // Load all sections in order
+// Order follows the "NordicTV Light Purple" design.
 $sections = array(
-    'header',      // Front-page header (source of truth for all headers)
-    'hero',        // Redesigned
-    'content-showcase', // New Section
-    // 'brands' removed per user request
-    'features',    // Redesigned
-    'sports',      // Redesigned
-    'comparison',  // Redesigned (Price Comparison)
-    'steps',       // Redesigned
-    'dashboard',   // New: Member Dashboard
-    'unlock',      // Redesigned (Devices)
-    'pricing',     // Existing (User said: "Your Existing Pricing Section Goes Here")
-    'reviews',     // Existing
-    'faq',         // New
-    'dark-cta',    // Redesigned (CTA)
-    'footer'       // Existing
+    'header',           // Front-page header (source of truth for all headers)
+    'hero',             // Split hero with Trustpilot badge
+    'features',         // Eight capability chips
+    'content-showcase', // Channels panel + VOD panel
+    'sports',           // Sports panel with mosaic
+    'cta-bar',          // Full-width savings bar
+    'comparison',       // NordicTV vs. traditional services
+    'reviews',          // Score card + review grid
+    'pricing',          // Device/duration configurator (WooCommerce)
+    'unlock',           // Supported device chips
+    'dashboard',        // Member Dashboard
+    'faq',              // Accordion
+    'steps',            // Journey panel - closing CTA in this design
+    'contact',          // Support cards
+    'footer'
+    // 'dark-cta' is intentionally not in this list: the journey panel is the
+    // closing CTA in this design. The section and its styles still exist -
+    // add it back here if you want a second CTA block.
 );
 
 foreach ($sections as $section) {

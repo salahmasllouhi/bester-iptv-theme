@@ -1,17 +1,17 @@
-<!-- Footer Section -->
+<!-- Footer Section (Design v2) -->
 <footer class="site-footer">
     <div class="container">
         <div class="footer-grid">
             <div>
                 <div class="footer-brand">
-                    <img src="<?php echo get_template_directory_uri(); ?>/images/logo/light logo 500_150.png"
+                    <img src="<?php echo get_template_directory_uri(); ?>/images/logo/dark logo 500_150.png"
                         alt="Nordic IPTV" class="footer-logo-img">
                 </div>
                 <p class="footer-desc">
-                    <?php echo esc_html(iptv_text('footer_desc', 'Premium IPTV streaming service with 35,000+ channels worldwide.')); ?>
+                    <?php echo esc_html(iptv_text('footer_desc', 'The leading IPTV service provider — 35,000+ live channels, 150,000+ movies and series, every sport, in 4K and 8K.')); ?>
                 </p>
 
-                <!-- Language Selector Dropdown in Footer -->
+                <!-- Currency selector -->
                 <div class="footer-language-selector">
                     <div class="footer-country-selector" id="footerCountrySelector">
                         <button class="footer-country-btn" onclick="toggleFooterDropdown()">
@@ -56,7 +56,7 @@
             ?>
 
             <div class="footer-col">
-                <h4><?php echo esc_html(iptv_get_menu_title('footer_1', 'Quick Links')); ?></h4>
+                <h4><?php echo esc_html(iptv_get_menu_title('footer_1', 'Plans')); ?></h4>
                 <?php if (has_nav_menu('footer_1')): ?>
                     <?php wp_nav_menu(array(
                         'theme_location' => 'footer_1',
@@ -64,21 +64,32 @@
                         'fallback_cb' => false,
                     )); ?>
                 <?php else: ?>
-                    <a href="#features">Features</a>
-                    <a href="#pricing">Pricing</a>
-                    <a href="https://panel.nordictv.io/login">My Account</a>
+                    <div>
+                        <a href="#pricing">1 Month Plan</a>
+                        <a href="#pricing">3 Month Plan</a>
+                        <a href="#pricing">6 Month Plan</a>
+                        <a href="#pricing">12 Month Plan</a>
+                    </div>
                 <?php endif; ?>
             </div>
-            <?php if (has_nav_menu('footer_2')): ?>
-                <div class="footer-col">
-                    <h4><?php echo esc_html(iptv_get_menu_title('footer_2', 'Support')); ?></h4>
+
+            <div class="footer-col">
+                <h4><?php echo esc_html(iptv_get_menu_title('footer_2', 'Useful Links')); ?></h4>
+                <?php if (has_nav_menu('footer_2')): ?>
                     <?php wp_nav_menu(array(
                         'theme_location' => 'footer_2',
                         'container' => false,
                         'fallback_cb' => false,
                     )); ?>
-                </div>
-            <?php endif; ?>
+                <?php else: ?>
+                    <div>
+                        <a href="<?php echo home_url('/blog/'); ?>">Blog</a>
+                        <a href="<?php echo home_url('/user-guide/'); ?>">Setup Guide</a>
+                        <a href="https://panel.nordictv.io/login">My Account</a>
+                    </div>
+                <?php endif; ?>
+            </div>
+
             <div class="footer-col">
                 <h4><?php echo esc_html(iptv_get_menu_title('footer_3', 'Legal')); ?></h4>
                 <?php if (has_nav_menu('footer_3')): ?>
@@ -88,15 +99,18 @@
                         'fallback_cb' => false,
                     )); ?>
                 <?php else: ?>
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                    <a href="#">Refund Policy</a>
+                    <div>
+                        <a href="#">About Us</a>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Return &amp; Refund Policy</a>
+                    </div>
                 <?php endif; ?>
             </div>
         </div>
         <div class="footer-bottom">
-            © <?php echo date('Y'); ?> Nordic IPTV.
-            <?php echo esc_html(iptv_text('footer_copyright', 'All rights reserved.')); ?>
+            Nordic IPTV | <?php echo esc_html(iptv_text('footer_copyright', 'All Rights Reserved')); ?>
+            <?php echo date('Y'); ?>
         </div>
     </div>
 </footer>

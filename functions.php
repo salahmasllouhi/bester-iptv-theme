@@ -67,6 +67,16 @@ function my_iptv_enqueue_styles()
 {
     wp_enqueue_style('my-iptv-style', get_stylesheet_uri(), array(), '1.0.0');
 
+    // Design v2 typography. Enqueued rather than @import-ed because most
+    // templates concatenate the CSS files into an inline <style> block,
+    // where a non-leading @import is ignored by the browser.
+    wp_enqueue_style(
+        'iptv-design-v2-fonts',
+        'https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap',
+        array(),
+        null
+    );
+
     // Load product page styles on single product pages
     if (function_exists('is_product') && is_product()) {
         wp_enqueue_style('iptv-variables', get_template_directory_uri() . '/front-page/css/variables.css', array(), '1.0.1');
@@ -76,6 +86,9 @@ function my_iptv_enqueue_styles()
         wp_enqueue_style('iptv-footer', get_template_directory_uri() . '/front-page/css/footer.css', array(), '1.0.1');
         wp_enqueue_style('iptv-responsive', get_template_directory_uri() . '/front-page/css/responsive.css', array(), '1.0.1');
         wp_enqueue_style('iptv-product-page', get_template_directory_uri() . '/front-page/css/product-page.css', array(), '1.0.1');
+        // Design v2 must load last so its tokens override the older layers.
+        wp_enqueue_style('iptv-design-v2', get_template_directory_uri() . '/front-page/css/design-v2.css', array(), '2.0.0');
+        wp_enqueue_style('iptv-design-v2-sections', get_template_directory_uri() . '/front-page/css/design-v2-sections.css', array('iptv-design-v2'), '2.0.0');
     }
 }
 add_action('wp_enqueue_scripts', 'my_iptv_enqueue_styles', 20);

@@ -1,95 +1,72 @@
-<!-- Hero Section -->
-<div class="bg-aurora"></div>
+<?php
+/**
+ * Section: Hero (Design v2 — NordicTV Light Purple)
+ */
 
-<section class="hero">
-    <div class="hero-content">
-        <!-- Badges Container -->
-        <div class="hero-badges-container">
-            <!-- Rating Badge -->
-            <div class="hero-rating">
-                <span class="stars">★★★★★</span>
-                <span
-                    class="rating-text"><?php echo esc_html(iptv_text('hero_badge', '4.8/5 from 53,000+ customers')); ?></span>
-            </div>
+// Hero image: ACF field on the front page, else the shared content render.
+$hero_image_url = '';
+if (function_exists('get_field')) {
+    $hero_field = get_field('hero_image', get_option('page_on_front'));
+    if (is_array($hero_field) && !empty($hero_field['url'])) {
+        $hero_image_url = $hero_field['url'];
+    } elseif (is_string($hero_field) && $hero_field) {
+        $hero_image_url = $hero_field;
+    }
+}
+if (!$hero_image_url) {
+    $hero_image_url = 'https://nordictv.io/wp-content/uploads/2026/01/content.png';
+}
 
-            <!-- Savings Badge -->
-            <div class="hero-savings">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M12 6v6l4 2" />
-                </svg>
-                <?php echo esc_html(iptv_text('hero_savings_badge', 'Save Over $1,500 Annually!')); ?>
-            </div>
+$primary_label   = iptv_text('hero_primary_cta_label', 'Get Access Now');
+$primary_url     = iptv_text('hero_primary_cta_url', '#pricing');
+$secondary_label = iptv_text('hero_secondary_cta_label', 'Pricing & Plans ↓');
+$secondary_url   = iptv_text('hero_secondary_cta_url', '#pricing');
+?>
+<div class="dv2-grid-wash" aria-hidden="true"></div>
+
+<section class="dv2-hero container">
+    <div class="dv2-hero-copy">
+        <div class="dv2-trustpilot">
+            <span class="dv2-trustpilot-name">★ Trustpilot</span>
+            <span><?php echo esc_html(iptv_text('hero_trust_label', 'Excellent')); ?></span>
+            <span class="dv2-trustpilot-stars" aria-hidden="true">
+                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+            </span>
+            <span>
+                <strong><?php echo esc_html(iptv_text('hero_trust_score', '4.9')); ?></strong>
+                <?php echo esc_html(iptv_text('hero_trust_suffix', 'out of 5')); ?>
+            </span>
         </div>
 
-        <h1>
-            <?php echo iptv_text('hero_title', 'Nordic IPTV'); ?><br>
-            <span
-                class="gradient-text"><?php echo iptv_text('hero_title_span', 'Premium Streaming Experience,'); ?></span><br>
-            <?php echo iptv_text('hero_title_3', 'Seamlessly Delivered'); ?>
-            <?php $hero_title_4 = iptv_text('hero_title_4', ''); if ($hero_title_4) : ?><br><?php echo $hero_title_4; ?><?php endif; ?>
+        <h1 class="dv2-hero-title">
+            <?php echo esc_html(iptv_text('hero_title', 'Watch Everything.')); ?>
+            <?php echo esc_html(iptv_text('hero_title_span', 'Pay Almost Nothing.')); ?>
         </h1>
 
-        <p class="hero-subtitle">
-            <?php echo wp_kses_post(iptv_text('hero_subtitle', 'Stop paying for <strong>6+ streaming services</strong>. Get every sport, every show, every PPV event in one place. <strong>No blackouts. No restrictions.</strong>')); ?>
+        <p class="dv2-hero-sub">
+            <?php echo wp_kses_post(iptv_text('hero_subtitle', 'As a premier IPTV service provider, NordicTV offers 35,000+ channels, 150,000+ VODs, and all sports in 4K/8K. Stream premium content on any device today.')); ?>
         </p>
 
-        <!-- CTA with glow container -->
-        <?php
-        $primary_label   = iptv_text('hero_primary_cta_label', 'Get Started');
-        $primary_url     = iptv_text('hero_primary_cta_url', 'https://nordictv.io/#pricing');
-        $secondary_label = iptv_text('hero_secondary_cta_label', 'My Dashboard');
-        $secondary_url   = iptv_text('hero_secondary_cta_url', 'https://panel.nordictv.io/login');
-        ?>
-        <div class="hero-cta-wrap" style="gap:1rem;flex-wrap:wrap;">
-            <a href="<?php echo esc_url($primary_url); ?>" class="btn btn-primary">
-                <?php echo esc_html($primary_label); ?>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <line x1="5" y1="12" x2="19" y2="12" />
-                    <polyline points="12 5 19 12 12 19" />
-                </svg>
+        <div class="dv2-live-pill">
+            <span class="dv2-live-dot" aria-hidden="true"></span>
+            <strong id="liveCounter"><?php echo esc_html(iptv_text('hero_stat_1_val', '12,849')); ?></strong>
+            <?php echo esc_html(iptv_text('hero_stat_1_desc', 'users watching now')); ?>
+        </div>
+
+        <div class="dv2-hero-actions">
+            <a href="<?php echo esc_url($primary_url); ?>" class="dv2-btn dv2-btn-green">
+                ▶ <?php echo esc_html($primary_label); ?>
             </a>
-            <a href="<?php echo esc_url($secondary_url); ?>" class="btn btn-secondary">
+            <a href="<?php echo esc_url($secondary_url); ?>" class="dv2-hero-link">
                 <?php echo esc_html($secondary_label); ?>
             </a>
         </div>
+    </div>
 
-        <!-- Stats Row -->
-        <div class="hero-stats">
-            <!-- Card 1: Live Now (Animated) -->
-            <div class="stat-card stat-live">
-                <div class="stat-value" id="liveCounter"><?php echo esc_html(iptv_text('hero_stat_1_val', '42,537')); ?>
-                </div>
-                <div class="stat-header">
-                    <span class="live-dot"></span>
-                    <span class="stat-label">LIVE NOW</span>
-                </div>
-                <div class="stat-desc"><?php echo esc_html(iptv_text('hero_stat_1_desc', 'active viewers')); ?></div>
-            </div>
-
-            <!-- Card 2: PPV Events -->
-            <div class="stat-card stat-ppv">
-                <div class="stat-value price"><?php echo esc_html(iptv_text('hero_stat_2_val', '$0')); ?></div>
-                <div class="stat-label-large"><?php echo esc_html(iptv_text('hero_stat_2_label', 'PPV Events')); ?>
-                </div>
-                <div class="stat-desc">
-                    <?php echo esc_html(iptv_text('hero_stat_2_desc', 'UFC, Boxing - All Included')); ?>
-                </div>
-            </div>
-
-            <!-- Card 3: Live Channels -->
-            <div class="stat-card stat-channels">
-                <div class="stat-value channels"><?php echo esc_html(iptv_text('hero_stat_3_val', '35,000+')); ?></div>
-                <div class="stat-label-large"><?php echo esc_html(iptv_text('hero_stat_3_label', 'Live Channels')); ?></div>
-                <div class="stat-desc"><?php echo esc_html(iptv_text('hero_stat_3_desc', 'From 198 countries')); ?></div>
-            </div>
-
-            <!-- Card 4: Movies & Series -->
-            <div class="stat-card stat-movies">
-                <div class="stat-value movies"><?php echo esc_html(iptv_text('hero_stat_4_val', '150,000+')); ?></div>
-                <div class="stat-label-large"><?php echo esc_html(iptv_text('hero_stat_4_label', 'Movies & Series')); ?></div>
-                <div class="stat-desc"><?php echo esc_html(iptv_text('hero_stat_4_desc', 'All genres included')); ?></div>
-            </div>
-        </div>
+    <div class="dv2-hero-media">
+        <div class="dv2-hero-glow" aria-hidden="true"></div>
+        <img src="<?php echo esc_url($hero_image_url); ?>"
+             alt="<?php echo esc_attr(iptv_text('hero_image_alt', 'NordicTV live sports and entertainment')); ?>"
+             fetchpriority="high">
     </div>
 </section>

@@ -57,7 +57,7 @@ if (isset($site_currency_map[$site_slug])) {
 <header class="site-header" id="site-header">
     <div class="container nav-container">
         <a href="<?php echo home_url('/'); ?>" class="logo">
-            <img src="<?php echo get_template_directory_uri(); ?>/images/logo/light logo 500_150.png" alt="Nordic IPTV"
+            <img src="<?php echo get_template_directory_uri(); ?>/images/logo/dark logo 500_150.png" alt="Nordic IPTV"
                 class="logo-img">
         </a>
         <?php if (has_nav_menu('primary')): ?>

@@ -1,68 +1,48 @@
 <?php
-// Get Content Settings
-$content = get_option('iptv_content', []);
-$title = $content['contact_title'] ?? 'Need Help?';
-$subtitle = $content['contact_subtitle'] ?? 'Our support team is here for you 24/7';
+/**
+ * Section: Support (Design v2)
+ * Three contact cards. Values still come from the content settings option.
+ */
+$content  = get_option('iptv_content', []);
+$title    = $content['contact_title']    ?? 'We\'re here to help';
+$subtitle = $content['contact_subtitle'] ?? 'Reach out anytime via email, WhatsApp, or Telegram. Our support team typically responds within minutes.';
 
-$email_label = $content['contact_email'] ?? 'Email Support';
-$email_text = $content['contact_email_text'] ?? 'support@nordictv.com';
-$email_link = $content['contact_email_link'] ?? 'mailto:support@nordictv.com';
-
-$whatsapp_label = $content['contact_whatsapp'] ?? 'WhatsApp Support';
-$whatsapp_text = $content['contact_whatsapp_text'] ?? '+1 234 567 890';
-$whatsapp_link = $content['contact_whatsapp_link'] ?? 'https://wa.me/1234567890';
+$cards = [
+    [
+        'label' => $content['contact_email'] ?? 'Email Support',
+        'value' => $content['contact_email_text'] ?? 'support@nordictv.io',
+        'link'  => $content['contact_email_link'] ?? 'mailto:support@nordictv.io',
+        'blank' => false,
+    ],
+    [
+        'label' => $content['contact_whatsapp'] ?? 'WhatsApp',
+        'value' => $content['contact_whatsapp_text'] ?? 'Chat with us live',
+        'link'  => $content['contact_whatsapp_link'] ?? 'https://wa.me/1234567890',
+        'blank' => true,
+    ],
+    [
+        'label' => $content['contact_telegram'] ?? 'Telegram',
+        'value' => $content['contact_telegram_text'] ?? '@NordicTV',
+        'link'  => $content['contact_telegram_link'] ?? 'https://t.me/NordicTV',
+        'blank' => true,
+    ],
+];
 ?>
-
-<!-- Contact Section -->
-<section id="contact" class="contact">
+<section id="contact" class="contact dv2-section">
     <div class="container">
-
-        <!-- Header -->
-        <div class="contact-header">
-            <h2>
-                <?php echo esc_html($title); ?>
-            </h2>
-            <p>
-                <?php echo esc_html($subtitle); ?>
-            </p>
+        <div class="dv2-section-head">
+            <h2><?php echo esc_html($title); ?></h2>
+            <p style="max-width:620px;"><?php echo esc_html($subtitle); ?></p>
         </div>
 
-        <!-- Contact Grid (2 Columns) -->
-        <div class="contact-grid">
-
-            <!-- Email Card -->
-            <a href="<?php echo esc_url($email_link); ?>" class="contact-card">
-                <div class="contact-icon">
-                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                </div>
-                <h3>
-                    <?php echo esc_html($email_label); ?>
-                </h3>
-                <p>
-                    <?php echo esc_html($email_text); ?>
-                </p>
-            </a>
-
-            <!-- WhatsApp Card -->
-            <a href="<?php echo esc_url($whatsapp_link); ?>" class="contact-card" target="_blank"
-                rel="noopener noreferrer">
-                <div class="contact-icon">
-                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                </div>
-                <h3>
-                    <?php echo esc_html($whatsapp_label); ?>
-                </h3>
-                <p>
-                    <?php echo esc_html($whatsapp_text); ?>
-                </p>
-            </a>
-
+        <div class="dv2-support-grid">
+            <?php foreach ($cards as $card) : ?>
+                <a href="<?php echo esc_url($card['link']); ?>" class="dv2-support-card"
+                    <?php echo $card['blank'] ? ' target="_blank" rel="noopener noreferrer"' : ''; ?>>
+                    <h3><?php echo esc_html($card['label']); ?></h3>
+                    <p><?php echo esc_html($card['value']); ?></p>
+                </a>
+            <?php endforeach; ?>
         </div>
     </div>
 </section>

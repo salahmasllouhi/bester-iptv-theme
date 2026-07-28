@@ -30,6 +30,8 @@ $shared_css = [
     'pricing.css',
     'faq.css',
     'cta.css',
+    'design-v2.css',
+    'design-v2-sections.css',
 ];
 
 echo '<style>';

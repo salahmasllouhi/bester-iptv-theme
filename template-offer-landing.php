@@ -117,6 +117,8 @@ if (empty($offer_urgency_line))
         'responsive',
         'redesign-theme',
         'offer-landing',
+        'design-v2',
+        'design-v2-sections',
     ];
     foreach ($css_files as $file) {
         $path = $css_dir . '/' . $file . '.css';

@@ -5,18 +5,19 @@
 </script>
 <section id="pricing" class="pricing">
     <div class="container">
-        <div style="text-align:center;margin-bottom:1rem;">
-            <span class="section-tag">
-                <?php echo esc_html(iptv_text('pricing_badge', 'Stream Smarter, Pay Less – Start Today!')); ?>
-            </span>
-        </div>
-        <div class="pricing-header">
-            <h2 class="mobile-split-title"><?php echo esc_html(iptv_text('pricing_title', 'Unlimited Streaming')); ?>
-                <span class="gradient-text"><?php echo esc_html(iptv_text('pricing_title_span', 'at a fair price')); ?></span>
+        <div class="dv2-section-head pricing-header">
+            <h2 class="mobile-split-title"><?php echo esc_html(iptv_text('pricing_title', 'One price.')); ?>
+                <span class="gradient-text"><?php echo esc_html(iptv_text('pricing_title_span', 'Unlimited streaming.')); ?></span>
             </h2>
-            <p style="color:var(--text-secondary);margin-top:0.5rem;">
-                <?php echo esc_html(iptv_text('pricing_subtitle', '35,000+ live channels and 150,000+ movies & series in 4K.')); ?>
+            <p>
+                <?php echo esc_html(iptv_text('pricing_subtitle', 'No hidden fees. No contracts. Cancel anytime. Pick your plan and start watching in minutes.')); ?>
             </p>
+        </div>
+
+        <div class="dv2-pricing-perks">
+            <span><?php echo esc_html(iptv_text('pricing_perk_1', '35,000+ live channels')); ?></span>
+            <span><?php echo esc_html(iptv_text('pricing_perk_2', 'All sports & PPV included')); ?></span>
+            <span><?php echo esc_html(iptv_text('pricing_perk_3', 'Anti-freeze, stable servers')); ?></span>
         </div>
 
         <style>

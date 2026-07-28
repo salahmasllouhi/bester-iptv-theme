@@ -1,77 +1,45 @@
-<section class="comparison">
+<?php
+/**
+ * Section: NordicTV vs. traditional services (Design v2)
+ */
+
+$comp_rows = [
+    1 => ['35,000+ channels from 198 countries',      '200–500 (cable) or none (streaming)'],
+    2 => ['150,000+ movies & series, all genres',     'Limited per platform (~5,000 each)'],
+    3 => ['All sports included — every league',       'Paid add-on or separate subscription'],
+    4 => ['4K & 8K Ultra HD included',                '4K only on premium tier (+cost)'],
+    5 => ['Up to 4 devices at once',                  '1–2 per service'],
+    6 => ['From $8/mo — everything included',         '$60–$100+/mo across services'],
+    7 => ['90% average savings vs. combined services', 'Billed monthly, price rises every year'],
+];
+?>
+<section class="comparison dv2-section">
     <div class="comparison-inner">
-        <div class="section-header">
-            <div class="section-tag">
-                <?php echo esc_html(iptv_text('comp_badge', 'Save Money')); ?>
-            </div>
-            <h2 class="section-title">
-                <?php echo iptv_text('comp_title_main', 'Stop The'); ?> <span class="gradient-text">
-                    <?php echo iptv_text('comp_title_sub', 'Subscription Trap'); ?>
-                </span>
-            </h2>
-            <p class="section-subtitle">
-                <?php echo esc_html(iptv_text('comp_desc', 'See how much you\'re really paying vs Nordic IPTV.')); ?>
+        <div class="dv2-section-head">
+            <h2><?php echo esc_html(iptv_text('comp_title_main', 'NordicTV vs. Traditional Services')); ?></h2>
+            <p>
+                <?php echo esc_html(iptv_text('comp_desc', 'As the most affordable IPTV service provider, stop paying for streaming apps, a sports package, and cable TV separately. NordicTV replaces them all.')); ?>
             </p>
         </div>
 
-        <div class="comp-cards-wrap">
-
-            <?php
-            $comp_rows = [
-                ['label' => 'Netflix',             'val_1' => '$17.99/mo',   'val_2' => 'Included'],
-                ['label' => 'Disney+',             'val_1' => '$12.99/mo',   'val_2' => 'Included'],
-                ['label' => 'HBO Max',             'val_1' => '$14.99/mo',   'val_2' => 'Included'],
-                ['label' => 'Sports Package',      'val_1' => '$35.00/mo',   'val_2' => 'Included'],
-                ['label' => 'PPV Events (yearly)', 'val_1' => '$700+',       'val_2' => '$0 Extra'],
-                ['label' => '20,000+ Channels',    'val_1' => 'Extra Fees',  'val_2' => 'Included'],
-                ['label' => '4K Quality',          'val_1' => 'Extra Fees',  'val_2' => 'Included'],
-            ];
-            foreach ($comp_rows as $i => $defaults) :
-                $n = $i + 1;
-            ?>
-            <div class="feat-card">
-                <div class="fc-left">
-                    <div class="fc-name"><?php echo esc_html(iptv_text("comp_row_{$n}_label", $defaults['label'])); ?></div>
-                    <div class="fc-cable"><?php echo esc_html(iptv_text("comp_row_{$n}_val_1", $defaults['val_1'])); ?></div>
+        <div class="dv2-compare">
+            <div class="dv2-compare-head">
+                <div class="dv2-compare-head-ours">
+                    <div class="dv2-compare-head-label"><?php echo esc_html(iptv_text('comp_ours_label', 'NordicTV')); ?></div>
+                    <div class="dv2-compare-head-price"><?php echo esc_html(iptv_text('comp_ours_price', 'from $8/mo')); ?></div>
                 </div>
-                <div class="fc-right"><?php echo esc_html(iptv_text("comp_row_{$n}_val_2", $defaults['val_2'])); ?></div>
+                <div class="dv2-compare-head-theirs">
+                    <div class="dv2-compare-head-label"><?php echo esc_html(iptv_text('comp_theirs_label', 'Traditional Services')); ?></div>
+                    <div class="dv2-compare-head-price"><?php echo esc_html(iptv_text('comp_theirs_price', '$60–$100+/mo')); ?></div>
+                </div>
             </div>
+
+            <?php foreach ($comp_rows as $n => $row) : ?>
+                <div class="dv2-compare-row">
+                    <div class="dv2-compare-good"><?php echo esc_html(iptv_text("comp_row_{$n}_good", $row[0])); ?></div>
+                    <div class="dv2-compare-bad"><?php echo esc_html(iptv_text("comp_row_{$n}_bad", $row[1])); ?></div>
+                </div>
             <?php endforeach; ?>
-
-            <!-- Annual Cost card -->
-            <div class="annual-card">
-                <div class="ac-left">
-                    <div class="ac-label"><?php echo esc_html(iptv_text('comp_c1_total_label', 'Annual Cost')); ?></div>
-                    <div class="ac-cable"><?php echo esc_html(iptv_text('comp_c1_total_val', '$1,200+')); ?> cable</div>
-                </div>
-                <div class="ac-right">
-                    <div class="ac-price"><?php echo esc_html(iptv_text('comp_price', '$69.99')); ?></div>
-                    <div class="ac-sub"><?php echo esc_html(iptv_text('comp_price_sub', '~$5.83/month')); ?></div>
-                </div>
-            </div>
-
-            <!-- Savings bar -->
-            <div class="savings-bar">
-                <div class="sav-label"><?php echo esc_html(iptv_text('comp_savings_label', 'Your Annual Savings')); ?></div>
-                <div class="sav-val"><?php echo esc_html(iptv_text('comp_savings_val', '$1,100+')); ?></div>
-            </div>
-
-        </div>
-
-        <?php
-        $comp_cta_field  = function_exists('get_field') ? get_field('comp_cta_text', get_option('page_on_front')) : null;
-        $comp_cta_url    = (!empty($comp_cta_field['url'])) ? $comp_cta_field['url'] : '#pricing';
-        $comp_cta_label  = (!empty($comp_cta_field['title'])) ? $comp_cta_field['title'] : iptv_text('comp_cta', 'Start Saving Today');
-        $comp_cta_target = (!empty($comp_cta_field['target'])) ? ' target="' . esc_attr($comp_cta_field['target']) . '"' : '';
-        ?>
-        <div style="text-align:center;margin-top:var(--space-xl);">
-            <a href="<?php echo esc_url($comp_cta_url); ?>" class="btn btn-primary"<?php echo $comp_cta_target; ?>>
-                <?php echo esc_html($comp_cta_label); ?>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <line x1="5" y1="12" x2="19" y2="12" />
-                    <polyline points="12 5 19 12 12 19" />
-                </svg>
-            </a>
         </div>
     </div>
 </section>

@@ -41,6 +41,8 @@ if (!$is_thank_you_page && class_exists('WooCommerce') && function_exists('WC') 
     <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/front-page/css/header.css">
     <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/front-page/css/footer.css">
     <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/front-page/css/responsive.css">
+    <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/front-page/css/design-v2.css">
+    <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/front-page/css/design-v2-sections.css">
     <link rel="stylesheet"
         href="<?php echo get_template_directory_uri(); ?>/front-page/css/checkout.css?v=<?php echo time(); ?>">
 </head>

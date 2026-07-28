@@ -1,70 +1,79 @@
-<section class="steps">
-    <div class="steps-container">
-        <div class="section-header">
-            <div class="section-tag">
-                <?php echo esc_html(iptv_text('steps_tag', 'Easy Setup')); ?>
+<?php
+/**
+ * Section: Journey / 3 steps (Design v2)
+ * Purple gradient panel with three illustrated step cards.
+ */
+
+$steps_cta_field  = function_exists('get_field') ? get_field('steps_cta', get_option('page_on_front')) : null;
+$steps_cta_url    = (!empty($steps_cta_field['url'])) ? $steps_cta_field['url'] : '#pricing';
+$steps_cta_label  = (!empty($steps_cta_field['title'])) ? $steps_cta_field['title'] : iptv_text('steps_cta', 'Start Watching Now');
+$steps_cta_target = (!empty($steps_cta_field['target'])) ? ' target="' . esc_attr($steps_cta_field['target']) . '"' : '';
+?>
+<section class="dv2-journey">
+    <div>
+        <h2 class="dv2-journey-title">
+            <?php echo esc_html(iptv_text('steps_title', 'Up and running in 3 minutes')); ?>
+        </h2>
+        <div class="dv2-journey-note">
+            <span class="dv2-journey-note-mark" aria-hidden="true">$</span>
+            <?php echo esc_html(iptv_text('steps_subtitle', 'No technician. No hardware. No waiting.')); ?>
+        </div>
+        <a href="<?php echo esc_url($steps_cta_url); ?>" class="dv2-btn dv2-btn-white"<?php echo $steps_cta_target; ?>>
+            <?php echo esc_html($steps_cta_label); ?>
+        </a>
+    </div>
+
+    <div class="dv2-journey-cards">
+        <!-- Step 1 -->
+        <div class="dv2-journey-card">
+            <div class="dv2-journey-visual" aria-hidden="true">
+                <div class="dv2-journey-bar"></div>
+                <div class="dv2-journey-bar"></div>
+                <div class="dv2-journey-chip"><?php echo esc_html(iptv_text('step_1_visual', 'Choose plan')); ?></div>
             </div>
-            <h2 class="section-title">
-                <?php echo iptv_text('steps_title', 'Start Streaming in'); ?> <span class="gradient-text">
-                    <?php echo iptv_text('steps_title_span', '3 Steps'); ?>
+            <span class="dv2-journey-num">1</span>
+            <div>
+                <h3><?php echo esc_html(iptv_text('step_1_title', 'Choose Your Plan')); ?></h3>
+                <p><?php echo esc_html(iptv_text('step_1_desc', 'Pick the number of devices and duration that suits you. Prices start from $8/month.')); ?></p>
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="dv2-journey-card">
+            <div class="dv2-journey-visual" style="align-items:center;" aria-hidden="true">
+                <div style="color:var(--dv2-purple);font-size:12px;font-weight:700;text-align:center;">
+                    <?php echo esc_html(iptv_text('step_2_visual', 'Check your inbox')); ?>
+                </div>
+                <div style="display:flex;gap:8px;justify-content:center;">
+                    <span style="width:26px;height:26px;border:1px solid #e4dcf5;border-radius:6px;"></span>
+                    <span style="width:26px;height:26px;border:1px solid #e4dcf5;border-radius:6px;"></span>
+                    <span style="width:26px;height:26px;border:1px solid #e4dcf5;border-radius:6px;"></span>
+                </div>
+                <div class="dv2-journey-chip" style="align-self:center;padding:4px 22px;">↓</div>
+            </div>
+            <span class="dv2-journey-num">2</span>
+            <div>
+                <h3><?php echo esc_html(iptv_text('step_2_title', 'Get Your Credentials')); ?></h3>
+                <p><?php echo esc_html(iptv_text('step_2_desc', 'Receive your login details instantly by email after payment — no waiting.')); ?></p>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="dv2-journey-card">
+            <div class="dv2-journey-visual"
+                style="border:1px solid #efe9fb;border-radius:8px;align-items:center;justify-content:center;position:relative;"
+                aria-hidden="true">
+                <span style="position:absolute;top:8px;left:10px;font-size:11px;color:var(--dv2-ink);font-weight:700;">
+                    <?php echo esc_html(iptv_text('step_3_visual', 'Live')); ?> <span style="color:#e5484d;">•</span>
                 </span>
-            </h2>
-            <p class="section-subtitle">
-                <?php echo esc_html(iptv_text('steps_subtitle', 'Get up and running in minutes, not hours.')); ?>
-            </p>
-        </div>
-        <div class="steps-grid">
-            <!-- Step 1 -->
-            <div class="step-card animate-on-scroll">
-                <div class="step-number">
-                    <?php echo esc_html(iptv_text('step_1_badge', '1')); ?>
-                </div>
-                <h3 class="step-title">
-                    <?php echo esc_html(iptv_text('step_1_title', 'Choose Your Plan')); ?>
-                </h3>
-                <p class="step-desc">
-                    <?php echo esc_html(iptv_text('step_1_desc', 'Browse our flexible subscription packages and select the one that fits your budget and device needs.')); ?>
-                </p>
+                <span
+                    style="width:34px;height:34px;border-radius:999px;border:1.5px solid var(--dv2-purple);display:inline-flex;align-items:center;justify-content:center;color:var(--dv2-purple);">▶</span>
             </div>
-            <!-- Step 2 -->
-            <div class="step-card animate-on-scroll">
-                <div class="step-number">
-                    <?php echo esc_html(iptv_text('step_2_badge', '2')); ?>
-                </div>
-                <h3 class="step-title">
-                    <?php echo esc_html(iptv_text('step_2_title', 'Complete Payment')); ?>
-                </h3>
-                <p class="step-desc">
-                    <?php echo esc_html(iptv_text('step_2_desc', 'Checkout securely using our encrypted payment gateway. We accept major cards and crypto options.')); ?>
-                </p>
+            <span class="dv2-journey-num">3</span>
+            <div>
+                <h3><?php echo esc_html(iptv_text('step_3_title', 'Start Watching')); ?></h3>
+                <p><?php echo esc_html(iptv_text('step_3_desc', 'Open your preferred app, enter your credentials, and enjoy 35,000+ channels immediately.')); ?></p>
             </div>
-            <!-- Step 3 -->
-            <div class="step-card animate-on-scroll">
-                <div class="step-number">
-                    <?php echo esc_html(iptv_text('step_3_badge', '3')); ?>
-                </div>
-                <h3 class="step-title">
-                    <?php echo esc_html(iptv_text('step_3_title', 'Start Watching')); ?>
-                </h3>
-                <p class="step-desc">
-                    <?php echo esc_html(iptv_text('step_3_desc', 'Our team will configure your account and send login credentials via email. Download the app and enjoy!')); ?>
-                </p>
-            </div>
-        </div>
-        <?php
-        $steps_cta_field  = function_exists('get_field') ? get_field('steps_cta', get_option('page_on_front')) : null;
-        $steps_cta_url    = (!empty($steps_cta_field['url'])) ? $steps_cta_field['url'] : '#pricing';
-        $steps_cta_label  = (!empty($steps_cta_field['title'])) ? $steps_cta_field['title'] : iptv_text('steps_cta', 'Get Started Now');
-        $steps_cta_target = (!empty($steps_cta_field['target'])) ? ' target="' . esc_attr($steps_cta_field['target']) . '"' : '';
-        ?>
-        <div style="text-align:center;margin-top:var(--space-xl);">
-            <a href="<?php echo esc_url($steps_cta_url); ?>" class="btn btn-primary"<?php echo $steps_cta_target; ?>>
-                <?php echo esc_html($steps_cta_label); ?>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <line x1="5" y1="12" x2="19" y2="12" />
-                    <polyline points="12 5 19 12 12 19" />
-                </svg>
-            </a>
         </div>
     </div>
 </section>

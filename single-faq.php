@@ -21,6 +21,8 @@ $shared_css = [
     'header.css',
     'footer.css',
     'cta.css',
+    'design-v2.css',
+    'design-v2-sections.css',
 ];
 
 echo '<style>';

@@ -1,83 +1,52 @@
-<section class="sports">
-    <div class="sports-container">
-        <div class="section-header">
-            <div class="section-tag"><?php echo esc_html(iptv_text('sports_tag', 'Sports')); ?></div>
-            <h2 class="section-title"><?php echo iptv_text('sports_title', 'Never Miss a'); ?> <span
-                    class="gradient-text"><?php echo iptv_text('sports_title_span', 'Game'); ?></span></h2>
-            <p class="section-subtitle">
-                <?php echo esc_html(iptv_text('sports_desc', 'All your favorite leagues and tournaments, live and on-demand.')); ?>
-            </p>
-        </div>
-        <div class="sports-grid">
-            <!-- Sport 1: Soccer -->
-            <div class="sport-card animate-on-scroll">
-                <div class="sport-icon">⚽</div>
-                <div class="sport-name"><?php echo esc_html(iptv_text('sport_1_name', 'Soccer')); ?></div>
-                <div class="sport-leagues">
-                    <?php echo esc_html(iptv_text('sport_1_subtitle', 'Premier League, Champions League, World Cup')); ?>
+<?php
+/**
+ * Section: Sports (Design v2)
+ * Split panel with a six-tile mosaic.
+ */
+
+$sports_cta_field  = function_exists('get_field') ? get_field('sports_cta', get_option('page_on_front')) : null;
+$sports_cta_url    = (!empty($sports_cta_field['url'])) ? $sports_cta_field['url'] : '#pricing';
+$sports_cta_label  = (!empty($sports_cta_field['title'])) ? $sports_cta_field['title'] : iptv_text('sports_cta', 'Watch live sport now');
+$sports_cta_target = (!empty($sports_cta_field['target'])) ? ' target="' . esc_attr($sports_cta_field['target']) . '"' : '';
+
+$img_base = get_template_directory_uri() . '/images/sport%20images/';
+
+// Mosaic: three photo tiles interleaved with three solid league tiles.
+$mosaic = [
+    ['type' => 'photo', 'src' => $img_base . 'Corners-IPTV-USA-Prime.png',            'key' => 'sport_1_name', 'default' => 'Football'],
+    ['type' => 'photo', 'src' => $img_base . 'More-than-machine-IPTV-Provider-USA.png', 'key' => 'sport_5_name', 'default' => 'Formula 1'],
+    ['type' => 'solid', 'key' => 'sport_4_name', 'default' => 'NFL'],
+    ['type' => 'solid', 'key' => 'sport_2_name', 'default' => 'NBA'],
+    ['type' => 'photo', 'src' => $img_base . 'Canelo-IPTV-subscription.png',          'key' => 'sport_6_name', 'default' => 'Boxing'],
+    ['type' => 'solid', 'key' => 'sport_3_name', 'default' => 'NHL'],
+];
+?>
+<section class="dv2-split">
+    <div class="dv2-split-copy">
+        <h3 class="dv2-split-title">
+            <?php echo esc_html(iptv_text('sports_title', 'Every sport.')); ?>
+            <em><?php echo esc_html(iptv_text('sports_title_span', 'Every match.')); ?></em>
+        </h3>
+        <p>
+            <?php echo esc_html(iptv_text('sports_desc', 'Never miss a game again. Every major league, every tournament, every PPV event — NFL, NBA, Formula 1, football, boxing and more, in HD and 4K.')); ?>
+        </p>
+        <a href="<?php echo esc_url($sports_cta_url); ?>" class="dv2-btn dv2-btn-primary"<?php echo $sports_cta_target; ?>>
+            <?php echo esc_html($sports_cta_label); ?>
+            <span class="dv2-btn-arrow" aria-hidden="true">→</span>
+        </a>
+    </div>
+
+    <div class="dv2-sport-mosaic">
+        <?php foreach ($mosaic as $tile) :
+            $label = iptv_text($tile['key'], $tile['default']);
+            ?>
+            <?php if ($tile['type'] === 'photo') : ?>
+                <div class="dv2-sport-tile dv2-sport-tile--photo">
+                    <img src="<?php echo esc_url($tile['src']); ?>" alt="<?php echo esc_attr($label); ?>" loading="lazy">
                 </div>
-                <div class="sport-live"><?php echo esc_html(iptv_text('sport_live_text', 'LIVE NOW')); ?></div>
-            </div>
-
-            <!-- Sport 2: NBA -->
-            <div class="sport-card animate-on-scroll">
-                <div class="sport-icon">🏀</div>
-                <div class="sport-name"><?php echo esc_html(iptv_text('sport_2_name', 'NBA')); ?></div>
-                <div class="sport-leagues">
-                    <?php echo esc_html(iptv_text('sport_2_subtitle', 'Regular Season, Playoffs & Finals')); ?></div>
-                <div class="sport-live"><?php echo esc_html(iptv_text('sport_live_text', 'LIVE NOW')); ?></div>
-            </div>
-
-            <!-- Sport 3: MLB -->
-            <div class="sport-card animate-on-scroll">
-                <div class="sport-icon">⚾</div>
-                <div class="sport-name"><?php echo esc_html(iptv_text('sport_3_name', 'MLB')); ?></div>
-                <div class="sport-leagues">
-                    <?php echo esc_html(iptv_text('sport_3_subtitle', 'Full Season, World Series')); ?></div>
-                <div class="sport-live"><?php echo esc_html(iptv_text('sport_live_text', 'LIVE NOW')); ?></div>
-            </div>
-
-            <!-- Sport 4: NFL -->
-            <div class="sport-card animate-on-scroll">
-                <div class="sport-icon">🏈</div>
-                <div class="sport-name"><?php echo esc_html(iptv_text('sport_4_name', 'NFL')); ?></div>
-                <div class="sport-leagues">
-                    <?php echo esc_html(iptv_text('sport_4_subtitle', 'Regular Season, Super Bowl')); ?></div>
-                <div class="sport-live"><?php echo esc_html(iptv_text('sport_live_text', 'LIVE NOW')); ?></div>
-            </div>
-
-            <!-- Sport 5: F1 -->
-            <div class="sport-card animate-on-scroll">
-                <div class="sport-icon">🏎️</div>
-                <div class="sport-name"><?php echo esc_html(iptv_text('sport_5_name', 'F1')); ?></div>
-                <div class="sport-leagues">
-                    <?php echo esc_html(iptv_text('sport_5_subtitle', 'All Grand Prix Races')); ?></div>
-                <div class="sport-live"><?php echo esc_html(iptv_text('sport_live_text', 'LIVE NOW')); ?></div>
-            </div>
-
-            <!-- Sport 6: UFC/Boxing -->
-            <div class="sport-card animate-on-scroll">
-                <div class="sport-icon">🥊</div>
-                <div class="sport-name"><?php echo esc_html(iptv_text('sport_6_name', 'UFC/Boxing')); ?></div>
-                <div class="sport-leagues"><?php echo esc_html(iptv_text('sport_6_subtitle', 'All PPV Events Free')); ?>
-                </div>
-                <div class="sport-live"><?php echo esc_html(iptv_text('sport_live_text', 'LIVE NOW')); ?></div>
-            </div>
-        </div>
-        <?php
-        $sports_cta_field  = function_exists('get_field') ? get_field('sports_cta', get_option('page_on_front')) : null;
-        $sports_cta_url    = (!empty($sports_cta_field['url'])) ? $sports_cta_field['url'] : '#pricing';
-        $sports_cta_label  = (!empty($sports_cta_field['title'])) ? $sports_cta_field['title'] : iptv_text('sports_cta', 'Watch All Sports Now');
-        $sports_cta_target = (!empty($sports_cta_field['target'])) ? ' target="' . esc_attr($sports_cta_field['target']) . '"' : '';
-        ?>
-        <div style="text-align:center;margin-top:var(--space-xl);">
-            <a href="<?php echo esc_url($sports_cta_url); ?>" class="btn btn-primary"<?php echo $sports_cta_target; ?>>
-                <?php echo esc_html($sports_cta_label); ?>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <line x1="5" y1="12" x2="19" y2="12" />
-                    <polyline points="12 5 19 12 12 19" />
-                </svg>
-            </a>
-        </div>
+            <?php else : ?>
+                <div class="dv2-sport-tile dv2-sport-tile--solid"><?php echo esc_html($label); ?></div>
+            <?php endif; ?>
+        <?php endforeach; ?>
     </div>
 </section>
