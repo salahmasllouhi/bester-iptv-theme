@@ -139,7 +139,8 @@ function updateAllPrices() {
     const currency = window.currentCurrency || 'usd';
     const data = currencyData[currency];
 
-    const selectedDevice = document.querySelector('.select-card.selected[data-devices]');
+    // pricing.js marks the chosen card with .active; .selected kept for safety.
+    const selectedDevice = document.querySelector('.select-card.active[data-devices], .select-card.selected[data-devices]');
     let deviceKey = '1_device';
     if (selectedDevice) {
         const deviceNum = parseInt(selectedDevice.dataset.devices);
@@ -172,6 +173,11 @@ function updateAllPrices() {
                 ? data.symbol + price
                 : price + ' ' + data.symbol;
         }
+    }
+
+    // Let the configurator re-render per-month lines, savings badges and CTA.
+    if (typeof window.iptvRefreshPricing === 'function') {
+        window.iptvRefreshPricing();
     }
 }
 

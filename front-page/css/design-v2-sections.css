@@ -834,12 +834,15 @@
     color: var(--dv2-purple);
 }
 
+/* Single centred panel, per the annotated spec. */
 .configurator {
+    width: 100%;
+    max-width: 720px;
     background: var(--dv2-surface);
     border: 1px solid var(--dv2-border-strong);
     border-radius: var(--dv2-radius-xl);
     padding: 32px;
-    margin-top: 44px;
+    margin: 44px auto 0;
     box-shadow: var(--dv2-shadow-md);
 }
 
@@ -847,6 +850,30 @@
     background: var(--dv2-bg) !important;
     border: 1px solid var(--dv2-border);
     border-radius: var(--dv2-radius-md) !important;
+    padding: 20px !important;
+    margin-bottom: 18px !important;
+}
+
+.config-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.config-step-num {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    border-radius: var(--dv2-radius-pill);
+    background: var(--dv2-purple);
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--dv2-font-display);
+    font-weight: 700;
+    font-size: 13px;
 }
 
 .configurator .config-title {
@@ -857,10 +884,167 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    margin: 0;
 }
 
 .configurator .config-title svg {
     color: var(--dv2-purple) !important;
+}
+
+/* Step 1 - screen pills */
+.dv2-screen-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.dv2-screen-pill {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 10px;
+    border-radius: var(--dv2-radius-pill);
+    font-family: var(--dv2-font-display);
+    font-weight: 700;
+    font-size: 15px;
+    text-align: center;
+}
+
+.dv2-screen-pill:focus-visible {
+    outline: 2px solid var(--dv2-purple);
+    outline-offset: 2px;
+}
+
+.dv2-pill-badge {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--dv2-green);
+    color: #ffffff;
+    border-radius: var(--dv2-radius-pill);
+    padding: 3px 10px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+}
+
+/* Step 2 - duration cards */
+.dv2-duration-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.dv2-duration-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 20px 10px 16px;
+}
+
+.dv2-duration-card:focus-visible {
+    outline: 2px solid var(--dv2-purple);
+    outline-offset: 2px;
+}
+
+.badge.is-hidden {
+    display: none;
+}
+
+.dv2-guarantee {
+    text-align: center;
+    color: var(--dv2-muted);
+    font-size: 14px;
+    margin: 14px 0 0;
+}
+
+/* Payment methods */
+.dv2-payments {
+    margin-top: 22px;
+    padding-top: 20px;
+    border-top: 1px solid var(--dv2-border);
+    text-align: center;
+}
+
+.dv2-payments-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--dv2-muted);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.dv2-payment-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    list-style: none;
+    margin: 12px 0 0;
+    padding: 0;
+}
+
+.dv2-payment-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--dv2-surface);
+    border: 1px solid var(--dv2-border-medium);
+    border-radius: 6px;
+    padding: 7px 12px;
+    font-family: var(--dv2-font-display);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--dv2-ink-2);
+}
+
+.dv2-payment-badge--visa {
+    color: #1a1f71;
+}
+
+.dv2-payment-badge--amex {
+    color: #1f72cd;
+}
+
+.dv2-payment-badge--paypal {
+    color: #003087;
+    letter-spacing: 0;
+}
+
+.dv2-payment-badge--btc {
+    color: #f7931a;
+    letter-spacing: 0;
+}
+
+.dv2-payment-badge--mc {
+    letter-spacing: 0;
+}
+
+.dv2-mc-mark {
+    display: inline-flex;
+    align-items: center;
+}
+
+.dv2-mc-mark i {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: block;
+}
+
+.dv2-mc-mark i:first-child {
+    background: #eb001b;
+}
+
+.dv2-mc-mark i:last-child {
+    background: #f79e1b;
+    margin-left: -5px;
 }
 
 .select-card {
@@ -1506,6 +1690,15 @@
 
     .configurator {
         padding: 20px;
+    }
+
+    .dv2-screen-row,
+    .dv2-duration-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dv2-screen-pill {
+        font-size: 14px;
     }
 
     .site-footer .footer-grid {

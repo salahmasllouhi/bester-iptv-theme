@@ -1,4 +1,4 @@
-// Pricing JavaScript - Device/Duration configurator
+// Pricing JavaScript - Screen/Duration configurator
 (function () {
     // Get variation ID from dynamically generated map (from pricing.php)
     function getVariationId(devices, duration) {
@@ -13,6 +13,13 @@
 
     const btn = document.getElementById('checkout-btn');
     const btnText = document.getElementById('button-text');
+    const deviceGroup = document.getElementById('devices');
+    const durationGroup = document.getElementById('durations');
+
+    if (!btn || !btnText || !deviceGroup || !durationGroup) return;
+
+    const deviceCards = Array.from(deviceGroup.querySelectorAll('[data-devices]'));
+    const durationCards = Array.from(durationGroup.querySelectorAll('[data-duration]'));
 
     // Get price from window.iptvPrices
     function getPrice(devices, months) {
@@ -48,37 +55,48 @@
         return data.position === 'before' ? data.symbol + formatted : formatted + ' ' + data.symbol;
     }
 
-    // Update duration cards with prices based on selected devices
+    function setText(id, value) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+    }
+
+    // Savings badges are derived from the live prices so the claim stays true
+    // when the screen count (and therefore the price ladder) changes.
+    function updateSavings(deviceCount) {
+        const base = getPrice(deviceCount, 1);
+
+        [3, 6, 12].forEach(function (months) {
+            const el = document.getElementById('save-' + months + 'mo');
+            if (!el) return;
+
+            const total = getPrice(deviceCount, months);
+            if (!base || !total) {
+                el.classList.add('is-hidden');
+                return;
+            }
+
+            const pct = Math.round((1 - (total / months) / base) * 100);
+            if (pct > 0) {
+                el.textContent = 'Save ' + pct + '%';
+                el.classList.remove('is-hidden');
+            } else {
+                el.classList.add('is-hidden');
+            }
+        });
+    }
+
+    // Update duration cards with prices based on selected screen count
     function updatePrices(deviceCount) {
-        const p1 = getPrice(deviceCount, 1);
-        const p3 = getPrice(deviceCount, 3);
-        const p6 = getPrice(deviceCount, 6);
-        const p12 = getPrice(deviceCount, 12);
+        [1, 3, 6, 12].forEach(function (months) {
+            const price = getPrice(deviceCount, months);
+            setText('price-' + months + 'mo', formatPrice(price));
+            setText(
+                'per-' + months + 'mo',
+                months === 1 ? 'per month' : '~' + formatPrice(price / months) + '/mo'
+            );
+        });
 
-        const el1 = document.getElementById('price-1mo');
-        if (el1) el1.textContent = formatPrice(p1);
-
-        const el3 = document.getElementById('price-3mo');
-        if (el3) el3.textContent = formatPrice(p3);
-
-        const el6 = document.getElementById('price-6mo');
-        if (el6) el6.textContent = formatPrice(p6);
-
-        const el12 = document.getElementById('price-12mo');
-        if (el12) el12.textContent = formatPrice(p12);
-
-        // Update per-month prices
-        const per1 = document.getElementById('per-1mo');
-        if (per1) per1.textContent = 'per month';
-
-        const per3 = document.getElementById('per-3mo');
-        if (per3) per3.textContent = '~' + formatPrice(p3 / 3) + '/mo';
-
-        const per6 = document.getElementById('per-6mo');
-        if (per6) per6.textContent = '~' + formatPrice(p6 / 6) + '/mo';
-
-        const per12 = document.getElementById('per-12mo');
-        if (per12) per12.textContent = '~' + formatPrice(p12 / 12) + '/mo';
+        updateSavings(deviceCount);
     }
 
     function updateButton() {
@@ -104,22 +122,10 @@
                 console.warn('Variation ID not found for:', selectedDevices, selectedDuration);
             }
             */
-
-            // Update step indicators
-            document.getElementById('step2').style.background = 'var(--blue-600)';
-            document.getElementById('step2').style.color = 'white';
-            document.getElementById('step2-label').style.color = 'var(--text)';
-            document.getElementById('step3').style.background = 'var(--blue-600)';
-            document.getElementById('step3').style.color = 'white';
-            document.getElementById('step3-label').style.color = 'var(--text)';
         } else if (selectedDevices) {
             btnText.textContent = 'Select a plan duration';
             btn.style.opacity = '0.6';
             btn.style.pointerEvents = 'none';
-
-            document.getElementById('step2').style.background = 'var(--blue-600)';
-            document.getElementById('step2').style.color = 'white';
-            document.getElementById('step2-label').style.color = 'var(--text)';
         } else {
             btnText.textContent = 'Complete Your Order';
             btn.style.opacity = '0.6';
@@ -127,27 +133,82 @@
         }
     }
 
-    // Device card click handlers
-    document.querySelectorAll('#devices .select-card').forEach(card => {
-        card.addEventListener('click', function () {
-            document.querySelectorAll('#devices .select-card').forEach(c => c.classList.remove('active'));
-            this.classList.add('active');
-            selectedDevices = parseInt(this.dataset.devices);
-            updatePrices(selectedDevices);
-            updateButton();
+    // Reflect selection on a radiogroup: one checked item, roving tabindex.
+    function select(cards, chosen) {
+        cards.forEach(function (card) {
+            const isChosen = card === chosen;
+            card.classList.toggle('active', isChosen);
+            card.setAttribute('aria-checked', isChosen ? 'true' : 'false');
+            if (card.hasAttribute('aria-pressed')) {
+                card.setAttribute('aria-pressed', isChosen ? 'true' : 'false');
+            }
+            card.tabIndex = isChosen ? 0 : -1;
         });
+    }
+
+    function chooseDevice(card, focus) {
+        select(deviceCards, card);
+        selectedDevices = parseInt(card.dataset.devices, 10);
+        updatePrices(selectedDevices);
+        updateButton();
+        if (focus) card.focus();
+    }
+
+    function chooseDuration(card, focus) {
+        select(durationCards, card);
+        selectedDuration = parseInt(card.dataset.duration, 10);
+        updateButton();
+        if (focus) card.focus();
+    }
+
+    // Arrow-key navigation, as expected of a radiogroup.
+    function bindKeys(cards, choose) {
+        cards.forEach(function (card, index) {
+            card.addEventListener('keydown', function (e) {
+                let next = null;
+                if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                    next = cards[(index + 1) % cards.length];
+                } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                    next = cards[(index - 1 + cards.length) % cards.length];
+                } else if (e.key === 'Home') {
+                    next = cards[0];
+                } else if (e.key === 'End') {
+                    next = cards[cards.length - 1];
+                }
+                if (next) {
+                    e.preventDefault();
+                    choose(next, true);
+                }
+            });
+        });
+    }
+
+    deviceCards.forEach(function (card) {
+        card.addEventListener('click', function () { chooseDevice(card, false); });
+    });
+    durationCards.forEach(function (card) {
+        card.addEventListener('click', function () { chooseDuration(card, false); });
     });
 
-    // Duration card click handlers
-    document.querySelectorAll('#durations .select-card').forEach(card => {
-        card.addEventListener('click', function () {
-            document.querySelectorAll('#durations .select-card').forEach(c => c.classList.remove('active'));
-            this.classList.add('active');
-            selectedDuration = parseInt(this.dataset.duration);
-            updateButton();
-        });
-    });
+    bindKeys(deviceCards, chooseDevice);
+    bindKeys(durationCards, chooseDuration);
 
-    // Initialize button state
-    updateButton();
+    // Pre-select the default screen count so prices are live on load.
+    const defaultScreens = parseInt(window.iptvDefaultScreens, 10) || 1;
+    const defaultCard = deviceCards.find(function (card) {
+        return parseInt(card.dataset.devices, 10) === defaultScreens;
+    }) || deviceCards[0];
+
+    if (defaultCard) {
+        chooseDevice(defaultCard, false);
+    } else {
+        updateButton();
+    }
+
+    // currency.js calls this after switching currency so the per-month lines,
+    // savings badges and CTA price all re-render, not just the headline price.
+    window.iptvRefreshPricing = function () {
+        updatePrices(selectedDevices || defaultScreens);
+        updateButton();
+    };
 })();
