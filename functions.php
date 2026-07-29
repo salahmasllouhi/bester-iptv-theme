@@ -650,6 +650,10 @@ require_once get_template_directory() . '/inc/network-cloner.php';
 // Include Multi-Currency Pricing Settings
 require_once get_template_directory() . '/inc/currency-settings.php';
 
+// Keeps iptv_conversion_rates fed from CurrencyFreaks on a daily cron. Free tier
+// is 1,000 requests/month, so the API is never touched on a front-end request.
+require_once get_template_directory() . '/inc/currency-rates-api.php';
+
 // Front page copy lookup: ACF on the translated front page, then Polylang strings.
 // Replaces the old "Content Localizing" admin screen (inc/content-settings.php),
 // which stored copy in an `iptv_content` option keyed by the retired multisite slugs.

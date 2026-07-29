@@ -485,6 +485,12 @@ class IPTV_Currency_Settings
                     </div>
                 </div>
 
+                <?php
+                // Auto-update panel (inc/currency-rates-api.php). Rendered inside
+                // this form so its settings save with the rest of the page.
+                do_action('iptv_after_conversion_rates', $rates);
+                ?>
+
                 <!-- USD Prices (Managed via Bulk Editor) -->
                 <div class="settings-section">
                     <h2>🇺🇸 USD Prices</h2>
