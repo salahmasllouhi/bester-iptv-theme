@@ -12,6 +12,9 @@ if (!defined('ABSPATH')) {
 
 class IPTV_Currency_Settings
 {
+    /** Where the computed price matrix is stored. See get_price_table(). */
+    const PRICE_TABLE_OPTION = 'iptv_price_table';
+
     // Currencies (USD is base, others are calculated)
     private $currencies = array(
         'usd' => array('name' => 'US Dollar', 'symbol' => '$', 'flag' => '🇺🇸', 'code' => 'USD', 'decimals' => true),
@@ -57,7 +60,15 @@ class IPTV_Currency_Settings
     {
         add_action('admin_menu', array($this, 'add_admin_menu'));
         add_action('admin_init', array($this, 'register_settings'));
-        
+
+        // Anything that can change a price invalidates the stored table. These
+        // all fire in wp-admin or on the REST/CLI side, never on a visitor's
+        // request, which is the point of the table.
+        add_action('update_option_iptv_conversion_rates', array(__CLASS__, 'rebuild_price_table_on_hook'));
+        add_action('update_option_iptv_usd_prices', array(__CLASS__, 'rebuild_price_table_on_hook'));
+        add_action('woocommerce_update_product', array(__CLASS__, 'rebuild_price_table_on_hook'));
+        add_action('woocommerce_save_product_variation', array(__CLASS__, 'rebuild_price_table_on_hook'));
+
         // Price conversion for subsites is handled differently - not via filters
         // to avoid recursion issues with switch_to_blog
     }
@@ -583,6 +594,81 @@ class IPTV_Currency_Settings
     public static function get_prices()
     {
         return self::calculate_all_prices();
+    }
+
+    /**
+     * The stored price table — what the front end reads.
+     *
+     * calculate_all_prices() is not cheap: it loads four variable products and
+     * every one of their variations, then converts each cell into six
+     * currencies. Doing that on every visitor's page load is wasted work, since
+     * the answer only changes when a rate or a product price changes.
+     *
+     * So the matrix is computed once, written to an option, and read from there.
+     * The rebuild hooks in __construct() keep it honest; the fallback below
+     * covers the very first request after deploy, when nothing has saved yet.
+     *
+     * @return array Same shape as calculate_all_prices().
+     */
+    public static function get_price_table()
+    {
+        $stored = get_option(self::PRICE_TABLE_OPTION);
+
+        if (is_array($stored) && !empty($stored['prices'])) {
+            return $stored['prices'];
+        }
+
+        // First render after deploy: build it, but do not purge from a visitor's
+        // request — there is no stale copy of a table that has never existed.
+        return self::rebuild_price_table(false);
+    }
+
+    /**
+     * Recompute the table and store it. Returns the fresh prices.
+     *
+     * @param bool $purge Drop the page cache afterwards. False only for the
+     *                    lazy first build during a front-end render.
+     */
+    public static function rebuild_price_table($purge = true)
+    {
+        $prices = self::calculate_all_prices();
+
+        update_option(
+            self::PRICE_TABLE_OPTION,
+            array(
+                'prices'       => $prices,
+                'rates'        => get_option('iptv_conversion_rates', array()),
+                'generated_at' => time(),
+            ),
+            false // never autoloaded; only the pricing section asks for it
+        );
+
+        // The table is printed into the page HTML and into window.iptvPrices, so
+        // a stale page cache would keep serving the old numbers.
+        if ($purge) {
+            do_action('litespeed_purge_all');
+        }
+
+        return $prices;
+    }
+
+    /**
+     * Hook entry point. Exists so the callbacks' first argument (an old option
+     * value, or a product ID) is never mistaken for the $purge flag.
+     */
+    public static function rebuild_price_table_on_hook()
+    {
+        self::rebuild_price_table(true);
+    }
+
+    /**
+     * When the stored table was last built, or 0 if it never has been.
+     */
+    public static function price_table_generated_at()
+    {
+        $stored = get_option(self::PRICE_TABLE_OPTION);
+
+        return (is_array($stored) && !empty($stored['generated_at'])) ? (int) $stored['generated_at'] : 0;
     }
     public static function get_currencies()
     {

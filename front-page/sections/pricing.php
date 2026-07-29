@@ -8,7 +8,10 @@
  * drives everything off #devices [data-devices] and #durations [data-duration].
  */
 
-$all_prices     = IPTV_Currency_Settings::calculate_all_prices();
+// Read the stored price table, never recompute it on a visitor's request. It is
+// rebuilt by the weekly rate fetch (inc/currency-rates-api.php) and whenever a
+// rate or product price is saved in wp-admin.
+$all_prices     = IPTV_Currency_Settings::get_price_table();
 $default_device = '1_device';
 
 // Which screen count is pre-selected. Clamped to the 1-4 range we sell.

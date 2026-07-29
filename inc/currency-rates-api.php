@@ -4,12 +4,16 @@
  *
  * The account is on the free tier: 1,000 requests per month. The only way to
  * blow that is to call the API from a front-end request, so nothing here ever
- * does. Prices are read from the `iptv_conversion_rates` option exactly as
- * before (see IPTV_Currency_Settings::calculate_all_prices) — this class is
- * simply the thing that keeps that option up to date.
+ * does. The flow is strictly one-directional:
+ *
+ *   weekly cron → CurrencyFreaks → parse → iptv_conversion_rates
+ *               → rebuild iptv_price_table → purge page cache
+ *
+ * A visitor never reaches past the last step: the pricing section reads the
+ * stored table (IPTV_Currency_Settings::get_price_table) and nothing else.
  *
  * Budget:
- *   1 scheduled fetch/day        ~31 requests/month   (3% of the quota)
+ *   1 scheduled fetch/week       ~4-5 requests/month   (0.5% of the quota)
  *   manual "Fetch now" clicks    throttled to 1/10min
  *   hard stop                    MONTHLY_CAP requests, then it refuses to call
  *
@@ -25,9 +29,10 @@ if (!defined('ABSPATH')) {
 
 class IPTV_Rates_API
 {
-    /** Free tier gives 1,000/month. Stop well short so a runaway loop cannot
-     *  exhaust the account and leave the site unable to refresh for weeks. */
-    const MONTHLY_CAP = 900;
+    /** Free tier gives 1,000/month. A weekly schedule needs five, so a cap this
+     *  low still leaves room for manual refreshes while making it impossible for
+     *  a bug to drain the account. */
+    const MONTHLY_CAP = 50;
 
     /** Reject a fetched rate that moves more than this from the current one.
      *  Real FX does not jump 10% overnight, so a move that large means a bad
@@ -96,10 +101,10 @@ class IPTV_Rates_API
         $scheduled  = wp_next_scheduled(self::CRON_HOOK);
 
         if ($should_run && !$scheduled) {
-            // Fire at ~03:15 site time, when nobody is buying and the previous
-            // day's rates have long since settled.
-            $first = strtotime('tomorrow 03:15', current_time('timestamp')) - (int) (get_option('gmt_offset') * HOUR_IN_SECONDS);
-            wp_schedule_event($first, 'daily', self::CRON_HOOK);
+            // Monday ~03:15 site time: quiet hours, and a full week of trading
+            // has settled since the last one.
+            $first = strtotime('next monday 03:15', current_time('timestamp')) - (int) (get_option('gmt_offset') * HOUR_IN_SECONDS);
+            wp_schedule_event($first, 'weekly', self::CRON_HOOK);
         } elseif (!$should_run && $scheduled) {
             wp_unschedule_event($scheduled, self::CRON_HOOK);
         }
@@ -231,8 +236,14 @@ class IPTV_Rates_API
         }
 
         if ($changed) {
+            // Writing the option fires update_option_iptv_conversion_rates,
+            // which IPTV_Currency_Settings uses to rebuild the price table and
+            // purge the page cache. That rebuild is the whole point of the
+            // fetch — the front end reads the table, not these rates.
             update_option('iptv_conversion_rates', $new);
-            self::purge_cache();
+        } elseif (!IPTV_Currency_Settings::price_table_generated_at()) {
+            // Rates unchanged but the table has never been built (first run).
+            IPTV_Currency_Settings::rebuild_price_table();
         }
 
         $state['last_success']  = time();
@@ -252,15 +263,6 @@ class IPTV_Rates_API
         }
 
         return array('ok' => true, 'message' => $message, 'changed' => $changed);
-    }
-
-    /**
-     * Prices are baked into the HTML and into window.iptvPrices, so a rate
-     * change is invisible until the page cache is dropped.
-     */
-    private static function purge_cache()
-    {
-        do_action('litespeed_purge_all');
     }
 
     // ── Manual trigger ───────────────────────────────────────────────────────
@@ -382,10 +384,12 @@ class IPTV_Rates_API
             <h2>🔄 Auto-update rates (CurrencyFreaks)</h2>
 
             <p style="max-width:70ch;">
-                One request per day keeps every rate above current, which is about
-                <strong>31 of the free plan's 1,000 monthly requests</strong>. Rates are never
-                fetched while a visitor loads a page — the front end only ever reads the
-                values saved above.
+                One request a week refreshes every rate at once, which is about
+                <strong>5 of the free plan's 1,000 monthly requests</strong>. The API is only
+                ever called from this screen or the scheduled job — never while a visitor
+                loads a page. Each fetch rewrites the rates above, rebuilds the price table
+                below, and clears the page cache; visitors are always served from that
+                stored table.
             </p>
 
             <table class="form-table">
@@ -399,13 +403,13 @@ class IPTV_Rates_API
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row">Daily update</th>
+                    <th scope="row">Weekly update</th>
                     <td>
                         <label>
                             <input type="hidden" name="<?php echo esc_attr(self::OPT_ENABLED); ?>" value="0" />
                             <input type="checkbox" name="<?php echo esc_attr(self::OPT_ENABLED); ?>" value="1"
                                 <?php checked($enabled); ?> />
-                            Fetch rates once a day
+                            Fetch rates once a week (Mondays, 03:15)
                         </label>
                         <p class="description">
                             While this is on, the rates above are overwritten by each fetch —
@@ -447,6 +451,11 @@ class IPTV_Rates_API
                 <?php if (!empty($state['rates_date'])) : ?>
                     <p style="margin:0 0 6px;"><strong>Rates dated:</strong> <?php echo esc_html($state['rates_date']); ?></p>
                 <?php endif; ?>
+                <?php $built = IPTV_Currency_Settings::price_table_generated_at(); ?>
+                <p style="margin:0 0 6px;">
+                    <strong>Price table (what visitors see) built:</strong>
+                    <?php echo $built ? esc_html(self::local_time($built)) : 'never — will build on the next save or fetch'; ?>
+                </p>
                 <?php if (!empty($state['last_error'])) : ?>
                     <p style="margin:0 0 6px;color:#b32d2e;"><strong>Last error:</strong> <?php echo esc_html($state['last_error']); ?></p>
                 <?php endif; ?>

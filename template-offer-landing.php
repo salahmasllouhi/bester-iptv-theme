@@ -66,7 +66,8 @@ $offer_currency = 'usd';
 $offer_currency_data = [];
 
 if (class_exists('IPTV_Currency_Settings')) {
-    $offer_all_prices = IPTV_Currency_Settings::calculate_all_prices();
+    // Stored table, not a live recalculation — see get_price_table().
+    $offer_all_prices = IPTV_Currency_Settings::get_price_table();
     $offer_currency = IPTV_Currency_Settings::instance()->get_current_currency();
 
     $all_currencies = IPTV_Currency_Settings::get_currencies();
