@@ -479,19 +479,18 @@
     margin: 22px 0 30px;
 }
 
+/* No panel of its own. The channel rows and the artwork each bring their own
+   background, so the aside is just a positioning box on the section's dark
+   ground. */
 .dv2-split-aside {
-    background: var(--dv2-bg);
-    border: 1px solid var(--dv2-border);
-    border-radius: var(--dv2-radius-md);
-    padding: 16px;
-}
-
-/* Artwork variant: no panel of its own. The image sits directly on the split
-   section's dark background. */
-.dv2-split-aside--image {
-    padding: 0;
     background: none;
     border: 0;
+    padding: 0;
+}
+
+/* Artwork variant: centres the image in the aside. Panel styling is already
+   absent from the base rule. */
+.dv2-split-aside--image {
     display: flex;
     align-items: center;
     justify-content: center;

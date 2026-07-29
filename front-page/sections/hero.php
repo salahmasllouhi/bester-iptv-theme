@@ -22,8 +22,6 @@ $primary_url     = iptv_text('hero_primary_cta_url', '#pricing');
 $secondary_label = iptv_text('hero_secondary_cta_label', 'Pricing & Plans ↓');
 $secondary_url   = iptv_text('hero_secondary_cta_url', '#pricing');
 ?>
-<div class="dv2-grid-wash" aria-hidden="true"></div>
-
 <section class="dv2-hero container">
     <div class="dv2-hero-copy">
         <div class="dv2-trustpilot">

@@ -41,6 +41,13 @@ $sections_dir = $front_page_dir . '/sections';
 </style>
 
 <?php
+// Page-wide backdrop: a fixed, masked grid that sits behind every section.
+// Rendered once here rather than inside a section, since it belongs to the page
+// rather than to any one band of it. See .dv2-grid-wash in design-v2.css.
+?>
+<div class="dv2-grid-wash" aria-hidden="true"></div>
+
+<?php
 // Load all sections in order
 // Order follows the "NordicTV Light Purple" design.
 $sections = array(

@@ -196,20 +196,26 @@ h6,
 
 /* Faint grid wash behind the top of the page, as in the mockup.
    Anchored to body (redesign-theme.css sets body{position:relative}). */
+/* Full-page backdrop. Fixed to the viewport rather than sized to the document,
+   so the vignette stays centred on what you are actually looking at and the
+   grid never runs out on a long page.
+
+   z-index is -1, not 0: sections are non-positioned children of <body>, so a
+   positioned layer at 0 or above would paint over them (the .dv2-page > section
+   rule below matches nothing — no such wrapper exists in the markup). At -1 the
+   layer sits above the canvas background but below all in-flow content. */
 .dv2-grid-wash {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1000px;
+    position: fixed;
+    inset: 0;
     background-image:
         linear-gradient(rgba(90, 40, 180, 0.07) 1px, transparent 1px),
         linear-gradient(90deg, rgba(90, 40, 180, 0.07) 1px, transparent 1px);
     background-size: 64px 64px;
-    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 22%, #000 30%, transparent 75%);
-    mask-image: radial-gradient(ellipse 80% 60% at 50% 22%, #000 30%, transparent 75%);
+    /* Solid through the middle, gone by the edges and corners. */
+    -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 50%, #000 35%, transparent 78%);
+    mask-image: radial-gradient(ellipse 75% 65% at 50% 50%, #000 35%, transparent 78%);
     pointer-events: none;
-    z-index: 0;
+    z-index: -1;
 }
 
 .dv2-page > .container,
