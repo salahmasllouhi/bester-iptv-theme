@@ -4763,7 +4763,7 @@
         },
         {
             "key": "field_nav_region_label",
-            "label": "Mobile Region Label",
+            "label": "Mobile Language Label",
             "name": "nav_region_label",
             "aria-label": "",
             "type": "text",
@@ -4775,7 +4775,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "Region / Currency",
+            "default_value": "Language",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",

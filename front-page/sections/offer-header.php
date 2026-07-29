@@ -9,7 +9,7 @@
  *   $offer_checkout_url  (string)
  */
 
-// ── Currency detection (copied from header.php) ────────────────────────────
+// ── Language detection (copied from header.php) ────────────────────────────
 $site_slug = '';
 // Method 1: Polylang
 if (function_exists('pll_current_language')) {
@@ -30,19 +30,23 @@ if (empty($site_slug)) {
     $request_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
     $path_parts = explode('/', trim($request_uri, '/'));
     $first = isset($path_parts[0]) ? $path_parts[0] : '';
-    if (in_array($first, ['sv'])) {
+    if (in_array($first, ['sv', 'no', 'dk', 'fi', 'is'])) {
         $site_slug = $first;
     }
 }
 
-$site_currency_map = [
-    'sv' => ['flag' => '🇸🇪', 'code' => 'SEK'],
+$site_language_map = [
+    'sv' => ['flag' => '🇸🇪', 'name' => 'Svenska'],
+    'no' => ['flag' => '🇳🇴', 'name' => 'Norsk'],
+    'dk' => ['flag' => '🇩🇰', 'name' => 'Dansk'],
+    'fi' => ['flag' => '🇫🇮', 'name' => 'Suomi'],
+    'is' => ['flag' => '🇮🇸', 'name' => 'Íslenska'],
 ];
 $default_flag = '🇺🇸';
-$default_code = 'USD';
-if (isset($site_currency_map[$site_slug])) {
-    $default_flag = $site_currency_map[$site_slug]['flag'];
-    $default_code = $site_currency_map[$site_slug]['code'];
+$default_name = 'English';
+if (isset($site_language_map[$site_slug])) {
+    $default_flag = $site_language_map[$site_slug]['flag'];
+    $default_name = $site_language_map[$site_slug]['name'];
 }
 ?>
 
@@ -57,21 +61,33 @@ if (isset($site_currency_map[$site_slug])) {
 
         <!-- Right side: currency + CTA -->
         <div class="nav-right">
-            <!-- Currency selector (same markup as header.php so currency.js works) -->
+            <!-- Language selector (same markup as header.php so currency.js works) -->
             <div class="country-selector" id="countrySelector">
                 <button class="country-btn" onclick="toggleCountryDropdown()">
                     <span class="country-flag" id="selectedFlag"><?php echo $default_flag; ?></span>
-                    <span class="country-code" id="selectedCode"><?php echo $default_code; ?></span>
+                    <span class="country-code" id="selectedCode"><?php echo $default_name; ?></span>
                     <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
                         <path d="M1 3L5 7L9 3" stroke="currentColor" stroke-width="1.5" fill="none" />
                     </svg>
                 </button>
                 <div class="country-dropdown" id="countryDropdown">
                     <div class="country-option" data-currency="usd" data-symbol="$" data-flag="🇺🇸">
-                        <span class="country-flag">🇺🇸</span><span>USD</span>
+                        <span class="country-flag">🇺🇸</span><span>English</span>
                     </div>
                     <div class="country-option" data-currency="sek" data-symbol="kr" data-flag="🇸🇪">
-                        <span class="country-flag">🇸🇪</span><span>SEK</span>
+                        <span class="country-flag">🇸🇪</span><span>Svenska</span>
+                    </div>
+                    <div class="country-option" data-currency="nok" data-symbol="kr" data-flag="🇳🇴">
+                        <span class="country-flag">🇳🇴</span><span>Norsk</span>
+                    </div>
+                    <div class="country-option" data-currency="dkk" data-symbol="kr" data-flag="🇩🇰">
+                        <span class="country-flag">🇩🇰</span><span>Dansk</span>
+                    </div>
+                    <div class="country-option" data-currency="eur" data-symbol="€" data-flag="🇫🇮">
+                        <span class="country-flag">🇫🇮</span><span>Suomi</span>
+                    </div>
+                    <div class="country-option" data-currency="isk" data-symbol="kr" data-flag="🇮🇸">
+                        <span class="country-flag">🇮🇸</span><span>Íslenska</span>
                     </div>
                 </div>
             </div>
@@ -93,10 +109,14 @@ if (isset($site_currency_map[$site_slug])) {
 <div class="mobile-menu" id="offer-mobile-menu">
     <button class="mobile-menu-close" onclick="toggleOfferMobileMenu()">&times;</button>
     <div class="mobile-language-selector">
-        <span class="mobile-language-label">Region / Currency</span>
+        <span class="mobile-language-label">Language</span>
         <div class="mobile-language-options">
-            <button class="mobile-lang-btn" data-currency="usd" onclick="redirectToRegion('usd')">🇺🇸 USD</button>
-            <button class="mobile-lang-btn" data-currency="sek" onclick="redirectToRegion('sek')">🇸🇪 SEK</button>
+            <button class="mobile-lang-btn" data-currency="usd" onclick="redirectToRegion('usd')">🇺🇸 English</button>
+            <button class="mobile-lang-btn" data-currency="sek" onclick="redirectToRegion('sek')">🇸🇪 Svenska</button>
+            <button class="mobile-lang-btn" data-currency="nok" onclick="redirectToRegion('nok')">🇳🇴 Norsk</button>
+            <button class="mobile-lang-btn" data-currency="dkk" onclick="redirectToRegion('dkk')">🇩🇰 Dansk</button>
+            <button class="mobile-lang-btn" data-currency="eur" onclick="redirectToRegion('eur')">🇫🇮 Suomi</button>
+            <button class="mobile-lang-btn" data-currency="isk" onclick="redirectToRegion('isk')">🇮🇸 Íslenska</button>
         </div>
     </div>
     <a href="<?php echo esc_url($offer_checkout_url); ?>" class="nav-btn offer-cta-btn" style="margin-top:1rem;"

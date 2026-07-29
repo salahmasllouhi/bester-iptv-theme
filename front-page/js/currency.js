@@ -48,14 +48,15 @@ document.addEventListener('click', function (e) {
     }
 });
 
-// Currency data
+// Currency data — `name` is the native language label shown in the switcher,
+// `code` stays for price formatting and anything reading the currency code.
 const currencyData = {
-    usd: { symbol: '$', flag: '🇺🇸', code: 'USD', position: 'before' },
-    eur: { symbol: '€', flag: '🇫🇮', code: 'EUR', position: 'before' },
-    sek: { symbol: 'kr', flag: '🇸🇪', code: 'SEK', position: 'after' },
-    nok: { symbol: 'kr', flag: '🇳🇴', code: 'NOK', position: 'after' },
-    dkk: { symbol: 'kr', flag: '🇩🇰', code: 'DKK', position: 'after' },
-    isk: { symbol: 'kr', flag: '🇮🇸', code: 'ISK', position: 'after' }
+    usd: { symbol: '$', flag: '🇺🇸', code: 'USD', name: 'English', position: 'before' },
+    eur: { symbol: '€', flag: '🇫🇮', code: 'EUR', name: 'Suomi', position: 'before' },
+    sek: { symbol: 'kr', flag: '🇸🇪', code: 'SEK', name: 'Svenska', position: 'after' },
+    nok: { symbol: 'kr', flag: '🇳🇴', code: 'NOK', name: 'Norsk', position: 'after' },
+    dkk: { symbol: 'kr', flag: '🇩🇰', code: 'DKK', name: 'Dansk', position: 'after' },
+    isk: { symbol: 'kr', flag: '🇮🇸', code: 'ISK', name: 'Íslenska', position: 'after' }
 };
 
 // URL mappings for each currency/country
@@ -94,13 +95,13 @@ function setCurrency(currency) {
     const headerFlag = document.getElementById('selectedFlag');
     const headerCode = document.getElementById('selectedCode');
     if (headerFlag) headerFlag.textContent = data.flag;
-    if (headerCode) headerCode.textContent = data.code;
+    if (headerCode) headerCode.textContent = data.name;
 
     // Update footer dropdown
     const footerFlag = document.getElementById('footerSelectedFlag');
     const footerCode = document.getElementById('footerSelectedCode');
     if (footerFlag) footerFlag.textContent = data.flag;
-    if (footerCode) footerCode.textContent = data.code;
+    if (footerCode) footerCode.textContent = data.name;
 
     document.querySelectorAll('.country-option').forEach(opt => {
         opt.classList.remove('selected');

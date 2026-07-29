@@ -141,45 +141,54 @@ my-iptv-theme/
 
 ---
 
-## Language Reactivation Guide
+## Languages
 
-> **Disabled on:** 2026-01-25  
-> **Active languages:** English (en), Swedish (se)  
-> **Disabled languages:** Norwegian (no), Danish (dk), Finnish (fi), Icelandic (is)
+> **Reactivated on:** 2026-07-29  
+> **Active languages:** English (en), Svenska (sv), Norsk (no), Dansk (dk), Suomi (fi), Íslenska (is)
 
-### Files Modified
+### Polylang
 
-| File | What Was Changed |
-|------|-----------------|
-| `inc/geo-redirect.php` | Commented out NO, DK, FI, IS in `$redirect_map` |
-| `front-page/sections/header.php` | Disabled currency options (EUR, NOK, DKK, ISK) in dropdown and mobile menu |
-| `front-page/sections/footer.php` | Disabled currency options in footer dropdown |
-| `inc/universal-header.php` | Same as header.php (for WooCommerce pages) |
-| `inc/openai-translator.php` | Commented out NO, DK, FI, IS in `$language_map` |
-| `inc/content-settings.php` | Commented out NO, DK, FI, IS in `$languages` array |
+All six languages exist as `language` terms plus their matching `pll_<slug>`
+`term_language` companion terms. Slugs deliberately match the theme's URL paths
+(`/sv/`, `/no/`, `/dk/`, `/fi/`, `/is/`), which is why Denmark uses `dk` (not
+`da`) and Norway `no` (locale `nb_NO`).
 
-### Comment Marker
+| Language | Slug | Locale | Flag code |
+|---|---|---|---|
+| English | `en` | `en_US` | `us` |
+| Svenska | `sv` | `sv_SE` | `se` |
+| Norsk | `no` | `nb_NO` | `no` |
+| Dansk | `dk` | `da_DK` | `dk` |
+| Suomi | `fi` | `fi` | `fi` |
+| Íslenska | `is` | `is_IS` | `is` |
 
-All disabled code uses this pattern:
-```
-// LANG-DISABLED: [code] - See Project_dyali.md "Language Reactivation Guide" to revert
-```
+The four new languages start with **0 translated posts**. Content still has to be
+cloned/translated before those subsites are useful.
 
-### Quick Reactivation Steps
+### Switcher
 
-To re-enable a language (e.g., Norwegian):
+The header/footer switcher shows **native language names**, not currency codes.
+The underlying `data-currency` keys (`usd`, `sek`, `nok`, `dkk`, `eur`, `isk`)
+are unchanged — they still drive price formatting in
+`front-page/js/currency.js`, where each entry now carries a `name` used for the
+visible label.
 
-1. **Search all files** for `LANG-DISABLED: no`
-2. **Uncomment** those lines (remove `//` or `<!-- -->`)
-3. **Test** geo-redirect and UI selectors
-4. **Update** this section to move `no` to active languages
+Files holding the switcher markup:
 
-### Current Geo-Redirect Behavior
+| File | Role |
+|------|------|
+| `front-page/sections/header.php` | Main header + mobile menu (included everywhere via `inc/universal-header.php`) |
+| `front-page/sections/footer.php` | Footer dropdown |
+| `front-page/sections/offer-header.php` | Offer landing page header |
+| `front-page/js/currency.js` | Currency data, labels, redirects |
 
-| User Location | Redirect |
-|---------------|----------|
-| Sweden (SE) | → `/se/` (Swedish) |
-| All other countries | Stay on main site (English) |
+### Auto-redirect: still Sweden-only
+
+`inc/geo-redirect.php` (`$redirect_map`) and `checkForSmartRedirect()` in
+`currency.js` deliberately still redirect **only** Swedish visitors. Enabling
+NO/DK/FI/IS there would drop visitors on empty subsites. Re-enable the
+`LANG-DISABLED` lines in `inc/geo-redirect.php` once those languages have
+translated content.
 
 ---
 
@@ -189,3 +198,4 @@ To re-enable a language (e.g., Norwegian):
 |------|--------|
 | 2026-01-25 | Created Project_dyali.md as project memory file |
 | 2026-01-25 | Disabled non-English/Swedish languages (NO, DK, FI, IS) |
+| 2026-07-29 | Re-enabled NO, DK, FI, IS; switcher now shows language names instead of currency codes; added the 4 languages to Polylang |

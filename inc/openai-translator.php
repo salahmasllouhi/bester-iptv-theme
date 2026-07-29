@@ -75,19 +75,14 @@ class Theme_OpenAI_Translator
      *
      * Polylang uses `sv`; `se` is kept because the multisite cloner still passes
      * blog-path slugs.
-     * NOTE: Non-Swedish languages temporarily disabled - see Project_dyali.md
      */
     private $language_map = array(
         'sv' => 'Swedish',
         'se' => 'Swedish',
-        // LANG-DISABLED: no - See Project_dyali.md "Language Reactivation Guide" to revert
-        // 'no' => 'Norwegian',
-        // LANG-DISABLED: dk - See Project_dyali.md "Language Reactivation Guide" to revert
-        // 'dk' => 'Danish',
-        // LANG-DISABLED: fi - See Project_dyali.md "Language Reactivation Guide" to revert
-        // 'fi' => 'Finnish',
-        // LANG-DISABLED: is - See Project_dyali.md "Language Reactivation Guide" to revert
-        // 'is' => 'Icelandic',
+        'no' => 'Norwegian',
+        'dk' => 'Danish',
+        'fi' => 'Finnish',
+        'is' => 'Icelandic',
     );
 
     /**

@@ -20,14 +20,10 @@ class Theme_Network_Cloner
      */
     private $target_sites = array(
         'se',
-        // LANG-DISABLED: no - See Project_dyali.md "Language Reactivation Guide" to revert
-        // 'no', 
-        // LANG-DISABLED: dk - See Project_dyali.md "Language Reactivation Guide" to revert
-        // 'dk', 
-        // LANG-DISABLED: fi - See Project_dyali.md "Language Reactivation Guide" to revert
-        // 'fi', 
-        // LANG-DISABLED: is - See Project_dyali.md "Language Reactivation Guide" to revert
-        // 'is'
+        'no',
+        'dk',
+        'fi',
+        'is',
     );
 
     /**

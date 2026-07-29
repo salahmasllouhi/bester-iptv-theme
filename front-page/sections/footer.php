@@ -11,27 +11,23 @@
                     <?php echo esc_html(iptv_text('footer_desc', 'The leading IPTV service provider — 40,000+ live channels, 200,000+ movies and series, every sport, in 4K and 8K.')); ?>
                 </p>
 
-                <!-- Currency selector -->
+                <!-- Language selector -->
                 <div class="footer-language-selector">
                     <div class="footer-country-selector" id="footerCountrySelector">
                         <button class="footer-country-btn" onclick="toggleFooterDropdown()">
                             <span id="footerSelectedFlag">🇺🇸</span>
-                            <span id="footerSelectedCode">USD</span>
+                            <span id="footerSelectedCode">English</span>
                             <svg width="10" height="10" viewBox="0 0 10 10">
                                 <path d="M1 3L5 7L9 3" stroke="currentColor" stroke-width="1.5" fill="none" />
                             </svg>
                         </button>
                         <div class="footer-country-dropdown" id="footerCountryDropdown">
-                            <div class="footer-country-option" onclick="setFooterCurrency('usd')">🇺🇸 USD</div>
-                            <!-- LANG-DISABLED: eur - See Project_dyali.md "Language Reactivation Guide" to revert
-                            <div class="footer-country-option" onclick="setFooterCurrency('eur')">🇫🇮 EUR</div>
-                            -->
-                            <div class="footer-country-option" onclick="setFooterCurrency('sek')">🇸🇪 SEK</div>
-                            <!-- LANG-DISABLED: nok, dkk, isk - See Project_dyali.md "Language Reactivation Guide" to revert
-                            <div class="footer-country-option" onclick="setFooterCurrency('nok')">🇳🇴 NOK</div>
-                            <div class="footer-country-option" onclick="setFooterCurrency('dkk')">🇩🇰 DKK</div>
-                            <div class="footer-country-option" onclick="setFooterCurrency('isk')">🇮🇸 ISK</div>
-                            -->
+                            <div class="footer-country-option" onclick="setFooterCurrency('usd')">🇺🇸 English</div>
+                            <div class="footer-country-option" onclick="setFooterCurrency('sek')">🇸🇪 Svenska</div>
+                            <div class="footer-country-option" onclick="setFooterCurrency('nok')">🇳🇴 Norsk</div>
+                            <div class="footer-country-option" onclick="setFooterCurrency('dkk')">🇩🇰 Dansk</div>
+                            <div class="footer-country-option" onclick="setFooterCurrency('eur')">🇫🇮 Suomi</div>
+                            <div class="footer-country-option" onclick="setFooterCurrency('isk')">🇮🇸 Íslenska</div>
                         </div>
                     </div>
                 </div>
