@@ -524,9 +524,11 @@ class Theme_Network_Cloner
     /**
      * Clone a post to a SINGLE specific sub-site
      * 
+     * Content is copied verbatim — the theme no longer translates on the server.
+     *
      * @param WP_Post $source_post The post object to clone
      * @param int $target_blog_id The target blog ID
-     * @param bool|null $force_translate Force translation (true) or skip (false). If null, checks config.
+     * @param bool|null $force_translate Kept for call-site compatibility; ignored.
      * @return array Result [success, action, translated, target_id, message]
      */
     public function clone_to_site($source_post, $target_blog_id, $force_translate = null)
@@ -539,97 +541,12 @@ class Theme_Network_Cloner
             'message' => ''
         );
 
-        // 1. Setup Translator
-        $translator = function_exists('get_openai_translator') ? get_openai_translator() : null;
-
-        // Determine whether to translate
-        $do_translate = false;
-        if ($force_translate !== null) {
-            $do_translate = $force_translate;
-        } else {
-            // Default behavior: products NOT translated by default in old logic (unless modified), 
-            // but normally we check if translator is configured.
-            // Based on previous user request, products SHOULD be translated if possible.
-            $do_translate = ($translator && $translator->is_configured());
-        }
-
-        // Get target site info for language mapping
-        $target_lang = 'English';
-        if ($do_translate) {
-            // Need to get site slug for language map
-            // We can get it from blog details
-            $details = get_blog_details($target_blog_id);
-            if ($details) {
-                $path = trim($details->path, '/');
-                $parts = explode('/', $path);
-                $site_slug = end($parts);
-                if ($translator) {
-                    $target_lang = $translator->get_target_language($site_slug);
-                }
-            } else {
-                // Fallback
-                $do_translate = false;
-            }
-        }
-
-        // 2. Prepare Content
+        // 1. Prepare Content — copied as-is; translation happens outside WordPress.
         $post_title = $source_post->post_title;
         $post_content = $source_post->post_content;
         $post_excerpt = $source_post->post_excerpt;
 
-        if ($do_translate && $target_lang !== 'English') {
-            try {
-                // Use batch translation if possible or single calls
-                if (method_exists($translator, 'translate_batch')) {
-                    $batch_data = array(
-                        'title' => $post_title,
-                        'content' => $post_content,
-                        'excerpt' => $post_excerpt
-                    );
-
-                    error_log("Cloner: translating post " . $source_post->ID . " to $target_lang");
-                    $translated = $translator->translate_batch($batch_data, $target_lang);
-
-                    if (!empty($translated)) {
-                        // ALWAYS apply translation if we got a result. 
-                        // Previous logic checked for differences, which caused issues if OpenAI returned "same-ish" text or if the check was flawed.
-                        $post_title = $translated['title'] ?? $post_title;
-                        $post_content = $translated['content'] ?? $post_content;
-                        $post_excerpt = $translated['excerpt'] ?? $post_excerpt;
-
-                        $result['translated'] = true;
-
-                        // Debug info
-                        if ($post_content === $source_post->post_content) {
-                            $result['translation_note'] = "Content identical after translation (Target: $target_lang)";
-                        } else {
-                            $result['translation_note'] = "Translation applied (Target: $target_lang)";
-                        }
-                    }
-                } else {
-                    // Legacy single calls
-                    $post_title = $translator->translate($source_post->post_title, $target_lang, 'English');
-                    $post_content = $translator->translate($source_post->post_content, $target_lang, 'English');
-                    if ($post_excerpt) {
-                        $post_excerpt = $translator->translate($source_post->post_excerpt, $target_lang, 'English');
-                    }
-                    $result['translated'] = true;
-                }
-            } catch (Exception $e) {
-                error_log("Cloner Translation Error: " . $e->getMessage());
-
-                // If translation was explicitly requested (force_translate=true), fail the clone
-                // This prevents untranslated English content from going live accidentally
-                if ($force_translate === true) {
-                    $result['message'] = 'Translation failed: ' . $e->getMessage();
-                    $result['success'] = false;
-                    return $result;
-                }
-                // Otherwise (default behavior), continue without translation
-            }
-        }
-
-        // 3. Switch Blog & Insert/Update
+        // 2. Switch Blog & Insert/Update
         $original_blog_id = get_current_blog_id();
         switch_to_blog($target_blog_id);
 
@@ -1409,10 +1326,6 @@ class Theme_Network_Cloner
             'errors' => array(),
         );
 
-        // Get OpenAI translator
-        $translator = function_exists('get_openai_translator') ? get_openai_translator() : null;
-        $translate_enabled = $translator && $translator->is_configured();
-
         // Get Main Site Home URL (without trailing slash for matching)
         $main_home_url = untrailingslashit(home_url());
 
@@ -1437,12 +1350,6 @@ class Theme_Network_Cloner
             // Only process target sites
             if (!in_array($site_slug, $this->target_sites)) {
                 continue;
-            }
-
-            // Target language for translation
-            $target_language = 'English';
-            if ($translate_enabled) {
-                $target_language = $translator->get_target_language($site_slug);
             }
 
             // Switch to sub-site
@@ -1503,15 +1410,7 @@ class Theme_Network_Cloner
                         $id_map = array();
 
                         foreach ($menu_items as $item) {
-                            // Translate Label
                             $title = $item->title;
-                            if ($translate_enabled && $target_language !== 'English') {
-                                // Simple cache check could be added here, but relying on translator cache
-                                $trans_title = $translator->translate($title, $target_language, 'English');
-                                if ($trans_title !== $title) {
-                                    $title = $trans_title;
-                                }
-                            }
 
                             // Rewrite URL: Replace main site home URL with subsite home URL
                             $url = $item->url;
@@ -1693,8 +1592,10 @@ class Theme_Network_Cloner
     /**
      * Clone menus to a single site (for AJAX/UI use)
      * 
+     * Menu labels are copied verbatim — the theme no longer translates on the server.
+     *
      * @param int  $target_blog_id Target blog ID
-     * @param bool $do_translate   Whether to translate menu labels
+     * @param bool $do_translate   Kept for call-site compatibility; ignored.
      * @return array Result with success status
      */
     public function clone_menus_to_site($target_blog_id, $do_translate = true)
@@ -1705,25 +1606,6 @@ class Theme_Network_Cloner
             'menus_count' => 0,
             'message' => ''
         );
-
-        // Get OpenAI translator if translation is requested
-        $translator = null;
-        $target_language = 'English';
-        if ($do_translate) {
-            $translator = function_exists('get_openai_translator') ? get_openai_translator() : null;
-            if ($translator && $translator->is_configured()) {
-                // Get site slug to determine target language
-                $site = get_blog_details($target_blog_id);
-                if ($site) {
-                    $path = trim($site->path, '/');
-                    $path_parts = explode('/', $path);
-                    $site_slug = end($path_parts);
-                    $target_language = $translator->get_target_language($site_slug);
-                }
-            } else {
-                $translator = null; // Disable translation if not configured
-            }
-        }
 
         // Get Main Site Home URL (without trailing slash for matching)
         $main_home_url = untrailingslashit(home_url());
@@ -1786,15 +1668,7 @@ class Theme_Network_Cloner
                     $id_map = array();
 
                     foreach ($menu_items as $item) {
-                        // Translate Label
                         $title = $item->title;
-                        if ($translator && $target_language !== 'English') {
-                            $trans_title = $translator->translate($title, $target_language, 'English');
-                            if ($trans_title !== $title) {
-                                $title = $trans_title;
-                                $result['translated'] = true;
-                            }
-                        }
 
                         // Rewrite URL: Replace main site home URL with subsite home URL
                         $url = $item->url;

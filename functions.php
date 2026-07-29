@@ -641,9 +641,6 @@ require_once get_template_directory() . '/inc/geo-redirect.php';
 // SEO Manager disabled - Using Rank Math Pro instead
 // require_once get_template_directory() . '/inc/seo-manager.php';
 
-// Include OpenAI Translation Service (secure API key in WordPress options)
-require_once get_template_directory() . '/inc/openai-translator.php';
-
 // Include Network Cloner utility
 require_once get_template_directory() . '/inc/network-cloner.php';
 
@@ -681,9 +678,6 @@ require_once get_template_directory() . '/inc/offer-strings.php';
 
 // Site Config options page (checkout URLs + pricing configurator defaults)
 require_once get_template_directory() . '/inc/site-config.php';
-
-// "Translate ACF Fields" metabox on the page editor
-require_once get_template_directory() . '/inc/acf-translate-metabox.php';
 
 /**
  * WooCommerce: Redirect all cart operations to checkout page

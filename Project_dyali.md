@@ -42,7 +42,6 @@ my-iptv-theme/
 │   ├── network-cloner.php     # Multisite cloning
 │   ├── currency-settings.php  # Multi-currency pricing
 │   ├── content-settings.php   # Front page content settings
-│   ├── openai-translator.php  # AI translation service
 │   ├── admin-bulk-editor.php  # Bulk product management
 │   ├── product-setup.php      # WooCommerce product setup
 │   ├── user-guide-shortcode.php
@@ -163,7 +162,17 @@ All six languages exist as `language` terms plus their matching `pll_<slug>`
 | Íslenska | `is` | `is_IS` | `is` |
 
 The four new languages start with **0 translated posts**. Content still has to be
-cloned/translated before those subsites are useful.
+translated before those subsites are useful.
+
+### Translation is done outside WordPress
+
+The in-site AI translation was removed on 2026-07-29 (`inc/openai-translator.php`
+and `inc/acf-translate-metabox.php` deleted, along with the translate branches in
+`inc/network-cloner.php`). Translations are now produced externally and written
+in over MCP. The theme makes no outbound AI calls.
+
+Leftover orphaned rows in `wp_options`: `deepseek_api_key`, `openai_api_key`,
+`translator_provider`, `translator_model`, `openai_model`. Nothing reads them.
 
 ### Switcher
 
