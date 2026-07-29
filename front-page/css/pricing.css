@@ -87,7 +87,9 @@
 .card-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
+    /* Tighter gap buys back horizontal room for long currency strings —
+       ISK runs to four digits plus the suffix, e.g. "8749 kr". */
+    gap: 0.625rem;
 }
 
 .select-card {
@@ -95,7 +97,8 @@
     background: var(--bg-card);
     border: 2px solid var(--border-medium);
     border-radius: var(--radius-md);
-    padding: 1.25rem 1rem;
+    /* Narrower side padding widens the usable card interior by ~1rem. */
+    padding: 1.25rem 0.5rem;
     text-align: center;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -131,10 +134,12 @@
 }
 
 .duration-price {
-    font-size: 1.75rem;
+    /* 10% down from 1.75rem so ISK amounts stay on one line. */
+    font-size: 1.575rem;
     font-weight: 800;
     color: var(--color-indigo);
     margin-bottom: 0.25rem;
+    white-space: nowrap;
 }
 
 .duration-per {
@@ -299,7 +304,8 @@
     }
 
     .duration-price {
-        font-size: 1.25rem;
+        font-size: 1.125rem;
+        white-space: nowrap;
     }
 
     .duration-header {

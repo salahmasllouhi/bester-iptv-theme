@@ -159,11 +159,13 @@
     }
 
     .select-card {
-        padding: 1rem 0.75rem;
+        padding: 1rem 0.5rem;
     }
 
     .duration-price {
-        font-size: 1.5rem;
+        /* 10% down, and never wrap — ISK amounts are the longest. */
+        font-size: 1.35rem;
+        white-space: nowrap;
     }
 
     .cta-btn {
