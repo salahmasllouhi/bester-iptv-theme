@@ -3,7 +3,10 @@
  * Section: Hero (Design v2 — NordicTV Light Purple)
  */
 
-// Hero image: ACF field on the front page, else the shared content render.
+// Hero image, per language. `hero_image` is an ACF image field if one is ever
+// attached; `hero_image_url` is the plain URL, which is what the editor actually
+// uses and what differs between languages — each language's artwork carries its
+// own baked-in alt text.
 $hero_image_url = '';
 if (function_exists('get_field')) {
     $hero_field = get_field('hero_image', get_option('page_on_front'));
@@ -14,7 +17,7 @@ if (function_exists('get_field')) {
     }
 }
 if (!$hero_image_url) {
-    $hero_image_url = 'https://nordictv.io/wp-content/uploads/2026/07/hero-image-1.webp';
+    $hero_image_url = iptv_text('hero_image_url', 'https://nordictv.io/wp-content/uploads/2026/07/hero-image-1.webp');
 }
 
 $primary_label   = iptv_text('hero_primary_cta_label', 'Get Access Now');

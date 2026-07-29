@@ -294,6 +294,23 @@
 				"append": ""
 			},
 			{
+				"key": "field_hero_image_url",
+				"label": "Hero Image URL",
+				"name": "hero_image_url",
+				"aria-label": "",
+				"type": "url",
+				"instructions": "Per language. Each language's artwork carries its own baked-in alt text.",
+				"required": false,
+				"conditional_logic": false,
+				"wrapper": {
+					"width": "",
+					"class": "",
+					"id": ""
+				},
+				"default_value": "https://nordictv.io/wp-content/uploads/2026/07/hero-image-1.webp",
+				"placeholder": ""
+			},
+			{
 				"key": "field_hero_image_alt",
 				"label": "Hero Image Alt Text",
 				"name": "hero_image_alt",
@@ -4833,6 +4850,6 @@
 		"show_in_rest": 1,
 		"display_title": "",
 		"pll_display_field_instructions": 1,
-		"modified": 1785253017
+		"modified": 1785293472
 	}
 ]
