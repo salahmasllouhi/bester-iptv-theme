@@ -26,7 +26,7 @@ $highlight_row = 2;
     <div class="dv2-split-copy">
         <h3 class="dv2-split-title dv2-split-title--lg">
             <?php echo esc_html(iptv_text('showcase_title', 'Explore')); ?>
-            <em><?php echo esc_html(iptv_text('showcase_title_span', '35,000+')); ?></em>
+            <em><?php echo esc_html(iptv_text('showcase_title_span', '40,000+')); ?></em>
             <?php echo esc_html(iptv_text('showcase_title_3', 'live TV channels')); ?>
         </h3>
         <p>
@@ -64,7 +64,7 @@ $vod_cta_target = (!empty($vod_cta_field['target'])) ? ' target="' . esc_attr($v
     <div class="dv2-split-copy">
         <h3 class="dv2-split-title">
             <?php echo esc_html(iptv_text('vod_title', 'Indulge in')); ?>
-            <em><?php echo esc_html(iptv_text('vod_title_span', '150,000+')); ?></em>
+            <em><?php echo esc_html(iptv_text('vod_title_span', '200,000+')); ?></em>
             <?php echo esc_html(iptv_text('vod_title_3', 'movies and series')); ?>
         </h3>
         <p>

@@ -9,13 +9,13 @@ $feat_tag = spl_str('Why NordicTV');
 $feat_title = spl_str('Watch %s with <span class="gradient-text">NordicTV</span>');
 $feat_subtitle = spl_str('Everything you need for the ultimate %s streaming experience');
 
-$feat_1_title = spl_str('35,000+ Live Channels');
-$feat_1_desc = spl_str('Stream %s alongside 35,000+ channels from 198 countries. Sports, news, entertainment — all included.');
+$feat_1_title = spl_str('40,000+ Live Channels');
+$feat_1_desc = spl_str('Stream %s alongside 40,000+ channels from 198 countries. Sports, news, entertainment — all included.');
 $feat_2_title = spl_str('$0 PPV Events');
 $feat_2_desc = spl_str('Watch %s and all UFC, Boxing, Wrestling Pay-Per-View events at zero extra cost. Save $70+ per event.');
 $feat_3_title = spl_str('All Sports Live');
 $feat_3_desc = spl_str('EPL, La Liga, Champions League, NFL, NBA, F1 — every game live. Perfect for %s fans.');
-$feat_4_title = spl_str('150K+ Movies & Shows');
+$feat_4_title = spl_str('200K+ Movies & Shows');
 $feat_4_desc = spl_str('Massive VOD library with latest releases alongside your live %s stream. New content added daily.');
 $feat_5_title = spl_str('Crystal Clear 4K');
 $feat_5_desc = spl_str('Watch %s in crystal-clear 4K resolution with Dolby audio. No buffering, no lag, no compromise.');

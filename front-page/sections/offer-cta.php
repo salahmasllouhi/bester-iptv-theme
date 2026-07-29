@@ -26,7 +26,7 @@ $cta = !empty($offer_final_cta_text) ? $offer_final_cta_text : $offer_cta_text;
         </h2>
 
         <p class="offer-final-cta__subtitle">
-            <?php echo esc_html(iptv_text('offer_final_cta_subtitle', '35,000+ channels. 150,000+ movies. Any device. Activated instantly.')); ?>
+            <?php echo esc_html(iptv_text('offer_final_cta_subtitle', '40,000+ channels. 200,000+ movies. Any device. Activated instantly.')); ?>
         </p>
 
         <a href="<?php echo esc_url($offer_checkout_url); ?>"

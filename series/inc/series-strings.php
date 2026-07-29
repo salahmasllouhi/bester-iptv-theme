@@ -40,7 +40,7 @@ add_action('init', function () {
     pll_register_string('series_hero_streaming_badge', '· Streaming Now', $group);
     pll_register_string('series_hero_savings_badge', 'Save Over $1,500 Annually!', $group);
     pll_register_string('series_hero_fallback_subtitle', 'Stream <strong>%s</strong> with NordicTV. All seasons, all episodes. <strong>No restrictions.</strong>', $group, true);
-    pll_register_string('series_hero_feature_1', '150K+ Movies & Shows', $group);
+    pll_register_string('series_hero_feature_1', '200K+ Movies & Shows', $group);
     pll_register_string('series_hero_feature_2', 'All Seasons Available', $group);
     pll_register_string('series_hero_feature_3', '4K Ultra HD', $group);
     pll_register_string('series_hero_cta_text', 'Start Watching Now', $group);
@@ -55,14 +55,14 @@ add_action('init', function () {
     pll_register_string('series_feat_title', 'Watch %s with <span class="gradient-text">NordicTV</span>', $group, true);
     pll_register_string('series_feat_subtitle', 'Everything you need for the ultimate %s binge experience', $group);
     // Feature 1
-    pll_register_string('series_feat_1_title', '150K+ Movies & Shows', $group);
-    pll_register_string('series_feat_1_desc', 'Stream %s alongside 150,000+ movies and series. Every genre, every mood — all included.', $group);
+    pll_register_string('series_feat_1_title', '200K+ Movies & Shows', $group);
+    pll_register_string('series_feat_1_desc', 'Stream %s alongside 200,000+ movies and series. Every genre, every mood — all included.', $group);
     // Feature 2
     pll_register_string('series_feat_2_title', 'All Seasons & Episodes', $group);
     pll_register_string('series_feat_2_desc', 'Watch every season of %s from pilot to finale. No missing episodes, no gaps, no waiting.', $group);
     // Feature 3
-    pll_register_string('series_feat_3_title', '35,000+ Live Channels', $group);
-    pll_register_string('series_feat_3_desc', 'Beyond %s, enjoy 35,000+ live channels from 198 countries. Sports, news, entertainment — all included.', $group);
+    pll_register_string('series_feat_3_title', '40,000+ Live Channels', $group);
+    pll_register_string('series_feat_3_desc', 'Beyond %s, enjoy 40,000+ live channels from 198 countries. Sports, news, entertainment — all included.', $group);
     // Feature 4
     pll_register_string('series_feat_4_title', '$0 PPV Events', $group);
     pll_register_string('series_feat_4_desc', 'All UFC, Boxing, Wrestling Pay-Per-View events at zero extra cost alongside your favorite series like %s.', $group);
@@ -124,7 +124,7 @@ add_action('init', function () {
 
     // ── CTA ──────────────────────────────────────────────────────────────────
     pll_register_string('series_cta_title', 'Ready to Watch %s?', $group);
-    pll_register_string('series_cta_subtitle', 'Join thousands binge-watching %s and 150,000+ movies & shows with NordicTV.', $group);
+    pll_register_string('series_cta_subtitle', 'Join thousands binge-watching %s and 200,000+ movies & shows with NordicTV.', $group);
     pll_register_string('series_cta_button_text', 'Get Access Now', $group);
     pll_register_string('series_cta_badge_1', '256-bit SSL Encryption', $group);
     pll_register_string('series_cta_badge_2', 'Instant Activation', $group);

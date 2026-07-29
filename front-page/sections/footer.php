@@ -8,7 +8,7 @@
                         alt="Nordic IPTV" class="footer-logo-img">
                 </div>
                 <p class="footer-desc">
-                    <?php echo esc_html(iptv_text('footer_desc', 'The leading IPTV service provider — 35,000+ live channels, 150,000+ movies and series, every sport, in 4K and 8K.')); ?>
+                    <?php echo esc_html(iptv_text('footer_desc', 'The leading IPTV service provider — 40,000+ live channels, 200,000+ movies and series, every sport, in 4K and 8K.')); ?>
                 </p>
 
                 <!-- Currency selector -->

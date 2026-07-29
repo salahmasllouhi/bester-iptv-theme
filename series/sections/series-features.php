@@ -9,12 +9,12 @@ $feat_tag = srs_str('Why NordicTV');
 $feat_title = srs_str('Watch %s with <span class="gradient-text">NordicTV</span>');
 $feat_subtitle = srs_str('Everything you need for the ultimate %s binge experience');
 
-$feat_1_title = srs_str('150K+ Movies & Shows');
-$feat_1_desc = srs_str('Stream %s alongside 150,000+ movies and series. Every genre, every mood — all included.');
+$feat_1_title = srs_str('200K+ Movies & Shows');
+$feat_1_desc = srs_str('Stream %s alongside 200,000+ movies and series. Every genre, every mood — all included.');
 $feat_2_title = srs_str('All Seasons & Episodes');
 $feat_2_desc = srs_str('Watch every season of %s from pilot to finale. No missing episodes, no gaps, no waiting.');
-$feat_3_title = srs_str('35,000+ Live Channels');
-$feat_3_desc = srs_str('Beyond %s, enjoy 35,000+ live channels from 198 countries. Sports, news, entertainment — all included.');
+$feat_3_title = srs_str('40,000+ Live Channels');
+$feat_3_desc = srs_str('Beyond %s, enjoy 40,000+ live channels from 198 countries. Sports, news, entertainment — all included.');
 $feat_4_title = srs_str('$0 PPV Events');
 $feat_4_desc = srs_str('All UFC, Boxing, Wrestling Pay-Per-View events at zero extra cost alongside your favorite series like %s.');
 $feat_5_title = srs_str('Crystal Clear 4K');

@@ -31,7 +31,7 @@ if (empty($comp_rows)) {
         ['row_label' => 'Contract', 'row_theirs' => '12-24 months', 'row_ours' => 'No contract'],
         ['row_label' => 'Installation', 'row_theirs' => 'Technician required', 'row_ours' => 'Instant activation'],
         ['row_label' => 'Equipment', 'row_theirs' => 'Rental fees ($10+/mo)', 'row_ours' => 'Use your own devices'],
-        ['row_label' => 'Channels', 'row_theirs' => '200-300 channels', 'row_ours' => '35,000+ channels'],
+        ['row_label' => 'Channels', 'row_theirs' => '200-300 channels', 'row_ours' => '40,000+ channels'],
         ['row_label' => '4K Content', 'row_theirs' => 'Limited / Extra cost', 'row_ours' => 'Included free'],
         ['row_label' => 'DVR', 'row_theirs' => 'Extra $15-20/mo', 'row_ours' => 'Included free'],
         ['row_label' => 'Simultaneous Streams', 'row_theirs' => '1 per TV box', 'row_ours' => 'Up to 4 devices'],

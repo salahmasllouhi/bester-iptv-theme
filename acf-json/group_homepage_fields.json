@@ -654,7 +654,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "35,000+",
+            "default_value": "40,000+",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -714,7 +714,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "150,000+",
+            "default_value": "200,000+",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -872,7 +872,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "150,000+ Movies & Series",
+            "default_value": "200,000+ Movies & Series",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1030,7 +1030,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "150,000+",
+            "default_value": "200,000+",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1170,7 +1170,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "Search 150,000+ titles",
+            "default_value": "Search 200,000+ titles",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1308,7 +1308,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "35,000+ Live Channels",
+            "default_value": "40,000+ Live Channels",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1428,7 +1428,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "150K+ Movies & Shows",
+            "default_value": "200K+ Movies & Shows",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -2756,7 +2756,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "35,000+ live channels and 150,000+ movies & series in 4K.",
+            "default_value": "40,000+ live channels and 200,000+ movies & series in 4K.",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -4090,7 +4090,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "IPTV delivers TV content via internet, giving you access to 35,000+ live channels.",
+                    "default_value": "IPTV delivers TV content via internet, giving you access to 40,000+ live channels.",
                     "new_lines": "",
                     "maxlength": "",
                     "placeholder": "",
@@ -4287,7 +4287,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "Premium IPTV streaming service with 35,000+ channels worldwide.",
+            "default_value": "Premium IPTV streaming service with 40,000+ channels worldwide.",
             "new_lines": "",
             "maxlength": "",
             "placeholder": "",

@@ -4,8 +4,8 @@
  */
 
 $comp_rows = [
-    1 => ['35,000+ channels from 198 countries',      '200–500 (cable) or none (streaming)'],
-    2 => ['150,000+ movies & series, all genres',     'Limited per platform (~5,000 each)'],
+    1 => ['40,000+ channels from 198 countries',      '200–500 (cable) or none (streaming)'],
+    2 => ['200,000+ movies & series, all genres',     'Limited per platform (~5,000 each)'],
     3 => ['All sports included — every league',       'Paid add-on or separate subscription'],
     4 => ['4K & 8K Ultra HD included',                '4K only on premium tier (+cost)'],
     5 => ['Up to 4 devices at once',                  '1–2 per service'],

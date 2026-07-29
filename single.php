@@ -107,7 +107,7 @@
                     <!-- CTA Widget -->
                     <div class="sidebar-widget cta-widget">
                         <h3>Get Nordic IPTV</h3>
-                        <p>35,000+ channels, 150,000+ movies. Start streaming today!</p>
+                        <p>40,000+ channels, 200,000+ movies. Start streaming today!</p>
                         <a href="<?php echo home_url('/#pricing'); ?>" class="cta-btn">View Plans</a>
                     </div>
 

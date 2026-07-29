@@ -8,8 +8,8 @@
  */
 
 $default_features = [
-    ['icon' => '📺', 'text' => iptv_text('offer_feat_1', '35,000+ live channels')],
-    ['icon' => '🎬', 'text' => iptv_text('offer_feat_2', '150,000+ movies & series')],
+    ['icon' => '📺', 'text' => iptv_text('offer_feat_1', '40,000+ live channels')],
+    ['icon' => '🎬', 'text' => iptv_text('offer_feat_2', '200,000+ movies & series')],
     ['icon' => '🔷', 'text' => iptv_text('offer_feat_3', '4K & 8K Ultra HD quality')],
     ['icon' => '💬', 'text' => iptv_text('offer_feat_4', 'Multi-language subtitles')],
     ['icon' => '🔄', 'text' => iptv_text('offer_feat_5', 'Daily content updates')],

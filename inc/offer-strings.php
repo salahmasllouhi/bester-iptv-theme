@@ -27,8 +27,8 @@ add_action('init', function () {
     // ── Features section ─────────────────────────────────────────────────────
     pll_register_string('offer_features_tag', 'What You Get', $group);
     pll_register_string('offer_features_title', 'Everything included in your plan', $group);
-    pll_register_string('offer_feat_1', '35,000+ live channels', $group);
-    pll_register_string('offer_feat_2', '150,000+ movies & series', $group);
+    pll_register_string('offer_feat_1', '40,000+ live channels', $group);
+    pll_register_string('offer_feat_2', '200,000+ movies & series', $group);
     pll_register_string('offer_feat_3', '4K & 8K Ultra HD quality', $group);
     pll_register_string('offer_feat_4', 'Multi-language subtitles', $group);
     pll_register_string('offer_feat_5', 'Daily content updates', $group);
@@ -76,5 +76,5 @@ add_action('init', function () {
 
     // ── Final CTA section ────────────────────────────────────────────────────
     pll_register_string('offer_final_cta_title', "Don't miss %d months for the price of %d", $group);
-    pll_register_string('offer_final_cta_subtitle', '35,000+ channels. 150,000+ movies. Any device. Activated instantly.', $group);
+    pll_register_string('offer_final_cta_subtitle', '40,000+ channels. 200,000+ movies. Any device. Activated instantly.', $group);
 });

@@ -114,7 +114,7 @@
                     "label": "Feature Text",
                     "name": "feature_text",
                     "type": "text",
-                    "instructions": "E.g. \"35,000+ live channels\"",
+                    "instructions": "E.g. \"40,000+ live channels\"",
                     "required": 1,
                     "default_value": "",
                     "maxlength": 100
