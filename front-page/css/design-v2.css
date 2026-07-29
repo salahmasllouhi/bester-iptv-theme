@@ -118,9 +118,17 @@
 /* -------------------------------------------
    BASE
    ------------------------------------------- */
-html,
-body {
+/* The page colour lives on <html> only. If <body> also carries a background it
+   paints as an ordinary block background, which in CSS paint order comes after
+   negative z-index layers — and that covers .dv2-grid-wash completely.
+   base.css and redesign-theme.css both set a body background and load earlier,
+   so clearing it here has to be explicit rather than just omitted. */
+html {
     background: var(--dv2-bg);
+}
+
+body {
+    background: transparent;
 }
 
 body {
