@@ -1535,6 +1535,86 @@
             "rows": ""
         },
         {
+            "key": "field_feature_7_title",
+            "label": "Feature 7 Title",
+            "name": "feature_7_title",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "24/7 Support",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_feature_7_desc",
+            "label": "Feature 7 Description",
+            "name": "feature_7_desc",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "24/7 Support",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_feature_8_title",
+            "label": "Feature 8 Title",
+            "name": "feature_8_title",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "24/7 Support",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_feature_8_desc",
+            "label": "Feature 8 Description",
+            "name": "feature_8_desc",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "24/7 Support",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_features_cta",
             "label": "CTA Button Text",
             "name": "features_cta",
@@ -4849,5 +4929,5 @@
     "show_in_rest": 1,
     "display_title": "",
     "pll_display_field_instructions": 1,
-    "modified": 1785293472
+    "modified": 1785295501
 }
