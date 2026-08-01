@@ -652,6 +652,10 @@ require_once get_template_directory() . '/inc/currency-settings.php';
 // is 1,000 requests/month, so the API is never touched on a front-end request.
 require_once get_template_directory() . '/inc/currency-rates-api.php';
 
+// Resolve a page by slug and get the current language's translation of it.
+// Used by the footer, which previously hardcoded '#' for every legal link.
+require_once get_template_directory() . '/inc/page-links.php';
+
 // Front page copy lookup: ACF on the translated front page, then Polylang strings.
 // Replaces the old "Content Localizing" admin screen (inc/content-settings.php),
 // which stored copy in an `iptv_content` option keyed by the retired multisite slugs.

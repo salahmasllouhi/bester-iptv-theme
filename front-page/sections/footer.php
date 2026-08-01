@@ -52,7 +52,7 @@
             ?>
 
             <div class="footer-col">
-                <h4><?php echo esc_html(iptv_get_menu_title('footer_1', 'Plans')); ?></h4>
+                <h4><?php echo esc_html(iptv_get_menu_title('footer_1', iptv_text('footer_head_plans', 'Plans'))); ?></h4>
                 <?php if (has_nav_menu('footer_1')): ?>
                     <?php wp_nav_menu(array(
                         'theme_location' => 'footer_1',
@@ -70,7 +70,7 @@
             </div>
 
             <div class="footer-col">
-                <h4><?php echo esc_html(iptv_get_menu_title('footer_2', 'Useful Links')); ?></h4>
+                <h4><?php echo esc_html(iptv_get_menu_title('footer_2', iptv_text('footer_head_links', 'Useful Links'))); ?></h4>
                 <?php if (has_nav_menu('footer_2')): ?>
                     <?php wp_nav_menu(array(
                         'theme_location' => 'footer_2',
@@ -78,16 +78,24 @@
                         'fallback_cb' => false,
                     )); ?>
                 <?php else: ?>
-                    <div>
-                        <a href="<?php echo home_url('/blog/'); ?>">Blog</a>
-                        <a href="<?php echo home_url('/user-guide/'); ?>">Setup Guide</a>
-                        <a href="https://panel.nordictv.io/login">My Account</a>
-                    </div>
+                    <?php
+                    // home_url() ignores the current language, so this column used
+                    // to send Swedish visitors to the English blog and guide.
+                    $home = function_exists('pll_home_url') ? pll_home_url() : home_url('/');
+                    iptv_footer_links(array(
+                        array('slug' => 'blog', 'key' => 'footer_link_blog', 'label' => 'Blog',
+                              'fallback' => trailingslashit($home) . 'blog/'),
+                        array('slug' => 'iptv-guide-setup-apps-devices-tips', 'key' => 'footer_link_guide', 'label' => 'Setup Guide'),
+                        array('slug' => 'm3u-playlist-convert-your-m3u-url', 'key' => 'footer_link_m3u', 'label' => 'M3U Converter'),
+                        array('slug' => 'contact-us', 'key' => 'footer_link_contact', 'label' => 'Contact Us'),
+                        array('url' => 'https://panel.nordictv.io/login', 'key' => 'footer_link_account', 'label' => 'My Account'),
+                    ));
+                    ?>
                 <?php endif; ?>
             </div>
 
             <div class="footer-col">
-                <h4><?php echo esc_html(iptv_get_menu_title('footer_3', 'Legal')); ?></h4>
+                <h4><?php echo esc_html(iptv_get_menu_title('footer_3', iptv_text('footer_head_legal', 'Legal'))); ?></h4>
                 <?php if (has_nav_menu('footer_3')): ?>
                     <?php wp_nav_menu(array(
                         'theme_location' => 'footer_3',
@@ -95,12 +103,16 @@
                         'fallback_cb' => false,
                     )); ?>
                 <?php else: ?>
-                    <div>
-                        <a href="#">About Us</a>
-                        <a href="#">Privacy Policy</a>
-                        <a href="#">Terms of Service</a>
-                        <a href="#">Return &amp; Refund Policy</a>
-                    </div>
+                    <?php
+                    // These four all existed as pages while this column pointed
+                    // every one of them at '#'.
+                    iptv_footer_links(array(
+                        array('slug' => 'about-us', 'key' => 'footer_link_about', 'label' => 'About Us'),
+                        array('slug' => 'privacy-policy', 'key' => 'footer_link_privacy', 'label' => 'Privacy Policy'),
+                        array('slug' => 'terms-of-services', 'key' => 'footer_link_terms', 'label' => 'Terms of Service'),
+                        array('slug' => 'return-refund-policy', 'key' => 'footer_link_refund', 'label' => 'Return & Refund Policy'),
+                    ));
+                    ?>
                 <?php endif; ?>
             </div>
         </div>

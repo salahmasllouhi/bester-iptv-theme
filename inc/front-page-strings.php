@@ -50,4 +50,23 @@ add_action('init', function () {
 
     // Day marker in "4d 07:12:39" — sv/no/dk take "d", Finnish "pv".
     pll_register_string('sticky_days_suffix', 'd', $group);
+
+    // ── Footer ───────────────────────────────────────────────────────────────
+    // Column headings and link labels. These only apply when no nav menu is
+    // assigned to the matching footer location; an assigned menu is translated
+    // through Polylang's own menu handling instead.
+    pll_register_string('footer_head_plans', 'Plans', $group);
+    pll_register_string('footer_head_links', 'Useful Links', $group);
+    pll_register_string('footer_head_legal', 'Legal', $group);
+
+    pll_register_string('footer_link_blog', 'Blog', $group);
+    pll_register_string('footer_link_guide', 'Setup Guide', $group);
+    pll_register_string('footer_link_m3u', 'M3U Converter', $group);
+    pll_register_string('footer_link_contact', 'Contact Us', $group);
+    pll_register_string('footer_link_account', 'My Account', $group);
+
+    pll_register_string('footer_link_about', 'About Us', $group);
+    pll_register_string('footer_link_privacy', 'Privacy Policy', $group);
+    pll_register_string('footer_link_terms', 'Terms of Service', $group);
+    pll_register_string('footer_link_refund', 'Return & Refund Policy', $group);
 });
