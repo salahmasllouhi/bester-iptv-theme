@@ -679,6 +679,10 @@ require_once get_template_directory() . '/inc/offer-strings.php';
 // Site Config options page (checkout URLs + pricing configurator defaults)
 require_once get_template_directory() . '/inc/site-config.php';
 
+// Sticky mobile CTA bar (countdown + pricing/trial buttons) — loads after
+// site-config.php and iptv-text.php, both of which it reads through.
+require_once get_template_directory() . '/inc/sticky-cta.php';
+
 /**
  * WooCommerce: Redirect all cart operations to checkout page
  * Since the cart page is disabled, we redirect to checkout instead

@@ -159,6 +159,69 @@
             "step": "",
             "prepend": "",
             "append": ""
+        },
+        {
+            "key": "tab_config_sticky",
+            "label": "📌 Sticky Bar (Mobile)",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_sticky_cta_enabled",
+            "label": "Show sticky bar",
+            "name": "sticky_cta_enabled",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Bottom bar shown on phones only. Never appears on cart, checkout or account pages.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 1,
+            "ui": 1,
+            "ui_on_text": "On",
+            "ui_off_text": "Off"
+        },
+        {
+            "key": "field_sticky_pricing_url",
+            "label": "Pricing Button URL",
+            "name": "sticky_pricing_url",
+            "aria-label": "",
+            "type": "url",
+            "instructions": "Leave empty to link to the pricing section of the front page in the current language. The trial button reuses the Trial URL above.",
+            "required": false,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_sticky_cta_enabled",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "#pricing"
         }
     ],
     "location": [
@@ -179,5 +242,5 @@
     "active": true,
     "description": "Configuration values for the pricing configurator and checkout links.",
     "show_in_rest": 0,
-    "modified": 1785251681
+    "modified": 1785577744
 }

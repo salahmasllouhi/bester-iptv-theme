@@ -4900,6 +4900,84 @@
             "placeholder": "",
             "prepend": "",
             "append": ""
+        },
+        {
+            "key": "tab_sticky",
+            "label": "📌 Sticky Bar",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_sticky_timer_label",
+            "label": "Sticky: Countdown Label",
+            "name": "sticky_timer_label",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Text before the countdown in the mobile bottom bar.",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Offer ends in",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_sticky_pricing_label",
+            "label": "Sticky: Pricing Button",
+            "name": "sticky_pricing_label",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Keep it short — two buttons share one phone-width row.",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "See Pricing",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_sticky_trial_label",
+            "label": "Sticky: Trial Button",
+            "name": "sticky_trial_label",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Keep it short — two buttons share one phone-width row.",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "24h Trial",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
         }
     ],
     "location": [
@@ -4929,5 +5007,5 @@
     "show_in_rest": 1,
     "display_title": "",
     "pll_display_field_instructions": 1,
-    "modified": 1785295501
+    "modified": 1785577759
 }
