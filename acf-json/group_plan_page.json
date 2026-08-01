@@ -1,0 +1,365 @@
+{
+    "key": "group_plan_page",
+    "title": "Plan Page",
+    "fields": [
+        {
+            "key": "field_plan_months",
+            "label": "Plan Length",
+            "name": "plan_months",
+            "type": "select",
+            "instructions": "The only required field. Prices, savings, checkout links, the compare table and the schema are all derived from it — set this and the page builds itself. Every other field below is an optional override.",
+            "required": 1,
+            "choices": {
+                "1": "1 Month",
+                "3": "3 Months",
+                "6": "6 Months",
+                "12": "12 Months"
+            },
+            "default_value": "1",
+            "allow_null": 0,
+            "multiple": 0,
+            "ui": 1,
+            "return_format": "value"
+        },
+        {
+            "key": "field_plan_tab_hero",
+            "label": "Hero",
+            "name": "",
+            "type": "tab",
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_plan_eyebrow",
+            "label": "Eyebrow",
+            "name": "plan_eyebrow",
+            "type": "text",
+            "instructions": "Small pill above the headline. Leave empty for \"IPTV Subscription\".",
+            "required": 0,
+            "placeholder": "IPTV Subscription",
+            "maxlength": 40
+        },
+        {
+            "key": "field_plan_headline",
+            "label": "Headline (H1)",
+            "name": "plan_headline",
+            "type": "text",
+            "instructions": "Leave empty for \"{Plan Length} IPTV Subscription\", e.g. \"1 Month IPTV Subscription\". This is the page's H1 — write it for the search term you want.",
+            "required": 0,
+            "placeholder": "1 Month IPTV Subscription",
+            "maxlength": 90
+        },
+        {
+            "key": "field_plan_subline",
+            "label": "Subline",
+            "name": "plan_subline",
+            "type": "textarea",
+            "instructions": "One or two sentences under the headline. Leave empty for a default written for this plan length.",
+            "required": 0,
+            "rows": 3,
+            "new_lines": ""
+        },
+        {
+            "key": "field_plan_hero_points",
+            "label": "Hero Trust Points",
+            "name": "plan_hero_points",
+            "type": "repeater",
+            "instructions": "Short reassurances under the buttons, shown with a green tick. Three works best. Leave empty for the defaults.",
+            "required": 0,
+            "min": 0,
+            "max": 4,
+            "layout": "table",
+            "button_label": "Add point",
+            "sub_fields": [
+                {
+                    "key": "field_plan_hero_point_text",
+                    "label": "Text",
+                    "name": "text",
+                    "type": "text",
+                    "required": 1,
+                    "maxlength": 50
+                }
+            ]
+        },
+        {
+            "key": "field_plan_cta_text",
+            "label": "CTA Button Text",
+            "name": "plan_cta_text",
+            "type": "text",
+            "instructions": "The hero button. It scrolls to the price grid rather than going straight to checkout, because the visitor still has to pick a screen count.",
+            "required": 0,
+            "placeholder": "See prices",
+            "maxlength": 40
+        },
+        {
+            "key": "field_plan_tab_pricing",
+            "label": "Pricing",
+            "name": "",
+            "type": "tab",
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_plan_pricing_title",
+            "label": "Pricing Heading",
+            "name": "plan_pricing_title",
+            "type": "text",
+            "instructions": "Leave empty for \"{Plan Length} — choose your screens\".",
+            "required": 0,
+            "maxlength": 90
+        },
+        {
+            "key": "field_plan_pricing_subtitle",
+            "label": "Pricing Subheading",
+            "name": "plan_pricing_subtitle",
+            "type": "textarea",
+            "instructions": "Sits under the pricing heading, above the four cards.",
+            "required": 0,
+            "rows": 2,
+            "new_lines": ""
+        },
+        {
+            "key": "field_plan_buy_text",
+            "label": "Buy Button Text",
+            "name": "plan_buy_text",
+            "type": "text",
+            "instructions": "On all four price cards. Leave empty to reuse the front page's checkout button text.",
+            "required": 0,
+            "placeholder": "Start watching",
+            "maxlength": 40
+        },
+        {
+            "key": "field_plan_tab_content",
+            "label": "Content",
+            "name": "",
+            "type": "tab",
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_plan_includes_title",
+            "label": "Includes Heading",
+            "name": "plan_includes_title",
+            "type": "text",
+            "instructions": "Leave empty for \"Every plan is fully loaded\".",
+            "required": 0,
+            "maxlength": 80
+        },
+        {
+            "key": "field_plan_includes",
+            "label": "What's Included",
+            "name": "plan_includes",
+            "type": "repeater",
+            "instructions": "Leave empty to reuse the same list the front page shows — which is the point: the length changes the price, never what you get. Only fill this in if this plan really does include something different.",
+            "required": 0,
+            "min": 0,
+            "layout": "table",
+            "button_label": "Add item",
+            "sub_fields": [
+                {
+                    "key": "field_plan_includes_item",
+                    "label": "Item",
+                    "name": "item",
+                    "type": "text",
+                    "required": 1,
+                    "maxlength": 60
+                }
+            ]
+        },
+        {
+            "key": "field_plan_audience_title",
+            "label": "Audience Heading",
+            "name": "plan_audience_title",
+            "type": "text",
+            "instructions": "Leave empty for \"Who the {Plan Length} plan suits\".",
+            "required": 0,
+            "maxlength": 90
+        },
+        {
+            "key": "field_plan_audience_points",
+            "label": "Who This Plan Suits",
+            "name": "plan_audience_points",
+            "type": "repeater",
+            "instructions": "The section that makes this page worth having — the argument for THIS length rather than the other three. Three cards. Leave empty for defaults written per length.",
+            "required": 0,
+            "min": 0,
+            "max": 6,
+            "layout": "row",
+            "button_label": "Add reason",
+            "sub_fields": [
+                {
+                    "key": "field_plan_audience_point_title",
+                    "label": "Title",
+                    "name": "title",
+                    "type": "text",
+                    "required": 1,
+                    "maxlength": 70
+                },
+                {
+                    "key": "field_plan_audience_point_text",
+                    "label": "Text",
+                    "name": "text",
+                    "type": "textarea",
+                    "required": 0,
+                    "rows": 3,
+                    "new_lines": ""
+                }
+            ]
+        },
+        {
+            "key": "field_plan_compare_title",
+            "label": "Compare Heading",
+            "name": "plan_compare_title",
+            "type": "text",
+            "instructions": "The table that links the four plan pages to each other. Leave empty for \"How the four plans compare\".",
+            "required": 0,
+            "maxlength": 90
+        },
+        {
+            "key": "field_plan_compare_subtitle",
+            "label": "Compare Subheading",
+            "name": "plan_compare_subtitle",
+            "type": "textarea",
+            "required": 0,
+            "rows": 2,
+            "new_lines": ""
+        },
+        {
+            "key": "field_plan_tab_faq",
+            "label": "FAQ",
+            "name": "",
+            "type": "tab",
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_plan_faq_title",
+            "label": "FAQ Heading",
+            "name": "plan_faq_title",
+            "type": "text",
+            "required": 0,
+            "maxlength": 90
+        },
+        {
+            "key": "field_plan_faq",
+            "label": "Questions",
+            "name": "plan_faq",
+            "type": "repeater",
+            "instructions": "These also become the FAQ rich result for this page. Leave empty for a default set written per plan length.",
+            "required": 0,
+            "min": 0,
+            "layout": "row",
+            "button_label": "Add question",
+            "sub_fields": [
+                {
+                    "key": "field_plan_faq_question",
+                    "label": "Question",
+                    "name": "question",
+                    "type": "text",
+                    "required": 1,
+                    "maxlength": 160
+                },
+                {
+                    "key": "field_plan_faq_answer",
+                    "label": "Answer",
+                    "name": "answer",
+                    "type": "textarea",
+                    "required": 1,
+                    "rows": 4,
+                    "new_lines": "br"
+                }
+            ]
+        },
+        {
+            "key": "field_plan_tab_closing",
+            "label": "Closing CTA",
+            "name": "",
+            "type": "tab",
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_plan_final_title",
+            "label": "Closing Heading",
+            "name": "plan_final_title",
+            "type": "text",
+            "instructions": "Leave empty for \"Start your {Plan Length} plan today\".",
+            "required": 0,
+            "maxlength": 90
+        },
+        {
+            "key": "field_plan_final_text",
+            "label": "Closing Text",
+            "name": "plan_final_text",
+            "type": "textarea",
+            "required": 0,
+            "rows": 2,
+            "new_lines": ""
+        },
+        {
+            "key": "field_plan_final_cta_text",
+            "label": "Closing Button Text",
+            "name": "plan_final_cta_text",
+            "type": "text",
+            "instructions": "Leave empty to reuse the hero's button text.",
+            "required": 0,
+            "maxlength": 40
+        },
+        {
+            "key": "field_plan_tab_sections",
+            "label": "Sections",
+            "name": "",
+            "type": "tab",
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_plan_show_steps",
+            "label": "Show \"How it works\"",
+            "name": "plan_show_steps",
+            "type": "true_false",
+            "instructions": "The shared three-step onboarding panel from the front page.",
+            "required": 0,
+            "default_value": 1,
+            "ui": 1
+        },
+        {
+            "key": "field_plan_show_devices",
+            "label": "Show supported devices",
+            "name": "plan_show_devices",
+            "type": "true_false",
+            "instructions": "The shared device chips from the front page.",
+            "required": 0,
+            "default_value": 1,
+            "ui": 1
+        },
+        {
+            "key": "field_plan_show_reviews",
+            "label": "Show reviews",
+            "name": "plan_show_reviews",
+            "type": "true_false",
+            "instructions": "The shared review section from the front page.",
+            "required": 0,
+            "default_value": 1,
+            "ui": 1
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "page_template",
+                "operator": "==",
+                "value": "template-plan.php"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Fields for the Plan Page template. Set Plan Length; everything else is an optional override of a sensible default.",
+    "modified": 1999999999
+}

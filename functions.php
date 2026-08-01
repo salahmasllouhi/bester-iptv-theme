@@ -692,6 +692,12 @@ require_once get_template_directory() . '/inc/site-config.php';
 // site-config.php and iptv-text.php, both of which it reads through.
 require_once get_template_directory() . '/inc/sticky-cta.php';
 
+// Plan pages (template-plan.php): prices, savings, checkout links and the
+// sibling-page lookup behind the compare table. Loads after site-config.php
+// (checkout_base_url), currency-settings.php (the price table) and
+// iptv-text.php (the shared labels), all of which it reads through.
+require_once get_template_directory() . '/plan/inc/plan-data.php';
+
 /**
  * WooCommerce: Redirect all cart operations to checkout page
  * Since the cart page is disabled, we redirect to checkout instead

@@ -1,0 +1,596 @@
+/* ============================================
+   PLAN PAGE
+   Loaded last, after design-v2-sections.css, by
+   template-plan.php. Only the pieces the plan
+   pages add — the hero, the four-card price
+   grid, the audience cards, the compare table
+   and the closing band. Everything else reuses
+   the design v2 components as they are.
+   ============================================ */
+
+/* -------------------------------------------
+   HERO
+   ------------------------------------------- */
+.plan-hero {
+    padding: 56px 0 8px;
+    text-align: center;
+}
+
+.plan-hero-inner {
+    max-width: 900px;
+}
+
+.plan-hero-eyebrow {
+    display: inline-block;
+    background: var(--dv2-surface-tint);
+    color: var(--dv2-purple-700);
+    border-radius: var(--dv2-radius-pill);
+    padding: 7px 16px;
+    margin: 0;
+    font-family: var(--dv2-font-display);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+}
+
+.plan-hero-title {
+    font-family: var(--dv2-font-display);
+    font-weight: 800;
+    font-size: 48px;
+    line-height: 1.08;
+    letter-spacing: -1.4px;
+    color: var(--dv2-ink);
+    margin: 22px 0 0;
+}
+
+.plan-hero-sub {
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--dv2-body);
+    max-width: 620px;
+    margin: 18px auto 0;
+}
+
+/* "From $16.99 per month". The price is the only thing here at display size —
+   the label and the period sit beside it at body weight so the number reads as
+   the number. */
+.plan-hero-price {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 26px 0 0;
+}
+
+.plan-hero-price-label {
+    font-size: 15px;
+    color: var(--dv2-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+}
+
+.plan-hero-price-value {
+    font-family: var(--dv2-font-display);
+    font-weight: 800;
+    font-size: 44px;
+    line-height: 1;
+    letter-spacing: -1.5px;
+    color: var(--dv2-purple);
+}
+
+.plan-hero-price-per {
+    font-size: 16px;
+    color: var(--dv2-body);
+}
+
+.plan-hero-actions {
+    margin-top: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.plan-hero-points {
+    list-style: none;
+    margin: 26px 0 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px 26px;
+    flex-wrap: wrap;
+}
+
+.plan-hero-points li {
+    position: relative;
+    padding-left: 24px;
+    font-size: 15px;
+    color: var(--dv2-body);
+}
+
+.plan-hero-points li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--dv2-green);
+    font-weight: 700;
+}
+
+/* -------------------------------------------
+   PRICE GRID
+   ------------------------------------------- */
+.plan-price-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+    margin-top: 44px;
+    /* The popular card lifts by 6px; without room the shadow clips. */
+    padding-top: 8px;
+    align-items: stretch;
+}
+
+.plan-price-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--dv2-surface);
+    border: 1px solid var(--dv2-border-medium);
+    border-radius: var(--dv2-radius-xl);
+    box-shadow: var(--dv2-shadow-sm);
+    padding: 30px 22px 26px;
+    text-align: center;
+    position: relative;
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.plan-price-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--dv2-border-strong);
+    box-shadow: var(--dv2-shadow-md);
+}
+
+/* The recommended screen count. Raised, outlined and given the deeper shadow so
+   it is the card the eye lands on first. */
+.plan-price-card--popular {
+    border-color: var(--dv2-purple);
+    box-shadow: 0 18px 44px rgba(124, 58, 237, 0.18);
+    transform: translateY(-6px);
+}
+
+.plan-price-card--popular:hover {
+    transform: translateY(-9px);
+}
+
+.plan-price-flag {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--dv2-purple);
+    color: #ffffff;
+    font-family: var(--dv2-font-display);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    padding: 5px 14px;
+    border-radius: var(--dv2-radius-pill);
+    white-space: nowrap;
+}
+
+.plan-price-screens {
+    font-family: var(--dv2-font-display);
+    font-weight: 700;
+    font-size: 19px;
+    color: var(--dv2-ink);
+    margin: 0;
+}
+
+.plan-price-note {
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: var(--dv2-faint);
+    margin: 8px 0 0;
+    min-height: 39px;
+}
+
+.plan-price-amount {
+    font-family: var(--dv2-font-display);
+    font-weight: 800;
+    font-size: 38px;
+    line-height: 1;
+    letter-spacing: -1.4px;
+    color: var(--dv2-ink);
+    margin: 18px 0 0;
+}
+
+/* Both of these carry a bottom margin because either one can be the element
+   directly above the button, and the button's own margin-top:auto resolves to 0
+   in the tallest card — so the gap has to come from above, not below. */
+.plan-price-per {
+    font-size: 14px;
+    color: var(--dv2-body);
+    margin: 8px 0 20px;
+}
+
+/* Rendered empty on cards with no saving, but only on pages where some other
+   card has one, so all four buttons stay on the same line. A 1-month page has
+   no savings anywhere and omits the strip entirely. */
+.plan-price-saving {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 0 0 20px;
+    min-height: 24px;
+}
+
+.plan-price-was {
+    font-size: 14px;
+    color: var(--dv2-muted);
+    text-decoration: line-through;
+}
+
+.plan-price-off {
+    background: rgba(0, 182, 122, 0.12);
+    color: #00905f;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 3px 10px;
+    border-radius: var(--dv2-radius-pill);
+}
+
+/* margin-top:auto pins every button to the bottom regardless of how much copy
+   sits above it. */
+.plan-price-btn {
+    margin-top: auto;
+    width: 100%;
+    font-size: 15px;
+    padding: 13px 18px;
+    /* The grid puts four of these side by side; the front page's 40px shadow is
+       too heavy repeated four times. */
+    box-shadow: 0 10px 26px rgba(124, 58, 237, 0.22);
+}
+
+/* Reuses the front page's trust list and payment badges; only the spacing
+   under the grid is new. */
+.plan-trust.dv2-checkout-trust {
+    margin-top: 34px;
+}
+
+/* -------------------------------------------
+   INCLUDES
+   ------------------------------------------- */
+.plan-includes-panel {
+    max-width: 860px;
+    margin: 0 auto;
+}
+
+/* -------------------------------------------
+   AUDIENCE
+   ------------------------------------------- */
+.plan-audience-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.plan-audience-card {
+    background: var(--dv2-surface);
+    border: 1px solid var(--dv2-border);
+    border-radius: var(--dv2-radius-lg);
+    box-shadow: var(--dv2-shadow-sm);
+    padding: 28px 24px;
+}
+
+.plan-audience-card h3 {
+    font-family: var(--dv2-font-display);
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 1.25;
+    color: var(--dv2-ink);
+    margin: 0;
+}
+
+.plan-audience-card p {
+    font-size: 15.5px;
+    line-height: 1.6;
+    color: var(--dv2-body);
+    margin: 12px 0 0;
+}
+
+/* -------------------------------------------
+   COMPARE TABLE
+   ------------------------------------------- */
+.plan-compare-table {
+    margin-top: 40px;
+    background: var(--dv2-surface);
+    border: 1px solid var(--dv2-border-medium);
+    border-radius: var(--dv2-radius-xl);
+    box-shadow: var(--dv2-shadow-sm);
+    overflow: hidden;
+}
+
+.plan-compare-row {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 0.8fr 1.1fr;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 26px;
+    border-bottom: 1px solid var(--dv2-border);
+}
+
+.plan-compare-row:last-child {
+    border-bottom: none;
+}
+
+.plan-compare-row--head {
+    background: var(--dv2-surface-alt);
+    font-family: var(--dv2-font-display);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--dv2-faint);
+    padding-top: 14px;
+    padding-bottom: 14px;
+}
+
+/* The page you are on. Tinted and rule-marked rather than merely bolded, so it
+   is obvious at a glance which row is not a link. */
+.plan-compare-row--current {
+    background: var(--dv2-surface-tint);
+    box-shadow: inset 3px 0 0 var(--dv2-purple);
+}
+
+.plan-compare-name {
+    font-family: var(--dv2-font-display);
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--dv2-ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.plan-compare-flag {
+    background: rgba(0, 182, 122, 0.12);
+    color: #00905f;
+    font-family: var(--dv2-font-body);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: var(--dv2-radius-pill);
+    white-space: nowrap;
+}
+
+.plan-compare-total {
+    font-family: var(--dv2-font-display);
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--dv2-ink);
+}
+
+.plan-compare-rate {
+    font-size: 16px;
+    color: var(--dv2-body);
+}
+
+.plan-compare-save {
+    font-weight: 700;
+    font-size: 16px;
+    color: #00905f;
+}
+
+.plan-compare-dash {
+    color: var(--dv2-muted);
+    font-weight: 400;
+}
+
+.plan-compare-action {
+    text-align: right;
+}
+
+.plan-compare-action a {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--dv2-purple);
+    white-space: nowrap;
+}
+
+.plan-compare-action a:hover {
+    text-decoration: underline;
+}
+
+.plan-compare-here {
+    font-size: 14px;
+    color: var(--dv2-faint);
+    white-space: nowrap;
+}
+
+/* -------------------------------------------
+   CLOSING BAND
+   ------------------------------------------- */
+.plan-final {
+    margin-top: 96px;
+    background: var(--dv2-purple-900);
+    padding: 68px 0;
+    text-align: center;
+}
+
+.plan-final-inner {
+    max-width: 760px;
+}
+
+.plan-final-title {
+    font-family: var(--dv2-font-display);
+    font-weight: 800;
+    font-size: 36px;
+    line-height: 1.15;
+    letter-spacing: -0.8px;
+    color: #ffffff;
+    margin: 0;
+}
+
+.plan-final-text {
+    font-size: 18px;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.78);
+    margin: 16px auto 30px;
+    max-width: 560px;
+}
+
+/* -------------------------------------------
+   UTILITIES
+   ------------------------------------------- */
+.screen-reader-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* -------------------------------------------
+   RESPONSIVE
+   ------------------------------------------- */
+@media (max-width: 1024px) {
+    .plan-hero-title {
+        font-size: 40px;
+    }
+
+    /* Four across stops working before the cards stop being readable. */
+    .plan-price-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+    }
+
+    .plan-audience-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .plan-compare-row {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .plan-hero {
+        padding-top: 40px;
+    }
+
+    .plan-hero-title {
+        font-size: 32px;
+        letter-spacing: -0.8px;
+    }
+
+    .plan-hero-sub {
+        font-size: 16.5px;
+    }
+
+    .plan-hero-price-value {
+        font-size: 36px;
+    }
+
+    .plan-hero-actions .dv2-btn {
+        width: 100%;
+    }
+
+    .plan-hero-points {
+        gap: 10px 18px;
+    }
+
+    /* Lifting the popular card off the row only reads as a hierarchy when the
+       cards sit side by side. Stacked, it just looks misaligned. */
+    .plan-price-card--popular,
+    .plan-price-card--popular:hover {
+        transform: none;
+    }
+
+    .plan-price-note {
+        min-height: 0;
+    }
+
+    /* Five columns cannot survive a phone. Each row becomes a labelled block,
+       with the labels coming from data-label rather than the header row. */
+    .plan-compare-row--head {
+        display: none;
+    }
+
+    .plan-compare-row {
+        grid-template-columns: 1fr auto;
+        row-gap: 6px;
+        padding: 18px 20px;
+    }
+
+    .plan-compare-name {
+        grid-column: 1 / -1;
+        font-size: 18px;
+    }
+
+    /* With the header row gone, each value states its own column. */
+    .plan-compare-total::before,
+    .plan-compare-rate::before,
+    .plan-compare-save::before {
+        content: attr(data-label) ' ';
+        font-family: var(--dv2-font-body);
+        font-weight: 400;
+        font-size: 13px;
+        color: var(--dv2-faint);
+    }
+
+    .plan-compare-total,
+    .plan-compare-rate {
+        font-size: 15px;
+    }
+
+    .plan-compare-total {
+        grid-column: 1;
+    }
+
+    .plan-compare-rate {
+        grid-column: 2;
+        text-align: right;
+    }
+
+    .plan-compare-save {
+        grid-column: 1;
+        font-size: 14px;
+    }
+
+    .plan-compare-action {
+        grid-column: 2;
+    }
+
+    .plan-final {
+        margin-top: 64px;
+        padding: 52px 0;
+    }
+
+    .plan-final-title {
+        font-size: 27px;
+    }
+
+    .plan-final-text {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 520px) {
+    .plan-price-grid {
+        grid-template-columns: 1fr;
+        gap: 22px;
+    }
+}
