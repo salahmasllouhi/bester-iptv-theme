@@ -14,7 +14,11 @@
  *   $plan_months (int)  $plan_label (string)  $plan_from (float)
  */
 
-$hero_eyebrow = iptv_plan_field('plan_eyebrow', iptv_text('plan_eyebrow', 'IPTV Subscription'));
+// plan_str() inside iptv_text(): the front page has no plan_eyebrow field, so
+// iptv_text() would end at pll__('IPTV Subscription') and return it unchanged —
+// English on every Nordic page. Handing it the already-translated string keeps
+// the front-page override working while giving the bundled copy a chance.
+$hero_eyebrow = iptv_plan_field('plan_eyebrow', iptv_text('plan_eyebrow', plan_str('IPTV Subscription')));
 
 // The page title, not a format string. Each language's title is written out in
 // plan/inc/plan-pages-setup.php, so it is already correct everywhere; building
@@ -58,7 +62,7 @@ if (empty($hero_points)) {
     );
 }
 
-$hero_cta   = iptv_plan_field('plan_cta_text', iptv_text('plan_cta_text', 'See prices'));
+$hero_cta   = iptv_plan_field('plan_cta_text', iptv_text('plan_cta_text', plan_str('See prices')));
 $trial_url  = iptv_config('trial_url', 'https://panel.nordictv.io/checkout/trial');
 $trial_text = iptv_text('trial_cta', 'Start a 24-hour trial — no card');
 
@@ -97,7 +101,7 @@ if ($hero_image_url && !$hero_image_alt) {
 
         <?php if ($plan_from > 0) : ?>
             <p class="plan-hero-price">
-                <span class="plan-hero-price-label"><?php echo esc_html(iptv_text('plan_from_label', 'From')); ?></span>
+                <span class="plan-hero-price-label"><?php echo esc_html(iptv_text('plan_from_label', plan_str('From'))); ?></span>
                 <span class="plan-hero-price-value"><?php echo esc_html(iptv_plan_format_price($plan_from)); ?></span>
                 <span class="plan-hero-price-per">
                     <?php echo esc_html($plan_months === 1

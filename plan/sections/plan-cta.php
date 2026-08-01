@@ -25,7 +25,7 @@ $cta_text = iptv_plan_field('plan_final_text', $plan_from > 0
 
 $cta_button = iptv_plan_field(
     'plan_final_cta_text',
-    iptv_plan_field('plan_cta_text', iptv_text('plan_cta_text', 'See prices'))
+    iptv_plan_field('plan_cta_text', iptv_text('plan_cta_text', plan_str('See prices')))
 );
 ?>
 <section class="plan-final">
