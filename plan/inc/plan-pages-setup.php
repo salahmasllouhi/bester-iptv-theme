@@ -30,8 +30,10 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Bump to re-run after changing the titles or slugs below.
-define('PLAN_PAGES_BUILD', 1);
+// Bump to re-run after changing the titles or slugs below. Re-running is safe:
+// existing pages are matched and reused, so only the language, translation
+// group and plan length are rewritten — never the status or the content.
+define('PLAN_PAGES_BUILD', 2);
 
 if (!function_exists('iptv_plan_page_definitions')) {
     /**
@@ -234,4 +236,10 @@ add_action('init', function () {
     $summary = iptv_plan_build_pages();
 
     update_option('iptv_plan_pages_report', $summary, false);
+
+    // LiteSpeed caches these pages the first time they are hit, so a template
+    // or copy change that ships alongside a build bump would otherwise not be
+    // visible until the cache expired on its own. Same call the price table
+    // uses after a rebuild — see IPTV_Currency_Settings::rebuild_price_table().
+    do_action('litespeed_purge_all');
 }, 20);
