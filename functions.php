@@ -635,8 +635,9 @@ function my_iptv_theme_setup()
 }
 add_action('after_setup_theme', 'my_iptv_theme_setup');
 
-// Include Geo-Redirect System for Multisite
-require_once get_template_directory() . '/inc/geo-redirect.php';
+// Language is the visitor's choice, remembered between visits. Replaces the old
+// inc/geo-redirect.php, which picked a language from the visitor's IP.
+require_once get_template_directory() . '/inc/language-preference.php';
 
 // SEO Manager disabled - Using Rank Math Pro instead
 // require_once get_template_directory() . '/inc/seo-manager.php';

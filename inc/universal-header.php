@@ -66,12 +66,16 @@ include get_template_directory() . '/front-page/sections/header.php';
 
         const targetPath = countryUrls[currency];
         if (targetPath) {
-            // Set noredirect cookie to prevent PHP geo-redirect from overriding (30 days)
-            document.cookie = 'noredirect=1;path=/;max-age=' + (30 * 24 * 60 * 60);
-            localStorage.setItem('iptv_manual_switch', 'true');
+            // Remember the choice for next visit. window.nordictvLang is printed
+            // by inc/language-preference.php, which also reads the cookie back.
+            const cfg = window.nordictvLang;
+            if (cfg && cfg.byCurrency && cfg.byCurrency[currency]) {
+                document.cookie = cfg.cookie + '=' + encodeURIComponent(cfg.byCurrency[currency]) +
+                    ';path=/;max-age=' + (cfg.days * 24 * 60 * 60) + ';samesite=lax';
+            }
 
             const baseUrl = window.location.origin;
-            window.location.href = baseUrl + targetPath;
+            window.location.href = baseUrl + targetPath + '?nolangredirect=1';
         }
     }
 </script>

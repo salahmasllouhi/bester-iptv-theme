@@ -10,7 +10,20 @@ function toggleFooterDropdown() {
     if (dropdown) dropdown.classList.toggle('active');
 }
 
-// Redirect to region subsite
+// Remember the language the visitor just picked, so the next visit opens in it.
+// inc/language-preference.php reads this cookie and prints window.nordictvLang.
+function rememberLanguageChoice(currency) {
+    const cfg = window.nordictvLang;
+    if (!cfg || !cfg.byCurrency) return;
+
+    const slug = cfg.byCurrency[currency];
+    if (!slug) return;
+
+    document.cookie = cfg.cookie + '=' + encodeURIComponent(slug) +
+        ';path=/;max-age=' + (cfg.days * 24 * 60 * 60) + ';samesite=lax';
+}
+
+// Redirect to the chosen language
 function redirectToRegion(currency) {
     const countryUrls = {
         usd: '/',
@@ -23,12 +36,12 @@ function redirectToRegion(currency) {
 
     const targetPath = countryUrls[currency];
     if (targetPath) {
-        // Set noredirect cookie to prevent PHP geo-redirect from overriding (30 days)
-        document.cookie = 'noredirect=1;path=/;max-age=' + (30 * 24 * 60 * 60);
-        localStorage.setItem('iptv_manual_switch', 'true');
+        rememberLanguageChoice(currency);
 
+        // nolangredirect stops the preference redirect from second-guessing a
+        // click that has only just written the cookie.
         const baseUrl = window.location.origin;
-        window.location.href = baseUrl + targetPath;
+        window.location.href = baseUrl + targetPath + '?nolangredirect=1';
     }
 }
 
@@ -125,9 +138,12 @@ function setFooterCurrency(currency) {
     const targetPath = countryUrls[currency];
     const currentCurrency = getCurrentCurrencyFromUrl();
 
+    // Same as the header switcher: this is a deliberate choice, so record it.
+    rememberLanguageChoice(currency);
+
     if (currency !== currentCurrency && targetPath) {
         const baseUrl = window.location.origin;
-        window.location.href = baseUrl + targetPath;
+        window.location.href = baseUrl + targetPath + '?nolangredirect=1';
     } else {
         setCurrency(currency);
     }
@@ -182,55 +198,30 @@ function updateAllPrices() {
     }
 }
 
-// Check if we should auto-redirect based on browser language
-function checkForSmartRedirect() {
-    // If user has manually switched before, respect their choice (DO NOT REDIRECT)
-    if (localStorage.getItem('iptv_manual_switch')) {
-        return;
-    }
-
-    const currentPath = window.location.pathname;
-    // Only redirect if we are on the main domain (root) or a non-specific path
-    // Avoid circular redirects if already on correct subsite
-    if (currentPath.startsWith('/sv') || currentPath.startsWith('/no') || currentPath.startsWith('/dk') || currentPath.startsWith('/fi') || currentPath.startsWith('/is')) {
-        return;
-    }
-
-    const lang = navigator.language || navigator.userLanguage;
-    if (!lang) return;
-
-    const primaryLang = lang.split('-')[0].toLowerCase();
-
-    // Redirect Logic
-    if (primaryLang === 'sv') {
-        window.location.href = window.location.origin + '/sv/';
-    }
-}
+// There is deliberately no browser-language auto-redirect here any more. A
+// Swedish-configured browser asking for the English page gets the English page;
+// only a language the visitor picked themselves ever moves them, and that is
+// handled server-side in inc/language-preference.php.
 
 // Initialize currency on page load
 document.addEventListener('DOMContentLoaded', function () {
-
-    // Check for smart redirect FIRST
-    checkForSmartRedirect();
 
     // Set up country option click handlers with redirect
     document.querySelectorAll('.country-option').forEach(option => {
         option.addEventListener('click', function (e) {
             e.preventDefault(); // Prevent default link behavior to ensure storage save
 
-            // User manually clicked, so save this preference to prevent auto-redirect
-            localStorage.setItem('iptv_manual_switch', 'true');
-
-            // Also set the noredirect cookie to prevent PHP geo-redirect (30 days)
-            document.cookie = 'noredirect=1;path=/;max-age=' + (30 * 24 * 60 * 60);
-
             const currency = this.dataset.currency;
+
+            // This is the visitor choosing — remember it for next time.
+            rememberLanguageChoice(currency);
+
             const targetPath = countryUrls[currency];
             const currentCurrency = htmlCurrentCurrency(); // Helper to safely get current
 
             if (currency !== currentCurrency) {
                 const baseUrl = window.location.origin;
-                window.location.href = baseUrl + targetPath;
+                window.location.href = baseUrl + targetPath + '?nolangredirect=1';
             } else {
                 setCurrency(currency);
             }
