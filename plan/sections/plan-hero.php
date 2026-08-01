@@ -14,12 +14,22 @@
  *   $plan_months (int)  $plan_label (string)  $plan_from (float)
  */
 
-$hero_eyebrow  = iptv_plan_field('plan_eyebrow', iptv_text('plan_eyebrow', 'IPTV Subscription'));
-$hero_headline = iptv_plan_field('plan_headline', sprintf(
-    /* translators: %s = plan length, e.g. "1 Month" */
-    plan_str('%s IPTV Subscription'),
-    $plan_label
-));
+$hero_eyebrow = iptv_plan_field('plan_eyebrow', iptv_text('plan_eyebrow', 'IPTV Subscription'));
+
+// The page title, not a format string. Each language's title is written out in
+// plan/inc/plan-pages-setup.php, so it is already correct everywhere; building
+// the H1 from plan_str('%s IPTV Subscription') instead produced half-translated
+// headlines like "12 måneder IPTV Subscription" until someone remembered to
+// translate the format too. Overridable per page by the plan_headline field.
+$hero_headline = iptv_plan_field('plan_headline', get_the_title());
+
+if (!$hero_headline) {
+    $hero_headline = sprintf(
+        /* translators: %s = plan length, e.g. "1 Month" */
+        plan_str('%s IPTV Subscription'),
+        $plan_label
+    );
+}
 $hero_subline = iptv_plan_field('plan_subline', $plan_months === 1
     ? plan_str('The whole service, one month at a time. No contract, no auto-renew — stop whenever you like.')
     : sprintf(
