@@ -21,16 +21,65 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+if (!function_exists('iptv_plan_translations')) {
+    /**
+     * Bundled Nordic copy for this template, english => translation.
+     *
+     * Ships with the theme so the plan pages read correctly in every language
+     * the moment they are published, rather than after someone remembers to
+     * work through Languages → String translations. A translation entered
+     * there still wins — see plan_str() — so this is a floor, not a ceiling.
+     *
+     * @param string $lang Polylang language slug.
+     * @return array<string,string>
+     */
+    function iptv_plan_translations($lang)
+    {
+        static $cache = array();
+
+        if (isset($cache[$lang])) {
+            return $cache[$lang];
+        }
+
+        $file = __DIR__ . '/translations/' . $lang . '.php';
+        $cache[$lang] = file_exists($file) ? (array) include $file : array();
+
+        return $cache[$lang];
+    }
+}
+
 if (!function_exists('plan_str')) {
     /**
-     * The current language's version of a registered plan string.
+     * The current language's version of a plan string.
+     *
+     * Order: a translation entered in Polylang's string table, then the copy
+     * bundled with the theme, then the English default. Polylang comes first so
+     * an editor can always override what the theme ships — pll__() returns the
+     * string unchanged when nothing has been entered, which is what makes the
+     * comparison below a usable "was it translated?" test.
      *
      * @param string $default English default, which is also the lookup key.
      * @return string
      */
     function plan_str($default)
     {
-        return function_exists('pll__') ? pll__($default) : $default;
+        if (function_exists('pll__')) {
+            $translated = pll__($default);
+            if ($translated !== $default) {
+                return $translated;
+            }
+        }
+
+        $lang = function_exists('pll_current_language') ? pll_current_language('slug') : '';
+
+        if ($lang && $lang !== 'en') {
+            $bundled = iptv_plan_translations($lang);
+            if (isset($bundled[$default]) && $bundled[$default] !== '') {
+                return $bundled[$default];
+            }
+        }
+
+        return $default;
     }
 }
 
