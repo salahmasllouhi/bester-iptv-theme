@@ -11,17 +11,17 @@
 
 $cta_title = iptv_plan_field('plan_final_title', sprintf(
     /* translators: %s = plan length, e.g. "1 Month" */
-    __('Start your %s plan today', 'my-iptv'),
+    plan_str('Start your %s plan today'),
     $plan_label
 ));
 
 $cta_text = iptv_plan_field('plan_final_text', $plan_from > 0
     ? sprintf(
         /* translators: %s = formatted price, e.g. "$16.99" */
-        __('From %s. Activated in about a minute, watchable on the TV you already own.', 'my-iptv'),
+        plan_str('From %s. Activated in about a minute, watchable on the TV you already own.'),
         iptv_plan_format_price($plan_from)
     )
-    : __('Activated in about a minute, watchable on the TV you already own.', 'my-iptv'));
+    : plan_str('Activated in about a minute, watchable on the TV you already own.'));
 
 $cta_button = iptv_plan_field(
     'plan_final_cta_text',

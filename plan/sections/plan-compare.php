@@ -17,14 +17,14 @@
 
 $compare_title = iptv_plan_field(
     'plan_compare_title',
-    __('How the four plans compare', 'my-iptv')
+    plan_str('How the four plans compare')
 );
 
 $screens = iptv_plan_popular_screens();
 
 $compare_subtitle = iptv_plan_field('plan_compare_subtitle', sprintf(
     /* translators: %s = screen count label, e.g. "2 Screens" */
-    __('Prices shown for %s. Longer plans cost less per month — the service is the same on all of them.', 'my-iptv'),
+    plan_str('Prices shown for %s. Longer plans cost less per month — the service is the same on all of them.'),
     iptv_plan_screens_label($screens)
 ));
 
@@ -58,11 +58,11 @@ foreach (array_keys(iptv_plan_durations()) as $months) {
             <div class="plan-compare-row plan-compare-row--head" role="row">
                 <?php // Not iptv_text('duration_title') — that string is the
                       // configurator's question ("How long?"), not a heading. ?>
-                <span role="columnheader"><?php echo esc_html(__('Plan', 'my-iptv')); ?></span>
+                <span role="columnheader"><?php echo esc_html(plan_str('Plan')); ?></span>
                 <span role="columnheader"><?php echo esc_html(iptv_text('total_label', 'Your total')); ?></span>
-                <span role="columnheader"><?php echo esc_html(__('Per month', 'my-iptv')); ?></span>
-                <span role="columnheader"><?php echo esc_html(__('You save', 'my-iptv')); ?></span>
-                <span role="columnheader"><span class="screen-reader-text"><?php echo esc_html(__('Link', 'my-iptv')); ?></span></span>
+                <span role="columnheader"><?php echo esc_html(plan_str('Per month')); ?></span>
+                <span role="columnheader"><?php echo esc_html(plan_str('You save')); ?></span>
+                <span role="columnheader"><span class="screen-reader-text"><?php echo esc_html(plan_str('Link')); ?></span></span>
             </div>
 
             <?php foreach (array_keys(iptv_plan_durations()) as $months) :
@@ -89,7 +89,7 @@ foreach (array_keys(iptv_plan_durations()) as $months) {
                     <span class="plan-compare-name" role="cell">
                         <?php echo esc_html(iptv_plan_label($months)); ?>
                         <?php if ($is_best) : ?>
-                            <span class="plan-compare-flag"><?php echo esc_html(__('Best value', 'my-iptv')); ?></span>
+                            <span class="plan-compare-flag"><?php echo esc_html(plan_str('Best value')); ?></span>
                         <?php endif; ?>
                     </span>
 
@@ -104,12 +104,12 @@ foreach (array_keys(iptv_plan_durations()) as $months) {
                     </span>
 
                     <span class="plan-compare-rate" role="cell"
-                        data-label="<?php echo esc_attr(__('Per month', 'my-iptv')); ?>">
+                        data-label="<?php echo esc_attr(plan_str('Per month')); ?>">
                         <?php echo esc_html(iptv_plan_format_price($saving['per_month'])); ?>
                     </span>
 
                     <span class="plan-compare-save" role="cell"
-                        data-label="<?php echo esc_attr(__('You save', 'my-iptv')); ?>">
+                        data-label="<?php echo esc_attr(plan_str('You save')); ?>">
                         <?php echo $saving['pct'] > 0
                             ? esc_html(sprintf('%d%%', $saving['pct']))
                             : '<span class="plan-compare-dash">—</span>'; ?>
@@ -117,18 +117,18 @@ foreach (array_keys(iptv_plan_durations()) as $months) {
 
                     <span class="plan-compare-action" role="cell">
                         <?php if ($is_current) : ?>
-                            <span class="plan-compare-here"><?php echo esc_html(__('You are here', 'my-iptv')); ?></span>
+                            <span class="plan-compare-here"><?php echo esc_html(plan_str('You are here')); ?></span>
                         <?php elseif ($url) : ?>
                             <a href="<?php echo esc_url($url); ?>">
                                 <?php echo esc_html(sprintf(
                                     /* translators: %s = plan length, e.g. "12 Months" */
-                                    __('See %s', 'my-iptv'),
+                                    plan_str('See %s'),
                                     iptv_plan_label($months)
                                 )); ?>
                             </a>
                         <?php else : ?>
                             <a href="<?php echo esc_url(home_url('/#pricing')); ?>">
-                                <?php echo esc_html(__('See pricing', 'my-iptv')); ?>
+                                <?php echo esc_html(plan_str('See pricing')); ?>
                             </a>
                         <?php endif; ?>
                     </span>

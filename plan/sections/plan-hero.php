@@ -17,14 +17,14 @@
 $hero_eyebrow  = iptv_plan_field('plan_eyebrow', iptv_text('plan_eyebrow', 'IPTV Subscription'));
 $hero_headline = iptv_plan_field('plan_headline', sprintf(
     /* translators: %s = plan length, e.g. "1 Month" */
-    __('%s IPTV Subscription', 'my-iptv'),
+    plan_str('%s IPTV Subscription'),
     $plan_label
 ));
 $hero_subline = iptv_plan_field('plan_subline', $plan_months === 1
-    ? __('The whole service, one month at a time. No contract, no auto-renew — stop whenever you like.', 'my-iptv')
+    ? plan_str('The whole service, one month at a time. No contract, no auto-renew — stop whenever you like.')
     : sprintf(
         /* translators: %s = plan length, e.g. "6 Months" */
-        __('The whole service for %s. One payment, no contract, no auto-renew.', 'my-iptv'),
+        plan_str('The whole service for %s. One payment, no contract, no auto-renew.'),
         $plan_label
     ));
 
@@ -42,9 +42,9 @@ if (is_array($rows)) {
 
 if (empty($hero_points)) {
     $hero_points = array(
-        __('Watching in 60 seconds', 'my-iptv'),
-        __('No contract, no auto-renew', 'my-iptv'),
-        __('24/7 support', 'my-iptv'),
+        plan_str('Watching in 60 seconds'),
+        plan_str('No contract, no auto-renew'),
+        plan_str('24/7 support'),
     );
 }
 
@@ -94,7 +94,7 @@ if ($hero_image_url && !$hero_image_alt) {
                         ? iptv_text('per_month', 'per month')
                         : sprintf(
                             /* translators: %s = plan length, e.g. "6 Months" */
-                            __('for %s', 'my-iptv'),
+                            plan_str('for %s'),
                             $plan_label
                         )); ?>
                 </span>
@@ -140,7 +140,7 @@ if ($hero_image_url && !$hero_image_alt) {
                     <circle cx="8.5" cy="8.5" r="1.5"></circle>
                     <path d="m21 15-5-5L5 21"></path>
                 </svg>
-                <span><?php echo esc_html__('Hero image', 'my-iptv'); ?></span>
+                <span><?php echo esc_html(plan_str('Hero image')); ?></span>
             </div>
         <?php endif; ?>
     </div>

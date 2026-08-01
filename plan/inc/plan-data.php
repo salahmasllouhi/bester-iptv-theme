@@ -504,40 +504,18 @@ if (!function_exists('iptv_plan_faq_items')) {
             return $items;
         }
 
+        // Defaults live in plan/inc/plan-strings.php, which is also what
+        // registers them with Polylang — one array, so copy edited there cannot
+        // drift out of registration and silently stop translating.
         $label = iptv_plan_label($months);
 
-        $items = array(
-            array(
-                'q' => sprintf(__('What do I get with the %s plan?', 'my-iptv'), $label),
-                'a' => __('Everything we offer: 40,000+ live channels, 200,000+ movies and series, 4K/HD quality, the full TV guide and 24/7 support. The only thing a plan changes is how long it runs and how many screens can watch at once.', 'my-iptv'),
-            ),
-            array(
-                'q' => __('How fast is my subscription activated?', 'my-iptv'),
-                'a' => __('Straight after payment. Your login details are emailed within about 60 seconds, and you can be watching before the email notification fades.', 'my-iptv'),
-            ),
-            array(
-                'q' => __('Does it renew automatically?', 'my-iptv'),
-                'a' => __('No. There is no auto-renew and no contract — the plan simply ends, and you renew only if you want to.', 'my-iptv'),
-            ),
-            array(
-                'q' => __('How many screens do I need?', 'my-iptv'),
-                'a' => __('One screen streams on one device at a time. Pick the number of people who might watch different things at the same time — most households choose two.', 'my-iptv'),
-            ),
-            array(
-                'q' => __('Which devices work?', 'my-iptv'),
-                'a' => __('Smart TVs, Android TV, Apple TV, Fire Stick, iPhone, iPad, Android, Windows, Mac, set-top boxes, Chromecast, Roku and Kodi. No new hardware needed.', 'my-iptv'),
-            ),
-            array(
-                'q' => __('What if it does not work for me?', 'my-iptv'),
-                'a' => __('You are covered by our money-back guarantee, and there is a 24-hour trial with no card if you would rather test first.', 'my-iptv'),
-            ),
-        );
-
-        if ($months === 1) {
-            array_unshift($items, array(
-                'q' => __('Can I switch to a longer plan later?', 'my-iptv'),
-                'a' => __('Yes. Plenty of people start with one month and move to 6 or 12 once they have seen the service. Nothing is locked, and the longer plans cost far less per month.', 'my-iptv'),
-            ));
+        foreach (iptv_plan_faq_defaults($months) as $row) {
+            $items[] = array(
+                // The only row carrying a placeholder is the "what do I get"
+                // one; sprintf on a string without one returns it unchanged.
+                'q' => sprintf(plan_str($row['q']), $label),
+                'a' => plan_str($row['a']),
+            );
         }
 
         return $items;

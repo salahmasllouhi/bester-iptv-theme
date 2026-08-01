@@ -13,7 +13,7 @@
 
 $audience_title = iptv_plan_field('plan_audience_title', sprintf(
     /* translators: %s = plan length, e.g. "1 Month" */
-    __('Who the %s plan suits', 'my-iptv'),
+    plan_str('Who the %s plan suits'),
     $plan_label
 ));
 
@@ -32,66 +32,18 @@ if (is_array($rows)) {
 }
 
 if (empty($points)) {
-    $by_length = array(
-        1 => array(
-            array(
-                'title' => __('You want to try it properly', 'my-iptv'),
-                'text'  => __('A full month of the complete service — every channel, every film, every match. Long enough to judge it on your own TV, your own connection and your own evenings.', 'my-iptv'),
-            ),
-            array(
-                'title' => __('You are not ready to commit', 'my-iptv'),
-                'text'  => __('Nothing renews on its own and there is no contract to leave. When the month ends, it ends — you decide whether there is a next one.', 'my-iptv'),
-            ),
-            array(
-                'title' => __('You only need it for a while', 'my-iptv'),
-                'text'  => __('A season, a tournament, a long winter, a rented flat. Take the month you need and stop.', 'my-iptv'),
-            ),
-        ),
-        3 => array(
-            array(
-                'title' => __('You have already made up your mind', 'my-iptv'),
-                'text'  => __('You have tried IPTV before and you know what you want. Three months costs noticeably less per month than paying monthly.', 'my-iptv'),
-            ),
-            array(
-                'title' => __('You are covering a season', 'my-iptv'),
-                'text'  => __('One league, one winter, one stretch of long evenings — a quarter is usually the shape of it.', 'my-iptv'),
-            ),
-            array(
-                'title' => __('You want less admin', 'my-iptv'),
-                'text'  => __('One payment instead of three, and no renewal to remember in between.', 'my-iptv'),
-            ),
-        ),
-        6 => array(
-            array(
-                'title' => __('You watch all year', 'my-iptv'),
-                'text'  => __('Half a year of everything, at a rate that makes monthly billing look expensive.', 'my-iptv'),
-            ),
-            array(
-                'title' => __('You want the saving without the full year', 'my-iptv'),
-                'text'  => __('Most of the discount of the annual plan, at half the amount up front.', 'my-iptv'),
-            ),
-            array(
-                'title' => __('You are done comparing', 'my-iptv'),
-                'text'  => __('Set it up once, forget the billing, and go back to watching television.', 'my-iptv'),
-            ),
-        ),
-        12 => array(
-            array(
-                'title' => __('You want the lowest price there is', 'my-iptv'),
-                'text'  => __('The annual plan is the cheapest month of television we sell. Nothing else comes close per month.', 'my-iptv'),
-            ),
-            array(
-                'title' => __('This is your main television', 'my-iptv'),
-                'text'  => __('If the household watches most nights, a year is the plan that matches how you actually use it.', 'my-iptv'),
-            ),
-            array(
-                'title' => __('You want to pay once and forget it', 'my-iptv'),
-                'text'  => __('One payment, twelve months, no renewal notice and no auto-charge at the end of it.', 'my-iptv'),
-            ),
-        ),
-    );
+    // Defaults live in plan/inc/plan-strings.php, which is also what registers
+    // them with Polylang — one array, so copy edited there cannot drift out of
+    // registration and silently stop translating.
+    $by_length = iptv_plan_audience_defaults();
+    $cards     = isset($by_length[$plan_months]) ? $by_length[$plan_months] : $by_length[1];
 
-    $points = isset($by_length[$plan_months]) ? $by_length[$plan_months] : $by_length[1];
+    foreach ($cards as $card) {
+        $points[] = array(
+            'title' => plan_str($card['title']),
+            'text'  => plan_str($card['text']),
+        );
+    }
 }
 ?>
 <section class="plan-audience dv2-section">

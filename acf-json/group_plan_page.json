@@ -373,5 +373,6 @@
     "hide_on_screen": "",
     "active": true,
     "description": "Fields for the Plan Page template. Set Plan Length; everything else is an optional override of a sensible default.",
+    "show_in_rest": 1,
     "modified": 1999999999
 }

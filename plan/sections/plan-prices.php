@@ -18,12 +18,12 @@ $popular = iptv_plan_popular_screens();
 
 $prices_title = iptv_plan_field('plan_pricing_title', sprintf(
     /* translators: %s = plan length, e.g. "1 Month" */
-    __('%s — choose your screens', 'my-iptv'),
+    plan_str('%s — choose your screens'),
     $plan_label
 ));
 $prices_subtitle = iptv_plan_field(
     'plan_pricing_subtitle',
-    __('One screen streams on one device at a time. Everything else is identical on every plan.', 'my-iptv')
+    plan_str('One screen streams on one device at a time. Everything else is identical on every plan.')
 );
 $buy_text = iptv_plan_field('plan_buy_text', iptv_text('checkout_button', 'Start watching'));
 
@@ -74,11 +74,15 @@ if ($plan_months > 1) {
 
                     <p class="plan-price-note">
                         <?php
+                        // Two registered strings rather than _n(): Polylang's
+                        // string translation has no plural forms, and the
+                        // singular here is only ever "one", so a count-based
+                        // rule buys nothing.
                         echo esc_html($screens === 1
-                            ? __('One device watching at a time', 'my-iptv')
+                            ? plan_str('One device watching at a time')
                             : sprintf(
                                 /* translators: %d = number of screens */
-                                _n('%d device watching at the same time', '%d devices watching at the same time', $screens, 'my-iptv'),
+                                plan_str('%d devices watching at the same time'),
                                 $screens
                             ));
                         ?>
@@ -95,7 +99,7 @@ if ($plan_months > 1) {
                         } else {
                             printf(
                                 /* translators: %s = formatted price, e.g. "$6.83" */
-                                esc_html__('%s / month', 'my-iptv'),
+                                esc_html(plan_str('%s / month')),
                                 esc_html(iptv_plan_format_price($saving['per_month']))
                             );
                         }
@@ -108,7 +112,7 @@ if ($plan_months > 1) {
                             <span class="plan-price-off">
                                 <?php echo esc_html(sprintf(
                                     /* translators: %d = percentage saved */
-                                    __('Save %d%%', 'my-iptv'),
+                                    plan_str('Save %d%%'),
                                     $saving['pct']
                                 )); ?>
                             </span>
