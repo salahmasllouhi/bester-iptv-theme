@@ -10,16 +10,16 @@
 
 /* -------------------------------------------
    HERO
+
+   Two columns: copy left, image right. The grid is .dv2-hero from
+   design-v2-sections.css — column split, gap, vertical centring, padding and
+   the stack at 1024px all come from there, so this hero and the front page's
+   cannot drift apart. Only the left column's contents are defined below.
+
+   Deliberately no .plan-hero rule: this sheet loads after
+   design-v2-sections.css at the same specificity, so anything set here would
+   also beat .dv2-hero's own responsive padding rather than merely adding to it.
    ------------------------------------------- */
-.plan-hero {
-    padding: 56px 0 8px;
-    text-align: center;
-}
-
-.plan-hero-inner {
-    max-width: 900px;
-}
-
 .plan-hero-eyebrow {
     display: inline-block;
     background: var(--dv2-surface-tint);
@@ -33,22 +33,24 @@
     letter-spacing: 0.02em;
 }
 
+/* 41px matches .dv2-hero-title — the copy column is the same width here as it
+   is on the front page, so the headline has to be the same size to fit. */
 .plan-hero-title {
     font-family: var(--dv2-font-display);
     font-weight: 800;
-    font-size: 48px;
-    line-height: 1.08;
-    letter-spacing: -1.4px;
+    font-size: 41px;
+    line-height: 1.1;
+    letter-spacing: -1.3px;
     color: var(--dv2-ink);
-    margin: 22px 0 0;
+    margin: 20px 0 0;
 }
 
 .plan-hero-sub {
     font-size: 19px;
     line-height: 1.55;
     color: var(--dv2-body);
-    max-width: 620px;
-    margin: 18px auto 0;
+    max-width: 520px;
+    margin: 16px 0 0;
 }
 
 /* "From $16.99 per month". The price is the only thing here at display size —
@@ -57,10 +59,10 @@
 .plan-hero-price {
     display: flex;
     align-items: baseline;
-    justify-content: center;
+    justify-content: flex-start;
     flex-wrap: wrap;
     gap: 10px;
-    margin: 26px 0 0;
+    margin: 24px 0 0;
 }
 
 .plan-hero-price-label {
@@ -86,21 +88,21 @@
 }
 
 .plan-hero-actions {
-    margin-top: 28px;
+    margin-top: 26px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 14px;
     flex-wrap: wrap;
 }
 
 .plan-hero-points {
     list-style: none;
-    margin: 26px 0 0;
+    margin: 24px 0 0;
     padding: 0;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 12px 26px;
     flex-wrap: wrap;
 }
@@ -119,6 +121,33 @@
     top: 0;
     color: var(--dv2-green);
     font-weight: 700;
+}
+
+/* Stand-in until an image is attached in the editor. 4:3 is a holding shape —
+   the real image sets its own once it lands, and .dv2-hero-media img (inherited)
+   already styles it. position:relative puts it above .dv2-hero-glow, which is
+   absolutely positioned in the same column. */
+.plan-hero-placeholder {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    aspect-ratio: 4 / 3;
+    width: 100%;
+    border: 2px dashed var(--dv2-border-strong);
+    border-radius: var(--dv2-radius-xl);
+    background: rgba(255, 255, 255, 0.55);
+    color: var(--dv2-purple);
+}
+
+.plan-hero-placeholder span {
+    font-family: var(--dv2-font-display);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    color: var(--dv2-faint);
 }
 
 /* -------------------------------------------
@@ -466,8 +495,11 @@
    RESPONSIVE
    ------------------------------------------- */
 @media (max-width: 1024px) {
-    .plan-hero-title {
-        font-size: 40px;
+    /* .dv2-hero has stacked to one column by here, so the copy has the full
+       width back and the headline does not need to shrink — but the subline's
+       520px cap was sized for the narrow column and now just looks arbitrary. */
+    .plan-hero-sub {
+        max-width: none;
     }
 
     /* Four across stops working before the cards stop being readable. */
@@ -487,17 +519,14 @@
 }
 
 @media (max-width: 768px) {
-    .plan-hero {
-        padding-top: 40px;
-    }
-
+    /* Matches .dv2-hero-title at this breakpoint. */
     .plan-hero-title {
-        font-size: 32px;
+        font-size: 28px;
         letter-spacing: -0.8px;
     }
 
     .plan-hero-sub {
-        font-size: 16.5px;
+        font-size: 17px;
     }
 
     .plan-hero-price-value {
@@ -510,6 +539,12 @@
 
     .plan-hero-points {
         gap: 10px 18px;
+    }
+
+    /* Stacked, the placeholder is as wide as the screen; 4:3 would push the
+       whole hero off the fold. */
+    .plan-hero-placeholder {
+        aspect-ratio: 16 / 10;
     }
 
     /* Lifting the popular card off the row only reads as a hierarchy when the

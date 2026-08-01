@@ -60,6 +60,18 @@
             "new_lines": ""
         },
         {
+            "key": "field_plan_hero_image",
+            "label": "Hero Image",
+            "name": "plan_hero_image",
+            "type": "image",
+            "instructions": "The right-hand column of the hero. Until one is set, a dashed placeholder of the same proportions holds the space, so adding the image later does not reflow the page. Alt text comes from the media library.",
+            "required": 0,
+            "return_format": "array",
+            "preview_size": "medium",
+            "library": "all",
+            "mime_types": "jpg,jpeg,png,webp,avif,svg"
+        },
+        {
             "key": "field_plan_hero_points",
             "label": "Hero Trust Points",
             "name": "plan_hero_points",

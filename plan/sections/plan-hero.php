@@ -1,11 +1,14 @@
 <?php
 /**
- * Plan hero
+ * Plan hero — two columns: copy left, image right
  *
- * Headline, the "from" price and three trust lines. The CTA points at the price
- * grid rather than straight at checkout: the price depends on how many screens
- * the visitor wants, and sending them to a checkout for a screen count they
- * never chose is how you get refunds.
+ * Reuses the front page's .dv2-hero grid rather than defining another one, so
+ * the column split, the gap and the stack-at-1024px behaviour are shared and
+ * cannot drift. Only the contents of the left column are plan-specific.
+ *
+ * The CTA points at the price grid rather than straight at checkout: the price
+ * depends on how many screens the visitor wants, and sending them to a checkout
+ * for a screen count they never chose is how you get refunds.
  *
  * Expects from template-plan.php:
  *   $plan_months (int)  $plan_label (string)  $plan_from (float)
@@ -48,9 +51,33 @@ if (empty($hero_points)) {
 $hero_cta   = iptv_plan_field('plan_cta_text', iptv_text('plan_cta_text', 'See prices'));
 $trial_url  = iptv_config('trial_url', 'https://panel.nordictv.io/checkout/trial');
 $trial_text = iptv_text('trial_cta', 'Start a 24-hour trial — no card');
+
+// ── Hero image ───────────────────────────────────────────────────────────────
+// Set per page from the editor. Accepts either shape the ACF field can be
+// configured to return, so switching return_format later does not break it.
+// Until one is attached the column holds a placeholder of the same proportions,
+// so dropping the real image in does not reflow the page.
+$hero_image_url = '';
+$hero_image_alt = '';
+$hero_image     = iptv_plan_field('plan_hero_image', '');
+
+if (is_array($hero_image)) {
+    $hero_image_url = !empty($hero_image['url']) ? $hero_image['url'] : '';
+    $hero_image_alt = !empty($hero_image['alt']) ? $hero_image['alt'] : '';
+} elseif (is_numeric($hero_image)) {
+    $hero_image_url = wp_get_attachment_image_url((int) $hero_image, 'full');
+    $hero_image_alt = get_post_meta((int) $hero_image, '_wp_attachment_image_alt', true);
+} elseif (is_string($hero_image) && $hero_image) {
+    $hero_image_url = $hero_image;
+}
+
+if ($hero_image_url && !$hero_image_alt) {
+    $hero_image_alt = $hero_headline;
+}
 ?>
-<section class="plan-hero">
-    <div class="container plan-hero-inner">
+<section class="plan-hero dv2-hero container">
+
+    <div class="dv2-hero-copy plan-hero-copy">
 
         <p class="plan-hero-eyebrow"><?php echo esc_html($hero_eyebrow); ?></p>
 
@@ -91,4 +118,31 @@ $trial_text = iptv_text('trial_cta', 'Start a 24-hour trial — no card');
         </ul>
 
     </div>
+
+    <div class="dv2-hero-media plan-hero-media">
+        <div class="dv2-hero-glow" aria-hidden="true"></div>
+
+        <?php if ($hero_image_url) : ?>
+            <img src="<?php echo esc_url($hero_image_url); ?>"
+                alt="<?php echo esc_attr($hero_image_alt); ?>"
+                fetchpriority="high" decoding="async">
+        <?php else : ?>
+            <?php
+            // Placeholder, not an empty column: it holds the space the real
+            // image will occupy and says so, rather than leaving the hero
+            // looking half-finished. Hidden from assistive tech — there is no
+            // information here.
+            ?>
+            <div class="plan-hero-placeholder" aria-hidden="true">
+                <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <path d="m21 15-5-5L5 21"></path>
+                </svg>
+                <span><?php echo esc_html__('Hero image', 'my-iptv'); ?></span>
+            </div>
+        <?php endif; ?>
+    </div>
+
 </section>
