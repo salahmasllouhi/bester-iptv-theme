@@ -703,6 +703,11 @@ require_once get_template_directory() . '/plan/inc/plan-strings.php';
 // all of which it reads through.
 require_once get_template_directory() . '/plan/inc/plan-data.php';
 
+// One-time provisioning of the 24 plan pages (4 lengths x 6 languages), their
+// Polylang languages and their translation groups. Guarded by an option; see
+// the file header for how to re-run it.
+require_once get_template_directory() . '/plan/inc/plan-pages-setup.php';
+
 /**
  * WooCommerce: Redirect all cart operations to checkout page
  * Since the cart page is disabled, we redirect to checkout instead
