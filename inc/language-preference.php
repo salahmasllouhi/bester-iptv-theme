@@ -246,15 +246,48 @@ add_action('template_redirect', function () {
  * the currency/language pairs.
  */
 add_action('wp_head', function () {
+    // Where each language's copy of *this* page lives. Polylang works this out
+    // per request and falls back to that language's front page when no
+    // translation exists, which is exactly the behaviour the switcher wants.
+    //
+    // Without this the switcher only knew the language roots, so changing
+    // language from /sv/about-us dropped you on /no/ instead of /no/about-us.
+    $urls = array();
+    if (function_exists('pll_the_languages')) {
+        $list = pll_the_languages(array(
+            'raw'                    => 1,
+            'echo'                   => 0,
+            'hide_if_no_translation' => 0,
+        ));
+
+        if (is_array($list)) {
+            foreach ($list as $entry) {
+                if (!empty($entry['slug']) && !empty($entry['url'])) {
+                    $urls[$entry['slug']] = $entry['url'];
+                }
+            }
+        }
+    }
+
     $data = array(
         'cookie'     => NORDICTV_LANG_COOKIE,
         'days'       => NORDICTV_LANG_COOKIE_DAYS,
         'current'    => function_exists('pll_current_language') ? pll_current_language('slug') : '',
         'slugs'      => array_values(nordictv_lang_slugs()),
         'byCurrency' => (object) nordictv_lang_by_currency(),
+        'urls'       => (object) $urls,
     );
 
-    echo '<script>window.nordictvLang=' . wp_json_encode($data) . ';</script>' . "\n";
+    echo '<script>window.nordictvLang=' . wp_json_encode($data) . ';';
+
+    // Shared by both copies of the switcher — front-page/js/currency.js and the
+    // inline one in inc/universal-header.php — so they cannot drift apart again.
+    echo 'window.nordictvLangUrl=function(c){'
+        . 'var g=window.nordictvLang;if(!g||!g.byCurrency)return null;'
+        . 'var s=g.byCurrency[c];if(!s)return null;'
+        . 'return (g.urls&&g.urls[s])||null;};';
+
+    echo '</script>' . "\n";
 }, 5);
 
 /**

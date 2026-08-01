@@ -45,10 +45,22 @@ if (isset($site_language_map[$site_slug])) {
     $default_flag = $site_language_map[$site_slug]['flag'];
     $default_name = $site_language_map[$site_slug]['name'];
 }
+
+// Polylang filters home_url() only when the path is empty or '/'. Anything with
+// a path or fragment — home_url('/#features') — comes back as the English URL,
+// which is why every anchor link in this nav pointed at the English front page
+// from /no/, /sv/ and the rest while the labels were correctly translated.
+$nav_home = function_exists('pll_home_url') ? pll_home_url() : home_url('/');
+$nav_home = trailingslashit($nav_home);
+
+// The guide's real slug. home_url('/user-guide/') was a 404 in every language.
+$nav_guide = function_exists('iptv_page_url')
+    ? iptv_page_url('iptv-guide-setup-apps-devices-tips', $nav_home)
+    : $nav_home;
 ?>
 <header class="site-header" id="site-header">
     <div class="container nav-container">
-        <a href="<?php echo home_url('/'); ?>" class="logo">
+        <a href="<?php echo esc_url($nav_home); ?>" class="logo">
             <img src="<?php echo get_template_directory_uri(); ?>/images/logo/dark logo 500_150.png" alt="Nordic IPTV"
                 class="logo-img">
         </a>
@@ -62,12 +74,12 @@ if (isset($site_language_map[$site_slug])) {
             )); ?>
         <?php else: ?>
             <nav class="nav-links">
-                <a href="<?php echo home_url('/'); ?>"><?php echo esc_html(iptv_text('nav_link_home', 'Home')); ?></a>
-                <a href="<?php echo home_url('/#features'); ?>"><?php echo esc_html(iptv_text('nav_link_features', 'Features')); ?></a>
-                <a href="<?php echo home_url('/#pricing'); ?>"><?php echo esc_html(iptv_text('nav_link_pricing', 'Pricing')); ?></a>
+                <a href="<?php echo esc_url($nav_home); ?>"><?php echo esc_html(iptv_text('nav_link_home', 'Home')); ?></a>
+                <a href="<?php echo esc_url($nav_home . '#features'); ?>"><?php echo esc_html(iptv_text('nav_link_features', 'Features')); ?></a>
+                <a href="<?php echo esc_url($nav_home . '#pricing'); ?>"><?php echo esc_html(iptv_text('nav_link_pricing', 'Pricing')); ?></a>
                 <!-- Blog lives in the footer only. -->
-                <a href="<?php echo home_url('/user-guide/'); ?>"><?php echo esc_html(iptv_text('nav_link_guide', 'User Guide')); ?></a>
-                <a href="<?php echo home_url('/#contact'); ?>"><?php echo esc_html(iptv_text('nav_link_contact', 'Contact')); ?></a>
+                <a href="<?php echo esc_url($nav_guide); ?>"><?php echo esc_html(iptv_text('nav_link_guide', 'User Guide')); ?></a>
+                <a href="<?php echo esc_url($nav_home . '#contact'); ?>"><?php echo esc_html(iptv_text('nav_link_contact', 'Contact')); ?></a>
                 <a href="https://panel.nordictv.io/login"><?php echo esc_html(iptv_text('nav_link_account', 'My Account')); ?></a>
             </nav>
         <?php endif; ?>
@@ -101,7 +113,7 @@ if (isset($site_language_map[$site_slug])) {
                     </div>
                 </div>
             </div>
-            <a href="<?php echo home_url('/#pricing'); ?>" class="nav-btn nav-btn-primary"><?php echo esc_html(iptv_text('nav_cta_label', 'Get Access Now')); ?></a>
+            <a href="<?php echo esc_url($nav_home . '#pricing'); ?>" class="nav-btn nav-btn-primary"><?php echo esc_html(iptv_text('nav_cta_label', 'Get Access Now')); ?></a>
         </div>
         <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
             <span></span><span></span><span></span>
@@ -121,12 +133,12 @@ if (isset($site_language_map[$site_slug])) {
             'fallback_cb' => false,
         )); ?>
     <?php else: ?>
-        <a href="<?php echo home_url('/'); ?>"><?php echo esc_html(iptv_text('nav_link_home', 'Home')); ?></a>
-        <a href="<?php echo home_url('/#features'); ?>"><?php echo esc_html(iptv_text('nav_link_features', 'Features')); ?></a>
-        <a href="<?php echo home_url('/#pricing'); ?>"><?php echo esc_html(iptv_text('nav_link_pricing', 'Pricing')); ?></a>
+        <a href="<?php echo esc_url($nav_home); ?>"><?php echo esc_html(iptv_text('nav_link_home', 'Home')); ?></a>
+        <a href="<?php echo esc_url($nav_home . '#features'); ?>"><?php echo esc_html(iptv_text('nav_link_features', 'Features')); ?></a>
+        <a href="<?php echo esc_url($nav_home . '#pricing'); ?>"><?php echo esc_html(iptv_text('nav_link_pricing', 'Pricing')); ?></a>
         <!-- Blog lives in the footer only. -->
-        <a href="<?php echo home_url('/user-guide/'); ?>"><?php echo esc_html(iptv_text('nav_link_guide', 'User Guide')); ?></a>
-        <a href="<?php echo home_url('/#contact'); ?>"><?php echo esc_html(iptv_text('nav_link_contact', 'Contact')); ?></a>
+        <a href="<?php echo esc_url($nav_guide); ?>"><?php echo esc_html(iptv_text('nav_link_guide', 'User Guide')); ?></a>
+        <a href="<?php echo esc_url($nav_home . '#contact'); ?>"><?php echo esc_html(iptv_text('nav_link_contact', 'Contact')); ?></a>
         <a href="https://panel.nordictv.io/login"><?php echo esc_html(iptv_text('nav_link_account', 'My Account')); ?></a>
     <?php endif; ?>
 
@@ -143,6 +155,6 @@ if (isset($site_language_map[$site_slug])) {
         </div>
     </div>
 
-    <a href="<?php echo home_url('/#pricing'); ?>" class="nav-btn nav-btn-primary" style="margin-top:1rem;"
+    <a href="<?php echo esc_url($nav_home . '#pricing'); ?>" class="nav-btn nav-btn-primary" style="margin-top:1rem;"
         onclick="toggleMobileMenu()"><?php echo esc_html(iptv_text('nav_cta_label', 'Get Access Now')); ?></a>
 </div>

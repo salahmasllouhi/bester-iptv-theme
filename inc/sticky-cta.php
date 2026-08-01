@@ -105,14 +105,14 @@ add_action('wp_enqueue_scripts', function () {
         'iptv-sticky-cta',
         get_template_directory_uri() . '/front-page/css/sticky-cta.css',
         array(),
-        '1.2.0'
+        '1.3.0'
     );
 
     wp_enqueue_script(
         'iptv-sticky-cta',
         get_template_directory_uri() . '/front-page/js/sticky-cta.js',
         array(),
-        '1.2.0',
+        '1.3.0',
         true
     );
 }, 20);

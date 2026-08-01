@@ -53,13 +53,31 @@ body {
     padding-bottom: var(--sticky-cta-h, 0px);
 }
 
-/* The activity ticker is also fixed to the bottom left. Lift it clear of the
-   bar rather than letting the two stack on top of each other.
+/* Anything else pinned to the bottom of the viewport has to clear this bar.
+   --sticky-cta-offset (not --sticky-cta-h) so they settle back down while the
+   bar is slid out of the way, instead of hovering over nothing. */
+
+/* The activity ticker is fixed to the bottom left.
    Qualified with `body` on purpose: front-page.php inlines activity-ticker.css
    in a <style> block in the body, which comes after this file and would
    otherwise win the tie on source order. */
 body .activity-ticker {
-    bottom: calc(0.75rem + var(--sticky-cta-h, 0px));
+    bottom: calc(0.75rem + var(--sticky-cta-offset, 0px));
+}
+
+/* Chaty's floating contact button (wp-content/plugins/chaty) is fixed to the
+   same corner at bottom:25px, so this bar sat on top of it on every screen
+   size. margin-bottom lifts a bottom-anchored fixed element without overriding
+   the plugin's own `bottom`, which is configurable in its settings, and without
+   touching transform, which it uses for its open/close animation.
+
+   !important because the override has to hold whatever order the plugin's
+   stylesheet happens to load in. .chaty-outer-forms is the popup panel, which
+   is anchored separately and would otherwise open underneath the bar. */
+.chaty-widget,
+.chaty-outer-forms {
+    margin-bottom: var(--sticky-cta-offset, 0px) !important;
+    transition: margin-bottom .28s ease;
 }
 
 /* --- Countdown --- */

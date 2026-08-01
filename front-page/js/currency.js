@@ -23,8 +23,14 @@ function rememberLanguageChoice(currency) {
         ';path=/;max-age=' + (cfg.days * 24 * 60 * 60) + ';samesite=lax';
 }
 
-// Redirect to the chosen language
-function redirectToRegion(currency) {
+// Where switching to `currency` should land.
+//
+// Prefer this page's counterpart in the chosen language — window.nordictvLangUrl
+// is printed by inc/language-preference.php from Polylang, which knows each
+// translation's URL and falls back to that language's front page by itself.
+// Switching language from /sv/about-us used to drop you on /no/ rather than
+// /no/about-us, because only the language roots below were ever consulted.
+function languageTargetUrl(currency) {
     const countryUrls = {
         usd: '/',
         eur: '/fi/',
@@ -34,15 +40,35 @@ function redirectToRegion(currency) {
         isk: '/is/'
     };
 
-    const targetPath = countryUrls[currency];
-    if (targetPath) {
-        rememberLanguageChoice(currency);
+    const translated = window.nordictvLangUrl && window.nordictvLangUrl(currency);
+    if (translated) return translated;
 
-        // nolangredirect stops the preference redirect from second-guessing a
-        // click that has only just written the cookie.
-        const baseUrl = window.location.origin;
-        window.location.href = baseUrl + targetPath + '?nolangredirect=1';
+    const path = countryUrls[currency];
+    return path ? window.location.origin + path : null;
+}
+
+// The preference redirect only runs on a front page, so only guard those — no
+// need to hang a query string off every inner page URL. It covers the case
+// where the cookie write silently failed and a stale preference would otherwise
+// bounce the visitor straight back.
+function withLangRedirectGuard(url) {
+    let isRoot = false;
+    try {
+        isRoot = /^\/([a-z]{2}\/)?$/.test(new URL(url, window.location.origin).pathname);
+    } catch (e) {
+        isRoot = false;
     }
+    if (!isRoot) return url;
+    return url + (url.indexOf('?') === -1 ? '?' : '&') + 'nolangredirect=1';
+}
+
+// Redirect to the chosen language
+function redirectToRegion(currency) {
+    const target = languageTargetUrl(currency);
+    if (!target) return;
+
+    rememberLanguageChoice(currency);
+    window.location.href = withLangRedirectGuard(target);
 }
 
 // Close dropdown when clicking outside
@@ -135,18 +161,19 @@ function setCurrency(currency) {
 
 // Footer currency setter (syncs with header)
 function setFooterCurrency(currency) {
-    const targetPath = countryUrls[currency];
     const currentCurrency = getCurrentCurrencyFromUrl();
 
     // Same as the header switcher: this is a deliberate choice, so record it.
     rememberLanguageChoice(currency);
 
-    if (currency !== currentCurrency && targetPath) {
-        const baseUrl = window.location.origin;
-        window.location.href = baseUrl + targetPath + '?nolangredirect=1';
-    } else {
-        setCurrency(currency);
+    if (currency !== currentCurrency) {
+        const target = languageTargetUrl(currency);
+        if (target) {
+            window.location.href = withLangRedirectGuard(target);
+            return;
+        }
     }
+    setCurrency(currency);
 }
 
 // Update all prices based on selected device count and currency
@@ -216,12 +243,11 @@ document.addEventListener('DOMContentLoaded', function () {
             // This is the visitor choosing — remember it for next time.
             rememberLanguageChoice(currency);
 
-            const targetPath = countryUrls[currency];
             const currentCurrency = htmlCurrentCurrency(); // Helper to safely get current
+            const target = languageTargetUrl(currency);
 
-            if (currency !== currentCurrency) {
-                const baseUrl = window.location.origin;
-                window.location.href = baseUrl + targetPath + '?nolangredirect=1';
+            if (currency !== currentCurrency && target) {
+                window.location.href = withLangRedirectGuard(target);
             } else {
                 setCurrency(currency);
             }

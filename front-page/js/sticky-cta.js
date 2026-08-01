@@ -66,6 +66,19 @@
     // the end of the page until something happens to nudge it.
     function publishHeight() {
         document.documentElement.style.setProperty('--sticky-cta-h', bar.offsetHeight + 'px');
+        publishOffset();
+    }
+
+    // Two separate numbers on purpose:
+    //   --sticky-cta-h      the bar's height. Drives the page's bottom padding,
+    //                       and stays put so the page never jumps.
+    //   --sticky-cta-offset how much anything floating above the bar has to
+    //                       clear. Drops to 0 while the bar is slid away, so
+    //                       the Chaty button and the activity ticker settle
+    //                       back down instead of hovering in mid-air.
+    function publishOffset() {
+        var clear = bar.classList.contains('is-hidden') ? 0 : bar.offsetHeight;
+        document.documentElement.style.setProperty('--sticky-cta-offset', clear + 'px');
     }
 
     publishHeight();
@@ -91,6 +104,7 @@
     function apply(reason, on) {
         reasons[reason] = on;
         bar.classList.toggle('is-hidden', reasons.pricing || reasons.menu);
+        publishOffset();
     }
 
     // The pricing panel carries its own checkout button; the bar would cover it.
