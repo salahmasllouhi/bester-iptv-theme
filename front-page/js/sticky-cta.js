@@ -1,5 +1,5 @@
 /**
- * Sticky mobile CTA bar
+ * Sticky CTA bar
  *
  * Three jobs:
  *   1. Tick the countdown. The deadline is the same one the pricing panel
@@ -59,20 +59,26 @@
     })();
 
     // ── Height → CSS custom property ─────────────────────────────────────────
+    // The page pads its bottom by this much, so it has to be right at first
+    // paint rather than after the first resize — otherwise the bar sits over
+    // the end of the page until something happens to nudge it.
     function publishHeight() {
-        // offsetHeight is 0 while the bar is display:none above 768px, which is
-        // exactly the padding we want the page to have there.
-        var h = bar.offsetHeight;
-        document.documentElement.style.setProperty('--sticky-cta-h', h + 'px');
+        document.documentElement.style.setProperty('--sticky-cta-h', bar.offsetHeight + 'px');
     }
 
     publishHeight();
-    window.addEventListener('resize', publishHeight);
-    window.addEventListener('orientationchange', publishHeight);
 
-    // Web fonts can reflow the labels onto a second line after first paint.
-    if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(publishHeight);
+    if ('ResizeObserver' in window) {
+        // Catches every reflow that changes the height — web fonts swapping in,
+        // a label wrapping to a second line, the desktop/mobile switch — with no
+        // scroll or resize needed to trigger it.
+        new ResizeObserver(publishHeight).observe(bar);
+    } else {
+        window.addEventListener('resize', publishHeight);
+        window.addEventListener('orientationchange', publishHeight);
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(publishHeight);
+        }
     }
 
     // ── Reasons to get out of the way ────────────────────────────────────────

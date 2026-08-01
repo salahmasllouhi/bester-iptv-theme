@@ -1,11 +1,11 @@
 /* ============================================
-   STICKY MOBILE CTA BAR — Design v2
-   Pinned to the bottom of the viewport on phones:
-   a FOMO countdown row sitting above two CTAs
+   STICKY CTA BAR — Design v2
+   Pinned to the bottom of the viewport on every
+   screen size: a FOMO countdown next to two CTAs
    (pricing + 24h trial).
 
-   Hidden from 769px up, where the header CTA and
-   the pricing panel are already within reach.
+   Phones stack the countdown above the buttons;
+   from 769px up the three sit on one centered row.
 
    Enqueued site-wide, so it can load before
    design-v2.css on templates that <link> their CSS
@@ -15,156 +15,204 @@
    .dv2-btn rule would otherwise win on padding.
    ============================================ */
 
-.dv2-sticky-cta {
-    display: none;
+/* border-box on the bar itself matters: with left:0 and right:0 the used width
+   is derived from those edges, so under content-box the horizontal padding is
+   added on top of it and the bar ends up wider than the viewport — which is
+   exactly what put a horizontal scrollbar on the page. */
+.dv2-sticky-cta,
+.dv2-sticky-cta *,
+.dv2-sticky-cta *::before,
+.dv2-sticky-cta *::after {
+    box-sizing: border-box;
 }
 
-@media (max-width: 768px) {
+.dv2-sticky-cta {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-width: 100%;
+    z-index: 9990;
+    background: var(--dv2-surface, #ffffff);
+    border-top: 1px solid var(--dv2-border-strong, rgba(124, 58, 237, 0.30));
+    box-shadow: 0 -6px 28px rgba(76, 29, 149, 0.14);
+    padding: 9px 12px calc(9px + env(safe-area-inset-bottom, 0px));
+    transform: translateY(0);
+    transition: transform .28s ease;
+}
 
-    /* Height is measured by sticky-cta.js and published here, so the page can
-       reserve exactly the space the bar occupies instead of guessing. */
-    body {
-        padding-bottom: var(--sticky-cta-h, 0px);
-    }
+/* Slid off-screen while the pricing panel is in view or the mobile menu is
+   open. See sticky-cta.js for what sets this. */
+.dv2-sticky-cta.is-hidden {
+    transform: translateY(120%);
+}
 
-    .dv2-sticky-cta {
-        display: block;
-        position: fixed;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 9990;
-        background: var(--dv2-surface, #ffffff);
-        border-top: 1px solid var(--dv2-border-strong, rgba(124, 58, 237, 0.30));
-        box-shadow: 0 -6px 28px rgba(76, 29, 149, 0.14);
-        padding: 9px 12px calc(9px + env(safe-area-inset-bottom, 0px));
-        transform: translateY(0);
-        transition: transform .28s ease;
-    }
+/* Height is measured by sticky-cta.js and published here, so the page reserves
+   exactly the space the bar occupies instead of guessing. */
+body {
+    padding-bottom: var(--sticky-cta-h, 0px);
+}
 
-    /* Slid off-screen while the pricing panel is in view or the mobile menu is
-       open. See sticky-cta.js for what sets this. */
-    .dv2-sticky-cta.is-hidden {
-        transform: translateY(120%);
-    }
+/* The activity ticker is also fixed to the bottom left. Lift it clear of the
+   bar rather than letting the two stack on top of each other.
+   Qualified with `body` on purpose: front-page.php inlines activity-ticker.css
+   in a <style> block in the body, which comes after this file and would
+   otherwise win the tie on source order. */
+body .activity-ticker {
+    bottom: calc(0.75rem + var(--sticky-cta-h, 0px));
+}
 
-    /* The activity ticker is also fixed to the bottom left. Lift it clear of
-       the bar rather than letting the two stack on top of each other.
-       Qualified with `body` on purpose: front-page.php inlines
-       activity-ticker.css in a <style> block in the body, which comes after
-       this file and would otherwise win the tie on source order. */
-    body .activity-ticker {
-        bottom: calc(0.75rem + var(--sticky-cta-h, 0px));
-    }
+/* --- Countdown --- */
+/* A chip that hugs its text rather than a full-width band — the bar reads as
+   one CTA block with a badge on it, not as two stacked strips. */
+.dv2-sticky-timer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    width: -moz-fit-content;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto 8px;
+    padding: 4px 12px;
+    border-radius: var(--dv2-radius-pill, 999px);
+    background: var(--dv2-surface-tint, #f1ebff);
+    font-family: var(--dv2-font-body, 'Space Grotesk', sans-serif);
+    font-size: 12.5px;
+    line-height: 1.2;
+    color: var(--dv2-ink-2, #3d2e5c);
+}
 
-    .dv2-sticky-cta *,
-    .dv2-sticky-cta *::before,
-    .dv2-sticky-cta *::after {
-        box-sizing: border-box;
-    }
+.dv2-sticky-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #e5484d;
+    flex-shrink: 0;
+    animation: dv2-sticky-pulse 1.6s ease-in-out infinite;
+}
 
-    /* --- Countdown row --- */
-    /* A chip that hugs its text rather than a full-width band — the bar reads
-       as one CTA block with a badge over it, not as two stacked strips. */
-    .dv2-sticky-timer {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 7px;
-        width: -moz-fit-content;
-        width: fit-content;
-        max-width: 100%;
-        margin: 0 auto 8px;
-        padding: 4px 12px;
-        border-radius: var(--dv2-radius-pill, 999px);
-        background: var(--dv2-surface-tint, #f1ebff);
-        font-family: var(--dv2-font-body, 'Space Grotesk', sans-serif);
-        font-size: 12.5px;
-        line-height: 1.2;
-        color: var(--dv2-ink-2, #3d2e5c);
-    }
+.dv2-sticky-timer-label {
+    font-weight: 500;
+}
 
-    .dv2-sticky-dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: #e5484d;
-        flex-shrink: 0;
-        animation: dv2-sticky-pulse 1.6s ease-in-out infinite;
-    }
+.dv2-sticky-timer-value {
+    font-weight: 700;
+    color: var(--dv2-purple-700, #5b21b6);
+    /* Fixed-width digits so the row does not twitch once a second. */
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+}
 
-    .dv2-sticky-timer-label {
-        font-weight: 500;
-    }
+/* --- CTAs --- */
+.dv2-sticky-actions {
+    display: flex;
+    align-items: stretch;
+    gap: 9px;
+}
 
-    .dv2-sticky-timer-value {
-        font-weight: 700;
-        color: var(--dv2-purple-700, #5b21b6);
-        /* Fixed-width digits so the row does not twitch once a second. */
-        font-variant-numeric: tabular-nums;
-        font-feature-settings: "tnum";
-    }
+.dv2-sticky-btn {
+    flex: 1 1 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    /* 48px is the minimum comfortable tap target. */
+    min-height: 48px;
+    padding: 10px;
+    border-radius: var(--dv2-radius-pill, 999px);
+    font-family: var(--dv2-font-display, 'Sora', sans-serif);
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 1.15;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background .18s ease, color .18s ease;
+    -webkit-tap-highlight-color: transparent;
+}
 
-    /* --- CTA row --- */
-    .dv2-sticky-actions {
-        display: flex;
-        align-items: stretch;
-        gap: 9px;
-    }
+.dv2-sticky-btn--primary {
+    background: var(--dv2-purple, #7c3aed);
+    color: #ffffff;
+    box-shadow: 0 8px 22px rgba(124, 58, 237, 0.28);
+}
 
-    .dv2-sticky-btn {
-        flex: 1 1 0;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 7px;
-        /* 48px is the minimum comfortable tap target. */
-        min-height: 48px;
-        padding: 10px;
-        border-radius: var(--dv2-radius-pill, 999px);
-        font-family: var(--dv2-font-display, 'Sora', sans-serif);
-        font-weight: 700;
-        font-size: 15px;
-        line-height: 1.15;
-        text-align: center;
-        text-decoration: none;
-        white-space: nowrap;
-        transition: background .18s ease, color .18s ease;
-        -webkit-tap-highlight-color: transparent;
-    }
+.dv2-sticky-btn--ghost {
+    background: var(--dv2-surface-tint, #f1ebff);
+    color: var(--dv2-purple-700, #5b21b6);
+    border: 1px solid var(--dv2-border-strong, rgba(124, 58, 237, 0.30));
+}
 
-    .dv2-sticky-btn--primary {
-        background: var(--dv2-purple, #7c3aed);
-        color: #ffffff;
-        box-shadow: 0 8px 22px rgba(124, 58, 237, 0.30);
-    }
-
-    .dv2-sticky-btn--primary:active {
+/* Hover is gated behind a real pointer. A touch tap otherwise leaves the
+   :hover style latched on the button until the next tap elsewhere, which reads
+   as a stuck highlight. Touch feedback is :active, which always releases. */
+@media (hover: hover) and (pointer: fine) {
+    .dv2-sticky-btn--primary:hover {
         background: var(--dv2-purple-600, #6d28d9);
         color: #ffffff;
     }
 
-    .dv2-sticky-btn--ghost {
-        background: var(--dv2-surface-tint, #f1ebff);
-        color: var(--dv2-purple-700, #5b21b6);
-        border: 1px solid var(--dv2-border-strong, rgba(124, 58, 237, 0.30));
-    }
-
-    .dv2-sticky-btn--ghost:active {
+    .dv2-sticky-btn--ghost:hover {
         background: #e7dcff;
         color: var(--dv2-purple-700, #5b21b6);
     }
+}
 
-    /* Long translations (sv/no/dk/fi) overflow the pill at 15px. */
-    @media (max-width: 380px) {
-        .dv2-sticky-btn {
-            font-size: 13.5px;
-            padding: 12px 6px;
-        }
+.dv2-sticky-btn--primary:active {
+    background: var(--dv2-purple-600, #6d28d9);
+    color: #ffffff;
+}
 
-        .dv2-sticky-timer {
-            font-size: 11.5px;
-        }
+.dv2-sticky-btn--ghost:active {
+    background: #e7dcff;
+    color: var(--dv2-purple-700, #5b21b6);
+}
+
+/* --- Desktop: one centered row --- */
+@media (min-width: 769px) {
+    .dv2-sticky-cta {
+        padding: 10px 24px calc(10px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .dv2-sticky-inner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        max-width: var(--dv2-shell, 1280px);
+        margin: 0 auto;
+    }
+
+    .dv2-sticky-timer {
+        margin: 0;
+        flex: 0 1 auto;
+        padding: 6px 14px;
+        font-size: 14px;
+    }
+
+    .dv2-sticky-actions {
+        flex: 0 0 auto;
+        gap: 12px;
+    }
+
+    .dv2-sticky-btn {
+        flex: 0 0 auto;
+        min-width: 180px;
+        padding: 10px 26px;
+        font-size: 16px;
+    }
+}
+
+/* Long translations (sv/no/dk/fi) overflow the pill below this width. */
+@media (max-width: 380px) {
+    .dv2-sticky-btn {
+        font-size: 13.5px;
+        padding: 10px 6px;
+    }
+
+    .dv2-sticky-timer {
+        font-size: 11.5px;
     }
 }
 

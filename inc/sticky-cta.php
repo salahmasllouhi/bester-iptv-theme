@@ -1,9 +1,10 @@
 <?php
 /**
- * Sticky mobile CTA bar
+ * Sticky CTA bar
  *
- * A bottom-pinned bar shown on phones only (<=768px): a countdown row above two
- * CTAs — pricing and the 24-hour trial. Rendered on every template via
+ * A bottom-pinned bar on every screen size: a countdown next to two
+ * CTAs — pricing and the 24-hour trial, stacked on phones and on one centered
+ * row from 769px up. Rendered on every template via
  * wp_footer, since every template in this theme ends in wp_footer() either
  * directly or through get_footer().
  *
@@ -104,14 +105,14 @@ add_action('wp_enqueue_scripts', function () {
         'iptv-sticky-cta',
         get_template_directory_uri() . '/front-page/css/sticky-cta.css',
         array(),
-        '1.0.0'
+        '1.1.0'
     );
 
     wp_enqueue_script(
         'iptv-sticky-cta',
         get_template_directory_uri() . '/front-page/js/sticky-cta.js',
         array(),
-        '1.0.0',
+        '1.1.0',
         true
     );
 }, 20);
@@ -138,22 +139,24 @@ add_action('wp_footer', function () {
     $trial_label   = iptv_text('sticky_trial_label', '24h Trial');
     ?>
     <div class="dv2-sticky-cta" id="sticky-cta" data-offer-days="<?php echo (int) $offer_days; ?>">
-        <div class="dv2-sticky-timer">
-            <span class="dv2-sticky-dot" aria-hidden="true"></span>
-            <span class="dv2-sticky-timer-label"><?php echo esc_html($timer_label); ?></span>
-            <?php // Seeded with the full window; sticky-cta.js replaces it on first tick. ?>
-            <strong class="dv2-sticky-timer-value" id="sticky-cta-countdown">
-                <?php echo (int) $offer_days; ?>d 00:00:00
-            </strong>
-        </div>
+        <?php // The inner wrapper is what caps the row width on desktop; the bar
+              // itself has to stay full-bleed to carry the background and border. ?>
+        <div class="dv2-sticky-inner">
+            <div class="dv2-sticky-timer">
+                <span class="dv2-sticky-dot" aria-hidden="true"></span>
+                <span class="dv2-sticky-timer-label"><?php echo esc_html($timer_label); ?></span>
+                <?php // Seeded with the full window; sticky-cta.js replaces it on first tick. ?>
+                <strong class="dv2-sticky-timer-value" id="sticky-cta-countdown"><?php echo (int) $offer_days; ?>d 00:00:00</strong>
+            </div>
 
-        <div class="dv2-sticky-actions">
-            <a href="<?php echo esc_url($pricing_url); ?>" class="dv2-sticky-btn dv2-sticky-btn--primary">
-                <?php echo esc_html($pricing_label); ?>
-            </a>
-            <a href="<?php echo esc_url($trial_url); ?>" class="dv2-sticky-btn dv2-sticky-btn--ghost">
-                <?php echo esc_html($trial_label); ?>
-            </a>
+            <div class="dv2-sticky-actions">
+                <a href="<?php echo esc_url($pricing_url); ?>" class="dv2-sticky-btn dv2-sticky-btn--primary">
+                    <?php echo esc_html($pricing_label); ?>
+                </a>
+                <a href="<?php echo esc_url($trial_url); ?>" class="dv2-sticky-btn dv2-sticky-btn--ghost">
+                    <?php echo esc_html($trial_label); ?>
+                </a>
+            </div>
         </div>
     </div>
     <?php
