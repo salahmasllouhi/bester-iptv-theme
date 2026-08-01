@@ -4978,6 +4978,26 @@
             "placeholder": "",
             "prepend": "",
             "append": ""
+        },
+        {
+            "key": "field_sticky_days_suffix",
+            "label": "Sticky: Day Marker",
+            "name": "sticky_days_suffix",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Day marker in the countdown, e.g. the \"d\" in \"4d 07:12:39\". Finnish usually wants \"pv\".",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "d",
+            "maxlength": "4",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
         }
     ],
     "location": [
@@ -5007,5 +5027,5 @@
     "show_in_rest": 1,
     "display_title": "",
     "pll_display_field_instructions": 1,
-    "modified": 1785577759
+    "modified": 1785580587
 }

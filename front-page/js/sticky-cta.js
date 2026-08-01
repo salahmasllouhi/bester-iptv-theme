@@ -23,6 +23,8 @@
         if (!out) return;
 
         var days = parseInt(bar.dataset.offerDays, 10) || 5;
+        // Localised in PHP — "d" in English, "pv" in Finnish, and so on.
+        var daysSuffix = bar.dataset.daysSuffix || 'd';
         var windowMs = days * 24 * 60 * 60 * 1000;
         var key = 'iptvOfferDeadline';
 
@@ -51,7 +53,7 @@
 
             // Drop the day segment on the last day — the bar is narrow, and
             // "08:14:02" reads more urgently than "0d 08:14:02".
-            out.textContent = (d > 0 ? d + 'd ' : '') + pad(h) + ':' + pad(m) + ':' + pad(s);
+            out.textContent = (d > 0 ? d + daysSuffix + ' ' : '') + pad(h) + ':' + pad(m) + ':' + pad(s);
         }
 
         tick();

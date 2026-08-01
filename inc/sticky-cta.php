@@ -105,14 +105,14 @@ add_action('wp_enqueue_scripts', function () {
         'iptv-sticky-cta',
         get_template_directory_uri() . '/front-page/css/sticky-cta.css',
         array(),
-        '1.1.0'
+        '1.2.0'
     );
 
     wp_enqueue_script(
         'iptv-sticky-cta',
         get_template_directory_uri() . '/front-page/js/sticky-cta.js',
         array(),
-        '1.1.0',
+        '1.2.0',
         true
     );
 }, 20);
@@ -137,8 +137,14 @@ add_action('wp_footer', function () {
     $timer_label   = iptv_text('sticky_timer_label', 'Offer ends in');
     $pricing_label = iptv_text('sticky_pricing_label', 'See Pricing');
     $trial_label   = iptv_text('sticky_trial_label', '24h Trial');
+
+    // The day marker in "4d 07:12:39". Handed to JS rather than hardcoded there,
+    // so the countdown is localised along with the rest of the bar — "d" suits
+    // sv/no/dk (dag), but Finnish wants "pv" and Icelandic "d." or similar.
+    $days_suffix = iptv_text('sticky_days_suffix', 'd');
     ?>
-    <div class="dv2-sticky-cta" id="sticky-cta" data-offer-days="<?php echo (int) $offer_days; ?>">
+    <div class="dv2-sticky-cta" id="sticky-cta" data-offer-days="<?php echo (int) $offer_days; ?>"
+        data-days-suffix="<?php echo esc_attr($days_suffix); ?>">
         <?php // The inner wrapper is what caps the row width on desktop; the bar
               // itself has to stay full-bleed to carry the background and border. ?>
         <div class="dv2-sticky-inner">
@@ -146,7 +152,7 @@ add_action('wp_footer', function () {
                 <span class="dv2-sticky-dot" aria-hidden="true"></span>
                 <span class="dv2-sticky-timer-label"><?php echo esc_html($timer_label); ?></span>
                 <?php // Seeded with the full window; sticky-cta.js replaces it on first tick. ?>
-                <strong class="dv2-sticky-timer-value" id="sticky-cta-countdown"><?php echo (int) $offer_days; ?>d 00:00:00</strong>
+                <strong class="dv2-sticky-timer-value" id="sticky-cta-countdown"><?php echo (int) $offer_days . esc_html($days_suffix); ?> 00:00:00</strong>
             </div>
 
             <div class="dv2-sticky-actions">
