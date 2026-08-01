@@ -656,6 +656,10 @@ require_once get_template_directory() . '/inc/currency-rates-api.php';
 // Used by the footer, which previously hardcoded '#' for every legal link.
 require_once get_template_directory() . '/inc/page-links.php';
 
+// Support cards shared by the front page section and the [nordictv_contact]
+// shortcode used on the Contact page.
+require_once get_template_directory() . '/inc/contact-cards.php';
+
 // Front page copy lookup: ACF on the translated front page, then Polylang strings.
 // Replaces the old "Content Localizing" admin screen (inc/content-settings.php),
 // which stored copy in an `iptv_content` option keyed by the retired multisite slugs.

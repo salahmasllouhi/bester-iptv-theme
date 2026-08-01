@@ -2310,3 +2310,26 @@
         margin-bottom: 16px;
     }
 }
+
+/* ---------------------------------------------
+   CONTACT PAGE — [nordictv_contact]
+   The support cards rendered inside page content
+   rather than a full-width section, so they need
+   their own spacing. The grid itself is shared
+   with the front page's support section.
+   --------------------------------------------- */
+.dv2-contact-page {
+    margin: 0 auto;
+    max-width: 960px;
+}
+
+.dv2-contact-page-intro {
+    margin: 0 0 28px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--dv2-body, #5b5175);
+}
+
+.dv2-contact-page .dv2-support-grid {
+    margin-top: 0;
+}
