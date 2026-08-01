@@ -2080,6 +2080,15 @@
 }
 
 @media (max-width: 768px) {
+
+    /* The hero image runs nearly the full width on a phone, so the glow's -30px
+       horizontal bleed lands outside the viewport and gives the whole page a
+       horizontal scrollbar. Keep the vertical bleed, drop the horizontal —
+       invisible on a blurred 28%-opacity radial gradient. */
+    .dv2-hero-glow {
+        inset: -30px 0;
+    }
+
     .dv2-feature-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
