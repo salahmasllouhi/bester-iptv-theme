@@ -33,7 +33,7 @@ if (!defined('ABSPATH')) {
 // Bump to re-run after changing the titles or slugs below. Re-running is safe:
 // existing pages are matched and reused, so only the language, translation
 // group and plan length are rewritten — never the status or the content.
-define('PLAN_PAGES_BUILD', 2);
+define('PLAN_PAGES_BUILD', 3);
 
 if (!function_exists('iptv_plan_page_definitions')) {
     /**
@@ -49,40 +49,40 @@ if (!function_exists('iptv_plan_page_definitions')) {
     {
         return array(
             'en' => array(
-                1  => array('title' => '1 Month IPTV Subscription',   'slug' => '1-month-iptv-subscription'),
-                3  => array('title' => '3 Months IPTV Subscription',  'slug' => '3-months-iptv-subscription'),
-                6  => array('title' => '6 Months IPTV Subscription',  'slug' => '6-months-iptv-subscription'),
-                12 => array('title' => '12 Months IPTV Subscription', 'slug' => '12-months-iptv-subscription'),
+                1  => array('title' => '1 Month IPTV Subscription', 'slug' => '1-month-iptv-subscription', 'label' => '1 Month'),
+                3  => array('title' => '3 Months IPTV Subscription', 'slug' => '3-months-iptv-subscription', 'label' => '3 Months'),
+                6  => array('title' => '6 Months IPTV Subscription', 'slug' => '6-months-iptv-subscription', 'label' => '6 Months'),
+                12 => array('title' => '12 Months IPTV Subscription', 'slug' => '12-months-iptv-subscription', 'label' => '12 Months'),
             ),
             'sv' => array(
-                1  => array('title' => 'IPTV-abonnemang 1 månad',    'slug' => 'iptv-abonnemang-1-manad'),
-                3  => array('title' => 'IPTV-abonnemang 3 månader',  'slug' => 'iptv-abonnemang-3-manader'),
-                6  => array('title' => 'IPTV-abonnemang 6 månader',  'slug' => 'iptv-abonnemang-6-manader'),
-                12 => array('title' => 'IPTV-abonnemang 12 månader', 'slug' => 'iptv-abonnemang-12-manader'),
+                1  => array('title' => 'IPTV-abonnemang 1 månad', 'slug' => 'iptv-abonnemang-1-manad', 'label' => '1 månad'),
+                3  => array('title' => 'IPTV-abonnemang 3 månader', 'slug' => 'iptv-abonnemang-3-manader', 'label' => '3 månader'),
+                6  => array('title' => 'IPTV-abonnemang 6 månader', 'slug' => 'iptv-abonnemang-6-manader', 'label' => '6 månader'),
+                12 => array('title' => 'IPTV-abonnemang 12 månader', 'slug' => 'iptv-abonnemang-12-manader', 'label' => '12 månader'),
             ),
             'no' => array(
-                1  => array('title' => 'IPTV-abonnement 1 måned',    'slug' => 'iptv-abonnement-1-maned'),
-                3  => array('title' => 'IPTV-abonnement 3 måneder',  'slug' => 'iptv-abonnement-3-maneder'),
-                6  => array('title' => 'IPTV-abonnement 6 måneder',  'slug' => 'iptv-abonnement-6-maneder'),
-                12 => array('title' => 'IPTV-abonnement 12 måneder', 'slug' => 'iptv-abonnement-12-maneder'),
+                1  => array('title' => 'IPTV-abonnement 1 måned', 'slug' => 'iptv-abonnement-1-maned', 'label' => '1 måned'),
+                3  => array('title' => 'IPTV-abonnement 3 måneder', 'slug' => 'iptv-abonnement-3-maneder', 'label' => '3 måneder'),
+                6  => array('title' => 'IPTV-abonnement 6 måneder', 'slug' => 'iptv-abonnement-6-maneder', 'label' => '6 måneder'),
+                12 => array('title' => 'IPTV-abonnement 12 måneder', 'slug' => 'iptv-abonnement-12-maneder', 'label' => '12 måneder'),
             ),
             'dk' => array(
-                1  => array('title' => 'IPTV-abonnement 1 måned',    'slug' => 'iptv-abonnement-1-maaned'),
-                3  => array('title' => 'IPTV-abonnement 3 måneder',  'slug' => 'iptv-abonnement-3-maaneder'),
-                6  => array('title' => 'IPTV-abonnement 6 måneder',  'slug' => 'iptv-abonnement-6-maaneder'),
-                12 => array('title' => 'IPTV-abonnement 12 måneder', 'slug' => 'iptv-abonnement-12-maaneder'),
+                1  => array('title' => 'IPTV-abonnement 1 måned', 'slug' => 'iptv-abonnement-1-maaned', 'label' => '1 måned'),
+                3  => array('title' => 'IPTV-abonnement 3 måneder', 'slug' => 'iptv-abonnement-3-maaneder', 'label' => '3 måneder'),
+                6  => array('title' => 'IPTV-abonnement 6 måneder', 'slug' => 'iptv-abonnement-6-maaneder', 'label' => '6 måneder'),
+                12 => array('title' => 'IPTV-abonnement 12 måneder', 'slug' => 'iptv-abonnement-12-maaneder', 'label' => '12 måneder'),
             ),
             'fi' => array(
-                1  => array('title' => 'IPTV-tilaus 1 kuukausi',   'slug' => 'iptv-tilaus-1-kuukausi'),
-                3  => array('title' => 'IPTV-tilaus 3 kuukautta',  'slug' => 'iptv-tilaus-3-kuukautta'),
-                6  => array('title' => 'IPTV-tilaus 6 kuukautta',  'slug' => 'iptv-tilaus-6-kuukautta'),
-                12 => array('title' => 'IPTV-tilaus 12 kuukautta', 'slug' => 'iptv-tilaus-12-kuukautta'),
+                1  => array('title' => 'IPTV-tilaus 1 kuukausi', 'slug' => 'iptv-tilaus-1-kuukausi', 'label' => '1 kuukausi'),
+                3  => array('title' => 'IPTV-tilaus 3 kuukautta', 'slug' => 'iptv-tilaus-3-kuukautta', 'label' => '3 kuukautta'),
+                6  => array('title' => 'IPTV-tilaus 6 kuukautta', 'slug' => 'iptv-tilaus-6-kuukautta', 'label' => '6 kuukautta'),
+                12 => array('title' => 'IPTV-tilaus 12 kuukautta', 'slug' => 'iptv-tilaus-12-kuukautta', 'label' => '12 kuukautta'),
             ),
             'is' => array(
-                1  => array('title' => 'IPTV áskrift 1 mánuður', 'slug' => 'iptv-askrift-1-manudur'),
-                3  => array('title' => 'IPTV áskrift 3 mánuðir', 'slug' => 'iptv-askrift-3-manudir'),
-                6  => array('title' => 'IPTV áskrift 6 mánuðir', 'slug' => 'iptv-askrift-6-manudir'),
-                12 => array('title' => 'IPTV áskrift 12 mánuðir', 'slug' => 'iptv-askrift-12-manudir'),
+                1  => array('title' => 'IPTV áskrift 1 mánuður', 'slug' => 'iptv-askrift-1-manudur', 'label' => '1 mánuður'),
+                3  => array('title' => 'IPTV áskrift 3 mánuðir', 'slug' => 'iptv-askrift-3-manudir', 'label' => '3 mánuðir'),
+                6  => array('title' => 'IPTV áskrift 6 mánuðir', 'slug' => 'iptv-askrift-6-manudir', 'label' => '6 mánuðir'),
+                12 => array('title' => 'IPTV áskrift 12 mánuðir', 'slug' => 'iptv-askrift-12-manudir', 'label' => '12 mánuðir'),
             ),
         );
     }
@@ -134,6 +134,146 @@ if (!function_exists('iptv_plan_existing_pages')) {
     }
 }
 
+if (!function_exists('iptv_plan_fill_acf')) {
+    /**
+     * Write this page's copy into its own ACF fields, in its own language.
+     *
+     * The template already renders correctly from the bundled translations, so
+     * this is about editability: with the fields populated, the copy for one
+     * plan in one language is editable in the page editor by someone who does
+     * not touch code, instead of living only in plan/inc/translations/.
+     *
+     * Only ever fills an *empty* field. A re-run after someone has edited a
+     * page in wp-admin must not overwrite their wording — that is the whole
+     * point of putting it in ACF.
+     *
+     * Two things are deliberately not written:
+     *   - the closing text's "From {price}" variant. Baking a price into a
+     *     text field would leave it stale the next time prices move; the
+     *     no-price wording is used instead.
+     *   - anything on the English pages, whose defaults are already English.
+     *
+     * @param int    $post_id
+     * @param string $lang    Polylang slug.
+     * @param int    $months
+     * @param string $label   The plan length in this language, e.g. "6 månader".
+     * @return int Number of fields written.
+     */
+    function iptv_plan_fill_acf($post_id, $lang, $months, $label)
+    {
+        if ($lang === 'en' || !function_exists('update_field')) {
+            return 0;
+        }
+
+        $t = iptv_plan_translations($lang);
+
+        if (empty($t)) {
+            return 0;
+        }
+
+        // Translation for an English default, or nothing if it is missing —
+        // writing the English into a Swedish page's field would be worse than
+        // leaving it empty, because an empty field still falls through to the
+        // bundled copy at render time.
+        $tr = function ($english) use ($t) {
+            return isset($t[$english]) && $t[$english] !== '' ? $t[$english] : '';
+        };
+
+        $values = array();
+
+        $values['plan_eyebrow']  = $tr('IPTV Subscription');
+        $values['plan_cta_text'] = $tr('See prices');
+
+        $subline = $months === 1
+            ? $tr('The whole service, one month at a time. No contract, no auto-renew — stop whenever you like.')
+            : $tr('The whole service for %s. One payment, no contract, no auto-renew.');
+        if ($subline) {
+            $values['plan_subline'] = $months === 1 ? $subline : sprintf($subline, $label);
+        }
+
+        $points = array();
+        foreach (array('Watching in 60 seconds', 'No contract, no auto-renew', '24/7 support') as $p) {
+            if ($tr($p)) {
+                $points[] = array('text' => $tr($p));
+            }
+        }
+        if ($points) {
+            $values['plan_hero_points'] = $points;
+        }
+
+        if ($tr('%s — choose your screens')) {
+            $values['plan_pricing_title'] = sprintf($tr('%s — choose your screens'), $label);
+        }
+        $values['plan_pricing_subtitle'] = $tr('One screen streams on one device at a time. Everything else is identical on every plan.');
+
+        if ($tr('Who the %s plan suits')) {
+            $values['plan_audience_title'] = sprintf($tr('Who the %s plan suits'), $label);
+        }
+
+        $audience = iptv_plan_audience_defaults();
+        $cards    = isset($audience[$months]) ? $audience[$months] : array();
+        $rows     = array();
+        foreach ($cards as $card) {
+            if ($tr($card['title'])) {
+                $rows[] = array(
+                    'title' => $tr($card['title']),
+                    'text'  => $tr($card['text']),
+                );
+            }
+        }
+        if ($rows) {
+            $values['plan_audience_points'] = $rows;
+        }
+
+        $values['plan_compare_title'] = $tr('How the four plans compare');
+
+        // plan_compare_subtitle is deliberately left empty. It interpolates the
+        // screen-count label, which comes from iptv_text() — the *current*
+        // request's language, not this page's. Filling it from here would bake
+        // "2 Screens" into the Swedish page. Left empty, the section renders it
+        // live in the right language, from the same translated string.
+
+        $faq = array();
+        foreach (iptv_plan_faq_defaults($months) as $row) {
+            $q = $tr($row['q']);
+            $a = $tr($row['a']);
+            if ($q && $a) {
+                $faq[] = array(
+                    // Only the "what do I get" row carries a placeholder.
+                    'question' => sprintf($q, $label),
+                    'answer'   => $a,
+                );
+            }
+        }
+        if ($faq) {
+            $values['plan_faq'] = $faq;
+        }
+
+        if ($tr('Start your %s plan today')) {
+            $values['plan_final_title'] = sprintf($tr('Start your %s plan today'), $label);
+        }
+        $values['plan_final_text'] = $tr('Activated in about a minute, watchable on the TV you already own.');
+
+        $written = 0;
+
+        foreach ($values as $name => $value) {
+            if ($value === '' || $value === array()) {
+                continue;
+            }
+
+            $existing = get_field($name, $post_id);
+            if ($existing !== null && $existing !== '' && $existing !== false && $existing !== array()) {
+                continue; // edited in wp-admin — leave it alone
+            }
+
+            update_field($name, $value, $post_id);
+            $written++;
+        }
+
+        return $written;
+    }
+}
+
 if (!function_exists('iptv_plan_build_pages')) {
     /**
      * Create anything missing, then wire the translation groups.
@@ -144,7 +284,7 @@ if (!function_exists('iptv_plan_build_pages')) {
     {
         $definitions = iptv_plan_page_definitions();
         $existing    = iptv_plan_existing_pages();
-        $summary     = array('created' => 0, 'reused' => 0, 'linked' => 0);
+        $summary     = array('created' => 0, 'reused' => 0, 'linked' => 0, 'fields' => 0);
 
         // months => [lang => post_id], built as we go and handed to Polylang.
         $groups = array();
@@ -191,9 +331,19 @@ if (!function_exists('iptv_plan_build_pages')) {
                     update_post_meta($post_id, 'plan_months', (string) $months);
                 }
 
+                // Language before the copy: iptv_plan_fill_acf() writes this
+                // page's own language, and a page with no language yet would
+                // confuse anything downstream that asks Polylang about it.
                 if (function_exists('pll_set_post_language')) {
                     pll_set_post_language($post_id, $lang);
                 }
+
+                $summary['fields'] += iptv_plan_fill_acf(
+                    $post_id,
+                    $lang,
+                    $months,
+                    isset($def['label']) ? $def['label'] : ''
+                );
 
                 $groups[$months][$lang] = $post_id;
             }
