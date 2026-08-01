@@ -43,20 +43,34 @@ if (!function_exists('iptv_page_url')) {
 
         $url = '';
 
-        // 'lang' => '' tells Polylang not to restrict the query to the current
-        // language. Which translation this finds does not matter: every member of
-        // a translation group maps to the same set, so pll_get_post() below
-        // resolves the right one either way.
-        $query = new WP_Query(array(
+        $args = array(
             'post_type'              => 'page',
             'name'                   => $slug,
             'post_status'            => 'publish',
             'posts_per_page'         => 1,
-            'lang'                   => '',
             'no_found_rows'          => true,
             'update_post_term_cache' => false,
             'update_post_meta_cache' => false,
-        ));
+        );
+
+        // Search every language explicitly. 'lang' => '' does NOT mean "all" —
+        // Polylang reads it as the current language, which silently breaks any
+        // page whose translation was given its own slug: looking up the English
+        // m3u-playlist-convert-your-m3u-url from /sv/ found nothing, because the
+        // Swedish page is m3u-lank-konverterare. Pages that happen to share a
+        // slug across languages hid the bug.
+        //
+        // Which translation the query lands on does not matter — every member of
+        // a translation group maps to the same set, so pll_get_post() below
+        // resolves the right one either way.
+        if (function_exists('nordictv_lang_slugs')) {
+            $languages = nordictv_lang_slugs();
+            if (!empty($languages)) {
+                $args['lang'] = implode(',', $languages);
+            }
+        }
+
+        $query = new WP_Query($args);
 
         if (!empty($query->posts)) {
             $id = $query->posts[0]->ID;
