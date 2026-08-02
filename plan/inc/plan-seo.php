@@ -153,6 +153,82 @@ if (!function_exists('iptv_plan_analysis_digest')) {
     }
 }
 
+if (!function_exists('iptv_plan_followed_domains')) {
+    /**
+     * External domains that must keep a followed link.
+     *
+     * Rank Math is configured to nofollow every external link in post content,
+     * which makes its own "Linking to external content with a followed link"
+     * test impossible to pass — it rewrote our references to
+     * rel="nofollow noopener" before they reached the page. Its own guidance is
+     * to whitelist trusted domains rather than nofollow everything; this is that
+     * whitelist, kept in the theme because the plugin's options are not
+     * reachable from here.
+     *
+     * @return string[] Host suffixes, matched against the link's host.
+     */
+    function iptv_plan_followed_domains()
+    {
+        return apply_filters('iptv_plan_followed_domains', array(
+            'ayoplayer.com',
+            'wikipedia.org',
+        ));
+    }
+}
+
+/**
+ * Drop rel="nofollow" from links to whitelisted domains.
+ *
+ * Runs at priority 99 on the_content, i.e. after Rank Math has added its
+ * attributes, so it undoes the nofollow rather than racing it. Only the
+ * nofollow token is removed — noopener and target are left alone, since those
+ * are about safety rather than about SEO.
+ */
+add_filter('the_content', function ($content) {
+    if (!iptv_plan_is_plan_page(get_post()) || strpos($content, 'nofollow') === false) {
+        return $content;
+    }
+
+    $domains = iptv_plan_followed_domains();
+
+    return preg_replace_callback('/<a\b[^>]*>/i', function ($m) use ($domains) {
+        $tag = $m[0];
+
+        if (!preg_match('/href=["\']([^"\']+)["\']/i', $tag, $href)) {
+            return $tag;
+        }
+
+        $host = parse_url($href[1], PHP_URL_HOST);
+        if (!$host) {
+            return $tag;
+        }
+
+        $allowed = false;
+        foreach ($domains as $domain) {
+            if ($host === $domain || substr($host, -strlen('.' . $domain)) === '.' . $domain) {
+                $allowed = true;
+                break;
+            }
+        }
+
+        if (!$allowed) {
+            return $tag;
+        }
+
+        // Strip only the nofollow token, then tidy up what it leaves behind:
+        // an empty rel="" is invalid-ish and a doubled space is just untidy.
+        $tag = preg_replace_callback('/\srel=["\']([^"\']*)["\']/i', function ($r) {
+            $rels = array_values(array_filter(
+                preg_split('/\s+/', $r[1]),
+                function ($v) { return $v !== '' && strtolower($v) !== 'nofollow'; }
+            ));
+            return $rels ? ' rel="' . implode(' ', $rels) . '"' : '';
+        }, $tag);
+
+        return preg_replace('/\s{2,}/', ' ', $tag);
+    }, $content);
+}, 99);
+
 /**
  * Give Rank Math the whole page, not just the body field.
  *
