@@ -17,6 +17,7 @@
  *   5. plan-audience (who this length suits — the per-page argument)
  *   6. steps         (shared onboarding panel)
  *   7. plan-compare  (all four plans; links the pages to each other)
+ *   7b. plan-content (the_content() — long-form body copy, SEO)
  *   8. unlock        (shared device chips)
  *   9. reviews       (shared social proof)
  *  10. plan-faq      (accordion)
@@ -92,6 +93,7 @@ while (have_posts()) :
     }
 
     include $plan_dir . '/sections/plan-compare.php';
+    include $plan_dir . '/sections/plan-content.php';
 
     if ($show_devices) {
         include $front_dir . '/sections/unlock.php';

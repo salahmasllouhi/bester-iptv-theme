@@ -708,6 +708,10 @@ require_once get_template_directory() . '/plan/inc/plan-data.php';
 // the file header for how to re-run it.
 require_once get_template_directory() . '/plan/inc/plan-pages-setup.php';
 
+// Hands Rank Math the copy a plan page actually renders. Without it the
+// content tests score against an all-but-empty post_content.
+require_once get_template_directory() . '/plan/inc/plan-seo.php';
+
 /**
  * WooCommerce: Redirect all cart operations to checkout page
  * Since the cart page is disabled, we redirect to checkout instead
