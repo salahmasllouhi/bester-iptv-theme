@@ -60,11 +60,42 @@
                         'fallback_cb' => false,
                     )); ?>
                 <?php else: ?>
+                    <?php
+                    // These were four hardcoded "#pricing" anchors with English
+                    // labels, so every language showed "1 Month Plan" and every
+                    // one of them jumped to a section that only exists on the
+                    // front page — on any other page the link did nothing.
+                    //
+                    // iptv_plan_url() resolves the plan page for the *current*
+                    // language and iptv_plan_label() its duration in that
+                    // language. Both are already used by the plan templates, so
+                    // the footer cannot drift from them. iptv_plan_url() caches
+                    // per months|lang, so this is four queries on a cache miss
+                    // and none on a LiteSpeed hit.
+                    $footer_home = function_exists('pll_home_url') ? pll_home_url() : home_url('/');
+                    ?>
                     <div>
-                        <a href="#pricing">1 Month Plan</a>
-                        <a href="#pricing">3 Month Plan</a>
-                        <a href="#pricing">6 Month Plan</a>
-                        <a href="#pricing">12 Month Plan</a>
+                        <?php foreach (array(1, 3, 6, 12) as $footer_plan_months) : ?>
+                            <?php
+                            $footer_plan_url = function_exists('iptv_plan_url')
+                                ? iptv_plan_url($footer_plan_months)
+                                : '';
+
+                            // No plan page published for this length yet: keep a
+                            // usable link rather than a dead one.
+                            if (!$footer_plan_url) {
+                                $footer_plan_url = trailingslashit($footer_home) . '#pricing';
+                            }
+
+                            $footer_plan_label = function_exists('iptv_plan_label')
+                                ? iptv_plan_label($footer_plan_months)
+                                : '';
+                            if (!$footer_plan_label) {
+                                continue;
+                            }
+                            ?>
+                            <a href="<?php echo esc_url($footer_plan_url); ?>"><?php echo esc_html($footer_plan_label); ?></a>
+                        <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
             </div>

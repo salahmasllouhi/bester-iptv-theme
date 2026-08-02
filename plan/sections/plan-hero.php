@@ -71,16 +71,23 @@ $trial_text = iptv_text('trial_cta', 'Start a 24-hour trial — no card');
 // configured to return, so switching return_format later does not break it.
 // Until one is attached the column holds a placeholder of the same proportions,
 // so dropping the real image in does not reflow the page.
+// The ID is kept alongside the URL because it is what lets WordPress build a
+// srcset. Taking $hero_image['url'] alone means the *full* file: the generated
+// heroes are 2400px and up to 6MB, and this column is never wider than 500px,
+// so that shipped ~12x more bytes than the layout can use and wrecked LCP.
+$hero_image_id  = 0;
 $hero_image_url = '';
 $hero_image_alt = '';
 $hero_image     = iptv_plan_field('plan_hero_image', '');
 
 if (is_array($hero_image)) {
+    $hero_image_id  = !empty($hero_image['ID']) ? (int) $hero_image['ID'] : 0;
     $hero_image_url = !empty($hero_image['url']) ? $hero_image['url'] : '';
     $hero_image_alt = !empty($hero_image['alt']) ? $hero_image['alt'] : '';
 } elseif (is_numeric($hero_image)) {
-    $hero_image_url = wp_get_attachment_image_url((int) $hero_image, 'full');
-    $hero_image_alt = get_post_meta((int) $hero_image, '_wp_attachment_image_alt', true);
+    $hero_image_id  = (int) $hero_image;
+    $hero_image_url = wp_get_attachment_image_url($hero_image_id, 'large');
+    $hero_image_alt = get_post_meta($hero_image_id, '_wp_attachment_image_alt', true);
 } elseif (is_string($hero_image) && $hero_image) {
     $hero_image_url = $hero_image;
 }
@@ -136,7 +143,20 @@ if ($hero_image_url && !$hero_image_alt) {
     <div class="dv2-hero-media plan-hero-media">
         <div class="dv2-hero-glow" aria-hidden="true"></div>
 
-        <?php if ($hero_image_url) : ?>
+        <?php if ($hero_image_id) : ?>
+            <?php
+            // wp_get_attachment_image() rather than a hand-rolled <img>: it adds
+            // srcset/sizes so the browser picks a file that fits the column, and
+            // width/height so the space is reserved before it loads. 'large' is
+            // 1024px, which covers the 500px column at 2x.
+            echo wp_get_attachment_image($hero_image_id, 'large', false, array(
+                'alt'           => $hero_image_alt,
+                'sizes'         => '(max-width: 1024px) 92vw, 500px',
+                'fetchpriority' => 'high',
+                'decoding'      => 'async',
+            ));
+            ?>
+        <?php elseif ($hero_image_url) : ?>
             <img src="<?php echo esc_url($hero_image_url); ?>"
                 alt="<?php echo esc_attr($hero_image_alt); ?>"
                 fetchpriority="high" decoding="async">
