@@ -25,7 +25,7 @@ $prices_subtitle = iptv_plan_field(
     'plan_pricing_subtitle',
     plan_str('One screen streams on one device at a time. Everything else is identical on every plan.')
 );
-$buy_text = iptv_plan_field('plan_buy_text', iptv_text('checkout_button', 'Start watching'));
+$buy_text = iptv_plan_field('plan_buy_text', iptv_text('checkout_button', 'Jetzt kaufen'));
 
 // Does anything on this page have a saving to show? A one-month plan is the
 // monthly rate, so it is discounted against itself and never does. Deciding

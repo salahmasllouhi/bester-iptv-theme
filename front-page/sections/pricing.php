@@ -251,7 +251,7 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
 
                         <a class="dv2-plan-cta" id="cta-<?php echo esc_attr($slug); ?>"
                             href="<?php echo esc_url($checkout_base . '?connections=' . $default_screens . '&duration=' . $months); ?>">
-                            <?php echo esc_html(iptv_text('checkout_button', 'Bestellen')); ?>
+                            <?php echo esc_html(iptv_text('checkout_button', 'Jetzt kaufen')); ?>
                         </a>
 
                         <?php // Payment marks per card rather than once per section: they are
