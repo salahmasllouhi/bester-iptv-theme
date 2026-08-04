@@ -68,12 +68,10 @@
         return el.textContent.trim().replace(pattern, token);
     }
 
-    // Captured once, before anything is overwritten.
+    // Captured once, before anything is overwritten. The 1-month card has no
+    // per-month line — its price already is the monthly price — so only the
+    // multi-month format is read.
     const saveFormat = readFormat('save-12mo', /\d+/, '{n}') || '{n}%';
-    const perMonthOne = (function () {
-        const el = document.getElementById('per-1mo');
-        return el ? el.textContent.trim() : '';
-    })();
     const perMonthMulti = readFormat('per-12mo', /~[^/]*/, '~{p}') || '~{p}/mo';
 
     // Savings badges are derived from the live prices so the claim stays true
@@ -108,12 +106,15 @@
             const price = getPrice(deviceCount, months);
 
             setText('price-' + months + 'mo', formatPrice(price));
-            setText(
-                'per-' + months + 'mo',
-                months === 1
-                    ? perMonthOne
-                    : perMonthMulti.replace('{p}', formatPrice(price / months))
-            );
+
+            // setText no-ops when the element is absent, which is the 1-month
+            // card's case by design.
+            if (months > 1) {
+                setText(
+                    'per-' + months + 'mo',
+                    perMonthMulti.replace('{p}', formatPrice(price / months))
+                );
+            }
 
             const cta = document.getElementById('cta-' + months + 'mo');
             if (cta) cta.href = checkoutUrl(deviceCount, months);

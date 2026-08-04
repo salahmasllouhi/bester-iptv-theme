@@ -147,7 +147,7 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
                 1 => iptv_text('card_feature_1', '40.000+ Live-Sender'),
                 2 => iptv_text('card_feature_2', '200.000+ Filme & Serien'),
                 3 => iptv_text('card_feature_3', '4K, Ultra HD & HD'),
-                4 => iptv_text('card_feature_4', 'Bundesliga, Champions League & NFL'),
+                4 => iptv_text('card_feature_4', 'Bundesliga, Champions League & alle Sportarten'),
                 5 => iptv_text('card_feature_5', 'Alle PPV-Events inklusive'),
                 6 => iptv_text('card_feature_6', 'Programmzeitschrift (EPG)'),
                 7 => iptv_text('card_feature_7', 'Stabile Server & Anti-Buffer™'),
@@ -168,7 +168,10 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
                         aria-label="<?php echo esc_attr(iptv_text('screens_title', 'Wie viele Bildschirme?')); ?>">
                         <?php for ($i = 1; $i <= 4; $i++) :
                             $is_default = ($i === $default_screens);
-                            $label = $i . ' ' . ($i > 1 ? $screen_plural : $screen_singular);
+                            // Number and word are separate elements so the word can be
+                            // dropped on a narrow phone and all four pills still fit on
+                            // one line — see .dv2-screen-word in pricing.css.
+                            $word = ($i > 1 ? $screen_plural : $screen_singular);
                             ?>
                             <button type="button"
                                 class="select-card dv2-screen-pill<?php echo $is_default ? ' active' : ''; ?>"
@@ -177,13 +180,23 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
                                 aria-checked="<?php echo $is_default ? 'true' : 'false'; ?>"
                                 aria-pressed="<?php echo $is_default ? 'true' : 'false'; ?>"
                                 tabindex="<?php echo $is_default ? '0' : '-1'; ?>">
-                                <span class="dv2-screen-label"><?php echo esc_html($label); ?></span>
+                                <span class="dv2-screen-label">
+                                    <span class="dv2-screen-num"><?php echo (int) $i; ?></span>
+                                    <span class="dv2-screen-word"><?php echo esc_html($word); ?></span>
+                                </span>
                                 <?php if ($i === $popular_screens) : ?>
                                     <span class="dv2-pill-badge"><?php echo esc_html(iptv_text('popular_badge', 'BELIEBT')); ?></span>
                                 <?php endif; ?>
                             </button>
                         <?php endfor; ?>
                     </div>
+                    <?php // Rides along with the picker rather than sitting under the
+                          // cards: it is the reason to choose now, so it should stay on
+                          // screen next to the control the visitor is using. ?>
+                    <?php $slots_line = iptv_text('checkout_slots_line', '🔥 Diesen Monat nur noch 32 Zugänge frei'); ?>
+                    <?php if ($slots_line) : ?>
+                        <p class="dv2-scarcity"><?php echo esc_html($slots_line); ?></p>
+                    <?php endif; ?>
                 </div>
             </div>
 
@@ -208,44 +221,54 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
                             <?php endif; ?>
                         </header>
 
-                        <div class="dv2-plan-body">
-                            <div class="dv2-plan-price">
-                                <span class="dv2-plan-amount price-display" id="price-<?php echo esc_attr($slug); ?>">
-                                    <?php echo esc_html(iptv_price($price)); ?>
-                                </span>
-                                <span class="dv2-plan-per" id="per-<?php echo esc_attr($slug); ?>">
-                                    <?php echo $months === 1
-                                        ? esc_html(iptv_text('per_month', 'pro Monat'))
-                                        : '~' . esc_html(iptv_price($price / $months)) . '/'
-                                          . esc_html(iptv_text('per_month_short', 'Mon.')); ?>
-                                </span>
-                            </div>
-
-                            <span class="badge badge-green dv2-plan-save<?php echo $d['save'] ? '' : ' is-hidden'; ?>"
-                                id="save-<?php echo esc_attr($slug); ?>">
-                                <?php echo esc_html(sprintf(iptv_text('save_percent_format', '%d %% sparen'), $d['save'])); ?>
+                        <div class="dv2-plan-price">
+                            <span class="dv2-plan-amount price-display" id="price-<?php echo esc_attr($slug); ?>">
+                                <?php echo esc_html(iptv_price($price)); ?>
                             </span>
-
-                            <ul class="dv2-plan-features">
-                                <?php foreach ($card_features as $feature) : ?>
-                                    <li><?php echo esc_html($feature); ?></li>
-                                <?php endforeach; ?>
-                            </ul>
-
-                            <a class="dv2-plan-cta" id="cta-<?php echo esc_attr($slug); ?>"
-                                href="<?php echo esc_url($checkout_base . '?connections=' . $default_screens . '&duration=' . $months); ?>">
-                                <?php echo esc_html(iptv_text('checkout_button', 'Bestellung abschließen')); ?>
-                            </a>
+                            <?php // The 1-month price is already a monthly price, so "pro Monat"
+                                  // under it said the same thing twice. Only the multi-month cards
+                                  // carry the per-month equivalent. ?>
+                            <?php if ($months > 1) : ?>
+                                <span class="dv2-plan-per" id="per-<?php echo esc_attr($slug); ?>">
+                                    <?php echo '~' . esc_html(iptv_price($price / $months)) . '/'
+                                        . esc_html(iptv_text('per_month_short', 'Mon.')); ?>
+                                </span>
+                            <?php endif; ?>
                         </div>
+
+                        <?php // Percentage saved against paying month by month at the 1-month
+                              // rate, recomputed by pricing.js for the chosen screen count. ?>
+                        <span class="badge badge-green dv2-plan-save<?php echo $d['save'] ? '' : ' is-hidden'; ?>"
+                            id="save-<?php echo esc_attr($slug); ?>">
+                            <?php echo esc_html(sprintf(iptv_text('save_percent_format', '%d %% sparen'), $d['save'])); ?>
+                        </span>
+
+                        <ul class="dv2-plan-features">
+                            <?php foreach ($card_features as $feature) : ?>
+                                <li><?php echo esc_html($feature); ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+
+                        <a class="dv2-plan-cta" id="cta-<?php echo esc_attr($slug); ?>"
+                            href="<?php echo esc_url($checkout_base . '?connections=' . $default_screens . '&duration=' . $months); ?>">
+                            <?php echo esc_html(iptv_text('checkout_button', 'Bestellen')); ?>
+                        </a>
+
+                        <?php // Payment marks per card rather than once per section: they are
+                              // reassurance at the moment of clicking, not a section footnote. ?>
+                        <ul class="dv2-plan-payments" aria-label="<?php echo esc_attr(iptv_text('payments_label', 'Sichere Bezahlung')); ?>">
+                            <li class="dv2-payment-badge dv2-payment-badge--visa">VISA</li>
+                            <li class="dv2-payment-badge dv2-payment-badge--mc" aria-label="Mastercard">
+                                <span class="dv2-mc-mark" aria-hidden="true"><i></i><i></i></span>
+                            </li>
+                            <li class="dv2-payment-badge dv2-payment-badge--amex">AMEX</li>
+                            <li class="dv2-payment-badge dv2-payment-badge--paypal">PayPal</li>
+                        </ul>
                     </article>
                 <?php endforeach; ?>
             </div>
 
-            <!-- Scarcity -->
-            <?php $slots_line = iptv_text('checkout_slots_line', '🔥 Diesen Monat nur noch 32 Zugänge frei'); ?>
-            <?php if ($slots_line) : ?>
-                <p class="dv2-scarcity"><?php echo esc_html($slots_line); ?></p>
-            <?php endif; ?>
+            <?php // The scarcity line moved up into the sticky picker. ?>
 
             <ul class="dv2-checkout-trust">
                 <li><?php echo esc_html(iptv_text('checkout_trust_1', '14-day money-back')); ?></li>
@@ -257,27 +280,7 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
                 <?php echo esc_html(iptv_text('guarantee_text', 'Watching in 60 seconds · Secure checkout · Pay once, no auto-renew')); ?>
             </p>
 
-            <!-- Payment methods -->
-            <div class="dv2-payments">
-                <span class="dv2-payments-label">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        aria-hidden="true">
-                        <rect x="4" y="11" width="16" height="10" rx="2"></rect>
-                        <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
-                    </svg>
-                    <?php echo esc_html(iptv_text('payments_label', 'Secure checkout')); ?>
-                </span>
-                <ul class="dv2-payment-badges">
-                    <li class="dv2-payment-badge dv2-payment-badge--visa">VISA</li>
-                    <li class="dv2-payment-badge dv2-payment-badge--mc" aria-label="Mastercard">
-                        <span class="dv2-mc-mark" aria-hidden="true"><i></i><i></i></span>
-                        <span>Mastercard</span>
-                    </li>
-                    <li class="dv2-payment-badge dv2-payment-badge--amex">AMEX</li>
-                    <li class="dv2-payment-badge dv2-payment-badge--paypal">PayPal</li>
-                    <li class="dv2-payment-badge dv2-payment-badge--btc">₿ Bitcoin</li>
-                </ul>
-            </div>
+            <?php // The payment marks moved into each card, next to its CTA. ?>
 
             <?php // The "Every plan is fully loaded" panel used to sit here. Its
                   // claims now live in each card's feature list — see

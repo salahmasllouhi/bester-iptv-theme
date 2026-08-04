@@ -34,8 +34,8 @@
     max-width: 100%;
     z-index: 9990;
     background: var(--dv2-surface, #ffffff);
-    border-top: 1px solid var(--dv2-border-strong, rgba(184, 134, 11, 0.45));
-    box-shadow: 0 -6px 28px rgba(76, 29, 149, 0.14);
+    border-top: 1px solid var(--dv2-border-medium, rgba(15, 15, 16, 0.14));
+    box-shadow: 0 -6px 28px rgba(15, 15, 16, 0.14);
     padding: 9px 12px calc(9px + env(safe-area-inset-bottom, 0px));
     transform: translateY(0);
     transition: transform .28s ease;
@@ -159,7 +159,7 @@ body .activity-ticker {
 .dv2-sticky-btn--ghost {
     background: var(--dv2-surface-tint, #f5f1e8);
     color: var(--dv2-brand-700, #8e1414);
-    border: 1px solid var(--dv2-border-strong, rgba(184, 134, 11, 0.45));
+    border: 1px solid var(--dv2-border-medium, rgba(15, 15, 16, 0.14));
 }
 
 /* Hover is gated behind a real pointer. A touch tap otherwise leaves the
