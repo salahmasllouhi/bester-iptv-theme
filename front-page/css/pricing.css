@@ -4,8 +4,10 @@
     background: transparent;
 }
 
+/* Matches the page shell rather than the old 1100px, so four cards get the
+   same width the rest of the page uses. */
 .pricing .container {
-    max-width: 1100px;
+    max-width: var(--dv2-shell, 1280px);
     margin: 0 auto;
     background: transparent;
     border-radius: var(--radius-xl);
@@ -372,11 +374,14 @@
 
 /* --- Card grid ----------------------------------------------- */
 
+/* stretch, not start: the cards carry different numbers of lines (only the
+   flagged one has a badge row) and ragged bottoms made the CTAs sit at four
+   different heights. */
 .dv2-plan-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1.25rem;
-    align-items: start;
+    align-items: stretch;
 }
 
 .dv2-plan-card {
@@ -402,21 +407,26 @@
     box-shadow: var(--dv2-shadow-lg, 0 24px 60px rgba(15, 15, 16, 0.22));
 }
 
+/* min-height reserves the badge row on every card, so the four price blocks
+   line up whether or not a card is flagged. */
 .dv2-plan-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 0.5rem;
+    min-height: 2rem;
     margin-bottom: 0.9rem;
     padding: 0 0.25rem;
 }
 
+/* nowrap: "12 Monate" was breaking onto two lines next to the badge. */
 .dv2-plan-name {
     font-family: var(--dv2-font-display, sans-serif);
     font-size: 1.15rem;
     font-weight: 800;
     color: var(--dv2-ink);
     margin: 0;
+    white-space: nowrap;
 }
 
 .dv2-plan-card.is-popular .dv2-plan-name {

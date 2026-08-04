@@ -138,13 +138,20 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
             // Shared feature list. Every plan includes the same service — only
             // the length and the screen count differ — so one list is printed
             // into each card rather than inventing per-tier differences.
+            //
+            // This absorbed the separate "Every plan is fully loaded" panel that
+            // used to sit below the configurator: the same claims, stated once
+            // inside the card the visitor is actually reading. The plan pages
+            // keep their own copy of that panel (plan/sections/plan-includes.php).
             $card_features = array(
                 1 => iptv_text('card_feature_1', '40.000+ Live-Sender'),
                 2 => iptv_text('card_feature_2', '200.000+ Filme & Serien'),
                 3 => iptv_text('card_feature_3', '4K, Ultra HD & HD'),
-                4 => iptv_text('card_feature_4', 'Alle PPV-Events inklusive'),
-                5 => iptv_text('card_feature_5', 'Sofort aktiviert'),
-                6 => iptv_text('card_feature_6', 'Support rund um die Uhr'),
+                4 => iptv_text('card_feature_4', 'Bundesliga, Champions League & NFL'),
+                5 => iptv_text('card_feature_5', 'Alle PPV-Events inklusive'),
+                6 => iptv_text('card_feature_6', 'Programmzeitschrift (EPG)'),
+                7 => iptv_text('card_feature_7', 'Stabile Server & Anti-Buffer™'),
+                8 => iptv_text('card_feature_8', 'Sofort aktiviert, Support 24/7'),
             );
             ?>
 
@@ -272,32 +279,13 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
                 </ul>
             </div>
 
-            <!-- What every plan includes -->
-            <?php
-            $plan_includes = array(
-                1  => '40,000+ Live TV Channels',
-                2  => '200,000+ Movies & Series (VOD)',
-                3  => '4K, Ultra HD & HD quality',
-                4  => 'Stable, fast servers',
-                5  => 'Full TV guide (EPG)',
-                6  => 'Anti-Buffer™ 9.8',
-                7  => 'SHL, NHL, Premier League & handball',
-                8  => 'Pay-Per-View (PPV) events',
-                9  => 'Auto-updating channels & VOD',
-                10 => '24/7 support',
-            );
-            ?>
-            <div class="dv2-loaded">
-                <h3 class="dv2-loaded-title">
-                    <span aria-hidden="true">⚡</span>
-                    <?php echo esc_html(iptv_text('plan_includes_title', 'Every plan is fully loaded')); ?>
-                </h3>
-                <ul class="dv2-loaded-list">
-                    <?php foreach ($plan_includes as $n => $item) : ?>
-                        <li><?php echo esc_html(iptv_text("plan_includes_{$n}", $item)); ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
+            <?php // The "Every plan is fully loaded" panel used to sit here. Its
+                  // claims now live in each card's feature list — see
+                  // $card_features above — so the visitor reads them inside the
+                  // thing they are about to buy rather than in a footnote below
+                  // four cards. The plan pages still render their own copy from
+                  // plan/sections/plan-includes.php, which keeps the same
+                  // plan_includes_* keys. ?>
 
             <!-- Trial -->
             <div class="dv2-trial">

@@ -951,15 +951,20 @@
 }
 
 /* Single centred panel, per the annotated spec. */
+/* Full width, no panel chrome.
+   This was a 720px card wrapping a two-step configurator, which is exactly the
+   width four plan cards cannot live in — they overflowed the panel and the
+   12-month card hung outside its rounded corner. The cards carry their own
+   surface and shadow now, so the wrapper only has to lay them out. */
 .configurator {
     width: 100%;
-    max-width: 720px;
-    background: var(--dv2-surface);
-    border: 1px solid var(--dv2-border-strong);
-    border-radius: var(--dv2-radius-xl);
-    padding: 32px;
+    max-width: none;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
     margin: 44px auto 0;
-    box-shadow: var(--dv2-shadow-md);
+    box-shadow: none;
 }
 
 .configurator .config-section {
