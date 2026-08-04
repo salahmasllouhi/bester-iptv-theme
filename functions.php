@@ -707,6 +707,34 @@ require_once get_template_directory() . '/plan/inc/plan-pages-setup.php';
 // content tests score against an all-but-empty post_content.
 require_once get_template_directory() . '/plan/inc/plan-seo.php';
 
+// Default copy for the two front-page sections that render a list rather than a
+// string — the accordion and the review wall. Shared by the sections and by the
+// Rank Math digest, so the two cannot drift.
+require_once get_template_directory() . '/inc/front-page-strings.php';
+
+// Long-form copy for the front page's body band. Rendered through the keyword
+// pages' prose section, so it loads before them too.
+require_once get_template_directory() . '/front-page/inc/front-page-body.php';
+
+// Hands Rank Math the copy the front page actually renders — its post_content
+// is empty, so every content test scored against nothing. Also holds the shared
+// section-digest builder the keyword pages reuse, so it must load before them.
+require_once get_template_directory() . '/inc/front-page-seo.php';
+
+// Keyword landing pages (template-keyword-landing.php). The copy table first:
+// everything else reads through it.
+require_once get_template_directory() . '/keyword/inc/keyword-data.php';
+
+// Page context, the iptv_text() override that makes the front page's sections
+// render one keyword's wording, and the %placeholder% link resolver.
+require_once get_template_directory() . '/keyword/inc/keyword-text.php';
+
+// One-time provisioning of the eight pages. Guarded by an option; see the file
+// header for how to re-run it.
+require_once get_template_directory() . '/keyword/inc/keyword-pages-setup.php';
+
+require_once get_template_directory() . '/keyword/inc/keyword-seo.php';
+
 /**
  * WooCommerce: Redirect all cart operations to checkout page
  * Since the cart page is disabled, we redirect to checkout instead

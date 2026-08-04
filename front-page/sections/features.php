@@ -62,7 +62,19 @@ $allowed_svg = [
 <section class="features dv2-section" id="features">
     <div class="features-inner">
         <div class="dv2-section-head">
-            <h2><?php echo esc_html(iptv_text('features_title', 'Built for global viewers')); ?></h2>
+            <?php
+            // The heading is two fields, as in the hero and the split panels:
+            // the plain opening and an accented phrase. The accent half was
+            // never rendered, so a front page whose fields read
+            // "Warum" + "IPTV Anbieter?" showed an <h2> that said only "Warum".
+            $features_title_span = iptv_text('features_title_span', '');
+            ?>
+            <h2>
+                <?php echo esc_html(iptv_text('features_title', 'Built for global viewers')); ?>
+                <?php if ($features_title_span !== '') : ?>
+                    <em><?php echo esc_html($features_title_span); ?></em>
+                <?php endif; ?>
+            </h2>
             <p>
                 <?php echo esc_html(iptv_text('features_subtitle', 'From Nordic public TV to Premier League, Bollywood to Hollywood — all sports, all genres, all countries in one affordable package')); ?>
             </p>

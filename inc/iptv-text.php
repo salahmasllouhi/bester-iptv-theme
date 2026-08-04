@@ -46,13 +46,15 @@ if (!function_exists('iptv_text')) {
 
         $front_page_id = get_option('page_on_front');
 
+        $value = null;
+
         if (function_exists('get_field') && !in_array($key, $acf_skip_keys, true)) {
-            $value = $front_page_id
+            $found = $front_page_id
                 ? get_field($key, $front_page_id)
                 : get_field($key);
 
-            if ($value !== null && $value !== '' && !is_array($value)) {
-                return $value;
+            if ($found !== null && $found !== '' && !is_array($found)) {
+                $value = $found;
             }
         }
 
@@ -60,13 +62,30 @@ if (!function_exists('iptv_text')) {
         // is the case for any field added to acf-json/ but not yet synced into
         // the database. The value is still plain post meta under the same key, so
         // read it directly rather than falling through to the English default.
-        if ($front_page_id) {
+        if ($value === null && $front_page_id) {
             $meta = get_post_meta($front_page_id, $key, true);
             if (is_string($meta) && $meta !== '') {
-                return $meta;
+                $value = $meta;
             }
         }
 
-        return $default;
+        if ($value === null) {
+            $value = $default;
+        }
+
+        /**
+         * Last word on any front-page string.
+         *
+         * The front page's sections are also the body of every keyword landing
+         * page, which needs the same layout with its own wording — so those
+         * pages hook this and answer for the handful of keys where the keyword
+         * belongs, leaving the rest to fall through to the front page. See
+         * keyword/inc/keyword-text.php.
+         *
+         * @param string $value   Resolved copy.
+         * @param string $key     Field name.
+         * @param string $default Template fallback.
+         */
+        return apply_filters('iptv_text', $value, $key, $default);
     }
 }

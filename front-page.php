@@ -37,6 +37,13 @@ $sections_dir = $front_page_dir . '/sections';
             include $path;
         }
     }
+
+    // The body band's prose styles. Shared with the keyword landing pages, so
+    // the sheet lives with them rather than in this folder.
+    $keyword_css = get_template_directory() . '/keyword/css/keyword.css';
+    if (file_exists($keyword_css)) {
+        include $keyword_css;
+    }
     ?>
 </style>
 
@@ -62,6 +69,10 @@ $sections = array(
     'features',         // Eight capability cards
     'pricing',          // Plan cards + sticky screen picker (WooCommerce)
     'steps',            // Onboarding panel - sits directly under pricing
+    // The reading material sits below the buying path rather than inside it:
+    // everything above this line is the offer, everything below is the case for
+    // it. Same position the keyword landing pages give their band.
+    'body',             // Long-form copy on "IPTV Anbieter"
     'unlock',           // Supported device chips
     'reviews',          // Score card + two-row review marquee
     'faq',              // Accordion

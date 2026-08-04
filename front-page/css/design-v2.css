@@ -275,6 +275,14 @@ h6,
     margin: 0;
 }
 
+/* Accented half of a two-part section heading. Same treatment as
+   .dv2-hero-accent and .dv2-split-title em, in the darker red because these
+   headings sit on a light surface. */
+.dv2-section-head h2 em {
+    font-style: normal;
+    color: var(--dv2-brand);
+}
+
 .dv2-section-head p,
 .section-subtitle {
     font-family: var(--dv2-font-body);

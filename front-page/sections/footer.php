@@ -79,6 +79,30 @@
                 <?php endif; ?>
             </div>
 
+            <?php
+            // The keyword landing pages. Linked from every page rather than
+            // from the front page alone: they are the site's entry points for
+            // the searches that do not say "bester IPTV Anbieter", and a page
+            // nothing links to is a page nothing crawls.
+            //
+            // iptv_footer_links() drops any entry whose page is not published,
+            // so this column is empty rather than broken before the pages are
+            // provisioned.
+            $footer_keyword_links = array();
+
+            foreach (iptv_keyword_definitions() as $footer_kw_slug => $footer_kw) {
+                $footer_keyword_links[] = array(
+                    'slug'  => $footer_kw_slug,
+                    'key'   => 'footer_link_' . str_replace('-', '_', $footer_kw_slug),
+                    'label' => $footer_kw['keyword'],
+                );
+            }
+            ?>
+            <div class="footer-col">
+                <h4><?php echo esc_html(iptv_text('footer_head_topics', 'IPTV-Themen')); ?></h4>
+                <?php iptv_footer_links($footer_keyword_links); ?>
+            </div>
+
             <div class="footer-col">
                 <h4><?php echo esc_html(iptv_get_menu_title('footer_2', iptv_text('footer_head_links', 'Nützliche Links'))); ?></h4>
                 <?php if (has_nav_menu('footer_2')): ?>
