@@ -72,9 +72,11 @@
     align-items: baseline;
     gap: 0.32em;
     font-family: var(--dv2-font-display, sans-serif);
-    font-size: 1.5rem;
+    font-size: 1.35rem;
     font-weight: 800;
-    letter-spacing: -0.02em;
+    /* Matches .dv2-hero-title: same family, weight and tracking, so the
+       wordmark and the hero headline read as one typeface. */
+    letter-spacing: -0.032em;
     line-height: 1;
     white-space: nowrap;
     color: var(--dv2-ink);
@@ -92,11 +94,11 @@
     letter-spacing: 0.02em;
 }
 
-/* Slightly lighter and tracked out, so the two words read as one lockup
-   rather than two competing headlines. */
+/* Same weight as the mark and as the hero h1 — at 600 it read as a different
+   font sitting next to the red "IPTV". */
 .brand-logo .brand-logo__word {
-    font-weight: 600;
-    letter-spacing: 0.01em;
+    font-weight: 800;
+    letter-spacing: -0.032em;
     color: var(--dv2-ink);
 }
 

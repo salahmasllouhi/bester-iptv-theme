@@ -412,12 +412,15 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 1.25rem;
     align-items: stretch;
+    /* Room for the savings badge, which overhangs each card's top edge. */
+    padding-top: 12px;
 }
 
 /* One surface, not two. The card used to be a coloured shell wrapping a white
    .dv2-plan-body, which cost ~2.5rem of horizontal padding on every card and
    squeezed the content — feature lines were wrapping after two words. */
 .dv2-plan-card {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 0.85rem;
@@ -446,8 +449,8 @@
 /* min-height reserves the badge row on every card, so the four price blocks
    line up whether or not a card is flagged. */
 /* Centred stack: the name reads as the card's title rather than a label with
-   a badge pushed to the far edge. min-height reserves the badge row so the
-   four price blocks stay on one line across the row. */
+   a badge pushed to the far edge. min-height keeps the "Bestes Angebot" flag's
+   row reserved on every card, so the four price blocks stay on one line. */
 .dv2-plan-head {
     display: flex;
     flex-direction: column;
@@ -503,15 +506,15 @@
     color: var(--dv2-muted);
 }
 
-/* .badge is position:absolute in base.css and higher up this file — that took
-   the savings badge out of the card's flow entirely, which is why no card ever
-   showed one. Put it back in flow. */
+/* Straddles the card's top edge. .badge is already position:absolute (base.css
+   and higher up this file); the card is the positioned ancestor, so this only
+   has to say where on the card it goes. */
 .dv2-plan-save {
-    position: static;
-    align-self: center;
-    top: auto;
-    left: auto;
-    transform: none;
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
 }
 
 .dv2-plan-features {

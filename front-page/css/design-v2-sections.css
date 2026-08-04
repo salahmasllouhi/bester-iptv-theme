@@ -22,13 +22,17 @@
     width: calc(100% - 32px);
     max-width: var(--dv2-shell);
     margin: 12px auto 0;
-    padding: 10px 22px;
+    /* ~20% shorter than the 10px/22px it was: the row height is driven by the
+       CTA's padding as much as this, so both come down together below. */
+    padding: 6px 20px;
     background: #ffffff;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     border: 1px solid var(--dv2-border);
     border-radius: var(--dv2-radius-pill);
-    box-shadow: var(--dv2-shadow-sm);
+    /* Deeper than --dv2-shadow-sm: on a near-white page the subtle one left the
+       bar and the background looking like one surface. */
+    box-shadow: 0 4px 18px rgba(15, 15, 16, 0.10);
     z-index: 60;
 }
 
@@ -42,7 +46,7 @@
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     border: 1px solid var(--dv2-border);
-    box-shadow: var(--dv2-shadow-md);
+    box-shadow: 0 8px 28px rgba(15, 15, 16, 0.14);
 }
 
 .site-header .nav-container {
@@ -56,7 +60,7 @@
 }
 
 .site-header .logo-img {
-    height: 38px;
+    height: 30px;
     width: auto;
     display: block;
 }
@@ -93,8 +97,8 @@
     color: #ffffff;
     font-family: var(--dv2-font-body);
     font-weight: 700;
-    font-size: 16px;
-    padding: 14px 26px;
+    font-size: 15px;
+    padding: 10px 22px;
     border-radius: var(--dv2-radius-pill);
     box-shadow: none;
 }
@@ -2139,9 +2143,16 @@
         padding: 20px;
     }
 
-    .dv2-screen-row,
+    /* The screen pills stay four across at every width — going 2x2 on a phone
+       is the exact layout the sticky picker exists to prevent, since it pushes
+       the plan cards down past the fold. Only the (now unused) duration row
+       drops to two. */
     .dv2-duration-row {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dv2-screen-row {
+        grid-template-columns: repeat(4, 1fr);
     }
 
     .dv2-screen-pill {
