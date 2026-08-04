@@ -11,26 +11,6 @@
                     <?php echo esc_html(iptv_text('footer_desc', 'The leading IPTV service provider — 40,000+ live channels, 200,000+ movies and series, every sport, in 4K and 8K.')); ?>
                 </p>
 
-                <!-- Language selector -->
-                <div class="footer-language-selector">
-                    <div class="footer-country-selector" id="footerCountrySelector">
-                        <button class="footer-country-btn" onclick="toggleFooterDropdown()">
-                            <span id="footerSelectedFlag">🇺🇸</span>
-                            <span id="footerSelectedCode">USD</span>
-                            <svg width="10" height="10" viewBox="0 0 10 10">
-                                <path d="M1 3L5 7L9 3" stroke="currentColor" stroke-width="1.5" fill="none" />
-                            </svg>
-                        </button>
-                        <div class="footer-country-dropdown" id="footerCountryDropdown">
-                            <div class="footer-country-option" onclick="setFooterCurrency('usd')">🇺🇸 USD</div>
-                            <div class="footer-country-option" onclick="setFooterCurrency('sek')">🇸🇪 SEK</div>
-                            <div class="footer-country-option" onclick="setFooterCurrency('nok')">🇳🇴 NOK</div>
-                            <div class="footer-country-option" onclick="setFooterCurrency('dkk')">🇩🇰 DKK</div>
-                            <div class="footer-country-option" onclick="setFooterCurrency('eur')">🇫🇮 EUR</div>
-                            <div class="footer-country-option" onclick="setFooterCurrency('isk')">🇮🇸 ISK</div>
-                        </div>
-                    </div>
-                </div>
             </div>
             <?php
             // Get all menu locations

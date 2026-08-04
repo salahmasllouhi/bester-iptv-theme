@@ -1,33 +1,16 @@
-// Currency Selector JavaScript v2
-function toggleCountryDropdown() {
-    const dropdown = document.getElementById('countryDropdown');
-    dropdown.classList.toggle('active');
-}
+// Price rendering
+//
+// This file used to own a currency/language switcher in the header, footer and
+// mobile menu. The site is English-only and prices in one currency, so the
+// switcher markup is gone and what remains is the code that paints prices:
+// setCurrency() fixes the currency once on load, updateAllPrices() renders it.
+//
+// SITE_CURRENCY is the single place to change if the site ever prices in
+// something other than USD. The other entries are kept because the stored price
+// table (IPTV_Currency_Settings) still holds a column per currency.
 
-// Footer dropdown toggle
-function toggleFooterDropdown() {
-    const dropdown = document.getElementById('footerCountryDropdown');
-    if (dropdown) dropdown.classList.toggle('active');
-}
+const SITE_CURRENCY = 'usd';
 
-// Close dropdown when clicking outside
-document.addEventListener('click', function (e) {
-    const selector = document.getElementById('countrySelector');
-    const dropdown = document.getElementById('countryDropdown');
-    if (selector && !selector.contains(e.target)) {
-        if (dropdown) dropdown.classList.remove('active');
-    }
-
-    // Footer dropdown
-    const footerSelector = document.getElementById('footerCountrySelector');
-    const footerDropdown = document.getElementById('footerCountryDropdown');
-    if (footerSelector && !footerSelector.contains(e.target)) {
-        if (footerDropdown) footerDropdown.classList.remove('active');
-    }
-});
-
-// Currency data. `name` is the switcher label — the currency code, since the
-// switcher no longer changes language; `code` is what price formatting reads.
 const currencyData = {
     usd: { symbol: '$', flag: '🇺🇸', code: 'USD', name: 'USD', position: 'before' },
     eur: { symbol: '€', flag: '🇫🇮', code: 'EUR', name: 'EUR', position: 'before' },
@@ -37,51 +20,12 @@ const currencyData = {
     isk: { symbol: 'kr', flag: '🇮🇸', code: 'ISK', name: 'ISK', position: 'after' }
 };
 
-// The site is English-only, so there is no language prefix to read a currency
-// out of any more. The visitor's own choice is the only signal, and USD is the
-// default until they make one.
-function getDefaultCurrency() {
-    const stored = localStorage.getItem('iptv_currency');
-    return currencyData[stored] ? stored : 'usd';
-}
-
-// Update UI and prices for selected currency
+// Set the currency everything else prices in, and repaint.
 function setCurrency(currency) {
-    const data = currencyData[currency];
-    if (!data) return;
-
-    // Update header dropdown
-    const headerFlag = document.getElementById('selectedFlag');
-    const headerCode = document.getElementById('selectedCode');
-    if (headerFlag) headerFlag.textContent = data.flag;
-    if (headerCode) headerCode.textContent = data.name;
-
-    // Update footer dropdown
-    const footerFlag = document.getElementById('footerSelectedFlag');
-    const footerCode = document.getElementById('footerSelectedCode');
-    if (footerFlag) footerFlag.textContent = data.flag;
-    if (footerCode) footerCode.textContent = data.name;
-
-    document.querySelectorAll('.country-option').forEach(opt => {
-        opt.classList.remove('selected');
-        if (opt.dataset.currency === currency) {
-            opt.classList.add('selected');
-        }
-    });
+    if (!currencyData[currency]) return;
 
     window.currentCurrency = currency;
     updateAllPrices();
-    localStorage.setItem('iptv_currency', currency);
-
-    const headerDropdown = document.getElementById('countryDropdown');
-    const footerDropdown = document.getElementById('footerCountryDropdown');
-    if (headerDropdown) headerDropdown.classList.remove('active');
-    if (footerDropdown) footerDropdown.classList.remove('active');
-}
-
-// Footer currency setter (syncs with header — setCurrency repaints both)
-function setFooterCurrency(currency) {
-    setCurrency(currency);
 }
 
 // Update all prices based on selected device count and currency
@@ -133,18 +77,8 @@ function updateAllPrices() {
     }
 }
 
-// Nothing here navigates any more: picking a currency repaints the prices in
-// place. The site is English-only, so there is nowhere else to send anyone.
-
-// Initialize currency on page load
+// There is nothing for the visitor to pick any more, so this just fixes the
+// site currency before the first paint of the pricing configurator.
 document.addEventListener('DOMContentLoaded', function () {
-
-    document.querySelectorAll('.country-option').forEach(option => {
-        option.addEventListener('click', function (e) {
-            e.preventDefault();
-            setCurrency(this.dataset.currency);
-        });
-    });
-
-    setCurrency(getDefaultCurrency());
+    setCurrency(SITE_CURRENCY);
 });

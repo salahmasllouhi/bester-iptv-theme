@@ -16,11 +16,6 @@ include get_template_directory() . '/front-page/sections/header.php';
         document.getElementById('mobile-menu').classList.toggle('active');
     }
 
-    function toggleCountryDropdown() {
-        const dropdown = document.getElementById('countryDropdown');
-        if (dropdown) dropdown.classList.toggle('active');
-    }
-
     // Close mobile menu when a link is clicked
     document.addEventListener('DOMContentLoaded', function () {
         const mobileMenu = document.getElementById('mobile-menu');
@@ -31,14 +26,6 @@ include get_template_directory() . '/front-page/sections/header.php';
                 }
             });
         }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function (e) {
-            if (!e.target.closest('.country-selector')) {
-                const dropdown = document.getElementById('countryDropdown');
-                if (dropdown) dropdown.classList.remove('active');
-            }
-        });
     });
 
     // Header scroll effect - makes header sticky on scroll
