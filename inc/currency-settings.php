@@ -240,6 +240,15 @@ class IPTV_Currency_Settings
 
         $all_prices = array();
 
+        // The site prices in exactly one currency, and the figures below are
+        // that price list — not something to convert. €16.99 is the price; it
+        // is not $16.99 run through a rate. So the site currency is stored
+        // as-entered and only the columns nobody displays get a rate applied.
+        //
+        // This also takes the weekly CurrencyFreaks cron out of the path of the
+        // price people actually pay: a rate refresh can no longer move it.
+        $site_currency = function_exists('iptv_site_currency') ? iptv_site_currency() : 'usd';
+
         // 1. Core Durations (Variable Products)
         foreach ($instance->durations as $dur_key => $dur_label) {
             $all_prices[$dur_key] = array();
@@ -283,10 +292,16 @@ class IPTV_Currency_Settings
                 // Always store USD as base
                 $all_prices[$dur_key][$dev_key]['usd'] = number_format($usd_price, 2, '.', '');
 
-                // Calculate ALL other currencies from USD
+                // Calculate ALL other currencies from the base
                 foreach ($instance->currencies as $cur_key => $currency) {
                     if ($cur_key === 'usd')
                         continue;
+                    // Site currency: the base figure verbatim, no rate, no
+                    // rounding rule — see $site_currency above.
+                    if ($cur_key === $site_currency) {
+                        $all_prices[$dur_key][$dev_key][$cur_key] = number_format($usd_price, 2, '.', '');
+                        continue;
+                    }
                     $rate = floatval($rates[$cur_key]);
                     $converted = $usd_price * $rate;
                     $rounded = self::apply_rounding($converted, $cur_key);
@@ -321,6 +336,11 @@ class IPTV_Currency_Settings
         foreach ($instance->currencies as $cur_key => $currency) {
             if ($cur_key === 'usd')
                 continue;
+            // Site currency: the base figure verbatim, same rule as above.
+            if ($cur_key === $site_currency) {
+                $all_prices['trial_24h'][$cur_key] = number_format($trial_price_usd, 2, '.', '');
+                continue;
+            }
             $rate = floatval($rates[$cur_key]);
             // Don't apply rounding to 0 or very small trial prices generally, but for consistency we apply it if > 0
             if ($trial_price_usd > 0) {
@@ -686,3 +706,24 @@ class IPTV_Currency_Settings
 
 // Initialize
 IPTV_Currency_Settings::instance();
+
+/**
+ * Rebuild the stored price table once per deploy that changes how it is built.
+ *
+ * The table is only recomputed when a rate or a product price is saved, so a
+ * change to calculate_all_prices() would otherwise not show up until someone
+ * happened to hit Save in wp-admin. Bump this when the calculation changes.
+ */
+define('IPTV_PRICE_TABLE_BUILD', 2);
+
+add_action('init', function () {
+    if ((int) get_option('iptv_price_table_build') === IPTV_PRICE_TABLE_BUILD) {
+        return;
+    }
+
+    // Written before the work, so two requests arriving together cannot both
+    // rebuild — same reasoning as plan/inc/plan-pages-setup.php.
+    update_option('iptv_price_table_build', IPTV_PRICE_TABLE_BUILD, false);
+
+    IPTV_Currency_Settings::rebuild_price_table(true);
+}, 20);
