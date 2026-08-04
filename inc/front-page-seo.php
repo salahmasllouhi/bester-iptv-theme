@@ -262,6 +262,65 @@ if (!function_exists('iptv_front_links_digest')) {
     }
 }
 
+if (!function_exists('iptv_prose_anchor')) {
+    /**
+     * The id an h2 in a body band gets, so the table of contents can point at it.
+     *
+     * @param string $title
+     * @return string
+     */
+    function iptv_prose_anchor($title)
+    {
+        $slug = sanitize_title($title);
+
+        return $slug ? $slug : 'abschnitt';
+    }
+}
+
+if (!function_exists('iptv_prose_toc')) {
+    /**
+     * A body band's table of contents.
+     *
+     * The class is Rank Math's TOC block class, which is what its contentHasTOC
+     * test looks for when no TOC plugin is installed. This is a real table of
+     * contents on a page of about 2,000 words — the class names it correctly
+     * rather than pretending.
+     *
+     * @param array $blocks
+     * @return string
+     */
+    function iptv_prose_toc(array $blocks)
+    {
+        if (count($blocks) < 3) {
+            return '';
+        }
+
+        $items = '';
+
+        foreach ($blocks as $block) {
+            if (empty($block['title'])) {
+                continue;
+            }
+
+            $items .= sprintf(
+                '<li><a href="#%s">%s</a></li>',
+                esc_attr(iptv_prose_anchor($block['title'])),
+                esc_html($block['title'])
+            );
+        }
+
+        if (!$items) {
+            return '';
+        }
+
+        return '<nav class="wp-block-rank-math-toc-block kw-toc" aria-label="'
+            . esc_attr__('Inhaltsverzeichnis', 'nordictv') . '">'
+            . '<h2 class="kw-toc-title">' . esc_html__('Inhalt dieser Seite', 'nordictv') . '</h2>'
+            . '<ul>' . $items . '</ul>'
+            . '</nav>';
+    }
+}
+
 if (!function_exists('iptv_prose_digest')) {
     /**
      * A body band — the front page's or a keyword page's — as HTML.
@@ -281,8 +340,13 @@ if (!function_exists('iptv_prose_digest')) {
             $out[] = '<p>' . iptv_keyword_links($body['lead'], $slug) . '</p>';
         }
 
-        foreach ((array) (isset($body['blocks']) ? $body['blocks'] : array()) as $block) {
-            $out[] = '<h2>' . $block['title'] . '</h2>';
+        $blocks = (array) (isset($body['blocks']) ? $body['blocks'] : array());
+
+        $out[] = iptv_prose_toc($blocks);
+
+        foreach ($blocks as $block) {
+            $out[] = '<h2 id="' . esc_attr(iptv_prose_anchor($block['title'])) . '">'
+                . $block['title'] . '</h2>';
 
             foreach ((array) (isset($block['text']) ? $block['text'] : array()) as $paragraph) {
                 $out[] = '<p>' . iptv_keyword_links($paragraph, $slug) . '</p>';

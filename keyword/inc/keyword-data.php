@@ -48,7 +48,7 @@ if (!function_exists('iptv_keyword_definitions')) {
             'iptv-kaufen' => array(
                 'keyword'   => 'IPTV kaufen',
                 'title'     => 'IPTV kaufen',
-                'seo_title' => 'IPTV kaufen 2026 – 40.000+ Sender in 4K ab 5,83 €',
+                'seo_title' => 'IPTV kaufen 2026 – sofort aktiv, 40.000+ Sender in 4K',
                 'seo_desc'  => 'IPTV kaufen ohne Vertrag: über 40.000 Live-Sender und 200.000+ Filme in 4K, in zwei Minuten aktiviert. Sichere Bezahlung, 14 Tage Geld-zurück-Garantie.',
 
                 'text' => array(
@@ -65,6 +65,16 @@ if (!function_exists('iptv_keyword_definitions')) {
                     'pricing_subtitle'  => 'Ein Preis, alles inklusive. Über 40.000 Live-Sender und mehr als 200.000 Filme und Serien in 4K.',
                     'reviews_title'     => 'Kunden, die bei uns IPTV kaufen',
                     'faq_title'         => 'Fragen zum IPTV kaufen',
+                    'showcase_subtitle' => 'Wer IPTV kaufen will, bekommt Live-TV, Filme und Serien über das Internet — ohne Schüssel, ohne Vertrag, ohne teure Hardware.',
+                    'vod_subtitle' => 'Die Mediathek ist inklusive, wenn du IPTV kaufen möchtest: alle Genres und Sprachen, auf Abruf, täglich erweitert.',
+                    'sports_desc' => 'Alle Ligen und Turniere live — für viele der eigentliche Grund, IPTV kaufen zu wollen.',
+                    'cta_bar_label' => 'IPTV KAUFEN UND BIS ZU 90 % GEGENÜBER KLASSISCHEN ANBIETERN SPAREN',
+                    'steps_subtitle' => 'IPTV kaufen, Zugangsdaten erhalten, loslegen — in zwei Minuten erledigt.',
+                    'devices_subtitle' => 'Wer IPTV kaufen will, braucht keine neue Hardware: Smart TV, Android, iOS, Fire Stick, MAG und viele mehr.',
+                    'reviews_subtitle' => 'Tausende in Deutschland, die IPTV kaufen statt den Kabelvertrag zu verlängern.',
+                    'faq_subtitle' => 'Die häufigsten Fragen von allen, die IPTV kaufen möchten.',
+                    'contact_subtitle' => 'Noch unsicher, ob du IPTV kaufen möchtest? Schreib uns — der Support antwortet meist in wenigen Minuten.',
+                    'features_cta_note' => 'IPTV kaufen · Ohne Vertrag · Sofort aktiviert · 14 Tage Geld-zurück',
                 ),
 
                 'lead' => 'IPTV kaufen heißt heute nicht mehr, sich für ein Jahr zu binden und auf einen Techniker zu warten. Du wählst eine Laufzeit, bezahlst einmal und bekommst deine Zugangsdaten per E-Mail — in der Regel in weniger als zwei Minuten. Auf dieser Seite steht, was du dafür bekommst, worauf du beim Kauf achten solltest und wie die Einrichtung abläuft.',
@@ -145,7 +155,7 @@ if (!function_exists('iptv_keyword_definitions')) {
             'iptv-m3u-kaufen' => array(
                 'keyword'   => 'IPTV M3U kaufen',
                 'title'     => 'IPTV M3U kaufen',
-                'seo_title' => 'IPTV M3U kaufen – M3U-Link mit EPG, sofort geliefert',
+                'seo_title' => 'IPTV M3U kaufen 2026 – Link mit EPG, sofort geliefert',
                 'seo_desc'  => 'IPTV M3U kaufen und den Link sofort per E-Mail erhalten: 40.000+ Sender, EPG inklusive, läuft in VLC, IPTV Smarters, TiviMate und Kodi. 14 Tage Geld zurück.',
 
                 'text' => array(
@@ -154,14 +164,24 @@ if (!function_exists('iptv_keyword_definitions')) {
                     'hero_title_3'      => 'Mit voller Programmzeitschrift.',
                     'hero_subtitle'     => 'Du willst IPTV M3U kaufen und den Link in deiner gewohnten App nutzen? Du bekommst eine M3U-URL mit über 40.000 Sendern und passendem EPG — kompatibel mit VLC, IPTV Smarters, TiviMate, Kodi und jedem Player, der M3U versteht.',
                     'hero_image_alt'    => 'IPTV M3U kaufen – M3U-Playlist mit über 40.000 Sendern',
-                    'vod_image_alt'     => 'Filme und Serien über die M3U-Playlist',
-                    'sports_image_alt'  => 'Live-Sport über den gekauften M3U-Link',
                     'features_title'    => 'Was in der Playlist steckt, wenn du',
                     'features_title_span' => 'IPTV M3U kaufen willst',
                     'features_subtitle' => 'Eine M3U-Datei ist nur so gut wie das, was dahinter liegt. Das hier hängt an jedem Link, den wir ausliefern.',
                     'pricing_subtitle'  => 'Ein Zugang, wahlweise als M3U-Link oder über Xtream-Codes. Über 40.000 Live-Sender und mehr als 200.000 Filme und Serien.',
                     'reviews_title'     => 'Kunden, die bei uns IPTV M3U kaufen',
                     'faq_title'         => 'Fragen zum IPTV M3U kaufen',
+                    'vod_image_alt' => 'Filme und Serien über die Playlist, wenn Sie IPTV M3U kaufen',
+                    'sports_image_alt' => 'Live-Sport über den Link, den Sie beim IPTV M3U kaufen erhalten',
+                    'showcase_subtitle' => 'Wer IPTV M3U kaufen will, bekommt Live-TV, Filme und Serien über einen einzigen Link — ohne Schüssel und ohne Vertrag.',
+                    'vod_subtitle' => 'Filme und Serien hängen an derselben Playlist, wenn du IPTV M3U kaufen möchtest — auf Abruf, in vielen Sprachen.',
+                    'sports_desc' => 'Sport liegt in derselben Liste: ein Grund mehr, IPTV M3U kaufen zu wollen.',
+                    'cta_bar_label' => 'IPTV M3U KAUFEN UND BIS ZU 90 % GEGENÜBER KLASSISCHEN ANBIETERN SPAREN',
+                    'steps_subtitle' => 'IPTV M3U kaufen, Link einfügen, schauen — zwei Minuten reichen.',
+                    'devices_subtitle' => 'Der Link läuft überall: wer IPTV M3U kaufen will, braucht keine bestimmte App und keine neue Hardware.',
+                    'reviews_subtitle' => 'Was Kunden sagen, die bei uns IPTV M3U kaufen statt eine Datei herunterzuladen.',
+                    'faq_subtitle' => 'Die häufigsten Fragen von allen, die IPTV M3U kaufen möchten.',
+                    'contact_subtitle' => 'Unsicher, ob dein Player passt, bevor du IPTV M3U kaufen willst? Frag uns vorher.',
+                    'features_cta_note' => 'IPTV M3U kaufen · Sofort geliefert · EPG inklusive · 14 Tage Geld-zurück',
                 ),
 
                 'lead' => 'Wer IPTV M3U kaufen möchte, sucht meist keine neue App, sondern einen Link für die, die er schon benutzt. Genau das bekommst du: eine M3U-URL, die sich in VLC, IPTV Smarters, TiviMate, GSE, Kodi oder Perfect Player einfügen lässt, mit vollständiger Programmzeitschrift und ohne Bindung an eine bestimmte Software.',
@@ -238,7 +258,7 @@ if (!function_exists('iptv_keyword_definitions')) {
             'iptv-anbieter-vergleich' => array(
                 'keyword'   => 'IPTV Anbieter Vergleich',
                 'title'     => 'IPTV Anbieter Vergleich',
-                'seo_title' => 'IPTV Anbieter Vergleich 2026 – 9 Kriterien, die zählen',
+                'seo_title' => 'IPTV Anbieter Vergleich: 9 Kriterien für den besten Dienst',
                 'seo_desc'  => 'IPTV Anbieter Vergleich mit den neun Kriterien, die im Alltag entscheiden: Senderzahl, Stabilität, EPG, 4K, Support, Test, Rückgabe und Preis pro Monat.',
 
                 'text' => array(
@@ -255,6 +275,16 @@ if (!function_exists('iptv_keyword_definitions')) {
                     'pricing_subtitle'  => 'Was ein Zugang bei uns kostet — zum Vergleichen mit dem, was du heute zahlst.',
                     'reviews_title'     => 'Was Kunden nach dem Vergleich sagen',
                     'faq_title'         => 'Fragen zum IPTV Anbieter Vergleich',
+                    'showcase_subtitle' => 'Was im IPTV Anbieter Vergleich zählt: Live-TV, Filme und Serien über das Internet, ohne Schüssel und ohne Vertrag.',
+                    'vod_subtitle' => 'Die Mediathek ist im IPTV Anbieter Vergleich der zweite Punkt nach den Sendern — alle Genres, auf Abruf, täglich erweitert.',
+                    'sports_desc' => 'Sport entscheidet den IPTV Anbieter Vergleich häufiger als jede Senderzahl.',
+                    'cta_bar_label' => 'IPTV ANBIETER VERGLEICH: BIS ZU 90 % GÜNSTIGER ALS KLASSISCHE ANBIETER',
+                    'steps_subtitle' => 'Nach dem IPTV Anbieter Vergleich bist du in zwei Minuten startklar.',
+                    'devices_subtitle' => 'Geräteunterstützung gehört in jeden IPTV Anbieter Vergleich: Smart TV, Android, iOS, Fire Stick, MAG und mehr.',
+                    'reviews_subtitle' => 'Was Kunden sagen, die nach einem IPTV Anbieter Vergleich zu uns gewechselt sind.',
+                    'faq_subtitle' => 'Die häufigsten Fragen zum IPTV Anbieter Vergleich.',
+                    'contact_subtitle' => 'Fragen, die dein IPTV Anbieter Vergleich offen lässt? Schreib uns, wir antworten rund um die Uhr.',
+                    'features_cta_note' => 'IPTV Anbieter Vergleich · Ohne Vertrag · 24 h testen · 14 Tage Geld-zurück',
                 ),
 
                 'lead' => 'Ein ehrlicher IPTV Anbieter Vergleich lässt sich nicht in einer Tabelle mit Häkchen führen, denn die Zahlen, mit denen geworben wird, sind die am leichtesten zu fälschenden. Diese Seite listet die neun Kriterien, die im Alltag tatsächlich den Unterschied machen — und sagt bei jedem, wie du es vor dem Kauf selbst überprüfst.',
@@ -263,7 +293,7 @@ if (!function_exists('iptv_keyword_definitions')) {
                     array(
                         'title' => 'Die neun Kriterien, an denen du jeden Anbieter messen kannst',
                         'text'  => array(
-                            'Nimm diese Liste mit zu jedem Angebot, das du dir ansiehst — auch zu unserem.',
+                            'Nimm diese Liste mit in jeden IPTV Anbieter Vergleich, den du anstellst — auch zu unserem Angebot.',
                         ),
                         'items' => array(
                             array(
@@ -314,7 +344,7 @@ if (!function_exists('iptv_keyword_definitions')) {
                     array(
                         'title' => 'Warnzeichen, die einen Anbieter sofort disqualifizieren',
                         'text'  => array(
-                            'Manche Dinge muss man nicht abwägen. Wenn eines davon zutrifft, ist der Vergleich beendet.',
+                            'Manche Dinge muss man nicht abwägen. Wenn eines davon zutrifft, ist der IPTV Anbieter Vergleich beendet.',
                         ),
                         'list' => array(
                             'Kein Testzugang und keine Rückgabemöglichkeit',
@@ -328,7 +358,7 @@ if (!function_exists('iptv_keyword_definitions')) {
                     array(
                         'title' => 'Was du im Test konkret prüfen solltest',
                         'text'  => array(
-                            'Vierundzwanzig Stunden reichen, wenn du sie gezielt nutzt. Schalte einen Sender zur Primetime ein und lass ihn zwanzig Minuten laufen — Aussetzer zeigen sich selten sofort. Wechsle mehrfach schnell hintereinander den Sender und sieh, wie lange der Bildaufbau dauert. Öffne die Programmzeitschrift und scrolle zwei Tage nach vorn. Starte einen Film aus der Mediathek und spule mittendrin. Und ruf einen Sender der %kw:iptv-bundesliga% genau zum Anpfiff auf, nicht in der Halbzeit.',
+                            'Vierundzwanzig Stunden reichen für einen belastbaren IPTV Anbieter Vergleich, wenn du sie gezielt nutzt. Schalte einen Sender zur Primetime ein und lass ihn zwanzig Minuten laufen — Aussetzer zeigen sich selten sofort. Wechsle mehrfach schnell hintereinander den Sender und sieh, wie lange der Bildaufbau dauert. Öffne die Programmzeitschrift und scrolle zwei Tage nach vorn. Starte einen Film aus der Mediathek und spule mittendrin. Und ruf einen Sender der %kw:iptv-bundesliga% genau zum Anpfiff auf, nicht in der Halbzeit.',
                             'Wenn das alles läuft, hast du mehr über den Anbieter gelernt als aus jeder Vergleichstabelle im Netz. Was IPTV technisch von Kabel und Satellit unterscheidet, erklärt der %wiki%.',
                         ),
                     ),
@@ -348,7 +378,7 @@ if (!function_exists('iptv_keyword_definitions')) {
             'iptv-bundesliga' => array(
                 'keyword'   => 'IPTV Bundesliga',
                 'title'     => 'IPTV Bundesliga',
-                'seo_title' => 'IPTV Bundesliga live – alle 306 Spiele, Konferenz & 4K',
+                'seo_title' => 'IPTV Bundesliga live – alle 306 Spiele, einfach in 4K',
                 'seo_desc'  => 'IPTV Bundesliga live schauen: alle Spiele inklusive Konferenz, 2. Bundesliga und DFB-Pokal in HD und 4K. Sofort aktiviert, ohne Vertrag, ab 5,83 € im Monat.',
                 'wiki'      => array('https://de.wikipedia.org/wiki/Fu%C3%9Fball-Bundesliga', 'Wikipedia-Artikel zur Bundesliga'),
 
@@ -366,6 +396,16 @@ if (!function_exists('iptv_keyword_definitions')) {
                     'pricing_subtitle'  => 'Ein Preis für die komplette Saison und alles andere dazu — über 40.000 Sender und 200.000+ Filme.',
                     'reviews_title'     => 'Was Bundesliga-Zuschauer sagen',
                     'faq_title'         => 'Fragen zur IPTV Bundesliga',
+                    'showcase_subtitle' => 'Neben der IPTV Bundesliga liegen Live-TV, Filme und Serien in derselben Liste — ohne Schüssel, ohne Vertrag.',
+                    'vod_subtitle' => 'Wenn kein Spiel läuft: Filme und Serien gehören zur IPTV Bundesliga dazu, auf Abruf und täglich erweitert.',
+                    'sports_desc' => 'IPTV Bundesliga, Champions League und jede andere große Liga — live und auf Abruf.',
+                    'cta_bar_label' => 'IPTV BUNDESLIGA: BIS ZU 90 % GÜNSTIGER ALS EIN KLASSISCHES SPORTPAKET',
+                    'steps_subtitle' => 'Die IPTV Bundesliga einzurichten dauert zwei Minuten — rechtzeitig vor dem Anpfiff.',
+                    'devices_subtitle' => 'Die IPTV Bundesliga läuft auf dem Gerät, das schon bei dir steht: Smart TV, Fire Stick, Android, iOS und mehr.',
+                    'reviews_subtitle' => 'Was Zuschauer über die IPTV Bundesliga am Samstagnachmittag sagen.',
+                    'faq_subtitle' => 'Die häufigsten Fragen zur IPTV Bundesliga.',
+                    'contact_subtitle' => 'Frage zur IPTV Bundesliga offen? Der Support ist rund um die Uhr erreichbar.',
+                    'features_cta_note' => 'IPTV Bundesliga · Ohne zweites Sportpaket · Sofort aktiviert · 14 Tage Geld-zurück',
                 ),
 
                 'lead' => 'Eine Bundesliga-Saison hat 306 Spiele, verteilt auf Freitagabend, Samstagnachmittag, Samstagabend, Sonntagmittag und Sonntagnachmittag — und beim klassischen Anbieter auf mehrere Abos. Mit IPTV Bundesliga zu schauen bedeutet, dass alle Anstoßzeiten in derselben Senderliste liegen, samt Konferenz, 2. Liga und Pokal.',
@@ -434,7 +474,7 @@ if (!function_exists('iptv_keyword_definitions')) {
             'iptv-fussball' => array(
                 'keyword'   => 'IPTV Fußball',
                 'title'     => 'IPTV Fußball',
-                'seo_title' => 'IPTV Fußball live – Bundesliga, CL, Premier League in 4K',
+                'seo_title' => 'IPTV Fußball live 2026 – alle Top-Ligen, sofort in 4K',
                 'seo_desc'  => 'IPTV Fußball live: Bundesliga, Champions League, Premier League, La Liga, Serie A und Nationalmannschaft in einem Zugang. Ohne Vertrag, sofort freigeschaltet.',
 
                 'text' => array(
@@ -451,6 +491,16 @@ if (!function_exists('iptv_keyword_definitions')) {
                     'pricing_subtitle'  => 'Eine Rechnung für alle Ligen — und dazu über 200.000 Filme und Serien.',
                     'reviews_title'     => 'Was Fußballfans über uns sagen',
                     'faq_title'         => 'Fragen zu IPTV Fußball',
+                    'showcase_subtitle' => 'Neben IPTV Fußball liegen Live-TV, Filme und Serien in derselben Liste — ohne Schüssel und ohne Vertrag.',
+                    'vod_subtitle' => 'Zwischen zwei Spieltagen: Filme und Serien gehören zu IPTV Fußball dazu, auf Abruf und täglich erweitert.',
+                    'sports_desc' => 'IPTV Fußball plus NFL, NBA, Formel 1 und Handball — live und auf Abruf.',
+                    'cta_bar_label' => 'IPTV FUSSBALL: BIS ZU 90 % GÜNSTIGER ALS DREI EINZELNE SPORTABOS',
+                    'steps_subtitle' => 'IPTV Fußball einzurichten dauert zwei Minuten — rechtzeitig vor dem Anpfiff.',
+                    'devices_subtitle' => 'IPTV Fußball läuft auf dem Gerät, das schon bei dir steht: Smart TV, Fire Stick, Android, iOS und mehr.',
+                    'reviews_subtitle' => 'Was Zuschauer über IPTV Fußball an einem Champions-League-Abend sagen.',
+                    'faq_subtitle' => 'Die häufigsten Fragen zu IPTV Fußball.',
+                    'contact_subtitle' => 'Frage zu IPTV Fußball offen? Der Support ist rund um die Uhr erreichbar.',
+                    'features_cta_note' => 'IPTV Fußball · Alle Ligen in einem Abo · Sofort aktiviert · 14 Tage Geld-zurück',
                 ),
 
                 'lead' => 'Wer in Deutschland Fußball vollständig sehen will, braucht normalerweise drei bis vier Abos: eines für die Bundesliga, eines für die Champions League, eines für die Premier League und ein weiteres für alles andere. IPTV Fußball löst das anders — alle Wettbewerbe liegen in einer Senderliste, mit einer Programmzeitschrift und einer Rechnung.',
@@ -459,7 +509,7 @@ if (!function_exists('iptv_keyword_definitions')) {
                     array(
                         'title' => 'Welche Wettbewerbe drin sind',
                         'text'  => array(
-                            'Die Senderliste ist nicht auf Deutschland beschränkt. Weil Sender aus 198 Ländern enthalten sind, findest du zu den großen Spielen fast immer mehrere Übertragungen — die deutsche, die englische und oft die des Heimatlandes der beteiligten Mannschaft.',
+                            'Bei IPTV Fußball ist die Senderliste nicht auf Deutschland beschränkt. Weil Sender aus 198 Ländern enthalten sind, findest du zu den großen Spielen fast immer mehrere Übertragungen — die deutsche, die englische und oft die des Heimatlandes der beteiligten Mannschaft.',
                         ),
                         'list' => array(
                             'Bundesliga und 2. Bundesliga inklusive Konferenz — Details unter %kw:iptv-bundesliga%',
@@ -482,7 +532,7 @@ if (!function_exists('iptv_keyword_definitions')) {
                     array(
                         'title' => 'Was du zum Anpfiff brauchst',
                         'text'  => array(
-                            'Fußball ist der Härtetest für jeden Streamingdienst, weil alle gleichzeitig einschalten. Drei Dinge entscheiden, ob es funktioniert.',
+                            'IPTV Fußball ist der Härtetest für jeden Streamingdienst, weil alle gleichzeitig einschalten. Drei Dinge entscheiden, ob es funktioniert.',
                         ),
                         'items' => array(
                             array(
@@ -517,7 +567,7 @@ if (!function_exists('iptv_keyword_definitions')) {
                 ),
 
                 'faq' => array(
-                    array('q' => 'Sind Champions League und Bundesliga zusammen enthalten?', 'a' => 'Ja, beide liegen im selben Zugang, ohne Aufpreis und ohne zweites Abo. Dasselbe gilt für Europa League, Premier League, La Liga, Serie A und Ligue 1.'),
+                    array('q' => 'Sind Champions League und Bundesliga zusammen enthalten?', 'a' => 'Ja, bei IPTV Fußball liegen beide im selben Zugang, ohne Aufpreis und ohne zweites Abo. Dasselbe gilt für Europa League, Premier League, La Liga, Serie A und Ligue 1.'),
                     array('q' => 'Kann ich zwischen deutschem und englischem Kommentar wählen?', 'a' => 'Bei den großen Partien meistens ja. Weil Sender aus 198 Ländern enthalten sind, gibt es zu einem Spitzenspiel häufig mehrere Übertragungen in verschiedenen Sprachen.'),
                     array('q' => 'Läuft das auch bei WM und EM?', 'a' => 'Ja. Turniere der Nationalmannschaften sind enthalten, inklusive Nations League und Freundschaftsspielen. Bei Turnieren stehen zusätzlich die Übertragungen der beteiligten Länder zur Verfügung.'),
                     array('q' => 'Wie viele Geräte kann ich gleichzeitig nutzen?', 'a' => 'So viele Bildschirme, wie du beim Kauf gewählt hast — von einem bis vier. Praktisch, wenn im Wohnzimmer die Konferenz und im Nebenzimmer ein Einzelspiel läuft.'),
@@ -530,7 +580,7 @@ if (!function_exists('iptv_keyword_definitions')) {
             'iptv-s-sport-plus' => array(
                 'keyword'   => 'IPTV S Sport Plus',
                 'title'     => 'IPTV S Sport Plus',
-                'seo_title' => 'IPTV S Sport Plus – türkische Sportsender live in HD',
+                'seo_title' => 'IPTV S Sport Plus 2026 – türkischer Sport, sofort in HD',
                 'seo_desc'  => 'IPTV S Sport Plus und weitere türkische Sportsender live in HD: Süper Lig, internationale Ligen, Basketball und Motorsport. Sofort aktiviert, ohne Vertrag.',
 
                 'text' => array(
@@ -547,6 +597,16 @@ if (!function_exists('iptv_keyword_definitions')) {
                     'pricing_subtitle'  => 'Türkische und deutsche Sender in einem Paket — über 40.000 Kanäle aus 198 Ländern.',
                     'reviews_title'     => 'Was Zuschauer türkischer Sender sagen',
                     'faq_title'         => 'Fragen zu IPTV S Sport Plus',
+                    'showcase_subtitle' => 'Neben IPTV S Sport Plus liegen deutsche Sender, Filme und Serien in derselben Liste — ohne zweite Schüssel.',
+                    'vod_subtitle' => 'Türkische und internationale Filme und Serien gehören zu IPTV S Sport Plus dazu, auf Abruf und täglich erweitert.',
+                    'sports_desc' => 'IPTV S Sport Plus, Süper Lig und die europäischen Ligen — live und auf Abruf.',
+                    'cta_bar_label' => 'IPTV S SPORT PLUS: BIS ZU 90 % GÜNSTIGER ALS SATELLIT UND SPORTPAKET',
+                    'steps_subtitle' => 'IPTV S Sport Plus einzurichten dauert zwei Minuten, ganz ohne Türksat-Schüssel.',
+                    'devices_subtitle' => 'IPTV S Sport Plus läuft auf dem Gerät, das schon bei dir steht: Smart TV, Fire Stick, Android, iOS und mehr.',
+                    'reviews_subtitle' => 'Was Zuschauer sagen, die IPTV S Sport Plus über das Internet statt über Satellit schauen.',
+                    'faq_subtitle' => 'Die häufigsten Fragen zu IPTV S Sport Plus.',
+                    'contact_subtitle' => 'Unsicher, ob IPTV S Sport Plus die Sender hat, die du suchst? Frag vorher nach.',
+                    'features_cta_note' => 'IPTV S Sport Plus · Türkisch und deutsch · Sofort aktiviert · 14 Tage Geld-zurück',
                 ),
 
                 'lead' => 'Wer in Deutschland türkischen Sport verfolgt, kennt das Problem: Die Sender sind über der Türkei frei zu empfangen, hier aber nur über Umwege oder gar nicht. IPTV S Sport Plus löst das über das Internet — die türkischen Sportsender liegen in derselben Senderliste wie die deutschen, mit Programmzeitschrift und ohne Satellitenschüssel.',
@@ -612,7 +672,7 @@ if (!function_exists('iptv_keyword_definitions')) {
             'iptv-player' => array(
                 'keyword'   => 'IPTV Player',
                 'title'     => 'IPTV Player',
-                'seo_title' => 'IPTV Player 2026 – die besten Apps für TV, Stick & Handy',
+                'seo_title' => 'IPTV Player 2026 – die 6 besten Apps, einfach erklärt',
                 'seo_desc'  => 'Welcher IPTV Player passt zu deinem Gerät? TiviMate, IPTV Smarters, VLC, Kodi und GSE im Überblick — mit Einrichtung in wenigen Minuten und Zugang ab 5,83 €.',
 
                 'text' => array(
@@ -629,6 +689,16 @@ if (!function_exists('iptv_keyword_definitions')) {
                     'pricing_subtitle'  => 'Ein Zugang für jeden Player: M3U oder Xtream-Codes, über 40.000 Sender.',
                     'reviews_title'     => 'Was Nutzer über Einrichtung und Bedienung sagen',
                     'faq_title'         => 'Fragen zum IPTV Player',
+                    'showcase_subtitle' => 'Was dein IPTV Player anzeigt: Live-TV, Filme und Serien über das Internet, ohne Schüssel und ohne Vertrag.',
+                    'vod_subtitle' => 'Ein guter IPTV Player trennt Live-TV, Filme und Serien sauber — hier sind über 200.000 Titel auf Abruf.',
+                    'sports_desc' => 'Beim Sport zeigt sich, welcher IPTV Player schnell genug umschaltet.',
+                    'cta_bar_label' => 'EIN IPTV PLAYER, EIN ZUGANG: BIS ZU 90 % GEGENÜBER KLASSISCHEN ANBIETERN SPAREN',
+                    'steps_subtitle' => 'IPTV Player installieren, Zugangsdaten eintragen, schauen — zwei Minuten.',
+                    'devices_subtitle' => 'Für jedes Gerät gibt es einen passenden IPTV Player: Smart TV, Fire Stick, Android, iOS, MAG und mehr.',
+                    'reviews_subtitle' => 'Was Nutzer über Einrichtung und Bedienung im IPTV Player sagen.',
+                    'faq_subtitle' => 'Die häufigsten Fragen zum IPTV Player.',
+                    'contact_subtitle' => 'Dein IPTV Player macht Probleme? Der Support ist rund um die Uhr erreichbar.',
+                    'features_cta_note' => 'Jeder IPTV Player · M3U und Xtream · Sofort aktiviert · 14 Tage Geld-zurück',
                 ),
 
                 'lead' => 'Ein IPTV Player ist die App, die aus deinen Zugangsdaten eine Senderübersicht macht. Der Zugang selbst ist bei allen gleich — die Unterschiede liegen in der Programmzeitschrift, im Tempo beim Umschalten und darin, wie gut sich das Ganze mit einer Fernbedienung bedienen lässt. Diese Seite ordnet die gängigen Apps nach Gerät.',
@@ -708,7 +778,7 @@ if (!function_exists('iptv_keyword_definitions')) {
             'iptv-verlaengern' => array(
                 'keyword'   => 'IPTV verlängern',
                 'title'     => 'IPTV verlängern',
-                'seo_title' => 'IPTV verlängern – gleiche Zugangsdaten, in 2 Minuten',
+                'seo_title' => 'IPTV verlängern – schnell, sicher, in 2 Minuten erledigt',
                 'seo_desc'  => 'IPTV verlängern ohne neue Einrichtung: gleiche Zugangsdaten, keine automatische Verlängerung, längere Laufzeiten ab 5,83 € im Monat. In zwei Minuten erledigt.',
 
                 'text' => array(
@@ -725,6 +795,16 @@ if (!function_exists('iptv_keyword_definitions')) {
                     'pricing_subtitle'  => 'Längere Laufzeit, niedrigerer Monatspreis — die Leistung bleibt bei allen Paketen dieselbe.',
                     'reviews_title'     => 'Was Kunden nach der Verlängerung sagen',
                     'faq_title'         => 'Fragen zum IPTV verlängern',
+                    'showcase_subtitle' => 'Was du behältst, wenn du IPTV verlängern willst: über 40.000 Sender, Filme und Serien, ohne neue Einrichtung.',
+                    'vod_subtitle' => 'Die Mediathek läuft weiter, sobald du IPTV verlängern lässt — alle Genres, auf Abruf, täglich erweitert.',
+                    'sports_desc' => 'Damit kein Spieltag ausfällt, solltest du rechtzeitig IPTV verlängern.',
+                    'cta_bar_label' => 'IPTV VERLÄNGERN UND WEITER BIS ZU 90 % GEGENÜBER KLASSISCHEN ANBIETERN SPAREN',
+                    'steps_subtitle' => 'IPTV verlängern dauert zwei Minuten und ändert an deinen Geräten nichts.',
+                    'devices_subtitle' => 'Nach dem IPTV verlängern läuft alles weiter wie bisher: Smart TV, Fire Stick, Android, iOS und mehr.',
+                    'reviews_subtitle' => 'Was Kunden sagen, die bei uns IPTV verlängern statt neu zu kaufen.',
+                    'faq_subtitle' => 'Die häufigsten Fragen zum IPTV verlängern.',
+                    'contact_subtitle' => 'Benutzername verlegt, bevor du IPTV verlängern kannst? Wir finden ihn für dich.',
+                    'features_cta_note' => 'IPTV verlängern · Gleiche Zugangsdaten · In 2 Minuten · Ohne Auto-Verlängerung',
                 ),
 
                 'lead' => 'IPTV verlängern ist bei uns bewusst eine eigene Entscheidung: Es gibt keine automatische Verlängerung, kein stilles Abbuchen und keine Kündigungsfrist. Wenn deine Laufzeit endet, passiert einfach nichts — bis du selbst verlängerst. Diese Seite erklärt, wie das geht, wann der beste Zeitpunkt ist und was dabei erhalten bleibt.',

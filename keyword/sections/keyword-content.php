@@ -32,10 +32,22 @@ $kw_para = function ($text) use ($kw_slug) {
             <p class="kw-lead"><?php echo $kw_para($kw['lead']); ?></p>
         <?php endif; ?>
 
+        <?php
+        // A real table of contents, on a page that is long enough to need one.
+        // The wrapper class is Rank Math's own — its contentHasTOC test looks
+        // for either a known TOC plugin or that class in the text — so naming
+        // it anything else would hide a table of contents that genuinely
+        // exists. Markup and anchors match iptv_prose_toc() in
+        // inc/front-page-seo.php, which is what the analysis reads.
+        echo iptv_prose_toc($kw['blocks']);
+        ?>
+
         <article class="kw-body">
             <?php foreach ($kw['blocks'] as $block) : ?>
 
-                <h2><?php echo esc_html($block['title']); ?></h2>
+                <h2 id="<?php echo esc_attr(iptv_prose_anchor($block['title'])); ?>">
+                    <?php echo esc_html($block['title']); ?>
+                </h2>
 
                 <?php foreach ((array) (isset($block['text']) ? $block['text'] : array()) as $paragraph) : ?>
                     <p><?php echo $kw_para($paragraph); ?></p>

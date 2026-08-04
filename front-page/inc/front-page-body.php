@@ -34,7 +34,7 @@ if (!function_exists('iptv_front_body')) {
                 array(
                     'title' => 'Was ein IPTV Anbieter eigentlich macht',
                     'text'  => array(
-                        'Beim klassischen Fernsehen wird ein Signal an alle gesendet und dein Receiver sucht sich den Sender heraus. Bei IPTV läuft es umgekehrt: Du forderst genau den einen Stream an, den du sehen willst, und bekommst ihn über deine Internetleitung geliefert. Deshalb braucht es keine Antenne und keine Schüssel — nur eine stabile Verbindung und ein Gerät, das ein Video abspielen kann.',
+                        'Ein IPTV Anbieter dreht die Logik des Fernsehens um. Beim klassischen Fernsehen wird ein Signal an alle gesendet und dein Receiver sucht sich den Sender heraus. Bei IPTV läuft es umgekehrt: Du forderst genau den einen Stream an, den du sehen willst, und bekommst ihn über deine Internetleitung geliefert. Deshalb braucht es keine Antenne und keine Schüssel — nur eine stabile Verbindung und ein Gerät, das ein Video abspielen kann.',
                         'Praktisch heißt das dreierlei. Erstens ist die Senderzahl nicht durch die Bandbreite eines Kabels begrenzt, sondern nur durch das, was der Anbieter einspeist — bei uns über 40.000 Sender aus 198 Ländern. Zweitens lässt sich das Live-Programm mit einer Mediathek kombinieren, weshalb neben den Sendern über 200.000 Filme und Serien auf Abruf stehen. Drittens ist der Zugang nicht an einen Ort gebunden: Dasselbe Abo läuft im Wohnzimmer, im Ferienhaus und auf dem Handy.',
                         'Wie das technisch im Detail funktioniert, beschreibt der %wiki% ausführlich und ohne Werbung.',
                     ),
@@ -68,7 +68,7 @@ if (!function_exists('iptv_front_body')) {
                 array(
                     'title' => 'Was in jedem Paket enthalten ist',
                     'text'  => array(
-                        'Es gibt keine Zusatzpakete und keinen Aufpreis für Sport oder 4K. Der Unterschied zwischen den Laufzeiten ist ausschließlich der Preis pro Monat; die Leistung ist auf allen identisch.',
+                        'Bei uns als IPTV Anbieter gibt es keine Zusatzpakete und keinen Aufpreis für Sport oder 4K. Der Unterschied zwischen den Laufzeiten ist ausschließlich der Preis pro Monat; die Leistung ist auf allen identisch.',
                     ),
                     'list' => array(
                         'Über 40.000 Live-Sender aus 198 Ländern, deutsche Free-TV- und Pay-TV-Sender inklusive',
@@ -94,7 +94,7 @@ if (!function_exists('iptv_front_body')) {
                 array(
                     'title' => 'So kommst du in zwei Minuten hinein',
                     'text'  => array(
-                        'Du wählst Laufzeit und Bildschirmzahl, bezahlst über die SSL-Kasse mit Karte, PayPal oder Bitcoin und bekommst deine Zugangsdaten per E-Mail — in der Regel in unter zwei Minuten. Danach installierst du eine App auf dem Gerät, das ohnehin bei dir steht, und trägst die Daten einmal ein. Neue Hardware ist nicht nötig.',
+                        'Der Einstieg bei einem IPTV Anbieter ist kürzer, als die meisten erwarten. Du wählst Laufzeit und Bildschirmzahl, bezahlst über die SSL-Kasse mit Karte, PayPal oder Bitcoin und bekommst deine Zugangsdaten per E-Mail — in der Regel in unter zwei Minuten. Danach installierst du eine App auf dem Gerät, das ohnehin bei dir steht, und trägst die Daten einmal ein. Neue Hardware ist nicht nötig.',
                         'Welche App zu deinem Fernseher, Stick oder Handy passt, steht unter %kw:iptv-player%; die Einrichtung Schritt für Schritt zeigt die %guide%. Wenn du erst vergleichen willst, was ein Einstieg konkret bedeutet, führt %kw:iptv-kaufen% durch den Ablauf.',
                     ),
                 ),

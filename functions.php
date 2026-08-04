@@ -735,6 +735,11 @@ require_once get_template_directory() . '/keyword/inc/keyword-pages-setup.php';
 
 require_once get_template_directory() . '/keyword/inc/keyword-seo.php';
 
+// Hands the same digests to Rank Math's *editor*, which scores in JavaScript
+// from the body field and so saw nothing at all. Loads last: it dispatches to
+// the front page, plan and keyword digest builders above.
+require_once get_template_directory() . '/inc/rank-math-editor.php';
+
 /**
  * WooCommerce: Redirect all cart operations to checkout page
  * Since the cart page is disabled, we redirect to checkout instead

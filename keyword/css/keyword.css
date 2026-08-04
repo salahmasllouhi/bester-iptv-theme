@@ -30,6 +30,67 @@
     border-left: 3px solid var(--dv2-gold);
 }
 
+/* Table of contents. Sits between the lead and the body so a reader who wants
+   one section can take it without scrolling 2,000 words to find it. */
+.kw-toc {
+    background: var(--dv2-surface);
+    border: 1px solid var(--dv2-border);
+    border-radius: var(--dv2-radius-md);
+    padding: 1.3rem 1.6rem;
+    margin: 0 0 2.5rem;
+    box-shadow: var(--dv2-shadow-sm);
+}
+
+.kw-toc-title {
+    font-family: var(--dv2-font-display);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--dv2-muted);
+    margin: 0 0 0.8rem;
+}
+
+.kw-toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 0.4rem 1.6rem;
+}
+
+.kw-toc li {
+    position: relative;
+    padding-left: 1.1rem;
+    line-height: 1.5;
+}
+
+.kw-toc li::before {
+    content: "›";
+    position: absolute;
+    left: 0;
+    color: var(--dv2-gold);
+    font-weight: 700;
+}
+
+.kw-toc a {
+    color: var(--dv2-body);
+    text-decoration: none;
+    font-size: 0.98rem;
+}
+
+.kw-toc a:hover {
+    color: var(--dv2-brand);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* Anchored headings must clear the sticky header when jumped to. */
+.kw-body h2 {
+    scroll-margin-top: 100px;
+}
+
 .kw-body h2 {
     font-family: var(--dv2-font-display);
     font-size: clamp(1.4rem, 2.6vw, 1.9rem);
