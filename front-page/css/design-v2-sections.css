@@ -88,49 +88,6 @@
     gap: 14px;
 }
 
-.site-header .country-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--dv2-surface);
-    border: 1px solid var(--dv2-border-medium);
-    border-radius: var(--dv2-radius-pill);
-    padding: 9px 14px;
-    color: var(--dv2-ink);
-    font-family: var(--dv2-font-body);
-    font-weight: 600;
-    font-size: 14px;
-    box-shadow: var(--dv2-shadow-sm);
-    cursor: pointer;
-}
-
-.site-header .country-btn:hover {
-    border-color: var(--dv2-border-strong);
-}
-
-.country-dropdown,
-.footer-country-dropdown {
-    background: var(--dv2-surface);
-    border: 1px solid var(--dv2-border-medium);
-    border-radius: var(--dv2-radius-md);
-    box-shadow: var(--dv2-shadow-md);
-    overflow: hidden;
-}
-
-.country-option,
-.footer-country-option {
-    color: var(--dv2-ink);
-    font-family: var(--dv2-font-body);
-    font-size: 14px;
-}
-
-.country-option:hover,
-.footer-country-option:hover,
-.country-option.selected {
-    background: var(--dv2-surface-tint);
-    color: var(--dv2-purple-700);
-}
-
 .site-header .nav-btn-primary {
     background: var(--dv2-ink);
     color: #ffffff;
@@ -168,22 +125,6 @@
 
 .mobile-menu-close {
     color: var(--dv2-ink);
-}
-
-.mobile-language-label {
-    color: var(--dv2-muted);
-}
-
-.mobile-lang-btn {
-    background: var(--dv2-surface);
-    border: 1px solid var(--dv2-border-medium);
-    color: var(--dv2-ink);
-    border-radius: var(--dv2-radius-pill);
-}
-
-.mobile-lang-btn:hover {
-    background: var(--dv2-surface-tint);
-    color: var(--dv2-purple-700);
 }
 
 /* -------------------------------------------
@@ -327,8 +268,7 @@
 @keyframes dv2-border-spin {
     to {
         --dv2-border-angle: 360deg;
-    }
-}
+    }}
 
 .dv2-feature-grid {
     display: grid;
@@ -826,8 +766,7 @@
 
     to {
         transform: translateX(-50%);
-    }
-}
+    }}
 
 @keyframes dv2-marquee-ltr {
     from {
@@ -836,8 +775,7 @@
 
     to {
         transform: translateX(0);
-    }
-}
+    }}
 
 .dv2-review-card {
     background: var(--dv2-surface);
@@ -1988,26 +1926,13 @@
     padding-top: 0;
 }
 
-.site-footer .footer-country-btn {
-    background: var(--dv2-surface);
-    border: 1px solid var(--dv2-border-medium);
-    border-radius: var(--dv2-radius-pill);
-    color: var(--dv2-ink);
-    padding: 9px 14px;
-}
-
-.site-footer .footer-country-btn:hover {
-    border-color: var(--dv2-border-strong);
-}
-
 /* -------------------------------------------
    RESPONSIVE
    ------------------------------------------- */
 @media (max-width: 1180px) {
     .dv2-feature-grid {
         grid-template-columns: repeat(3, 1fr);
-    }
-}
+    }}
 
 @media (max-width: 1024px) {
     .site-header .nav-links,
@@ -2076,8 +2001,7 @@
 
     .cta .cta-box h2 {
         font-size: 34px;
-    }
-}
+    }}
 
 @media (max-width: 768px) {
 
@@ -2222,8 +2146,7 @@
     .site-footer .footer-grid {
         grid-template-columns: 1fr;
         gap: 32px;
-    }
-}
+    }}
 
 @media (max-width: 560px) {
     .dv2-feature-grid {
@@ -2237,8 +2160,7 @@
 
     .dv2-hero-actions .dv2-btn {
         width: 100%;
-    }
-}
+    }}
 
 @media (max-width: 480px) {
     .dv2-journey {
@@ -2266,8 +2188,7 @@
     .dv2-review-card {
         width: 268px;
         flex-basis: 268px;
-    }
-}
+    }}
 
 /* -------------------------------------------
    REDUCED MOTION
@@ -2308,8 +2229,7 @@
 
     .dv2-review-card {
         margin-bottom: 16px;
-    }
-}
+    }}
 
 /* ---------------------------------------------
    CONTACT PAGE — [nordictv_contact]

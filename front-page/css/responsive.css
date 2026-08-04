@@ -27,8 +27,7 @@
 
     .unlock-features {
         justify-content: center;
-    }
-}
+    }}
 
 /* Tablet Small - 768px */
 @media (max-width: 768px) {
@@ -38,10 +37,6 @@
 
     .mobile-menu-toggle {
         display: block;
-    }
-
-    .country-selector {
-        display: none;
     }
 
     .site-header {
@@ -103,8 +98,7 @@
 
     .pricing>.container>div[style*="display:flex"]>div[style*="display:flex"] span[style*="font-weight:600"] {
         font-size: 0.75rem !important;
-    }
-}
+    }}
 
 /* Mobile - 480px */
 @media (max-width: 480px) {
@@ -184,8 +178,7 @@
 
     .poster-grid {
         grid-template-columns: repeat(6, 1fr);
-    }
-}
+    }}
 
 /* Very Small Mobile - 360px */
 @media (max-width: 360px) {
@@ -199,8 +192,7 @@
 
     .unlock-features {
         grid-template-columns: 1fr;
-    }
-}
+    }}
 
 /* Device cards - ALWAYS 4 columns on mobile */
 @media (max-width: 768px) {
@@ -223,5 +215,4 @@
         width: 1rem !important;
         height: 1rem !important;
         margin-bottom: 0.25rem !important;
-    }
-}
+    }}

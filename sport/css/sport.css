@@ -58,8 +58,7 @@
     flex: 0 0 45%;
     /* large screen — 45% image column */
     max-width: 45%;
-  }
-}
+  }}
 
 /* Top zone: centered block */
 .hero-top {
@@ -266,8 +265,7 @@
   50% {
     opacity: 0.5;
     transform: scale(0.85);
-  }
-}
+  }}
 
 /* ============================================
    RESPONSIVE — SPORT TEMPLATE ONLY
@@ -280,8 +278,7 @@
   .steps-grid,
   .footer-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-}
+  }}
 
 /* ── Tablet Small (≤768px) ───────────────────────── */
 @media (max-width: 768px) {
@@ -293,10 +290,6 @@
 
   .mobile-menu-toggle {
     display: block;
-  }
-
-  .country-selector {
-    display: none;
   }
 
   .site-header {
@@ -405,8 +398,7 @@
 
   .pricing>.container>div[style*="display:flex"]>div[style*="display:flex"] span[style*="font-weight:600"] {
     font-size: 0.75rem !important;
-  }
-}
+  }}
 
 /* ── Mobile (≤480px) ────────────────────────────── */
 @media (max-width: 480px) {
@@ -445,15 +437,13 @@
   .dark-cta-content h2,
   .cta h2 {
     font-size: 1.5rem;
-  }
-}
+  }}
 
 /* ── Very Small (≤360px) ────────────────────────── */
 @media (max-width: 360px) {
   .sport-hero-title {
     font-size: 1.5rem !important;
-  }
-}
+  }}
 
 /* ============================================
    FEATURED IMAGE OVERLAY & TEXT
@@ -522,5 +512,4 @@
 
   .featured-image-overlay-text {
     padding: 1rem 0.5rem;
-  }
-}
+  }}
