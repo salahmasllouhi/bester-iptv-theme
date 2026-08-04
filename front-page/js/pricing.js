@@ -19,7 +19,7 @@
         const durationMap = { 1: '1_month', 3: '3_months', 6: '6_months', 12: '12_months' };
         const deviceKey = devices === 1 ? '1_device' : devices + '_devices';
         const durationKey = durationMap[months];
-        const currency = window.currentCurrency || 'usd';
+        const currency = window.currentCurrency || window.SITE_CURRENCY || 'eur';
 
         if (window.iptvPrices[durationKey] && window.iptvPrices[durationKey][deviceKey]) {
             return parseFloat(window.iptvPrices[durationKey][deviceKey][currency]) || 0;
@@ -37,12 +37,12 @@
             dkk: { symbol: 'kr', position: 'after' },
             isk: { symbol: 'kr', position: 'after' }
         };
-        return currencyData[window.currentCurrency || 'usd'];
+        return currencyData[window.currentCurrency || window.SITE_CURRENCY || 'eur'];
     }
 
     function formatPrice(price) {
         const data = getCurrencyData();
-        const currency = window.currentCurrency || 'usd';
+        const currency = window.currentCurrency || window.SITE_CURRENCY || 'eur';
         let formatted = (currency === 'usd' || currency === 'eur') ? price.toFixed(2) : Math.round(price).toString();
         return data.position === 'before' ? data.symbol + formatted : formatted + ' ' + data.symbol;
     }

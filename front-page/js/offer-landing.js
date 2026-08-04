@@ -12,8 +12,8 @@
             dkk: { symbol: 'kr', position: 'after', decimals: false },
             isk: { symbol: 'kr', position: 'after', decimals: false }
         };
-        var code = window.currentCurrency || 'usd';
-        return data[code] || data['usd'];
+        var code = window.currentCurrency || window.SITE_CURRENCY || 'eur';
+        return data[code] || data['eur'] || data['usd'];
     }
 
     function formatPrice(price) {
@@ -28,7 +28,7 @@
     function updateOfferPricing() {
         if (!window.iptvPrices) return;
 
-        var currency = window.currentCurrency || 'usd';
+        var currency = window.currentCurrency || window.SITE_CURRENCY || 'eur';
         var paidMonths = window.offerPaidMonths || 12;
         var freeMonths = window.offerFreeMonths || 3;
         var totalMonths = paidMonths + freeMonths;

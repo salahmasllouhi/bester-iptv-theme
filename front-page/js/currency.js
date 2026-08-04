@@ -5,11 +5,14 @@
 // switcher markup is gone and what remains is the code that paints prices:
 // setCurrency() fixes the currency once on load, updateAllPrices() renders it.
 //
-// SITE_CURRENCY is the single place to change if the site ever prices in
-// something other than USD. The other entries are kept because the stored price
-// table (IPTV_Currency_Settings) still holds a column per currency.
+// The currency itself is set in PHP — iptv_site_currency() in inc/site-config.php
+// — and printed as window.SITE_CURRENCY next to window.iptvPrices, so the pre-JS
+// paint and this repaint cannot disagree. The literal below is only the fallback
+// for a template that renders prices without going through pricing.php.
+// The other entries stay because the stored price table still holds a column
+// per currency.
 
-const SITE_CURRENCY = 'usd';
+const SITE_CURRENCY = window.SITE_CURRENCY || 'eur';
 
 const currencyData = {
     usd: { symbol: '$', flag: '🇺🇸', code: 'USD', name: 'USD', position: 'before' },
@@ -32,7 +35,7 @@ function setCurrency(currency) {
 function updateAllPrices() {
     if (!window.iptvPrices) return;
 
-    const currency = window.currentCurrency || 'usd';
+    const currency = window.currentCurrency || window.SITE_CURRENCY || 'eur';
     const data = currencyData[currency];
 
     // pricing.js marks the chosen card with .active; .selected kept for safety.

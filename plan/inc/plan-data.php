@@ -149,9 +149,9 @@ if (!function_exists('iptv_plan_currency')) {
      * JS, but a plan page prints its prices in the HTML — for the crawler as
      * much as the visitor — so the same mapping has to exist in PHP.
      *
-     * The site is English-only, so USD is the default and the multisite slug is
-     * the only thing that can override it, for the subsites that still run their
-     * own blog. A visitor's currency choice is applied client-side.
+     * One currency for the whole site — iptv_site_currency() — with the
+     * multisite slug as the only override, for the subsites that still run
+     * their own blog.
      *
      * @return string Lowercase currency key: usd, eur, sek, nok, dkk or isk.
      */
@@ -163,7 +163,7 @@ if (!function_exists('iptv_plan_currency')) {
             return $currency;
         }
 
-        $currency = 'usd';
+        $currency = function_exists('iptv_site_currency') ? iptv_site_currency() : 'eur';
 
         if (class_exists('IPTV_Currency_Settings')) {
             $instance = IPTV_Currency_Settings::instance();

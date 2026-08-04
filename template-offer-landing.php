@@ -60,15 +60,16 @@ if (empty($offer_checkout_url)) {
 }
 */
 
-// ── Multi-currency pricing data ───────────────────────────────────────────────
+// ── Pricing data ─────────────────────────────────────────────────────────────
+// One currency site-wide; the table still carries a column per currency, so the
+// symbol map below stays as-is.
 $offer_all_prices = [];
-$offer_currency = 'usd';
+$offer_currency = function_exists('iptv_site_currency') ? iptv_site_currency() : 'eur';
 $offer_currency_data = [];
 
 if (class_exists('IPTV_Currency_Settings')) {
     // Stored table, not a live recalculation — see get_price_table().
     $offer_all_prices = IPTV_Currency_Settings::get_price_table();
-    $offer_currency = IPTV_Currency_Settings::instance()->get_current_currency();
 
     $all_currencies = IPTV_Currency_Settings::get_currencies();
     foreach ($all_currencies as $code => $data) {
@@ -136,6 +137,7 @@ if (empty($offer_urgency_line))
     window.offerCheckoutUrl = '<?php echo esc_js($offer_checkout_url); ?>';
     window.offerProductId = <?php echo (int) $offer_product_id; ?>;
     window.iptvPrices = <?php echo wp_json_encode($offer_all_prices); ?>;
+    window.SITE_CURRENCY = '<?php echo esc_js($offer_currency); ?>';
     window.currentCurrency = '<?php echo esc_js($offer_currency); ?>';
     window.iptvCurrencyData = <?php echo wp_json_encode($offer_currency_data); ?>;
     window.offerPaidMonths = <?php echo (int) $offer_paid_months; ?>;

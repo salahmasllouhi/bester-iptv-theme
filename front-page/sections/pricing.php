@@ -31,20 +31,24 @@ if (!in_array($default_months, array(1, 3, 6, 12), true)) {
 $checkout_base = iptv_config('checkout_base_url', 'https://panel.nordictv.io/checkout');
 $trial_url     = iptv_config('trial_url', 'https://panel.nordictv.io/checkout/trial');
 
+// The single currency this site prices in. Everything below is the pre-JS
+// paint; pricing.js repaints from window.iptvPrices in the same currency.
+$iptv_currency = iptv_site_currency();
+
 /**
  * Savings badge percentages are derived from the real prices rather than
  * hard-coded, so the claim stays true if prices change. pricing.js recomputes
  * them whenever the screen count changes.
  */
-$base_monthly = isset($all_prices['1_month'][$default_device]['usd'])
-    ? (float) $all_prices['1_month'][$default_device]['usd']
+$base_monthly = isset($all_prices['1_month'][$default_device][$iptv_currency])
+    ? (float) $all_prices['1_month'][$default_device][$iptv_currency]
     : 0;
 
-$iptv_savings_pct = function ($duration_key, $months) use ($all_prices, $default_device, $base_monthly) {
-    if (!$base_monthly || empty($all_prices[$duration_key][$default_device]['usd'])) {
+$iptv_savings_pct = function ($duration_key, $months) use ($all_prices, $default_device, $base_monthly, $iptv_currency) {
+    if (!$base_monthly || empty($all_prices[$duration_key][$default_device][$iptv_currency])) {
         return 0;
     }
-    $per_month = (float) $all_prices[$duration_key][$default_device]['usd'] / $months;
+    $per_month = (float) $all_prices[$duration_key][$default_device][$iptv_currency] / $months;
     return max(0, (int) round((1 - ($per_month / $base_monthly)) * 100));
 };
 
@@ -98,6 +102,9 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
     // Main site URL for cross-site cart (used by pricing.js)
     window.iptvMainSiteUrl = '<?php echo esc_js(defined("IPTV_MAIN_SITE_URL") ? IPTV_MAIN_SITE_URL : network_site_url("/")); ?>';
     window.iptvPrices = <?php echo json_encode($all_prices); ?>;
+    // PHP owns the site currency — see iptv_site_currency(). The JS reads it
+    // rather than carrying a second default that could drift.
+    window.SITE_CURRENCY = '<?php echo esc_js($iptv_currency); ?>';
     window.iptvVariationIds = <?php echo json_encode($variation_map); ?>;
     window.iptvDefaultScreens = <?php echo (int) $default_screens; ?>;
     window.iptvDefaultMonths = <?php echo (int) $default_months; ?>;
@@ -151,7 +158,7 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
                 <div class="dv2-duration-row" id="durations" role="radiogroup"
                     aria-label="<?php echo esc_attr(iptv_text('duration_title', 'How long?')); ?>">
                     <?php foreach ($durations as $months => $d) :
-                        $price   = isset($all_prices[$d['key']][$default_device]['usd']) ? $all_prices[$d['key']][$default_device]['usd'] : 0;
+                        $price   = isset($all_prices[$d['key']][$default_device][$iptv_currency]) ? $all_prices[$d['key']][$default_device][$iptv_currency] : 0;
                         $slug    = $months . 'mo'; // price-1mo, price-3mo, ...
                         $is_default = ($months === $default_months);
                         ?>
@@ -166,12 +173,12 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
                             </span>
                             <span class="duration-header"><?php echo esc_html($d['label']); ?></span>
                             <span class="duration-price price-display" id="price-<?php echo esc_attr($slug); ?>">
-                                $<?php echo esc_html($price); ?>
+                                <?php echo esc_html(iptv_price($price)); ?>
                             </span>
                             <span class="duration-per" id="per-<?php echo esc_attr($slug); ?>">
                                 <?php echo $months === 1
                                     ? esc_html(iptv_text('per_month', 'per month'))
-                                    : '~$' . esc_html(round($price / $months, 2)) . '/mo'; ?>
+                                    : '~' . esc_html(iptv_price($price / $months)) . '/mo'; ?>
                             </span>
                         </button>
                     <?php endforeach; ?>
@@ -183,11 +190,11 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
                  only the pre-JS paint for the default selection. -->
             <?php
             $default_device_key = $default_screens === 1 ? '1_device' : $default_screens . '_devices';
-            $total_now  = isset($all_prices[$durations[$default_months]['key']][$default_device_key]['usd'])
-                ? (float) $all_prices[$durations[$default_months]['key']][$default_device_key]['usd']
+            $total_now  = isset($all_prices[$durations[$default_months]['key']][$default_device_key][$iptv_currency])
+                ? (float) $all_prices[$durations[$default_months]['key']][$default_device_key][$iptv_currency]
                 : 0;
-            $total_rate = isset($all_prices['1_month'][$default_device_key]['usd'])
-                ? (float) $all_prices['1_month'][$default_device_key]['usd']
+            $total_rate = isset($all_prices['1_month'][$default_device_key][$iptv_currency])
+                ? (float) $all_prices['1_month'][$default_device_key][$iptv_currency]
                 : 0;
             // "Was" is the same plan bought month by month, so the saving is real.
             $total_was  = $total_rate * $default_months;
@@ -199,13 +206,13 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
                 <span class="dv2-total-label"><?php echo esc_html(iptv_text('total_label', 'Your total')); ?></span>
 
                 <div class="dv2-total-main">
-                    <span class="dv2-total-price" id="total-price">$<?php echo esc_html(number_format($total_now, 2)); ?></span>
+                    <span class="dv2-total-price" id="total-price"><?php echo esc_html(iptv_price($total_now)); ?></span>
                     <div class="dv2-total-aside<?php echo $has_saving ? '' : ' is-hidden'; ?>" id="total-aside">
-                        <span class="dv2-total-was" id="total-was">$<?php echo esc_html(number_format($total_was, 2)); ?></span>
+                        <span class="dv2-total-was" id="total-was"><?php echo esc_html(iptv_price($total_was)); ?></span>
                         <span class="dv2-total-save" id="total-save">
                             <?php echo esc_html(sprintf(
                                 iptv_text('total_save_format', 'Save %1$s (%2$d%%)'),
-                                '$' . number_format($total_off, 2),
+                                iptv_price($total_off),
                                 $total_pct
                             )); ?>
                         </span>
@@ -215,7 +222,7 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
                 <p class="dv2-total-meta" id="total-meta">
                     <?php echo esc_html(sprintf(
                         iptv_text('total_meta_format', 'one-time · %s/mo'),
-                        '$' . number_format($total_now / max(1, $default_months), 2)
+                        iptv_price($total_now / max(1, $default_months))
                     )); ?>
                 </p>
 

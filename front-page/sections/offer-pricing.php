@@ -44,12 +44,14 @@ if (!empty($offer_product_id) && class_exists('WooCommerce')) {
 }
 
 // Derive a "full value" (strikethrough) using iptvPrices if available: 1-month rate × total months
-// This will be recalculated live in JS for currency switching; PHP provides an SSR fallback.
-$one_month_usd = 16.99; // fallback default (1 device, 1 month)
-if (!empty($offer_all_prices['1_month']['1_device']['usd'])) {
-    $one_month_usd = (float) $offer_all_prices['1_month']['1_device']['usd'];
+// PHP renders it; offer-landing.js recomputes from the same table.
+$offer_price_currency = function_exists('iptv_site_currency') ? iptv_site_currency() : 'eur';
+
+$one_month_rate = 14.99; // fallback default (1 device, 1 month)
+if (!empty($offer_all_prices['1_month']['1_device'][$offer_price_currency])) {
+    $one_month_rate = (float) $offer_all_prices['1_month']['1_device'][$offer_price_currency];
 }
-$full_value_usd = $one_month_usd * $total;
+$full_value = $one_month_rate * $total;
 ?>
 
 <section class="offer-pricing" id="pricing">
@@ -100,7 +102,7 @@ $full_value_usd = $one_month_usd * $total;
                         <?php echo esc_html(iptv_text('offer_pricing_value_label', 'Regular value')); ?>
                     </span>
                     <span id="offer-price-full" class="offer-pricing__strikethrough">
-                        <?php printf('$%.2f', $full_value_usd); ?>
+                        <?php echo esc_html(iptv_price($full_value)); ?>
                     </span>
                 </div>
             </div>
