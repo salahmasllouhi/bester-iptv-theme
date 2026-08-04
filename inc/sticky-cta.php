@@ -101,18 +101,24 @@ add_action('wp_enqueue_scripts', function () {
         return;
     }
 
+    // Bump on every change to this bar's CSS or JS. The version is the whole
+    // cache key: the file is served from the theme directory with ?ver= on it,
+    // so leaving it alone means browsers and the CDN keep the copy they already
+    // have and the change looks like it never deployed.
+    $sticky_cta_version = '1.4.0';
+
     wp_enqueue_style(
         'iptv-sticky-cta',
         get_template_directory_uri() . '/front-page/css/sticky-cta.css',
         array(),
-        '1.3.0'
+        $sticky_cta_version
     );
 
     wp_enqueue_script(
         'iptv-sticky-cta',
         get_template_directory_uri() . '/front-page/js/sticky-cta.js',
         array(),
-        '1.3.0',
+        $sticky_cta_version,
         true
     );
 }, 20);

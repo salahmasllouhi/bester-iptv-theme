@@ -94,11 +94,15 @@ body .activity-ticker {
     margin: 0 auto 8px;
     padding: 4px 12px;
     border-radius: var(--dv2-radius-pill, 999px);
-    background: var(--dv2-surface-tint, #f5f1e8);
+    /* Was --dv2-surface-tint (#f5f1e8), a warm cream. It is a legitimate brand
+       surface but it is neither red nor black, and on a white bar it read as a
+       leftover from the old palette. */
+    background: #ffffff;
+    border: 1px solid var(--dv2-border-medium, rgba(15, 15, 16, 0.14));
     font-family: var(--dv2-font-body, 'Space Grotesk', sans-serif);
     font-size: 12.5px;
     line-height: 1.2;
-    color: var(--dv2-ink-2, #1f1f23);
+    color: var(--dv2-ink, #0f0f10);
 }
 
 .dv2-sticky-dot {
@@ -116,7 +120,7 @@ body .activity-ticker {
 
 .dv2-sticky-timer-value {
     font-weight: 700;
-    color: var(--dv2-brand-700, #8e1414);
+    color: var(--dv2-brand, #c81e1e);
     /* Fixed-width digits so the row does not twitch once a second. */
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum";
@@ -157,9 +161,9 @@ body .activity-ticker {
 }
 
 .dv2-sticky-btn--ghost {
-    background: var(--dv2-surface-tint, #f5f1e8);
-    color: var(--dv2-brand-700, #8e1414);
-    border: 1px solid var(--dv2-border-medium, rgba(15, 15, 16, 0.14));
+    background: var(--dv2-ink, #0f0f10);
+    color: #ffffff;
+    border: 1px solid var(--dv2-ink, #0f0f10);
 }
 
 /* Hover is gated behind a real pointer. A touch tap otherwise leaves the
@@ -172,8 +176,8 @@ body .activity-ticker {
     }
 
     .dv2-sticky-btn--ghost:hover {
-        background: var(--dv2-surface-tint, #f5f1e8);
-        color: var(--dv2-brand-700, #8e1414);
+        background: var(--dv2-ink-2, #1f1f23);
+        color: #ffffff;
     }
 }
 
@@ -183,8 +187,8 @@ body .activity-ticker {
 }
 
 .dv2-sticky-btn--ghost:active {
-    background: var(--dv2-surface-tint, #f5f1e8);
-    color: var(--dv2-brand-700, #8e1414);
+    background: var(--dv2-ink-2, #1f1f23);
+    color: #ffffff;
 }
 
 /* --- Desktop: one centered row --- */
