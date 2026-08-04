@@ -88,7 +88,7 @@
    colour every span inside the logo, and at (0,1,1) they would otherwise win
    over a single class and make both words gold. */
 .brand-logo .brand-logo__mark {
-    color: var(--dv2-gold);
+    color: var(--dv2-brand);
     letter-spacing: 0.02em;
 }
 

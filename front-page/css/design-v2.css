@@ -42,9 +42,11 @@
     --dv2-gold: #b8860b;
     --dv2-gold-bright: #d4af37;
 
-    /* Savings badges were green. Green is not in the brand, so they read
-       gold now — set this back to #00b67a to undo just that. */
-    --dv2-green: #b8860b;
+    /* Trust green. Deliberately outside the black/red/gold palette: Trustpilot
+       is green, review stars are green, and a tick that is not green stops
+       reading as a tick. Everything positive-signal keeps it — Trustpilot
+       badge, review stars, savings figures, checkout ticks. */
+    --dv2-green: #00b67a;
 
     --dv2-border: rgba(15, 15, 16, 0.10);
     --dv2-border-medium: rgba(15, 15, 16, 0.14);

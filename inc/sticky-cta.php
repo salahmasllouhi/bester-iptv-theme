@@ -134,14 +134,14 @@ add_action('wp_footer', function () {
     // Same window the pricing panel's lock line quotes, so both countdowns agree.
     $offer_days = max(1, (int) iptv_config('offer_lock_days', 5));
 
-    $timer_label   = iptv_text('sticky_timer_label', 'Offer ends in');
-    $pricing_label = iptv_text('sticky_pricing_label', 'See Pricing');
-    $trial_label   = iptv_text('sticky_trial_label', '24h Trial');
+    $timer_label   = iptv_text('sticky_timer_label', 'Angebot endet in');
+    $pricing_label = iptv_text('sticky_pricing_label', 'Preise ansehen');
+    $trial_label   = iptv_text('sticky_trial_label', '24 Std. testen');
 
-    // The day marker in "4d 07:12:39". Handed to JS rather than hardcoded there,
-    // so the countdown is localised along with the rest of the bar — "d" suits
-    // sv/no/dk (dag), but Finnish wants "pv" and Icelandic "d." or similar.
-    $days_suffix = iptv_text('sticky_days_suffix', 'd');
+    // The day marker in "4T 07:12:39". Handed to JS rather than hardcoded there,
+    // so the countdown reads in the same language as the rest of the bar — "T"
+    // for Tage.
+    $days_suffix = iptv_text('sticky_days_suffix', 'T');
     ?>
     <div class="dv2-sticky-cta" id="sticky-cta" data-offer-days="<?php echo (int) $offer_days; ?>"
         data-days-suffix="<?php echo esc_attr($days_suffix); ?>">

@@ -34,7 +34,7 @@
     max-width: 100%;
     z-index: 9990;
     background: var(--dv2-surface, #ffffff);
-    border-top: 1px solid var(--dv2-border-strong, rgba(124, 58, 237, 0.30));
+    border-top: 1px solid var(--dv2-border-strong, rgba(184, 134, 11, 0.45));
     box-shadow: 0 -6px 28px rgba(76, 29, 149, 0.14);
     padding: 9px 12px calc(9px + env(safe-area-inset-bottom, 0px));
     transform: translateY(0);
@@ -98,14 +98,14 @@ body .activity-ticker {
     font-family: var(--dv2-font-body, 'Space Grotesk', sans-serif);
     font-size: 12.5px;
     line-height: 1.2;
-    color: var(--dv2-ink-2, #3d2e5c);
+    color: var(--dv2-ink-2, #1f1f23);
 }
 
 .dv2-sticky-dot {
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: #e5484d;
+    background: var(--dv2-brand, #c81e1e);
     flex-shrink: 0;
     animation: dv2-sticky-pulse 1.6s ease-in-out infinite;
 }
@@ -153,13 +153,13 @@ body .activity-ticker {
 .dv2-sticky-btn--primary {
     background: var(--dv2-brand, #c81e1e);
     color: #ffffff;
-    box-shadow: 0 8px 22px rgba(124, 58, 237, 0.28);
+    box-shadow: 0 8px 22px rgba(200, 30, 30, 0.26);
 }
 
 .dv2-sticky-btn--ghost {
     background: var(--dv2-surface-tint, #f5f1e8);
     color: var(--dv2-brand-700, #8e1414);
-    border: 1px solid var(--dv2-border-strong, rgba(124, 58, 237, 0.30));
+    border: 1px solid var(--dv2-border-strong, rgba(184, 134, 11, 0.45));
 }
 
 /* Hover is gated behind a real pointer. A touch tap otherwise leaves the
@@ -172,7 +172,7 @@ body .activity-ticker {
     }
 
     .dv2-sticky-btn--ghost:hover {
-        background: #e7dcff;
+        background: var(--dv2-surface-tint, #f5f1e8);
         color: var(--dv2-brand-700, #8e1414);
     }
 }
@@ -183,7 +183,7 @@ body .activity-ticker {
 }
 
 .dv2-sticky-btn--ghost:active {
-    background: #e7dcff;
+    background: var(--dv2-surface-tint, #f5f1e8);
     color: var(--dv2-brand-700, #8e1414);
 }
 
