@@ -135,7 +135,7 @@ add_action('wp_footer', function () {
     }
 
     $pricing_url = iptv_sticky_cta_pricing_url();
-    $trial_url   = iptv_config('trial_url', 'https://panel.nordictv.io/checkout/trial');
+    $trial_url   = iptv_config('trial_url', 'https://panel-checkout.com/checkout/trial');
 
     // Same window the pricing panel's lock line quotes, so both countdowns agree.
     $offer_days = max(1, (int) iptv_config('offer_lock_days', 5));

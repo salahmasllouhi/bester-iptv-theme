@@ -710,7 +710,7 @@ require_once get_template_directory() . '/plan/inc/plan-seo.php';
 /**
  * WooCommerce: Redirect all cart operations to checkout page
  * Since the cart page is disabled, we redirect to checkout instead
- * NOTE: Commented out — all checkout flows now redirect to https://panel.nordictv.io/
+ * NOTE: Commented out — all checkout flows now redirect to https://panel-checkout.com/
  */
 /*
 if (class_exists('WooCommerce')) {
@@ -742,7 +742,7 @@ if (class_exists('WooCommerce')) {
 */
 
 // Redirect cart page to checkout, shop page to home (only if WooCommerce is active)
-// NOTE: Commented out — checkout redirects now go to https://panel.nordictv.io/
+// NOTE: Commented out — checkout redirects now go to https://panel-checkout.com/
 /*
 add_action('template_redirect', function () {
     if (!class_exists('WooCommerce'))
@@ -760,7 +760,7 @@ add_action('template_redirect', function () {
 */
 
 // Handle add-by-sku parameter from subsites - lookup product by SKU and add to cart
-// NOTE: Commented out — checkout redirects now go to https://panel.nordictv.io/
+// NOTE: Commented out — checkout redirects now go to https://panel-checkout.com/
 /*
 add_action('template_redirect', function () {
     if (!class_exists('WooCommerce'))
@@ -826,7 +826,7 @@ if (class_exists('WooCommerce')) {
     });
 
     // Redirect to checkout after adding to cart
-    // NOTE: Commented out — redirects now go to https://panel.nordictv.io/
+    // NOTE: Commented out — redirects now go to https://panel-checkout.com/
     // add_filter('woocommerce_add_to_cart_redirect', function () {
     //     return wc_get_checkout_url();
     // });
@@ -887,7 +887,7 @@ add_action('wp_footer', function () {
                 if (form) {
                     form.addEventListener('submit', function (e) {
                         e.preventDefault();
-                        window.location.href = 'https://panel.nordictv.io/';
+                        window.location.href = 'https://panel-checkout.com/';
                     });
                 }
             })();
@@ -954,8 +954,8 @@ add_action('wp_footer', function () {
                     }
 
                     // Redirect to panel instead of main site checkout
-                    window.location.href = 'https://panel.nordictv.io/';
-                    // NOTE: Commented out — redirects now go to https://panel.nordictv.io/
+                    window.location.href = 'https://panel-checkout.com/';
+                    // NOTE: Commented out — redirects now go to https://panel-checkout.com/
                     // const url = mainSiteUrl + '/checkout/?add-by-sku=' + encodeURIComponent(skuToUse);
                     // window.location.href = url;
                 });

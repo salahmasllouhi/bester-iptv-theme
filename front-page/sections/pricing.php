@@ -28,8 +28,8 @@ if (!in_array($default_months, array(1, 3, 6, 12), true)) {
 }
 
 // Panel checkout endpoints. The panel derives the price from the two params.
-$checkout_base = iptv_config('checkout_base_url', 'https://panel.nordictv.io/checkout');
-$trial_url     = iptv_config('trial_url', 'https://panel.nordictv.io/checkout/trial');
+$checkout_base = iptv_config('checkout_base_url', 'https://panel-checkout.com/checkout');
+$trial_url     = iptv_config('trial_url', 'https://panel-checkout.com/checkout/trial');
 
 // The single currency this site prices in. Everything below is the pre-JS
 // paint; pricing.js repaints from window.iptvPrices in the same currency.

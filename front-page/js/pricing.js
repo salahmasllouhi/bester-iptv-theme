@@ -126,7 +126,7 @@
     // panel/checkout?connections=<1|2|3|4>&duration=<1|3|6|12>
     // The panel derives the price from these two params - nothing else is passed.
     function checkoutUrl(devices, months) {
-        const base = window.iptvCheckoutBase || 'https://panel.nordictv.io/checkout';
+        const base = window.iptvCheckoutBase || 'https://panel-checkout.com/checkout';
         return base + '?connections=' + devices + '&duration=' + months;
     }
 

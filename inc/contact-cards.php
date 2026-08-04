@@ -2,7 +2,7 @@
 /**
  * Contact cards
  *
- * The support cards on the front page — email, WhatsApp, Telegram — extracted so
+ * The support cards on the front page — email and WhatsApp — extracted so
  * the Contact page can show the same thing instead of a form.
  *
  * The cards come from the `contact_cards` ACF repeater on the front page, so one
@@ -37,7 +37,10 @@ if (!function_exists('iptv_contact_cards')) {
 
         if (is_array($rows)) {
             foreach ($rows as $row) {
-                if (empty($row['card_label'])) {
+                // trim, not empty(): a row emptied from the editor can be left
+                // holding a space, and empty(' ') is false — which renders a
+                // card with no name rather than skipping it.
+                if (trim((string) (isset($row['card_label']) ? $row['card_label'] : '')) === '') {
                     continue;
                 }
                 $cards[] = array(
@@ -52,21 +55,15 @@ if (!function_exists('iptv_contact_cards')) {
         if (empty($cards)) {
             $cards = array(
                 array(
-                    'label' => iptv_text('contact_card_email_label', 'Email Support'),
-                    'value' => iptv_text('contact_card_email_value', 'support@nordictv.io'),
-                    'link'  => 'mailto:support@nordictv.io',
+                    'label' => iptv_text('contact_card_email_label', 'E-Mail-Support'),
+                    'value' => iptv_text('contact_card_email_value', 'support@panel-checkout.com'),
+                    'link'  => 'mailto:support@panel-checkout.com',
                     'blank' => false,
                 ),
                 array(
                     'label' => iptv_text('contact_card_whatsapp_label', 'WhatsApp'),
-                    'value' => iptv_text('contact_card_whatsapp_value', 'Chat with us live'),
+                    'value' => iptv_text('contact_card_whatsapp_value', 'Chatte live mit uns'),
                     'link'  => 'https://wa.me/33745476690',
-                    'blank' => true,
-                ),
-                array(
-                    'label' => iptv_text('contact_card_telegram_label', 'Telegram'),
-                    'value' => iptv_text('contact_card_telegram_value', '@IPTV Anbieter'),
-                    'link'  => 'https://t.me/IPTV Anbieter',
                     'blank' => true,
                 ),
             );
@@ -167,7 +164,7 @@ add_shortcode('nordictv_contact', function ($atts) {
     if ($atts['intro'] !== '0') {
         $out .= '<p class="dv2-contact-page-intro">' . esc_html(iptv_text(
             'contact_subtitle',
-            'Reach out anytime via email, WhatsApp, or Telegram. Our support team typically responds within minutes.'
+            'Reach out anytime via email or WhatsApp. Our support team typically responds within minutes.'
         )) . '</p>';
     }
 
