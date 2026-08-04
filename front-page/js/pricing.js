@@ -1,17 +1,24 @@
-// Pricing JavaScript - Screen/Duration configurator
+// Pricing — screen picker drives four plan cards.
+//
+// The section used to be a two-step configurator ending in one "your total"
+// card and one checkout button. It is now four cards, one per length, each with
+// its own price and its own checkout link; the screen picker sits above them
+// and rewrites all four whenever it changes.
+//
+// Copy note: every user-visible string this file writes comes from the markup
+// PHP already rendered (see readFormat below) rather than being written here.
+// Hardcoding them meant the German page reverted to English the moment anyone
+// touched the picker.
 (function () {
     let selectedDevices = null;
-    let selectedDuration = null;
 
-    const btn = document.getElementById('checkout-btn');
-    const btnText = document.getElementById('button-text');
     const deviceGroup = document.getElementById('devices');
     const durationGroup = document.getElementById('durations');
 
-    if (!btn || !btnText || !deviceGroup || !durationGroup) return;
+    if (!deviceGroup || !durationGroup) return;
 
     const deviceCards = Array.from(deviceGroup.querySelectorAll('[data-devices]'));
-    const durationCards = Array.from(durationGroup.querySelectorAll('[data-duration]'));
+    const planCards = Array.from(durationGroup.querySelectorAll('[data-duration]'));
 
     // Get price from window.iptvPrices
     function getPrice(devices, months) {
@@ -52,6 +59,23 @@
         if (el) el.textContent = value;
     }
 
+    // Take a string PHP already rendered and turn it into a template, so the
+    // language lives in one place. "40 % sparen" becomes "{n} % sparen";
+    // "~€5.83/Mon." becomes "~{p}/Mon.".
+    function readFormat(id, pattern, token) {
+        const el = document.getElementById(id);
+        if (!el) return '';
+        return el.textContent.trim().replace(pattern, token);
+    }
+
+    // Captured once, before anything is overwritten.
+    const saveFormat = readFormat('save-12mo', /\d+/, '{n}') || '{n}%';
+    const perMonthOne = (function () {
+        const el = document.getElementById('per-1mo');
+        return el ? el.textContent.trim() : '';
+    })();
+    const perMonthMulti = readFormat('per-12mo', /~[^/]*/, '~{p}') || '~{p}/mo';
+
     // Savings badges are derived from the live prices so the claim stays true
     // when the screen count (and therefore the price ladder) changes.
     function updateSavings(deviceCount) {
@@ -69,7 +93,7 @@
 
             const pct = Math.round((1 - (total / months) / base) * 100);
             if (pct > 0) {
-                el.textContent = 'Save ' + pct + '%';
+                el.textContent = saveFormat.replace('{n}', pct);
                 el.classList.remove('is-hidden');
             } else {
                 el.classList.add('is-hidden');
@@ -77,126 +101,32 @@
         });
     }
 
-    // Update duration cards with prices based on selected screen count
+    // Repaint every card for the chosen screen count: headline price, per-month
+    // line, savings badge and the card's own checkout link.
     function updatePrices(deviceCount) {
         [1, 3, 6, 12].forEach(function (months) {
             const price = getPrice(deviceCount, months);
+
             setText('price-' + months + 'mo', formatPrice(price));
             setText(
                 'per-' + months + 'mo',
-                months === 1 ? 'per month' : '~' + formatPrice(price / months) + '/mo'
+                months === 1
+                    ? perMonthOne
+                    : perMonthMulti.replace('{p}', formatPrice(price / months))
             );
+
+            const cta = document.getElementById('cta-' + months + 'mo');
+            if (cta) cta.href = checkoutUrl(deviceCount, months);
         });
 
         updateSavings(deviceCount);
     }
 
-    // "Your total" card. The struck-through price is the same plan bought month
-    // by month, so the saving shown is a real comparison rather than a markup.
-    const totalAside = document.getElementById('total-aside');
-    const totalLock = document.getElementById('total-lock');
-    const lockCopy = document.getElementById('total-lock-copy');
-    const lockFormat = lockCopy ? lockCopy.textContent.trim().replace(/\d+%/, '{pct}%') : '';
-
-    function updateTotal(devices, months) {
-        if (!devices || !months) return;
-
-        const now = getPrice(devices, months);
-        const rate = getPrice(devices, 1);
-        const was = rate * months;
-        const off = Math.max(0, was - now);
-        const pct = was > 0 ? Math.round((off / was) * 100) : 0;
-
-        setText('total-price', formatPrice(now));
-        setText('total-was', formatPrice(was));
-        setText('total-save', 'Save ' + formatPrice(off) + ' (' + pct + '%)');
-        setText(
-            'total-meta',
-            months === 1
-                ? 'one-time · ' + formatPrice(now) + '/mo'
-                : 'one-time · ' + formatPrice(now / months) + '/mo'
-        );
-
-        // A 1-month plan is the reference price, so there is nothing to compare
-        // it against and no discount to hold.
-        const discounted = months > 1 && off > 0.005;
-
-        if (totalAside) totalAside.classList.toggle('is-hidden', !discounted);
-        if (totalLock) totalLock.classList.toggle('is-hidden', !discounted);
-
-        if (lockCopy && lockFormat) {
-            lockCopy.textContent = lockFormat.replace('{pct}', pct);
-        }
-    }
-
-    // Countdown for the locked discount. The deadline is stored locally so it
-    // keeps ticking down across visits instead of restarting on every load.
-    (function startCountdown() {
-        const lock = document.querySelector('[data-offer-days]');
-        const out = document.getElementById('total-countdown');
-        if (!lock || !out) return;
-
-        const days = parseInt(lock.dataset.offerDays, 10) || 5;
-        const window_ms = days * 24 * 60 * 60 * 1000;
-        const key = 'iptvOfferDeadline';
-
-        let deadline = 0;
-        try {
-            deadline = parseInt(localStorage.getItem(key), 10) || 0;
-        } catch (e) {
-            deadline = 0;
-        }
-
-        // Seed on first visit, and re-seed once the window has fully elapsed.
-        if (!deadline || deadline <= Date.now()) {
-            deadline = Date.now() + window_ms;
-            try { localStorage.setItem(key, String(deadline)); } catch (e) { /* private mode */ }
-        }
-
-        function pad(n) { return n < 10 ? '0' + n : String(n); }
-
-        function tick() {
-            let left = Math.max(0, deadline - Date.now());
-            const d = Math.floor(left / 86400000);
-            left -= d * 86400000;
-            const h = Math.floor(left / 3600000);
-            left -= h * 3600000;
-            const m = Math.floor(left / 60000);
-            const s = Math.floor((left - m * 60000) / 1000);
-            out.textContent = d + 'd ' + pad(h) + ':' + pad(m) + ':' + pad(s);
-        }
-
-        tick();
-        setInterval(tick, 1000);
-    })();
-
-    // panel.nordictv.io/checkout?connections=<1|2|3|4>&duration=<1|3|6|12>
+    // panel/checkout?connections=<1|2|3|4>&duration=<1|3|6|12>
     // The panel derives the price from these two params - nothing else is passed.
     function checkoutUrl(devices, months) {
         const base = window.iptvCheckoutBase || 'https://panel.nordictv.io/checkout';
         return base + '?connections=' + devices + '&duration=' + months;
-    }
-
-    const ctaLabel = btnText.textContent.trim() || 'Start watching';
-
-    function updateButton() {
-        updateTotal(selectedDevices, selectedDuration);
-
-        if (selectedDevices && selectedDuration) {
-            const price = getPrice(selectedDevices, selectedDuration);
-            btnText.textContent = price
-                ? ctaLabel + ' · ' + formatPrice(price)
-                : ctaLabel;
-            btn.href = checkoutUrl(selectedDevices, selectedDuration);
-            btn.style.opacity = '1';
-            btn.style.pointerEvents = 'auto';
-        } else {
-            // Both pickers default to a value, so this is only reachable if the
-            // markup is missing a default.
-            btnText.textContent = ctaLabel;
-            btn.style.opacity = '0.6';
-            btn.style.pointerEvents = 'none';
-        }
     }
 
     // Reflect selection on a radiogroup: one checked item, roving tabindex.
@@ -216,14 +146,6 @@
         select(deviceCards, card);
         selectedDevices = parseInt(card.dataset.devices, 10);
         updatePrices(selectedDevices);
-        updateButton();
-        if (focus) card.focus();
-    }
-
-    function chooseDuration(card, focus) {
-        select(durationCards, card);
-        selectedDuration = parseInt(card.dataset.duration, 10);
-        updateButton();
         if (focus) card.focus();
     }
 
@@ -252,34 +174,41 @@
     deviceCards.forEach(function (card) {
         card.addEventListener('click', function () { chooseDevice(card, false); });
     });
-    durationCards.forEach(function (card) {
-        card.addEventListener('click', function () { chooseDuration(card, false); });
-    });
 
     bindKeys(deviceCards, chooseDevice);
-    bindKeys(durationCards, chooseDuration);
 
-    // Pre-select both pickers so prices and the checkout URL are live on load
-    // (default landing URL: ?connections=1&duration=12).
+    // Pre-select the picker so every card's price and checkout link is live on
+    // load. The cards themselves are not a radiogroup any more — each one is a
+    // link, so there is nothing to select.
     const defaultScreens = parseInt(window.iptvDefaultScreens, 10) || 1;
-    const defaultMonths = parseInt(window.iptvDefaultMonths, 10) || 12;
 
     const defaultDeviceCard = deviceCards.find(function (card) {
         return parseInt(card.dataset.devices, 10) === defaultScreens;
     }) || deviceCards[0];
 
-    const defaultDurationCard = durationCards.find(function (card) {
-        return parseInt(card.dataset.duration, 10) === defaultMonths;
-    }) || durationCards[0];
-
     if (defaultDeviceCard) chooseDevice(defaultDeviceCard, false);
-    if (defaultDurationCard) chooseDuration(defaultDurationCard, false);
-    updateButton();
+
+    // Shadow under the sticky picker, but only once it has actually stuck —
+    // otherwise it draws a line across the section on load.
+    (function stickyShadow() {
+        const bar = document.getElementById('screen-sticky');
+        if (!bar || !('IntersectionObserver' in window)) return;
+
+        // A 1px sentinel above the bar: when it leaves the viewport the bar is
+        // pinned. Cheaper and steadier than measuring scroll position.
+        const sentinel = document.createElement('div');
+        sentinel.setAttribute('aria-hidden', 'true');
+        sentinel.style.cssText = 'position:absolute;height:1px;width:1px;';
+        bar.parentNode.insertBefore(sentinel, bar);
+
+        new IntersectionObserver(function (entries) {
+            bar.classList.toggle('is-stuck', !entries[0].isIntersecting);
+        }).observe(sentinel);
+    })();
 
     // currency.js calls this after switching currency so the per-month lines,
-    // savings badges and CTA price all re-render, not just the headline price.
+    // savings badges and checkout links all re-render.
     window.iptvRefreshPricing = function () {
         updatePrices(selectedDevices || defaultScreens);
-        updateButton();
     };
 })();

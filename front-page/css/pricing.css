@@ -323,3 +323,247 @@
         white-space: nowrap;
     }
 }
+/* ============================================================
+   PLAN CARDS + STICKY SCREEN PICKER
+   Replaces the two-step configurator: one card per length, with
+   the screen picker pinned above them while they scroll past.
+   ============================================================ */
+
+/* --- Sticky screen picker ------------------------------------ */
+
+/* On a phone the cards stack one per row, so the picker would scroll away
+   and leave the visitor looking at prices with no idea — and no way to
+   change — how many screens they refer to. Pinning it keeps the control
+   that governs every number on screen the whole way down.
+
+   top is 0 rather than an offset for the site header: that header is
+   position:absolute until it gains .scrolled, so reserving space for it
+   would leave a permanent gap. */
+.dv2-screen-sticky {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    margin: 0 0 1.75rem;
+    padding: 0.75rem 0;
+    background: var(--dv2-bg, #ffffff);
+    transition: box-shadow 0.2s ease, background 0.2s ease;
+}
+
+/* Only once pinned — see stickyShadow() in pricing.js. */
+.dv2-screen-sticky.is-stuck {
+    box-shadow: 0 6px 20px rgba(15, 15, 16, 0.10);
+    background: var(--dv2-surface, #ffffff);
+}
+
+.dv2-screen-sticky-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+}
+
+.dv2-screen-sticky-label {
+    font-family: var(--dv2-font-display, sans-serif);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--dv2-ink);
+}
+
+/* --- Card grid ----------------------------------------------- */
+
+.dv2-plan-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    align-items: start;
+}
+
+.dv2-plan-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--dv2-surface-alt, #faf8f4);
+    border: 1px solid var(--dv2-border, rgba(15, 15, 16, 0.10));
+    border-radius: var(--dv2-radius-xl, 20px);
+    padding: 1.25rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dv2-plan-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--dv2-shadow-md, 0 8px 30px rgba(15, 15, 16, 0.08));
+}
+
+/* The recommended plan: brand red shell with a white body inside, the
+   same figure/ground flip as the reference layout. */
+.dv2-plan-card.is-popular {
+    background: var(--dv2-brand, #c81e1e);
+    border-color: var(--dv2-brand, #c81e1e);
+    box-shadow: var(--dv2-shadow-lg, 0 24px 60px rgba(15, 15, 16, 0.22));
+}
+
+.dv2-plan-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.9rem;
+    padding: 0 0.25rem;
+}
+
+.dv2-plan-name {
+    font-family: var(--dv2-font-display, sans-serif);
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--dv2-ink);
+    margin: 0;
+}
+
+.dv2-plan-card.is-popular .dv2-plan-name {
+    color: #ffffff;
+}
+
+.dv2-plan-flag {
+    background: #ffffff;
+    color: var(--dv2-brand, #c81e1e);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: var(--dv2-radius-pill, 999px);
+    white-space: nowrap;
+}
+
+.dv2-plan-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.85rem;
+    background: var(--dv2-surface, #ffffff);
+    border-radius: var(--dv2-radius-lg, 18px);
+    padding: 1.25rem;
+}
+
+.dv2-plan-price {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.dv2-plan-amount {
+    font-family: var(--dv2-font-display, sans-serif);
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--dv2-ink);
+}
+
+.dv2-plan-per {
+    font-size: 0.85rem;
+    color: var(--dv2-muted);
+}
+
+.dv2-plan-save {
+    align-self: flex-start;
+}
+
+.dv2-plan-features {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.dv2-plan-features li {
+    position: relative;
+    padding-left: 1.6rem;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    color: var(--dv2-body);
+}
+
+.dv2-plan-features li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1.15rem;
+    height: 1.15rem;
+    border-radius: 50%;
+    background: var(--dv2-green, #00b67a);
+    color: #ffffff;
+    font-size: 0.7rem;
+    line-height: 1.15rem;
+    text-align: center;
+    font-weight: 700;
+}
+
+.dv2-plan-cta {
+    display: block;
+    margin-top: auto;
+    padding: 0.85rem 1rem;
+    border-radius: var(--dv2-radius-pill, 999px);
+    background: var(--dv2-surface-alt, #faf8f4);
+    color: var(--dv2-ink);
+    font-family: var(--dv2-font-display, sans-serif);
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-align: center;
+    text-decoration: none;
+    border: 1px solid var(--dv2-border-medium, rgba(15, 15, 16, 0.14));
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.dv2-plan-cta:hover {
+    background: var(--dv2-ink, #0f0f10);
+    border-color: var(--dv2-ink, #0f0f10);
+    color: #ffffff;
+}
+
+.dv2-plan-card.is-popular .dv2-plan-cta {
+    background: var(--dv2-brand, #c81e1e);
+    border-color: var(--dv2-brand, #c81e1e);
+    color: #ffffff;
+}
+
+.dv2-plan-card.is-popular .dv2-plan-cta:hover {
+    background: var(--dv2-brand-600, #a81818);
+    border-color: var(--dv2-brand-600, #a81818);
+}
+
+/* --- Responsive ---------------------------------------------- */
+
+@media (max-width: 1024px) {
+    .dv2-plan-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .dv2-plan-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* One card per row is exactly the case the sticky picker exists for. */
+    .dv2-screen-sticky-inner {
+        gap: 0.4rem;
+    }
+
+    .dv2-screen-sticky-label {
+        width: 100%;
+        text-align: center;
+        font-size: 0.85rem;
+    }
+
+    .dv2-screen-row {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .dv2-plan-amount {
+        font-size: 1.75rem;
+    }
+}

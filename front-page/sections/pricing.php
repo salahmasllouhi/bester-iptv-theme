@@ -59,8 +59,16 @@ $durations = array(
     12 => array('key' => '12_months', 'label' => iptv_text('month_12_label', '12 Months'), 'save' => $iptv_savings_pct('12_months', 12)),
 );
 
-// Screen count that carries the "POPULAR" flag.
+// Screen count that carries the "POPULAR" flag in the sticky picker.
 $popular_screens = (int) iptv_config('pricing_popular_screens', 2);
+
+// Which plan card is highlighted. Defaults to the pre-selected duration, so the
+// flagged card and the landing default are the same plan rather than two
+// different recommendations on one screen.
+$popular_months = (int) iptv_config('pricing_popular_months', $default_months);
+if (!in_array($popular_months, array(1, 3, 6, 12), true)) {
+    $popular_months = $default_months;
+}
 
 // Variation ID map for checkout URLs. WooCommerce may be inactive (e.g. fresh
 // install): degrade to an empty map.
@@ -121,141 +129,116 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
         </div>
 
         <div class="configurator">
-            <!-- Step 1: screens -->
-            <div class="config-section">
-                <div class="config-step">
-                    <span class="config-step-num">1</span>
-                    <span class="config-title"><?php echo esc_html(iptv_text('screens_title', 'How many screens?')); ?></span>
-                </div>
-                <div class="dv2-screen-row" id="devices" role="radiogroup"
-                    aria-label="<?php echo esc_attr(iptv_text('screens_title', 'How many screens?')); ?>">
-                    <?php for ($i = 1; $i <= 4; $i++) :
-                        $is_default = ($i === $default_screens);
-                        $label = $i . ' ' . ($i > 1 ? $screen_plural : $screen_singular);
-                        ?>
-                        <button type="button"
-                            class="select-card dv2-screen-pill<?php echo $is_default ? ' active' : ''; ?>"
-                            data-devices="<?php echo $i; ?>"
-                            role="radio"
-                            aria-checked="<?php echo $is_default ? 'true' : 'false'; ?>"
-                            aria-pressed="<?php echo $is_default ? 'true' : 'false'; ?>"
-                            tabindex="<?php echo $is_default ? '0' : '-1'; ?>">
-                            <span class="dv2-screen-label"><?php echo esc_html($label); ?></span>
-                            <?php if ($i === $popular_screens) : ?>
-                                <span class="dv2-pill-badge"><?php echo esc_html(iptv_text('popular_badge', 'POPULAR')); ?></span>
-                            <?php endif; ?>
-                        </button>
-                    <?php endfor; ?>
+            <?php
+            // Days the discount is held for a returning visitor. pricing.js
+            // stores the deadline locally so the timer does not reset on
+            // every page view.
+            $offer_days = max(1, (int) iptv_config('offer_lock_days', 5));
+
+            // Shared feature list. Every plan includes the same service — only
+            // the length and the screen count differ — so one list is printed
+            // into each card rather than inventing per-tier differences.
+            $card_features = array(
+                1 => iptv_text('card_feature_1', '40.000+ Live-Sender'),
+                2 => iptv_text('card_feature_2', '200.000+ Filme & Serien'),
+                3 => iptv_text('card_feature_3', '4K, Ultra HD & HD'),
+                4 => iptv_text('card_feature_4', 'Alle PPV-Events inklusive'),
+                5 => iptv_text('card_feature_5', 'Sofort aktiviert'),
+                6 => iptv_text('card_feature_6', 'Support rund um die Uhr'),
+            );
+            ?>
+
+            <!-- Screen picker. Sticks to the top of the viewport while the cards
+                 scroll past: on a phone the cards are one per row, so without
+                 this the visitor scrolls the picker off screen and can no longer
+                 see — or change — how many screens the prices refer to. -->
+            <div class="dv2-screen-sticky" id="screen-sticky">
+                <div class="dv2-screen-sticky-inner">
+                    <span class="dv2-screen-sticky-label">
+                        <?php echo esc_html(iptv_text('screens_title', 'Wie viele Bildschirme?')); ?>
+                    </span>
+                    <div class="dv2-screen-row" id="devices" role="radiogroup"
+                        aria-label="<?php echo esc_attr(iptv_text('screens_title', 'Wie viele Bildschirme?')); ?>">
+                        <?php for ($i = 1; $i <= 4; $i++) :
+                            $is_default = ($i === $default_screens);
+                            $label = $i . ' ' . ($i > 1 ? $screen_plural : $screen_singular);
+                            ?>
+                            <button type="button"
+                                class="select-card dv2-screen-pill<?php echo $is_default ? ' active' : ''; ?>"
+                                data-devices="<?php echo $i; ?>"
+                                role="radio"
+                                aria-checked="<?php echo $is_default ? 'true' : 'false'; ?>"
+                                aria-pressed="<?php echo $is_default ? 'true' : 'false'; ?>"
+                                tabindex="<?php echo $is_default ? '0' : '-1'; ?>">
+                                <span class="dv2-screen-label"><?php echo esc_html($label); ?></span>
+                                <?php if ($i === $popular_screens) : ?>
+                                    <span class="dv2-pill-badge"><?php echo esc_html(iptv_text('popular_badge', 'BELIEBT')); ?></span>
+                                <?php endif; ?>
+                            </button>
+                        <?php endfor; ?>
+                    </div>
                 </div>
             </div>
 
-            <!-- Step 2: duration -->
-            <div class="config-section">
-                <div class="config-step">
-                    <span class="config-step-num">2</span>
-                    <span class="config-title"><?php echo esc_html(iptv_text('duration_title', 'How long?')); ?></span>
-                </div>
-                <div class="dv2-duration-row" id="durations" role="radiogroup"
-                    aria-label="<?php echo esc_attr(iptv_text('duration_title', 'How long?')); ?>">
-                    <?php foreach ($durations as $months => $d) :
-                        $price   = isset($all_prices[$d['key']][$default_device][$iptv_currency]) ? $all_prices[$d['key']][$default_device][$iptv_currency] : 0;
-                        $slug    = $months . 'mo'; // price-1mo, price-3mo, ...
-                        $is_default = ($months === $default_months);
-                        ?>
-                        <button type="button"
-                            class="select-card duration-card dv2-duration-card<?php echo $is_default ? ' active' : ''; ?>"
-                            data-duration="<?php echo $months; ?>" data-months="<?php echo $months; ?>"
-                            role="radio" aria-checked="<?php echo $is_default ? 'true' : 'false'; ?>"
-                            tabindex="<?php echo $is_default ? '0' : '-1'; ?>">
-                            <span class="badge badge-green<?php echo $d['save'] ? '' : ' is-hidden'; ?>"
+            <!-- One card per length. Prices, per-month lines, savings badges and
+                 the four checkout links are all rewritten by pricing.js whenever
+                 the screen count above changes. -->
+            <div class="dv2-plan-grid" id="durations">
+                <?php foreach ($durations as $months => $d) :
+                    $price = isset($all_prices[$d['key']][$default_device][$iptv_currency])
+                        ? (float) $all_prices[$d['key']][$default_device][$iptv_currency]
+                        : 0;
+                    $slug       = $months . 'mo';
+                    $is_popular = ($months === $popular_months);
+                    ?>
+                    <article class="dv2-plan-card<?php echo $is_popular ? ' is-popular' : ''; ?>"
+                        data-duration="<?php echo $months; ?>" data-months="<?php echo $months; ?>">
+
+                        <header class="dv2-plan-head">
+                            <h3 class="dv2-plan-name"><?php echo esc_html($d['label']); ?></h3>
+                            <?php if ($is_popular) : ?>
+                                <span class="dv2-plan-flag"><?php echo esc_html(iptv_text('best_value_text', 'Bestes Angebot')); ?></span>
+                            <?php endif; ?>
+                        </header>
+
+                        <div class="dv2-plan-body">
+                            <div class="dv2-plan-price">
+                                <span class="dv2-plan-amount price-display" id="price-<?php echo esc_attr($slug); ?>">
+                                    <?php echo esc_html(iptv_price($price)); ?>
+                                </span>
+                                <span class="dv2-plan-per" id="per-<?php echo esc_attr($slug); ?>">
+                                    <?php echo $months === 1
+                                        ? esc_html(iptv_text('per_month', 'pro Monat'))
+                                        : '~' . esc_html(iptv_price($price / $months)) . '/'
+                                          . esc_html(iptv_text('per_month_short', 'Mon.')); ?>
+                                </span>
+                            </div>
+
+                            <span class="badge badge-green dv2-plan-save<?php echo $d['save'] ? '' : ' is-hidden'; ?>"
                                 id="save-<?php echo esc_attr($slug); ?>">
                                 <?php echo esc_html(sprintf(iptv_text('save_percent_format', '%d %% sparen'), $d['save'])); ?>
                             </span>
-                            <span class="duration-header"><?php echo esc_html($d['label']); ?></span>
-                            <span class="duration-price price-display" id="price-<?php echo esc_attr($slug); ?>">
-                                <?php echo esc_html(iptv_price($price)); ?>
-                            </span>
-                            <span class="duration-per" id="per-<?php echo esc_attr($slug); ?>">
-                                <?php echo $months === 1
-                                    ? esc_html(iptv_text('per_month', 'per month'))
-                                    : '~' . esc_html(iptv_price($price / $months)) . '/mo'; ?>
-                            </span>
-                        </button>
-                    <?php endforeach; ?>
-                </div>
-            </div>
 
-            <!-- Your total. Every number here is recomputed by pricing.js on
-                 every screen/duration/currency change; the PHP values below are
-                 only the pre-JS paint for the default selection. -->
-            <?php
-            $default_device_key = $default_screens === 1 ? '1_device' : $default_screens . '_devices';
-            $total_now  = isset($all_prices[$durations[$default_months]['key']][$default_device_key][$iptv_currency])
-                ? (float) $all_prices[$durations[$default_months]['key']][$default_device_key][$iptv_currency]
-                : 0;
-            $total_rate = isset($all_prices['1_month'][$default_device_key][$iptv_currency])
-                ? (float) $all_prices['1_month'][$default_device_key][$iptv_currency]
-                : 0;
-            // "Was" is the same plan bought month by month, so the saving is real.
-            $total_was  = $total_rate * $default_months;
-            $total_off  = max(0, $total_was - $total_now);
-            $total_pct  = ($total_was > 0) ? (int) round(($total_off / $total_was) * 100) : 0;
-            $has_saving = ($default_months > 1 && $total_off > 0.005);
-            ?>
-            <div class="dv2-total-card" id="total-card">
-                <span class="dv2-total-label"><?php echo esc_html(iptv_text('total_label', 'Your total')); ?></span>
+                            <ul class="dv2-plan-features">
+                                <?php foreach ($card_features as $feature) : ?>
+                                    <li><?php echo esc_html($feature); ?></li>
+                                <?php endforeach; ?>
+                            </ul>
 
-                <div class="dv2-total-main">
-                    <span class="dv2-total-price" id="total-price"><?php echo esc_html(iptv_price($total_now)); ?></span>
-                    <div class="dv2-total-aside<?php echo $has_saving ? '' : ' is-hidden'; ?>" id="total-aside">
-                        <span class="dv2-total-was" id="total-was"><?php echo esc_html(iptv_price($total_was)); ?></span>
-                        <span class="dv2-total-save" id="total-save">
-                            <?php echo esc_html(sprintf(
-                                iptv_text('total_save_format', '%1$s gespart (%2$d %%)'),
-                                iptv_price($total_off),
-                                $total_pct
-                            )); ?>
-                        </span>
-                    </div>
-                </div>
-
-                <p class="dv2-total-meta" id="total-meta">
-                    <?php echo esc_html(sprintf(
-                        iptv_text('total_meta_format', 'einmalig · %s/Monat'),
-                        iptv_price($total_now / max(1, $default_months))
-                    )); ?>
-                </p>
-
-                <?php
-                // Days the discount is held for a returning visitor. pricing.js
-                // stores the deadline locally so the timer does not reset on
-                // every page view.
-                $offer_days = max(1, (int) iptv_config('offer_lock_days', 5));
-                ?>
-                <div class="dv2-total-lock<?php echo $has_saving ? '' : ' is-hidden'; ?>" id="total-lock"
-                    data-offer-days="<?php echo (int) $offer_days; ?>">
-                    <span class="dv2-total-dot" aria-hidden="true"></span>
-                    <span id="total-lock-copy">
-                        <?php echo esc_html(sprintf(
-                            iptv_text('total_lock_format', 'Dein Rabatt von %d %% ist gesichert für'),
-                            $total_pct
-                        )); ?>
-                    </span>
-                    <strong id="total-countdown"><?php echo (int) $offer_days; ?>d 00:00:00</strong>
-                </div>
+                            <a class="dv2-plan-cta" id="cta-<?php echo esc_attr($slug); ?>"
+                                href="<?php echo esc_url($checkout_base . '?connections=' . $default_screens . '&duration=' . $months); ?>">
+                                <?php echo esc_html(iptv_text('checkout_button', 'Bestellung abschließen')); ?>
+                            </a>
+                        </div>
+                    </article>
+                <?php endforeach; ?>
             </div>
 
             <!-- Scarcity -->
-            <?php $slots_line = iptv_text('checkout_slots_line', '🔥 Only 32 activation slots left this month'); ?>
+            <?php $slots_line = iptv_text('checkout_slots_line', '🔥 Diesen Monat nur noch 32 Zugänge frei'); ?>
             <?php if ($slots_line) : ?>
                 <p class="dv2-scarcity"><?php echo esc_html($slots_line); ?></p>
             <?php endif; ?>
-
-            <!-- Checkout. href and price are recomputed by pricing.js on every change. -->
-            <a href="<?php echo esc_url($checkout_base . '?connections=' . $default_screens . '&duration=' . $default_months); ?>"
-                id="checkout-btn" class="cta-btn">
-                <span id="button-text"><?php echo esc_html(iptv_text('checkout_button', 'Start watching')); ?></span>
-            </a>
 
             <ul class="dv2-checkout-trust">
                 <li><?php echo esc_html(iptv_text('checkout_trust_1', '14-day money-back')); ?></li>
