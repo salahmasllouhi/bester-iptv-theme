@@ -21,15 +21,15 @@ if (function_exists('get_field')) {
 
 if (empty($faq_items)) {
     $faq_items = [
-        ['q' => 'What is IPTV?',                              'a' => 'IPTV delivers TV channels and on-demand content over the internet instead of traditional satellite or cable. Connect a compatible app to our servers with your login and start streaming instantly.'],
-        ['q' => 'Which devices are supported?',               'a' => 'Smart TVs, Android TV, Apple TV, Fire Stick, iOS, Android, Windows, Mac, set-top boxes, Chromecast, Roku and Kodi — no new hardware needed.'],
-        ['q' => 'How fast does my internet need to be?',      'a' => 'We recommend at least 15–25 Mbps for smooth HD and 4K streaming. Our adaptive bitrate adjusts automatically on slower connections.'],
-        ['q' => 'Can I cancel anytime?',                      'a' => 'Yes. There are no contracts and no auto-renew — cancel whenever you like with no penalties.'],
-        ['q' => 'How many devices can I use simultaneously?', 'a' => 'Depending on your plan, from 1 up to 4 devices can stream at the same time.'],
-        ['q' => 'Do you offer a free trial?',                 'a' => 'Yes, a 24-hour trial is available so you can test the service before committing. Every paid plan also carries a 30-day money-back guarantee.'],
-        ['q' => 'What payment methods do you accept?',        'a' => 'Visa, Mastercard, PayPal and Bitcoin, all through a secure SSL checkout.'],
-        ['q' => 'What countries and languages are available?', 'a' => 'Content spans 198 countries with multi-language subtitles and full EPG support.'],
-        ['q' => 'How can I contact support?',                 'a' => 'You can reach our support team 24/7 at <a href="mailto:support@nordictv.io">support@nordictv.io</a>.'],
+        ['q' => 'Was ist IPTV?',                              'a' => 'IPTV liefert TV-Sender und Inhalte auf Abruf über das Internet statt über Satellit oder Kabel. Du verbindest eine passende App mit deinen Zugangsdaten und kannst sofort loslegen.'],
+        ['q' => 'Welche Geräte werden unterstützt?',          'a' => 'Smart TVs, Android TV, Apple TV, Fire Stick, iOS, Android, Windows, Mac, Set-Top-Boxen, Chromecast, Roku und Kodi — du brauchst keine neue Hardware.'],
+        ['q' => 'Wie schnell muss meine Internetverbindung sein?', 'a' => 'Wir empfehlen mindestens 15–25 Mbit/s für flüssiges HD- und 4K-Streaming. Bei langsameren Verbindungen passt sich die Bitrate automatisch an.'],
+        ['q' => 'Kann ich jederzeit kündigen?',               'a' => 'Ja. Es gibt keine Verträge und keine automatische Verlängerung — du kündigst, wann du möchtest, ohne Gebühren.'],
+        ['q' => 'Wie viele Geräte kann ich gleichzeitig nutzen?', 'a' => 'Je nach Paket können 1 bis 4 Geräte gleichzeitig streamen.'],
+        ['q' => 'Gibt es einen kostenlosen Test?',            'a' => 'Ja, es gibt einen 24-Stunden-Test, mit dem du den Dienst unverbindlich ausprobieren kannst. Auf jedes bezahlte Paket gibt es zusätzlich 30 Tage Geld-zurück-Garantie.'],
+        ['q' => 'Welche Zahlungsmethoden werden akzeptiert?', 'a' => 'Visa, Mastercard, PayPal und Bitcoin — alles über eine sichere SSL-Kasse.'],
+        ['q' => 'Welche Länder und Sprachen sind verfügbar?', 'a' => 'Die Inhalte umfassen 198 Länder, mit Untertiteln in vielen Sprachen und vollständiger Programmzeitschrift.'],
+        ['q' => 'Wie erreiche ich den Support?',              'a' => 'Unser Support ist rund um die Uhr für dich da: <a href="mailto:support@bester-iptv-anbieter.com">support@bester-iptv-anbieter.com</a>.'],
     ];
 }
 ?>

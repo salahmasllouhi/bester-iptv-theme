@@ -169,7 +169,7 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
                             tabindex="<?php echo $is_default ? '0' : '-1'; ?>">
                             <span class="badge badge-green<?php echo $d['save'] ? '' : ' is-hidden'; ?>"
                                 id="save-<?php echo esc_attr($slug); ?>">
-                                <?php echo esc_html(sprintf(iptv_text('save_percent_format', 'Save %d%%'), $d['save'])); ?>
+                                <?php echo esc_html(sprintf(iptv_text('save_percent_format', '%d %% sparen'), $d['save'])); ?>
                             </span>
                             <span class="duration-header"><?php echo esc_html($d['label']); ?></span>
                             <span class="duration-price price-display" id="price-<?php echo esc_attr($slug); ?>">
@@ -211,7 +211,7 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
                         <span class="dv2-total-was" id="total-was"><?php echo esc_html(iptv_price($total_was)); ?></span>
                         <span class="dv2-total-save" id="total-save">
                             <?php echo esc_html(sprintf(
-                                iptv_text('total_save_format', 'Save %1$s (%2$d%%)'),
+                                iptv_text('total_save_format', '%1$s gespart (%2$d %%)'),
                                 iptv_price($total_off),
                                 $total_pct
                             )); ?>
@@ -221,7 +221,7 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
 
                 <p class="dv2-total-meta" id="total-meta">
                     <?php echo esc_html(sprintf(
-                        iptv_text('total_meta_format', 'one-time · %s/mo'),
+                        iptv_text('total_meta_format', 'einmalig · %s/Monat'),
                         iptv_price($total_now / max(1, $default_months))
                     )); ?>
                 </p>
@@ -237,7 +237,7 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
                     <span class="dv2-total-dot" aria-hidden="true"></span>
                     <span id="total-lock-copy">
                         <?php echo esc_html(sprintf(
-                            iptv_text('total_lock_format', 'Your %d%% discount is locked for'),
+                            iptv_text('total_lock_format', 'Dein Rabatt von %d %% ist gesichert für'),
                             $total_pct
                         )); ?>
                     </span>
