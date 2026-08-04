@@ -53,43 +53,7 @@ include get_template_directory() . '/front-page/sections/header.php';
         }
     });
 
-    // Redirect to region subsite (syncs with currency.js)
-    function redirectToRegion(currency) {
-        const countryUrls = {
-            usd: '/',
-            eur: '/fi/',
-            sek: '/sv/',
-            nok: '/no/',
-            dkk: '/dk/',
-            isk: '/is/'
-        };
-
-        // Remember the choice for next visit. window.nordictvLang is printed
-        // by inc/language-preference.php, which also reads the cookie back.
-        const cfg = window.nordictvLang;
-        if (cfg && cfg.byCurrency && cfg.byCurrency[currency]) {
-            document.cookie = cfg.cookie + '=' + encodeURIComponent(cfg.byCurrency[currency]) +
-                ';path=/;max-age=' + (cfg.days * 24 * 60 * 60) + ';samesite=lax';
-        }
-
-        // This page's counterpart in the chosen language, not the language root.
-        let target = window.nordictvLangUrl && window.nordictvLangUrl(currency);
-        if (!target) {
-            const path = countryUrls[currency];
-            if (!path) return;
-            target = window.location.origin + path;
-        }
-
-        let isRoot = false;
-        try {
-            isRoot = /^\/([a-z]{2}\/)?$/.test(new URL(target, window.location.origin).pathname);
-        } catch (e) {
-            isRoot = false;
-        }
-        if (isRoot) {
-            target += (target.indexOf('?') === -1 ? '?' : '&') + 'nolangredirect=1';
-        }
-
-        window.location.href = target;
-    }
+    // The currency switcher used to navigate to a language subsite. The site is
+    // English-only now, so front-page/js/currency.js owns the whole interaction
+    // and repaints prices in place — there is nothing left to duplicate here.
 </script>

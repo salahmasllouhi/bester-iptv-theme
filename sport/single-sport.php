@@ -10,7 +10,7 @@
  *   3. sport-features (6 cards)
  *   4. steps           (direct reuse from front page)
  *   5. pricing         (unchanged)
- *   6. sport-faq     (Polylang for all text)
+ *   6. sport-faq
  *   7. sport-cta     (dark CTA)
  *   8. sport-schema  (JSON-LD)
  *   9. footer

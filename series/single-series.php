@@ -10,7 +10,7 @@
  *   3. series-features (6 cards)
  *   4. steps           (direct reuse from front page)
  *   5. pricing         (unchanged)
- *   6. series-faq     (Polylang for all text)
+ *   6. series-faq
  *   7. series-cta     (dark CTA)
  *   8. series-schema  (JSON-LD)
  *   9. footer

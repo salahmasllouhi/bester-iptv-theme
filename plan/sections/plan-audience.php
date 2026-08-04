@@ -32,9 +32,8 @@ if (is_array($rows)) {
 }
 
 if (empty($points)) {
-    // Defaults live in plan/inc/plan-strings.php, which is also what registers
-    // them with Polylang — one array, so copy edited there cannot drift out of
-    // registration and silently stop translating.
+    // Defaults live in plan/inc/plan-strings.php — one array, so the sections
+    // and plan-seo.php cannot drift apart.
     $by_length = iptv_plan_audience_defaults();
     $cards     = isset($by_length[$plan_months]) ? $by_length[$plan_months] : $by_length[1];
 

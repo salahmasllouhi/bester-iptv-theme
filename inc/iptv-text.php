@@ -6,18 +6,16 @@
  * every template) goes through this function.
  *
  * Resolution order:
- *   1. ACF field on the front page. Polylang filters `page_on_front`, so this
- *      returns the English page on `/` and the Swedish one under `/sv/` — which is
- *      what makes the whole page translatable from the page editor.
- *   2. The Polylang string translation of the English default, for the handful of
- *      strings registered in inc/front-page-strings.php. pll__() returns its input
- *      unchanged for anything unregistered, so this is a safe catch-all.
+ *   1. ACF field on the front page, which is what makes the whole page editable
+ *      from the page editor.
+ *   2. The same key as plain post meta, for fields added to acf-json/ but not
+ *      yet synced into the database.
  *   3. The English default written into the template.
  *
  * This replaces IPTV_Content_Settings::get_text(), which also consulted an
  * `iptv_content` option keyed by the site slugs of the old multisite install
- * (se/no/dk/fi/is). Polylang's Swedish slug is `sv`, so that layer never matched
- * and always fell through to English.
+ * (se/no/dk/fi/is) — a layer that never matched and always fell through to the
+ * default.
  *
  * @package Nordic_IPTV
  */
@@ -31,7 +29,7 @@ if (!function_exists('iptv_text')) {
      * Get the current language's copy for a front page key.
      *
      * @param string $key     Field name on the front page ACF group.
-     * @param string $default English fallback, also the Polylang lookup key.
+     * @param string $default English fallback.
      * @return string
      */
     function iptv_text($key, $default = '')
@@ -67,10 +65,6 @@ if (!function_exists('iptv_text')) {
             if (is_string($meta) && $meta !== '') {
                 return $meta;
             }
-        }
-
-        if ($default !== '' && function_exists('pll__')) {
-            return pll__($default);
         }
 
         return $default;

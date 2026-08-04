@@ -1,7 +1,7 @@
 <?php
 /**
  * Sport CTA Section
- * Simple strings: Polylang String Translations via spl_str().
+ * Simple strings go through spl_str().
  * Dynamic: $sport_name
  */
 

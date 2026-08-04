@@ -1,7 +1,7 @@
 <?php
 /**
  * Series CTA Section
- * Simple strings: Polylang String Translations via srs_str().
+ * Simple strings go through srs_str().
  * Dynamic: $series_name
  */
 

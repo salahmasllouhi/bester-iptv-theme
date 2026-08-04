@@ -83,7 +83,7 @@ if (!function_exists('iptv_sticky_cta_pricing_url')) {
             return '#pricing';
         }
 
-        $home = function_exists('pll_home_url') ? pll_home_url() : home_url('/');
+        $home = home_url('/');
 
         return trailingslashit($home) . '#pricing';
     }

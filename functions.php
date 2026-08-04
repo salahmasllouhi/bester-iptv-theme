@@ -635,10 +635,6 @@ function my_iptv_theme_setup()
 }
 add_action('after_setup_theme', 'my_iptv_theme_setup');
 
-// Language is the visitor's choice, remembered between visits. Replaces the old
-// inc/geo-redirect.php, which picked a language from the visitor's IP.
-require_once get_template_directory() . '/inc/language-preference.php';
-
 // SEO Manager disabled - Using Rank Math Pro instead
 // require_once get_template_directory() . '/inc/seo-manager.php';
 
@@ -652,15 +648,15 @@ require_once get_template_directory() . '/inc/currency-settings.php';
 // is 1,000 requests/month, so the API is never touched on a front-end request.
 require_once get_template_directory() . '/inc/currency-rates-api.php';
 
-// Resolve a page by slug and get the current language's translation of it.
-// Used by the footer, which previously hardcoded '#' for every legal link.
+// Resolve a page by slug. Used by the footer, which previously hardcoded '#'
+// for every legal link.
 require_once get_template_directory() . '/inc/page-links.php';
 
 // Support cards shared by the front page section and the [nordictv_contact]
 // shortcode used on the Contact page.
 require_once get_template_directory() . '/inc/contact-cards.php';
 
-// Front page copy lookup: ACF on the translated front page, then Polylang strings.
+// Front page copy lookup: ACF on the front page, then the template default.
 // Replaces the old "Content Localizing" admin screen (inc/content-settings.php),
 // which stored copy in an `iptv_content` option keyed by the retired multisite slugs.
 require_once get_template_directory() . '/inc/iptv-text.php';
@@ -678,12 +674,10 @@ require_once get_template_directory() . '/inc/admin-bulk-editor.php';
 require_once get_template_directory() . '/inc/sync-prices.php';
 
 
-// Include Polylang string helpers for channel / sport / series templates
+// Copy helpers for the channel / sport / series templates
 require_once get_template_directory() . '/inc/channel-strings.php';
 require_once get_template_directory() . '/sport/inc/sport-strings.php';
 require_once get_template_directory() . '/series/inc/series-strings.php';
-require_once get_template_directory() . '/inc/front-page-strings.php';
-require_once get_template_directory() . '/inc/offer-strings.php';
 
 // Site Config options page (checkout URLs + pricing configurator defaults)
 require_once get_template_directory() . '/inc/site-config.php';
@@ -693,8 +687,7 @@ require_once get_template_directory() . '/inc/site-config.php';
 require_once get_template_directory() . '/inc/sticky-cta.php';
 
 // Plan pages (template-plan.php). plan-strings.php first: it holds the
-// audience and FAQ default copy that plan-data.php reads, as well as the
-// Polylang registrations that make every string on these pages translatable.
+// audience and FAQ default copy that plan-data.php reads.
 require_once get_template_directory() . '/plan/inc/plan-strings.php';
 
 // Prices, savings, checkout links and the sibling-page lookup behind the
@@ -703,9 +696,8 @@ require_once get_template_directory() . '/plan/inc/plan-strings.php';
 // all of which it reads through.
 require_once get_template_directory() . '/plan/inc/plan-data.php';
 
-// One-time provisioning of the 24 plan pages (4 lengths x 6 languages), their
-// Polylang languages and their translation groups. Guarded by an option; see
-// the file header for how to re-run it.
+// One-time provisioning of the four plan pages. Guarded by an option; see the
+// file header for how to re-run it.
 require_once get_template_directory() . '/plan/inc/plan-pages-setup.php';
 
 // Hands Rank Math the copy a plan page actually renders. Without it the

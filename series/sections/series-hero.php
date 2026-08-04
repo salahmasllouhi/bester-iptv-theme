@@ -3,7 +3,7 @@
  * Series Hero Section
  * Design: two-column layout matching the sport hero.
  * Viewer counter shown at top center.
- * Simple strings: Polylang String Translations via srs_str().
+ * Simple strings go through srs_str().
  * Dynamic: $series_name (get_the_title()), series ACF fields per-post.
  */
 
@@ -28,7 +28,7 @@ if (!empty($series_desc)) {
     $hero_subtitle_html = wp_kses_post(sprintf($fallback_tpl, esc_html($series_name)));
 }
 
-// ── Polylang strings ─────────────────────────────────────────────────────────
+// ── Template strings ─────────────────────────────────────────────────────────
 $hero_prefix = srs_str('Watch');
 $hero_suffix = srs_str('Plus Thousands of Series with NordicTV');
 $streaming_badge = srs_str('· Streaming Now');

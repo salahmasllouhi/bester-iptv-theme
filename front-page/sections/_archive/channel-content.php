@@ -1,7 +1,7 @@
 <?php
 /**
  * Channel Details / Content Section
- * Simple strings: Polylang String Translations via tpl_str().
+ * Simple strings go through tpl_str().
  * URL fields: ACF Options via tpl_ch().
  * Dynamic: ACF per-post fields (channel_type, channel_networks, channel_launch_year, channel_website, channel_popular_shows)
  */
@@ -20,7 +20,7 @@ if ($channel_networks) {
     $networks_array = array_filter(array_map('trim', explode(',', $channel_networks)));
 }
 
-// ── Template strings (Polylang String Translations) ──────────────────────────
+// ── Template strings ──────────────────────────
 $tag_label = tpl_str('About This Channel');
 $title_suffix = tpl_str('Live Stream');
 $networks_label = tpl_str('Available on this channel:');

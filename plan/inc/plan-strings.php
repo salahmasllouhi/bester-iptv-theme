@@ -1,18 +1,16 @@
 <?php
 /**
- * Plan template — Polylang string registration
+ * Plan template — copy
  *
- * The theme ships no .mo files and never calls load_theme_textdomain(), so a
- * __() in a template renders English in all six languages. Every string a plan
- * page can print is therefore registered with Polylang instead, exactly as
- * sport/inc/sport-strings.php does, and shows up under
- * Languages → String translations (where AutoPoly can also reach it).
+ * The site is English-only, so plan_str() returns what it is given. It stays a
+ * function so the templates do not all have to change, and so there is one
+ * obvious place to hook a translation layer back in if that is ever needed.
  *
  * Usage in templates: plan_str('Default English text')
  *
  * The audience and FAQ defaults are held here as data rather than in the
- * sections that print them, so the registration loop and the templates read the
- * same array. Copy edited in one place cannot fall out of registration.
+ * sections that print them, so the templates and plan/inc/plan-seo.php read the
+ * same array.
  *
  * @package Nordic_IPTV
  */
@@ -21,64 +19,13 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-if (!function_exists('iptv_plan_translations')) {
-    /**
-     * Bundled Nordic copy for this template, english => translation.
-     *
-     * Ships with the theme so the plan pages read correctly in every language
-     * the moment they are published, rather than after someone remembers to
-     * work through Languages → String translations. A translation entered
-     * there still wins — see plan_str() — so this is a floor, not a ceiling.
-     *
-     * @param string $lang Polylang language slug.
-     * @return array<string,string>
-     */
-    function iptv_plan_translations($lang)
-    {
-        static $cache = array();
-
-        if (isset($cache[$lang])) {
-            return $cache[$lang];
-        }
-
-        $file = __DIR__ . '/translations/' . $lang . '.php';
-        $cache[$lang] = file_exists($file) ? (array) include $file : array();
-
-        return $cache[$lang];
-    }
-}
-
 if (!function_exists('plan_str')) {
     /**
-     * The current language's version of a plan string.
-     *
-     * Order: a translation entered in Polylang's string table, then the copy
-     * bundled with the theme, then the English default. Polylang comes first so
-     * an editor can always override what the theme ships — pll__() returns the
-     * string unchanged when nothing has been entered, which is what makes the
-     * comparison below a usable "was it translated?" test.
-     *
-     * @param string $default English default, which is also the lookup key.
+     * @param string $default The English copy.
      * @return string
      */
     function plan_str($default)
     {
-        if (function_exists('pll__')) {
-            $translated = pll__($default);
-            if ($translated !== $default) {
-                return $translated;
-            }
-        }
-
-        $lang = function_exists('pll_current_language') ? pll_current_language('slug') : '';
-
-        if ($lang && $lang !== 'en') {
-            $bundled = iptv_plan_translations($lang);
-            if (isset($bundled[$default]) && $bundled[$default] !== '') {
-                return $bundled[$default];
-            }
-        }
-
         return $default;
     }
 }
@@ -206,82 +153,3 @@ if (!function_exists('iptv_plan_faq_defaults')) {
         ));
     }
 }
-
-/**
- * Register everything a plan page can print.
- *
- * Strings reaching iptv_text() are registered too: that helper ends in
- * pll__($default) when the front page has no field of that name, which is the
- * case for every plan-only key.
- */
-add_action('init', function () {
-    if (!function_exists('pll_register_string')) {
-        return;
-    }
-
-    $group = 'Plan Template';
-
-    $register = function ($name, $string, $multiline = false) use ($group) {
-        pll_register_string($name, $string, $group, $multiline);
-    };
-
-    // ── Hero ─────────────────────────────────────────────────────────────────
-    $register('plan_eyebrow', 'IPTV Subscription');
-    $register('plan_headline_format', '%s IPTV Subscription');
-    $register('plan_subline_1mo', 'The whole service, one month at a time. No contract, no auto-renew — stop whenever you like.', true);
-    $register('plan_subline_multi', 'The whole service for %s. One payment, no contract, no auto-renew.', true);
-    $register('plan_from_label', 'From');
-    $register('plan_price_for', 'for %s');
-    $register('plan_cta_text', 'See prices');
-    $register('plan_hero_point_1', 'Watching in 60 seconds');
-    $register('plan_hero_point_2', 'No contract, no auto-renew');
-    $register('plan_hero_point_3', '24/7 support');
-    $register('plan_hero_image_placeholder', 'Hero image');
-
-    // ── Price grid ───────────────────────────────────────────────────────────
-    $register('plan_pricing_title', '%s — choose your screens');
-    $register('plan_pricing_subtitle', 'One screen streams on one device at a time. Everything else is identical on every plan.', true);
-    $register('plan_screens_note_one', 'One device watching at a time');
-    $register('plan_screens_note_many', '%d devices watching at the same time');
-    $register('plan_per_month_format', '%s / month');
-    $register('plan_save_percent', 'Save %d%%');
-
-    // ── Audience ─────────────────────────────────────────────────────────────
-    $register('plan_audience_title', 'Who the %s plan suits');
-
-    foreach (iptv_plan_audience_defaults() as $months => $cards) {
-        foreach ($cards as $i => $card) {
-            $n = $i + 1;
-            $register("plan_audience_{$months}mo_{$n}_title", $card['title']);
-            $register("plan_audience_{$months}mo_{$n}_text", $card['text'], true);
-        }
-    }
-
-    // ── Compare table ────────────────────────────────────────────────────────
-    $register('plan_compare_title', 'How the four plans compare');
-    $register('plan_compare_subtitle', 'Prices shown for %s. Longer plans cost less per month — the service is the same on all of them.', true);
-    $register('plan_compare_col_plan', 'Plan');
-    $register('plan_compare_col_rate', 'Per month');
-    $register('plan_compare_col_save', 'You save');
-    $register('plan_compare_col_link', 'Link');
-    $register('plan_compare_best', 'Best value');
-    $register('plan_compare_here', 'You are here');
-    $register('plan_compare_see', 'See %s');
-    $register('plan_compare_see_pricing', 'See pricing');
-
-    // ── FAQ ──────────────────────────────────────────────────────────────────
-    // Registered from the 1-month set, which is a superset of the others.
-    foreach (iptv_plan_faq_defaults(1) as $i => $row) {
-        $n = $i + 1;
-        $register("plan_faq_{$n}_q", $row['q']);
-        $register("plan_faq_{$n}_a", $row['a'], true);
-    }
-
-    // ── Closing band ─────────────────────────────────────────────────────────
-    $register('plan_final_title', 'Start your %s plan today');
-    $register('plan_final_text', 'From %s. Activated in about a minute, watchable on the TV you already own.', true);
-    $register('plan_final_text_nofrom', 'Activated in about a minute, watchable on the TV you already own.', true);
-
-    // ── Schema ───────────────────────────────────────────────────────────────
-    $register('plan_schema_description', '%s NordicTV IPTV subscription: 40,000+ live channels, 200,000+ movies and series in 4K and HD, on 1 to 4 screens. No contract and no auto-renew.', true);
-});

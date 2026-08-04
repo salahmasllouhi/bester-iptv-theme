@@ -5,10 +5,9 @@
  * The support cards on the front page — email, WhatsApp, Telegram — extracted so
  * the Contact page can show the same thing instead of a form.
  *
- * The cards come from the `contact_cards` ACF repeater on the front page, which
- * Polylang resolves per language, so one shortcode renders correctly translated
- * cards on all six Contact pages. Pasting the markup into each page's content
- * would have meant six copies to keep in step.
+ * The cards come from the `contact_cards` ACF repeater on the front page, so one
+ * shortcode renders the same cards on the Contact page. Pasting the markup into
+ * the page content would have meant two copies to keep in step.
  *
  * Usage in a page: [nordictv_contact]
  *   heading="1"  also render the section's <h2> (the page template already

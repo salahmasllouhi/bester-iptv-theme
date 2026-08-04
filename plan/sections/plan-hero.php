@@ -14,10 +14,9 @@
  *   $plan_months (int)  $plan_label (string)  $plan_from (float)
  */
 
-// plan_str() inside iptv_text(): the front page has no plan_eyebrow field, so
-// iptv_text() would end at pll__('IPTV Subscription') and return it unchanged —
-// English on every Nordic page. Handing it the already-translated string keeps
-// the front-page override working while giving the bundled copy a chance.
+// The front page has no plan_eyebrow field, so iptv_text() falls through to the
+// default. Kept in this shape so a front-page override still wins if one is ever
+// added.
 $hero_eyebrow = iptv_plan_field('plan_eyebrow', iptv_text('plan_eyebrow', plan_str('IPTV Subscription')));
 
 // The page title, not a format string. Each language's title is written out in

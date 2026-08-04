@@ -1,21 +1,22 @@
 <?php
 /**
  * Series FAQ Section
- * Simple strings: Polylang String Translations via srs_str().
+ * Simple strings go through srs_str().
  * FAQ items (repeater): ACF Options via get_field() directly.
- * All hardcoded default Q&A go through srs_str() to appear in Polylang Translations.
+ * All hardcoded default Q&A go through srs_str().
  * Dynamic: $series_name (use %s in question/answer fields)
  */
 
-$lang = function_exists('pll_current_language') ? pll_current_language() : 'en';
-$post_id = 'options_' . $lang;
+// ACF options are stored under the plain 'option' ID now that ACF Options for
+// Polylang is gone — there is no per-language options row any more.
+$post_id = 'option';
 
 $faq_tag = srs_str('FAQ');
 $faq_title = srs_str('Frequently Asked <span class="gradient-text">Questions</span>');
 $faq_subtitle = srs_str('Common questions about watching %s with NordicTV');
 $faq_items = function_exists('get_field') ? get_field('tpl_series_faq_items', $post_id) : [];
 
-// Default FAQ items — all go through srs_str() so they appear in Polylang Translations
+// Default FAQ items — all go through srs_str()
 if (empty($faq_items)) {
     $faq_items = [
         ['faq_q' => srs_str('How do I watch %s with NordicTV?'), 'faq_a' => srs_str('Simply subscribe to any NordicTV plan, download our app on your device, and search for %s. You\'ll be streaming in minutes.')],

@@ -3,7 +3,7 @@
  * Channel Hero Section
  * Design: centered layout (hero--centered) matching front page colors.
  * Live viewer dot + animated counter shown at top center.
- * Simple strings: Polylang String Translations via tpl_str().
+ * Simple strings go through tpl_str().
  * Dynamic: $channel_name (get_the_title()), channel_type, channel_tagline, channel_short_description (ACF per-post).
  */
 
@@ -28,7 +28,7 @@ if (!empty($channel_short_desc)) {
     $hero_subtitle_html = wp_kses_post(sprintf($fallback_tpl, esc_html($channel_name)));
 }
 
-// ── Polylang strings ─────────────────────────────────────────────────────────
+// ── Template strings ─────────────────────────────────────────────────────────
 $hero_prefix = tpl_str('Watch');
 $hero_suffix = tpl_str('Plus Thousands of Channels with NordicTV');
 $live_badge = tpl_str('· Live Now');

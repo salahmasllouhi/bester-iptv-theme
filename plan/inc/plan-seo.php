@@ -40,7 +40,7 @@ if (!function_exists('iptv_plan_is_plan_page')) {
 
 if (!function_exists('iptv_plan_analysis_digest')) {
     /**
-     * The template-driven copy of one plan page, as HTML, in its own language.
+     * The template-driven copy of one plan page, as HTML.
      *
      * Headings are emitted as real <h2>/<h3> so the "focus keyword in
      * subheading" test sees the headings the page actually has.
@@ -50,20 +50,11 @@ if (!function_exists('iptv_plan_analysis_digest')) {
      */
     function iptv_plan_analysis_digest($post_id)
     {
-        $lang = function_exists('pll_get_post_language')
-            ? pll_get_post_language($post_id, 'slug')
-            : '';
-
-        $bundled = ($lang && $lang !== 'en' && function_exists('iptv_plan_translations'))
-            ? iptv_plan_translations($lang)
-            : array();
-
-        // Same order plan_str() uses, minus the Polylang lookup: this runs in an
-        // admin request, where the current language is not the page's.
-        $t = function ($english) use ($bundled) {
-            return isset($bundled[$english]) && $bundled[$english] !== ''
-                ? $bundled[$english]
-                : $english;
+        // The site is English-only, so the copy a page renders is the copy the
+        // template ships. Kept as a closure so the call sites below read the
+        // same as the sections they mirror.
+        $t = function ($english) {
+            return $english;
         };
 
         $months = (int) get_post_meta($post_id, 'plan_months', true);

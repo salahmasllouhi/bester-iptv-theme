@@ -1,7 +1,7 @@
 <?php
 /**
  * Channel CTA Section
- * Simple strings: Polylang String Translations via tpl_str().
+ * Simple strings go through tpl_str().
  * URL fields: ACF Options via tpl_ch().
  * Dynamic: $channel_name
  */

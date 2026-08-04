@@ -1,13 +1,14 @@
 <?php
 /**
  * Channel Comparison Section
- * Simple strings: Polylang String Translations via tpl_str().
+ * Simple strings go through tpl_str().
  * Repeater (comp_rows): ACF Options via get_field() directly.
  * Dynamic: $channel_name
  */
 
-$lang = function_exists('pll_current_language') ? pll_current_language() : 'en';
-$post_id = 'options_' . $lang;
+// ACF options are stored under the plain 'option' ID now that ACF Options for
+// Polylang is gone — there is no per-language options row any more.
+$post_id = 'option';
 
 $comp_tag = tpl_str('Compare');
 $comp_title = tpl_str('How We Compare');

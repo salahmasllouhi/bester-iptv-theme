@@ -246,10 +246,7 @@ body.single-faq .faq-single {
 
     <!-- 4. CTA Section -->
     <?php
-    $lang    = function_exists('pll_current_language') ? pll_current_language() : 'en';
-    $cta_url = ($lang === 'en')
-        ? 'https://nordictv.io/#pricing'
-        : 'https://nordictv.io/' . $lang . '/home/#pricing';
+    $cta_url = 'https://nordictv.io/#pricing';
     ?>
     <section class="cta">
         <div class="cta-box">

@@ -149,8 +149,9 @@ if (!function_exists('iptv_plan_currency')) {
      * JS, but a plan page prints its prices in the HTML — for the crawler as
      * much as the visitor — so the same mapping has to exist in PHP.
      *
-     * Language is the source of truth (Polylang), with the multisite slug as a
-     * fallback for the subsites that still run their own blog.
+     * The site is English-only, so USD is the default and the multisite slug is
+     * the only thing that can override it, for the subsites that still run their
+     * own blog. A visitor's currency choice is applied client-side.
      *
      * @return string Lowercase currency key: usd, eur, sek, nok, dkk or isk.
      */
@@ -163,15 +164,6 @@ if (!function_exists('iptv_plan_currency')) {
         }
 
         $currency = 'usd';
-
-        if (function_exists('pll_current_language') && function_exists('nordictv_lang_by_currency')) {
-            $lang = pll_current_language('slug');
-            $map  = array_flip(nordictv_lang_by_currency()); // slug => currency
-            if ($lang && isset($map[$lang])) {
-                $currency = $map[$lang];
-                return $currency;
-            }
-        }
 
         if (class_exists('IPTV_Currency_Settings')) {
             $instance = IPTV_Currency_Settings::instance();
@@ -341,16 +333,11 @@ if (!function_exists('iptv_plan_savings')) {
 
 if (!function_exists('iptv_plan_url')) {
     /**
-     * Permalink of the plan page for another length, in this language.
+     * Permalink of the plan page for another length.
      *
      * Found by the template plus plan_months rather than by slug, so the four
-     * pages link to each other on their own — rename or translate any of them
-     * and the compare table still resolves.
-     *
-     * Polylang note: 'lang' => '' means *the current language*, not all of
-     * them, so every language is named explicitly and pll_get_post() maps the
-     * result back. This is the same trick iptv_page_url() uses, and for the
-     * same reason: a translated plan page will have its own slug.
+     * pages link to each other on their own — rename any of them and the
+     * compare table still resolves.
      *
      * @param int $months 1, 3, 6 or 12.
      * @return string Permalink, or '' when that plan has no page yet.
@@ -360,11 +347,9 @@ if (!function_exists('iptv_plan_url')) {
         static $cache = array();
 
         $months = (int) $months;
-        $lang   = function_exists('pll_current_language') ? pll_current_language('slug') : '';
-        $key    = $months . '|' . $lang;
 
-        if (isset($cache[$key])) {
-            return $cache[$key];
+        if (isset($cache[$months])) {
+            return $cache[$months];
         }
 
         $args = array(
@@ -387,30 +372,14 @@ if (!function_exists('iptv_plan_url')) {
             ),
         );
 
-        if (function_exists('nordictv_lang_slugs')) {
-            $languages = nordictv_lang_slugs();
-            if (!empty($languages)) {
-                $args['lang'] = implode(',', $languages);
-            }
-        }
-
         $url   = '';
         $query = new WP_Query($args);
 
         if (!empty($query->posts)) {
-            $id = $query->posts[0]->ID;
-
-            if (function_exists('pll_get_post')) {
-                $translated = pll_get_post($id);
-                if ($translated) {
-                    $id = $translated;
-                }
-            }
-
-            $url = get_permalink($id);
+            $url = get_permalink($query->posts[0]->ID);
         }
 
-        $cache[$key] = $url;
+        $cache[$months] = $url;
 
         return $url;
     }
@@ -504,9 +473,8 @@ if (!function_exists('iptv_plan_faq_items')) {
             return $items;
         }
 
-        // Defaults live in plan/inc/plan-strings.php, which is also what
-        // registers them with Polylang — one array, so copy edited there cannot
-        // drift out of registration and silently stop translating.
+        // Defaults live in plan/inc/plan-strings.php — one array, so the
+        // sections and plan-seo.php cannot drift apart.
         $label = iptv_plan_label($months);
 
         foreach (iptv_plan_faq_defaults($months) as $row) {

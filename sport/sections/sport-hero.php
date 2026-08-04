@@ -3,7 +3,7 @@
  * Sport Hero Section
  * Design: centered layout (hero--centered) matching front page colors.
  * Live viewer dot + animated counter shown at top center.
- * Simple strings: Polylang String Translations via spl_str().
+ * Simple strings go through spl_str().
  * Dynamic: $sport_name (get_the_title()), sport_type, sport_tagline, sport_short_description (ACF per-post).
  */
 
@@ -28,7 +28,7 @@ if (!empty($sport_short_desc)) {
     $hero_subtitle_html = wp_kses_post(sprintf($fallback_tpl, esc_html($sport_name)));
 }
 
-// ── Polylang strings ─────────────────────────────────────────────────────────
+// ── Template strings ─────────────────────────────────────────────────────────
 $hero_prefix = spl_str('Watch');
 $hero_suffix = spl_str('& Thousands of Live Sport Events with Nordic IPTV');
 $live_badge = spl_str('· Live Now');

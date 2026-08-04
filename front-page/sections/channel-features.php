@@ -1,7 +1,7 @@
 <?php
 /**
  * Channel Features Section — 6 Cards (cloned from front page features.php)
- * Simple strings: Polylang String Translations via tpl_str().
+ * Simple strings go through tpl_str().
  * Dynamic: $channel_name
  */
 

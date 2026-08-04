@@ -10,67 +10,6 @@ function toggleFooterDropdown() {
     if (dropdown) dropdown.classList.toggle('active');
 }
 
-// Remember the language the visitor just picked, so the next visit opens in it.
-// inc/language-preference.php reads this cookie and prints window.nordictvLang.
-function rememberLanguageChoice(currency) {
-    const cfg = window.nordictvLang;
-    if (!cfg || !cfg.byCurrency) return;
-
-    const slug = cfg.byCurrency[currency];
-    if (!slug) return;
-
-    document.cookie = cfg.cookie + '=' + encodeURIComponent(slug) +
-        ';path=/;max-age=' + (cfg.days * 24 * 60 * 60) + ';samesite=lax';
-}
-
-// Where switching to `currency` should land.
-//
-// Prefer this page's counterpart in the chosen language — window.nordictvLangUrl
-// is printed by inc/language-preference.php from Polylang, which knows each
-// translation's URL and falls back to that language's front page by itself.
-// Switching language from /sv/about-us used to drop you on /no/ rather than
-// /no/about-us, because only the language roots below were ever consulted.
-function languageTargetUrl(currency) {
-    const countryUrls = {
-        usd: '/',
-        eur: '/fi/',
-        sek: '/sv/',
-        nok: '/no/',
-        dkk: '/dk/',
-        isk: '/is/'
-    };
-
-    const translated = window.nordictvLangUrl && window.nordictvLangUrl(currency);
-    if (translated) return translated;
-
-    const path = countryUrls[currency];
-    return path ? window.location.origin + path : null;
-}
-
-// The preference redirect only runs on a front page, so only guard those — no
-// need to hang a query string off every inner page URL. It covers the case
-// where the cookie write silently failed and a stale preference would otherwise
-// bounce the visitor straight back.
-function withLangRedirectGuard(url) {
-    let isRoot = false;
-    try {
-        isRoot = /^\/([a-z]{2}\/)?$/.test(new URL(url, window.location.origin).pathname);
-    } catch (e) {
-        isRoot = false;
-    }
-    if (!isRoot) return url;
-    return url + (url.indexOf('?') === -1 ? '?' : '&') + 'nolangredirect=1';
-}
-
-// Redirect to the chosen language
-function redirectToRegion(currency) {
-    const target = languageTargetUrl(currency);
-    if (!target) return;
-
-    rememberLanguageChoice(currency);
-    window.location.href = withLangRedirectGuard(target);
-}
-
 // Close dropdown when clicking outside
 document.addEventListener('click', function (e) {
     const selector = document.getElementById('countrySelector');
@@ -87,42 +26,23 @@ document.addEventListener('click', function (e) {
     }
 });
 
-// Currency data — `name` is the native language label shown in the switcher,
-// `code` stays for price formatting and anything reading the currency code.
+// Currency data. `name` is the switcher label — the currency code, since the
+// switcher no longer changes language; `code` is what price formatting reads.
 const currencyData = {
-    usd: { symbol: '$', flag: '🇺🇸', code: 'USD', name: 'English', position: 'before' },
-    eur: { symbol: '€', flag: '🇫🇮', code: 'EUR', name: 'Suomi', position: 'before' },
-    sek: { symbol: 'kr', flag: '🇸🇪', code: 'SEK', name: 'Svenska', position: 'after' },
-    nok: { symbol: 'kr', flag: '🇳🇴', code: 'NOK', name: 'Norsk', position: 'after' },
-    dkk: { symbol: 'kr', flag: '🇩🇰', code: 'DKK', name: 'Dansk', position: 'after' },
-    isk: { symbol: 'kr', flag: '🇮🇸', code: 'ISK', name: 'Íslenska', position: 'after' }
+    usd: { symbol: '$', flag: '🇺🇸', code: 'USD', name: 'USD', position: 'before' },
+    eur: { symbol: '€', flag: '🇫🇮', code: 'EUR', name: 'EUR', position: 'before' },
+    sek: { symbol: 'kr', flag: '🇸🇪', code: 'SEK', name: 'SEK', position: 'after' },
+    nok: { symbol: 'kr', flag: '🇳🇴', code: 'NOK', name: 'NOK', position: 'after' },
+    dkk: { symbol: 'kr', flag: '🇩🇰', code: 'DKK', name: 'DKK', position: 'after' },
+    isk: { symbol: 'kr', flag: '🇮🇸', code: 'ISK', name: 'ISK', position: 'after' }
 };
 
-// URL mappings for each currency/country
-const countryUrls = {
-    usd: '/',
-    eur: '/fi/',
-    sek: '/sv/',
-    nok: '/no/',
-    dkk: '/dk/',
-    isk: '/is/'
-};
-
-// Get default currency from URL path or localStorage
-// Get default currency from URL path
+// The site is English-only, so there is no language prefix to read a currency
+// out of any more. The visitor's own choice is the only signal, and USD is the
+// default until they make one.
 function getDefaultCurrency() {
-    return getCurrentCurrencyFromUrl();
-}
-
-// Detect current currency from URL
-function getCurrentCurrencyFromUrl() {
-    const currentPath = window.location.pathname;
-    if (currentPath.startsWith('/sv')) return 'sek';
-    if (currentPath.startsWith('/no')) return 'nok';
-    if (currentPath.startsWith('/dk')) return 'dkk';
-    if (currentPath.startsWith('/fi')) return 'eur';
-    if (currentPath.startsWith('/is')) return 'isk';
-    return 'usd';
+    const stored = localStorage.getItem('iptv_currency');
+    return currencyData[stored] ? stored : 'usd';
 }
 
 // Update UI and prices for selected currency
@@ -159,20 +79,8 @@ function setCurrency(currency) {
     if (footerDropdown) footerDropdown.classList.remove('active');
 }
 
-// Footer currency setter (syncs with header)
+// Footer currency setter (syncs with header — setCurrency repaints both)
 function setFooterCurrency(currency) {
-    const currentCurrency = getCurrentCurrencyFromUrl();
-
-    // Same as the header switcher: this is a deliberate choice, so record it.
-    rememberLanguageChoice(currency);
-
-    if (currency !== currentCurrency) {
-        const target = languageTargetUrl(currency);
-        if (target) {
-            window.location.href = withLangRedirectGuard(target);
-            return;
-        }
-    }
     setCurrency(currency);
 }
 
@@ -225,40 +133,18 @@ function updateAllPrices() {
     }
 }
 
-// There is deliberately no browser-language auto-redirect here any more. A
-// Swedish-configured browser asking for the English page gets the English page;
-// only a language the visitor picked themselves ever moves them, and that is
-// handled server-side in inc/language-preference.php.
+// Nothing here navigates any more: picking a currency repaints the prices in
+// place. The site is English-only, so there is nowhere else to send anyone.
 
 // Initialize currency on page load
 document.addEventListener('DOMContentLoaded', function () {
 
-    // Set up country option click handlers with redirect
     document.querySelectorAll('.country-option').forEach(option => {
         option.addEventListener('click', function (e) {
-            e.preventDefault(); // Prevent default link behavior to ensure storage save
-
-            const currency = this.dataset.currency;
-
-            // This is the visitor choosing — remember it for next time.
-            rememberLanguageChoice(currency);
-
-            const currentCurrency = htmlCurrentCurrency(); // Helper to safely get current
-            const target = languageTargetUrl(currency);
-
-            if (currency !== currentCurrency && target) {
-                window.location.href = withLangRedirectGuard(target);
-            } else {
-                setCurrency(currency);
-            }
+            e.preventDefault();
+            setCurrency(this.dataset.currency);
         });
     });
 
-    // Set default currency based on current URL
-    const defaultCurrency = getDefaultCurrency();
-    setCurrency(defaultCurrency);
+    setCurrency(getDefaultCurrency());
 });
-
-function htmlCurrentCurrency() {
-    return getCurrentCurrencyFromUrl();
-}

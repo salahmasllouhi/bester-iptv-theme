@@ -1,59 +1,14 @@
 <!-- Header Section -->
 <?php
-// Detect current subsite for default currency/flag
-$site_slug = '';
-
-// Method 1: Polylang language detection (most reliable on this site)
-if (function_exists('pll_current_language')) {
-    $pll_lang = pll_current_language('slug');
-    if (!empty($pll_lang) && $pll_lang !== 'en') {
-        $site_slug = $pll_lang;
-    }
-}
-
-// Method 2: WordPress Multisite blog path
-if (empty($site_slug) && is_multisite() && function_exists('get_blog_details')) {
-    $blog_details = get_blog_details();
-    if ($blog_details && !empty($blog_details->path)) {
-        $site_slug = trim($blog_details->path, '/');
-    }
-}
-
-// Method 3: Fallback to REQUEST_URI parsing
-if (empty($site_slug)) {
-    $request_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
-    $path_parts = explode('/', trim($request_uri, '/'));
-    $first_segment = isset($path_parts[0]) ? $path_parts[0] : '';
-    if (in_array($first_segment, array('sv', 'no', 'dk', 'fi', 'is'))) {
-        $site_slug = $first_segment;
-    }
-}
-
-// Map subsite to its language label (flag + native language name)
-$site_language_map = array(
-    'sv' => array('flag' => '🇸🇪', 'name' => 'Svenska'),
-    'no' => array('flag' => '🇳🇴', 'name' => 'Norsk'),
-    'dk' => array('flag' => '🇩🇰', 'name' => 'Dansk'),
-    'fi' => array('flag' => '🇫🇮', 'name' => 'Suomi'),
-    'is' => array('flag' => '🇮🇸', 'name' => 'Íslenska'),
-);
-
-// Get default based on current subsite (main site = English)
+// The switcher is a currency switcher — the site is English-only, so it no
+// longer navigates anywhere. What it shows on first paint is USD; currency.js
+// repaints it from the visitor's stored choice on DOMContentLoaded.
 $default_flag = '🇺🇸';
-$default_name = 'English';
-if (isset($site_language_map[$site_slug])) {
-    $default_flag = $site_language_map[$site_slug]['flag'];
-    $default_name = $site_language_map[$site_slug]['name'];
-}
+$default_name = 'USD';
 
-// Polylang filters home_url() only when the path is empty or '/'. Anything with
-// a path or fragment — home_url('/#features') — comes back as the English URL,
-// which is why every anchor link in this nav pointed at the English front page
-// from /no/, /sv/ and the rest while the labels were correctly translated.
-$nav_home = function_exists('pll_home_url') ? pll_home_url() : home_url('/');
-$nav_home = trailingslashit($nav_home);
+$nav_home = trailingslashit(home_url('/'));
 
-// The guide's real slug. home_url('/user-guide/') was a 404 in every language.
+// The guide's real slug. home_url('/user-guide/') was a 404.
 $nav_guide = function_exists('iptv_page_url')
     ? iptv_page_url('iptv-guide-setup-apps-devices-tips', $nav_home)
     : $nav_home;
@@ -94,22 +49,22 @@ $nav_guide = function_exists('iptv_page_url')
                 </button>
                 <div class="country-dropdown" id="countryDropdown">
                     <div class="country-option" data-currency="usd" data-symbol="$" data-flag="🇺🇸">
-                        <span class="country-flag">🇺🇸</span><span>English</span>
+                        <span class="country-flag">🇺🇸</span><span>USD</span>
                     </div>
                     <div class="country-option" data-currency="sek" data-symbol="kr" data-flag="🇸🇪">
-                        <span class="country-flag">🇸🇪</span><span>Svenska</span>
+                        <span class="country-flag">🇸🇪</span><span>SEK</span>
                     </div>
                     <div class="country-option" data-currency="nok" data-symbol="kr" data-flag="🇳🇴">
-                        <span class="country-flag">🇳🇴</span><span>Norsk</span>
+                        <span class="country-flag">🇳🇴</span><span>NOK</span>
                     </div>
                     <div class="country-option" data-currency="dkk" data-symbol="kr" data-flag="🇩🇰">
-                        <span class="country-flag">🇩🇰</span><span>Dansk</span>
+                        <span class="country-flag">🇩🇰</span><span>DKK</span>
                     </div>
                     <div class="country-option" data-currency="eur" data-symbol="€" data-flag="🇫🇮">
-                        <span class="country-flag">🇫🇮</span><span>Suomi</span>
+                        <span class="country-flag">🇫🇮</span><span>EUR</span>
                     </div>
                     <div class="country-option" data-currency="isk" data-symbol="kr" data-flag="🇮🇸">
-                        <span class="country-flag">🇮🇸</span><span>Íslenska</span>
+                        <span class="country-flag">🇮🇸</span><span>ISK</span>
                     </div>
                 </div>
             </div>
@@ -144,14 +99,14 @@ $nav_guide = function_exists('iptv_page_url')
 
     <!-- Language Selector in Mobile Menu -->
     <div class="mobile-language-selector">
-        <span class="mobile-language-label"><?php echo esc_html(iptv_text('nav_region_label', 'Language')); ?></span>
+        <span class="mobile-language-label"><?php echo esc_html(iptv_text('nav_region_label', 'Currency')); ?></span>
         <div class="mobile-language-options">
-            <button class="mobile-lang-btn" data-currency="usd" onclick="redirectToRegion('usd')">🇺🇸 English</button>
-            <button class="mobile-lang-btn" data-currency="sek" onclick="redirectToRegion('sek')">🇸🇪 Svenska</button>
-            <button class="mobile-lang-btn" data-currency="nok" onclick="redirectToRegion('nok')">🇳🇴 Norsk</button>
-            <button class="mobile-lang-btn" data-currency="dkk" onclick="redirectToRegion('dkk')">🇩🇰 Dansk</button>
-            <button class="mobile-lang-btn" data-currency="eur" onclick="redirectToRegion('eur')">🇫🇮 Suomi</button>
-            <button class="mobile-lang-btn" data-currency="isk" onclick="redirectToRegion('isk')">🇮🇸 Íslenska</button>
+            <button class="mobile-lang-btn" data-currency="usd" onclick="setCurrency('usd')">🇺🇸 USD</button>
+            <button class="mobile-lang-btn" data-currency="sek" onclick="setCurrency('sek')">🇸🇪 SEK</button>
+            <button class="mobile-lang-btn" data-currency="nok" onclick="setCurrency('nok')">🇳🇴 NOK</button>
+            <button class="mobile-lang-btn" data-currency="dkk" onclick="setCurrency('dkk')">🇩🇰 DKK</button>
+            <button class="mobile-lang-btn" data-currency="eur" onclick="setCurrency('eur')">🇫🇮 EUR</button>
+            <button class="mobile-lang-btn" data-currency="isk" onclick="setCurrency('isk')">🇮🇸 ISK</button>
         </div>
     </div>
 

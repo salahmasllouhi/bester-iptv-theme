@@ -7,9 +7,6 @@
  * through iptv_text(), which meant a URL and the number "12" were being handed to
  * a translation function.
  *
- * ACF Options for Polylang is active, so these values are stored per language —
- * which is what the checkout URLs actually want.
- *
  * Read with: iptv_config('key', 'fallback')
  */
 
@@ -37,8 +34,7 @@ if (!function_exists('iptv_config')) {
     /**
      * Read a Site Config value, falling back to the theme default.
      *
-     * Unlike iptv_text() this never touches Polylang string translations — these
-     * values are configuration, not copy.
+     * Unlike iptv_text() these values are configuration, not copy.
      *
      * @param string $key      Field name on the Site Config options page.
      * @param mixed  $fallback Returned when the field is empty or ACF is inactive.

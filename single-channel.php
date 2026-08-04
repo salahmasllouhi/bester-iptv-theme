@@ -10,7 +10,7 @@
  *   3. channel-features (6 cards, cloned from front page)
  *   4. steps           (direct reuse from front page)
  *   5. pricing         (unchanged)
- *   6. channel-faq     (Polylang for all text)
+ *   6. channel-faq
  *   7. channel-cta     (dark CTA)
  *   8. channel-schema  (JSON-LD)
  *   9. footer

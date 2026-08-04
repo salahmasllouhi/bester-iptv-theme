@@ -1,21 +1,22 @@
 <?php
 /**
  * Sport FAQ Section
- * Simple strings: Polylang String Translations via spl_str().
+ * Simple strings go through spl_str().
  * FAQ items (repeater): ACF Options via get_field() directly.
- * All hardcoded default Q&A go through spl_str() to appear in Polylang Translations.
+ * All hardcoded default Q&A go through spl_str().
  * Dynamic: $sport_name (use %s in question/answer fields)
  */
 
-$lang = function_exists('pll_current_language') ? pll_current_language() : 'en';
-$post_id = 'options_' . $lang;
+// ACF options are stored under the plain 'option' ID now that ACF Options for
+// Polylang is gone — there is no per-language options row any more.
+$post_id = 'option';
 
 $faq_tag = spl_str('FAQ');
 $faq_title = spl_str('Frequently Asked <span class="gradient-text">Questions</span>');
 $faq_subtitle = spl_str('Common questions about watching %s with NordicTV');
 $faq_items = function_exists('get_field') ? get_field('tpl_sport_faq_items', $post_id) : [];
 
-// Default FAQ items — all go through spl_str() so they appear in Polylang Translations
+// Default FAQ items — all go through spl_str()
 if (empty($faq_items)) {
     $faq_items = [
         ['faq_q' => spl_str('How do I watch %s with NordicTV?'), 'faq_a' => spl_str('Simply subscribe to any NordicTV plan, download our app on your device, and search for %s. You\'ll be streaming in minutes.')],

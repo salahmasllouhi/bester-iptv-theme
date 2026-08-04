@@ -74,9 +74,8 @@ if ($plan_months > 1) {
 
                     <p class="plan-price-note">
                         <?php
-                        // Two registered strings rather than _n(): Polylang's
-                        // string translation has no plural forms, and the
-                        // singular here is only ever "one", so a count-based
+                        // Two literal strings rather than _n(): the singular
+                        // here is only ever "one", so a count-based plural
                         // rule buys nothing.
                         echo esc_html($screens === 1
                             ? plan_str('One device watching at a time')

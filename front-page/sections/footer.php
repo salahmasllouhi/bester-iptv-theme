@@ -16,18 +16,18 @@
                     <div class="footer-country-selector" id="footerCountrySelector">
                         <button class="footer-country-btn" onclick="toggleFooterDropdown()">
                             <span id="footerSelectedFlag">🇺🇸</span>
-                            <span id="footerSelectedCode">English</span>
+                            <span id="footerSelectedCode">USD</span>
                             <svg width="10" height="10" viewBox="0 0 10 10">
                                 <path d="M1 3L5 7L9 3" stroke="currentColor" stroke-width="1.5" fill="none" />
                             </svg>
                         </button>
                         <div class="footer-country-dropdown" id="footerCountryDropdown">
-                            <div class="footer-country-option" onclick="setFooterCurrency('usd')">🇺🇸 English</div>
-                            <div class="footer-country-option" onclick="setFooterCurrency('sek')">🇸🇪 Svenska</div>
-                            <div class="footer-country-option" onclick="setFooterCurrency('nok')">🇳🇴 Norsk</div>
-                            <div class="footer-country-option" onclick="setFooterCurrency('dkk')">🇩🇰 Dansk</div>
-                            <div class="footer-country-option" onclick="setFooterCurrency('eur')">🇫🇮 Suomi</div>
-                            <div class="footer-country-option" onclick="setFooterCurrency('isk')">🇮🇸 Íslenska</div>
+                            <div class="footer-country-option" onclick="setFooterCurrency('usd')">🇺🇸 USD</div>
+                            <div class="footer-country-option" onclick="setFooterCurrency('sek')">🇸🇪 SEK</div>
+                            <div class="footer-country-option" onclick="setFooterCurrency('nok')">🇳🇴 NOK</div>
+                            <div class="footer-country-option" onclick="setFooterCurrency('dkk')">🇩🇰 DKK</div>
+                            <div class="footer-country-option" onclick="setFooterCurrency('eur')">🇫🇮 EUR</div>
+                            <div class="footer-country-option" onclick="setFooterCurrency('isk')">🇮🇸 ISK</div>
                         </div>
                     </div>
                 </div>
@@ -72,7 +72,7 @@
                     // the footer cannot drift from them. iptv_plan_url() caches
                     // per months|lang, so this is four queries on a cache miss
                     // and none on a LiteSpeed hit.
-                    $footer_home = function_exists('pll_home_url') ? pll_home_url() : home_url('/');
+                    $footer_home = home_url('/');
                     ?>
                     <div>
                         <?php foreach (array(1, 3, 6, 12) as $footer_plan_months) : ?>
@@ -112,7 +112,7 @@
                     <?php
                     // home_url() ignores the current language, so this column used
                     // to send Swedish visitors to the English blog and guide.
-                    $home = function_exists('pll_home_url') ? pll_home_url() : home_url('/');
+                    $home = home_url('/');
                     iptv_footer_links(array(
                         array('slug' => 'blog', 'key' => 'footer_link_blog', 'label' => 'Blog',
                               'fallback' => trailingslashit($home) . 'blog/'),

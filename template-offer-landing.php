@@ -22,8 +22,8 @@ if ($offer_product_id && class_exists('WooCommerce')) {
     $offer_product = wc_get_product($offer_product_id);
     if ($offer_product) {
         // Use ?add-to-cart on the shop/home URL — WooCommerce handles the redirect to checkout.
-        // wc_get_checkout_url() can return the homepage when Polylang hasn't mapped the checkout page,
-        // so we always append add-to-cart params to home_url('/') and let WC redirect.
+        // wc_get_checkout_url() has been unreliable here, so we always append
+        // add-to-cart params to home_url('/') and let WC redirect.
         if ($offer_product->is_type('variable')) {
             $data_store = WC_Data_Store::load('product');
             $variation_id = $data_store->find_matching_product_variation($offer_product, ['devices' => '1']);
