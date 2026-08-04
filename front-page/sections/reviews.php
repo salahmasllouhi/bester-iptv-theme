@@ -62,13 +62,46 @@ $render_review = function ($review) {
     <?php
 };
 
-// Summary strip above the rail. The count is the number of reviews actually
-// rendered, so it cannot drift from what is on the page; the score is a
-// configured claim rather than a computed one, because these cards carry no
-// per-review rating to average.
+// Summary panel above the rail. The count is the number of reviews actually
+// rendered, so it cannot drift from what is on the page. Every score here is a
+// configured claim rather than a computed one — the review cards carry no
+// per-review rating, and none at all per category, so there is nothing to
+// average. They are editable via the keys below.
 $review_count = count($reviews);
 $review_score = iptv_text('reviews_score', '4,8');
 $review_max   = iptv_text('reviews_score_max', '5');
+
+// Category breakdown. Named for what an IPTV buyer actually weighs up rather
+// than the generic labels of a software review.
+$review_breakdown = array(
+    1 => array(
+        'label' => iptv_text('reviews_cat_1_label', 'Sender & Mediathek'),
+        'score' => iptv_text('reviews_cat_1_score', '4,9'),
+    ),
+    2 => array(
+        'label' => iptv_text('reviews_cat_2_label', 'Stabilität'),
+        'score' => iptv_text('reviews_cat_2_score', '4,7'),
+    ),
+    3 => array(
+        'label' => iptv_text('reviews_cat_3_label', 'Geräte-Unterstützung'),
+        'score' => iptv_text('reviews_cat_3_score', '4,9'),
+    ),
+    4 => array(
+        'label' => iptv_text('reviews_cat_4_label', 'Preis-Leistung'),
+        'score' => iptv_text('reviews_cat_4_score', '4,8'),
+    ),
+);
+
+// Bar length comes from the score, so a rewritten score cannot leave a bar
+// telling a different story. German copy writes 4,9 — normalise before the cast.
+$review_bar_pct = function ($score) use ($review_max) {
+    $value = (float) str_replace(',', '.', (string) $score);
+    $max   = (float) str_replace(',', '.', (string) $review_max);
+    if ($max <= 0) {
+        return 0;
+    }
+    return max(0, min(100, round(($value / $max) * 100, 1)));
+};
 ?>
 <section class="reviews dv2-section">
     <div class="container">
@@ -80,17 +113,35 @@ $review_max   = iptv_text('reviews_score_max', '5');
         <div class="dv2-review-summary">
             <div class="dv2-review-summary-score">
                 <span class="dv2-review-summary-num"><?php echo esc_html($review_score); ?></span>
-                <span class="dv2-review-summary-max">/ <?php echo esc_html($review_max); ?></span>
+                <div class="dv2-review-summary-meta">
+                    <span class="dv2-review-summary-stars" aria-hidden="true">★★★★★</span>
+                    <span class="dv2-review-summary-label">
+                        <?php echo esc_html(iptv_text('reviews_score_label', 'Unsere Bewertung')); ?>
+                    </span>
+                    <span class="dv2-review-summary-count">
+                        <?php echo esc_html(sprintf(
+                            iptv_text('reviews_count_format', 'Basierend auf %d Bewertungen'),
+                            $review_count
+                        )); ?>
+                    </span>
+                </div>
             </div>
-            <div class="dv2-review-summary-meta">
-                <span class="dv2-review-stars" aria-hidden="true">★★★★★</span>
-                <span class="dv2-review-summary-count">
-                    <?php echo esc_html(sprintf(
-                        iptv_text('reviews_count_format', 'Basierend auf %d Bewertungen'),
-                        $review_count
-                    )); ?>
-                </span>
-            </div>
+
+            <ul class="dv2-review-bars">
+                <?php foreach ($review_breakdown as $cat) : ?>
+                    <li class="dv2-review-bar-row">
+                        <div class="dv2-review-bar-head">
+                            <span class="dv2-review-bar-label"><?php echo esc_html($cat['label']); ?></span>
+                            <strong class="dv2-review-bar-score"><?php echo esc_html($cat['score']); ?></strong>
+                        </div>
+                        <?php // aria-hidden: the score is already read out above as text,
+                              // so the bar is decoration rather than a second announcement. ?>
+                        <div class="dv2-review-bar" aria-hidden="true">
+                            <span style="width: <?php echo esc_attr($review_bar_pct($cat['score'])); ?>%"></span>
+                        </div>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
         </div>
 
         <?php // One row, scrolled by the arrows. It used to be two rows animating

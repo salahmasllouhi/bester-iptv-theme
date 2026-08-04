@@ -2372,40 +2372,35 @@
    back; arrows put them in control, and scroll-snap keeps a card square with
    the rail after each press.
    ------------------------------------------- */
+/* Two panels in one card: the headline score on the left, a category
+   breakdown on the right. The bars are gold — the third brand colour, and the
+   one left over once red is spoken for by actions and black by type. */
 .dv2-review-summary {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
     align-items: center;
-    justify-content: center;
-    gap: 18px;
-    flex-wrap: wrap;
-    margin-top: 26px;
-    padding: 16px 24px;
+    gap: 28px 44px;
+    margin: 26px auto 0;
+    padding: 28px 34px;
     background: var(--dv2-surface);
     border: 1px solid var(--dv2-border);
-    border-radius: var(--dv2-radius-lg);
+    border-radius: var(--dv2-radius-xl);
     box-shadow: var(--dv2-shadow-sm);
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .dv2-review-summary-score {
     display: flex;
-    align-items: baseline;
-    gap: 4px;
+    align-items: center;
+    gap: 18px;
 }
 
 .dv2-review-summary-num {
     font-family: var(--dv2-font-display);
     font-weight: 800;
-    font-size: 34px;
-    line-height: 1;
+    font-size: 68px;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
     color: var(--dv2-ink);
-}
-
-.dv2-review-summary-max {
-    font-size: 15px;
-    color: var(--dv2-muted);
 }
 
 .dv2-review-summary-meta {
@@ -2414,9 +2409,86 @@
     gap: 4px;
 }
 
+.dv2-review-summary-stars {
+    color: var(--dv2-gold-bright, #d4af37);
+    font-size: 20px;
+    letter-spacing: 2px;
+    line-height: 1;
+}
+
+.dv2-review-summary-label {
+    font-family: var(--dv2-font-display);
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--dv2-ink);
+}
+
 .dv2-review-summary-count {
     font-size: 13px;
     color: var(--dv2-muted);
+}
+
+/* --- Category bars --- */
+
+.dv2-review-bars {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.dv2-review-bar-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 6px;
+}
+
+.dv2-review-bar-label {
+    font-size: 15px;
+    color: var(--dv2-body);
+}
+
+.dv2-review-bar-score {
+    font-family: var(--dv2-font-display);
+    font-weight: 800;
+    font-size: 15px;
+    color: var(--dv2-ink);
+}
+
+.dv2-review-bar {
+    height: 6px;
+    border-radius: 999px;
+    background: var(--dv2-border);
+    overflow: hidden;
+}
+
+.dv2-review-bar > span {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--dv2-gold-bright, #d4af37);
+}
+
+@media (max-width: 860px) {
+    .dv2-review-summary {
+        grid-template-columns: 1fr;
+        padding: 24px;
+        gap: 22px;
+    }
+
+    /* Centred once it is a single column, so the score is not stranded left
+       above a full-width list. */
+    .dv2-review-summary-score {
+        justify-content: center;
+    }
+
+    .dv2-review-summary-num {
+        font-size: 54px;
+    }
 }
 
 /* --- Rail --- */
