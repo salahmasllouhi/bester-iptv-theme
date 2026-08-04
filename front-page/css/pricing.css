@@ -338,12 +338,13 @@
    change — how many screens they refer to. Pinning it keeps the control
    that governs every number on screen the whole way down.
 
-   top is 0 rather than an offset for the site header: that header is
-   position:absolute until it gains .scrolled, so reserving space for it
-   would leave a permanent gap. */
+   The header floats above everything at z-index 60, so pinning this at top:0
+   put it underneath. --dv2-header-h is measured and published by pricing.js,
+   because the bar's height changes with the breakpoint and hardcoding it left
+   either a gap or an overlap. */
 .dv2-screen-sticky {
     position: sticky;
-    top: 0;
+    top: calc(var(--dv2-header-h, 64px) + 20px);
     z-index: 30;
     margin: 0 0 1.75rem;
     padding: 0.75rem 0;
@@ -363,6 +364,35 @@
     justify-content: center;
     flex-wrap: wrap;
     gap: 0.5rem 1rem;
+}
+
+/* Four across at every width. A wrapping flex row broke to 2x2 on a phone,
+   which is the layout the sticky bar exists to avoid. The label keeps its
+   word — an icon in place of "Bildschirme" said less, not more — and the type
+   scales down instead so all four still fit on one line. */
+.dv2-screen-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.4rem;
+    width: 100%;
+    max-width: 640px;
+}
+
+.dv2-screen-row .dv2-screen-pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 0.35rem;
+    font-size: clamp(0.62rem, 2.5vw, 0.9rem);
+    white-space: nowrap;
+}
+
+.dv2-screen-num {
+    font-weight: 800;
+}
+
+.dv2-screen-word {
+    margin-left: 0.28em;
 }
 
 .dv2-screen-sticky-label {
@@ -451,12 +481,13 @@
     white-space: nowrap;
 }
 
+/* Column: the per-month line sits under the price instead of beside it, so
+   the price itself is what is optically centred in the card. */
 .dv2-plan-price {
     display: flex;
-    align-items: baseline;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 0.4rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
 }
 
 .dv2-plan-amount {
@@ -574,32 +605,6 @@
         width: 100%;
         text-align: center;
         font-size: 0.85rem;
-    }
-
-    /* All four on one line: no wrapping, equal widths, and the word drops away
-       so "1 Bildschirm ... 4 Bildschirme" cannot force a second row. */
-    .dv2-screen-row {
-        width: 100%;
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 0.35rem;
-    }
-
-    .dv2-screen-row .dv2-screen-pill {
-        padding: 0.5rem 0.25rem;
-        font-size: 0.8rem;
-        white-space: nowrap;
-    }
-
-    .dv2-screen-word {
-        display: none;
-    }
-
-    /* Without the word the digit alone is the label, so name what it counts. */
-    .dv2-screen-num::after {
-        content: " ⬛";
-        font-size: 0.7em;
-        opacity: 0.65;
     }
 
     .dv2-plan-amount {

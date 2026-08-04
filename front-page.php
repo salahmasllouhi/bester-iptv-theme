@@ -53,11 +53,14 @@ $sections_dir = $front_page_dir . '/sections';
 $sections = array(
     'header',           // Front-page header (source of truth for all headers)
     'hero',             // Split hero with Trustpilot badge
-    'features',         // Eight capability cards
     'content-showcase', // Channels panel + VOD panel
     'sports',           // Sports panel with mosaic
     'cta-bar',          // Full-width savings bar
-    'pricing',          // Device/duration configurator (WooCommerce)
+    // Features sits directly above pricing on purpose: it is the argument, and
+    // the prices are the ask. It closes with a CTA into #pricing so the reader
+    // does not have to go looking for the thing they were just sold on.
+    'features',         // Eight capability cards
+    'pricing',          // Plan cards + sticky screen picker (WooCommerce)
     'steps',            // Onboarding panel - sits directly under pricing
     'unlock',           // Supported device chips
     'reviews',          // Score card + two-row review marquee

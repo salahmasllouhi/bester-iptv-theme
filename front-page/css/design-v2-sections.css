@@ -10,44 +10,44 @@
    The old header was a dark glassmorphic pill.
    Design v2 sits flat on the light background.
    ------------------------------------------- */
+/* Floating white bar.
+   position:sticky rather than fixed: it detaches and floats on scroll like a
+   fixed header, but keeps its space in the flow, so the hero does not jump up
+   under it on load and nothing needs a compensating top padding. */
 .site-header {
-    position: relative;
-    top: 0;
-    left: 0;
+    position: sticky;
+    top: 12px;
+    left: auto;
     transform: none;
-    width: 100%;
-    max-width: none;
-    margin: 0;
-    padding: 28px 0;
-    background: transparent;
+    width: calc(100% - 32px);
+    max-width: var(--dv2-shell);
+    margin: 12px auto 0;
+    padding: 10px 22px;
+    background: #ffffff;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
+    border: 1px solid var(--dv2-border);
+    border-radius: var(--dv2-radius-pill);
+    box-shadow: var(--dv2-shadow-sm);
     z-index: 60;
 }
 
-/* Once scrolled the bar spans the viewport; the inner row stays centred. */
+/* Scrolled: same floating pill, just lifted off the page a little harder.
+   It no longer switches to position:fixed — sticky already does that job, and
+   the switch was what made the bar jump the moment header.js added the class. */
 .site-header.scrolled {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    transform: none;
-    padding-top: 14px;
-    padding-bottom: 14px;
-    background: rgba(250, 247, 255, 0.88);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border: none;
-    border-bottom: 1px solid var(--dv2-border);
-    box-shadow: 0 6px 24px rgba(76, 29, 149, 0.06);
+    position: sticky;
+    top: 12px;
+    background: #ffffff;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: 1px solid var(--dv2-border);
+    box-shadow: var(--dv2-shadow-md);
 }
 
 .site-header .nav-container {
-    max-width: var(--dv2-shell);
-    margin: 0 auto;
+    max-width: none;
+    margin: 0;
     padding: 0 var(--dv2-gutter);
     display: flex;
     align-items: center;
@@ -1945,8 +1945,23 @@
         display: none;
     }
 
+    /* column, not the default row: three 24x2 bars laid out horizontally
+       butt together and read as one long line, which is what was on screen. */
     .site-header .mobile-menu-toggle {
         display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+        width: 40px;
+        height: 40px;
+        align-items: center;
+    }
+
+    .site-header .mobile-menu-toggle span {
+        margin: 0;
+        width: 22px;
+        height: 2.5px;
+        border-radius: 2px;
     }
 
     .dv2-hero {
@@ -2257,4 +2272,218 @@
 
 .dv2-contact-page .dv2-support-grid {
     margin-top: 0;
+}
+/* -------------------------------------------
+   FEATURES → PRICING CTA
+   The features block sits directly above pricing, so it closes by pointing
+   into it rather than leaving the reader to scroll on and find it.
+   ------------------------------------------- */
+.dv2-features-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 36px;
+    text-align: center;
+}
+
+.dv2-features-cta-btn {
+    background: var(--dv2-brand);
+    color: #ffffff;
+    font-family: var(--dv2-font-display);
+    font-weight: 700;
+    font-size: 17px;
+    padding: 15px 34px;
+    border-radius: var(--dv2-radius-pill);
+    text-decoration: none;
+    box-shadow: 0 10px 28px rgba(200, 30, 30, 0.26);
+    transition: background .18s ease, transform .18s ease;
+}
+
+.dv2-features-cta-btn:hover {
+    background: var(--dv2-brand-600);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.dv2-features-cta-note {
+    font-size: 13px;
+    color: var(--dv2-muted);
+}
+
+/* -------------------------------------------
+   SUPPORT CARD CTAs
+   Each card ends in a button so the whole card reads as an action rather
+   than a label the visitor has to guess is clickable. WhatsApp keeps its own
+   green — it is that product's colour and the one people recognise — while
+   email and Telegram take the brand red.
+   ------------------------------------------- */
+.dv2-support-cta {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 10px 22px;
+    border-radius: var(--dv2-radius-pill);
+    font-family: var(--dv2-font-display);
+    font-weight: 700;
+    font-size: 14px;
+    color: #ffffff;
+    background: var(--dv2-brand);
+    transition: background .18s ease;
+}
+
+.dv2-support-card--whatsapp .dv2-support-cta {
+    background: #25d366;
+}
+
+.dv2-support-card:hover .dv2-support-cta {
+    background: var(--dv2-brand-600);
+}
+
+.dv2-support-card--whatsapp:hover .dv2-support-cta {
+    background: #1fb855;
+}
+
+/* The number itself, above the button. */
+.dv2-support-number {
+    display: block;
+    margin-top: 6px;
+    font-family: var(--dv2-font-display);
+    font-weight: 800;
+    font-size: 17px;
+    letter-spacing: 0.01em;
+    color: var(--dv2-ink);
+}
+
+/* -------------------------------------------
+   REVIEWS — summary + arrow rail
+   Replaces the two auto-scrolling marquee rows. An animation that never stops
+   means the review a visitor started reading slides away and cannot be brought
+   back; arrows put them in control, and scroll-snap keeps a card square with
+   the rail after each press.
+   ------------------------------------------- */
+.dv2-review-summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-top: 26px;
+    padding: 16px 24px;
+    background: var(--dv2-surface);
+    border: 1px solid var(--dv2-border);
+    border-radius: var(--dv2-radius-lg);
+    box-shadow: var(--dv2-shadow-sm);
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.dv2-review-summary-score {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.dv2-review-summary-num {
+    font-family: var(--dv2-font-display);
+    font-weight: 800;
+    font-size: 34px;
+    line-height: 1;
+    color: var(--dv2-ink);
+}
+
+.dv2-review-summary-max {
+    font-size: 15px;
+    color: var(--dv2-muted);
+}
+
+.dv2-review-summary-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.dv2-review-summary-count {
+    font-size: 13px;
+    color: var(--dv2-muted);
+}
+
+/* --- Rail --- */
+
+.dv2-review-rail-wrap {
+    position: relative;
+    margin-top: 26px;
+}
+
+.dv2-review-rail {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    padding: 4px 2px 14px;
+    /* Firefox / IE keep their scrollbars; WebKit's is hidden below. */
+    scrollbar-width: none;
+}
+
+.dv2-review-rail::-webkit-scrollbar {
+    display: none;
+}
+
+.dv2-review-rail .dv2-review-card {
+    scroll-snap-align: start;
+    flex: 0 0 clamp(260px, 30%, 360px);
+}
+
+.dv2-review-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--dv2-border-medium);
+    background: #ffffff;
+    color: var(--dv2-ink);
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: var(--dv2-shadow-sm);
+    transition: background .18s ease, color .18s ease, opacity .18s ease;
+}
+
+.dv2-review-arrow:hover {
+    background: var(--dv2-brand);
+    color: #ffffff;
+    border-color: var(--dv2-brand);
+}
+
+/* Greyed at the ends rather than removed, so the control does not jump. */
+.dv2-review-arrow[disabled] {
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+.dv2-review-arrow--prev {
+    left: -10px;
+}
+
+.dv2-review-arrow--next {
+    right: -10px;
+}
+
+@media (max-width: 640px) {
+    .dv2-review-rail .dv2-review-card {
+        flex-basis: 82%;
+    }
+
+    /* Inside the rail on a phone, where there is no gutter to sit in. */
+    .dv2-review-arrow--prev {
+        left: 2px;
+    }
+
+    .dv2-review-arrow--next {
+        right: 2px;
+    }
 }

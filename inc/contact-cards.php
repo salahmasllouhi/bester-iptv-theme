@@ -94,12 +94,53 @@ if (!function_exists('iptv_contact_cards_grid')) {
         foreach ($cards as $card) {
             $target = $card['blank'] ? ' target="_blank" rel="noopener noreferrer"' : '';
 
+            // Channel is read off the link rather than the label, so a renamed
+            // or translated label cannot silently change the styling.
+            $link    = (string) $card['link'];
+            $channel = 'generic';
+            if (strpos($link, 'wa.me') !== false || strpos($link, 'whatsapp') !== false) {
+                $channel = 'whatsapp';
+            } elseif (strpos($link, 'mailto:') === 0) {
+                $channel = 'email';
+            } elseif (strpos($link, 't.me') !== false || strpos($link, 'telegram') !== false) {
+                $channel = 'telegram';
+            }
+
+            // WhatsApp shows the number itself: "chat with us" asks for trust,
+            // a number you can see and dial gives a reason for it. Taken from
+            // the wa.me link so there is one source for it.
+            $detail = '';
+            if ($channel === 'whatsapp' && preg_match('#wa\.me/(\+?\d+)#', $link, $m)) {
+                $digits = ltrim($m[1], '+');
+                // +33 7 45 47 66 90 — grouped so it reads as a phone number.
+                $pretty = '+' . $digits;
+                if (strlen($digits) > 4) {
+                    $pretty = '+' . substr($digits, 0, 2) . ' ' . trim(chunk_split(substr($digits, 2), 2, ' '));
+                }
+                $detail = '<span class="dv2-support-number">' . esc_html($pretty) . '</span>';
+            }
+
+            $cta_label = $card['label'];
+            if ($channel === 'whatsapp') {
+                $cta_label = iptv_text('contact_cta_whatsapp', 'Nachricht senden');
+            } elseif ($channel === 'email') {
+                $cta_label = iptv_text('contact_cta_email', 'E-Mail schreiben');
+            } elseif ($channel === 'telegram') {
+                $cta_label = iptv_text('contact_cta_telegram', 'Telegram öffnen');
+            }
+
             $out .= sprintf(
-                '<a href="%s" class="dv2-support-card"%s><h3>%s</h3><p>%s</p></a>',
-                esc_url($card['link']),
+                '<a href="%s" class="dv2-support-card dv2-support-card--%s"%s>'
+                    . '<h3>%s</h3><p>%s</p>%s'
+                    . '<span class="dv2-support-cta">%s</span>'
+                    . '</a>',
+                esc_url($link),
+                esc_attr($channel),
                 $target,
                 esc_html($card['label']),
-                esc_html($card['value'])
+                esc_html($card['value']),
+                $detail,
+                esc_html($cta_label)
             );
         }
 

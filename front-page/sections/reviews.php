@@ -42,41 +42,11 @@ if (empty($reviews)) {
 }
 
 /**
- * The reviews run as two infinite marquee rows. Each row needs enough cards to
- * overflow a wide viewport before it can loop seamlessly, so the row's slice is
- * repeated until it holds at least $row_min cards. The track then prints that
- * set twice and the keyframes translate it by exactly -50%, which lands the
- * clone where the original started.
+ * Renders one review card.
  */
-// 8 cards is ~3000px of track, so even an ultrawide viewport never sees the
-// end of a set before the clone has taken over.
-$row_min = 8;
-$rows    = [];
-
-if (!empty($reviews)) {
-    $half = (int) ceil(count($reviews) / 2);
-    $rows = [array_slice($reviews, 0, $half), array_slice($reviews, $half)];
-
-    foreach ($rows as $i => $row) {
-        // A single review leaves the second slice empty; fall back to the full
-        // set so both rows still have something to scroll.
-        if (empty($row)) {
-            $row = $reviews;
-            $rows[$i] = $reviews;
-        }
-        while (count($rows[$i]) < $row_min) {
-            $rows[$i] = array_merge($rows[$i], $row);
-        }
-    }
-}
-
-/**
- * Renders one review card. $clone marks the duplicated half of a track, which
- * is hidden from assistive tech so each review is only announced once.
- */
-$render_review = function ($review, $clone = false) {
+$render_review = function ($review) {
     ?>
-    <div class="dv2-review-card"<?php echo $clone ? ' aria-hidden="true"' : ''; ?>>
+    <div class="dv2-review-card">
         <div class="dv2-review-top">
             <span class="dv2-review-stars" aria-hidden="true">★★★★★</span>
             <?php if (!empty($review['when'])) : ?>
@@ -91,6 +61,14 @@ $render_review = function ($review, $clone = false) {
     </div>
     <?php
 };
+
+// Summary strip above the rail. The count is the number of reviews actually
+// rendered, so it cannot drift from what is on the page; the score is a
+// configured claim rather than a computed one, because these cards carry no
+// per-review rating to average.
+$review_count = count($reviews);
+$review_score = iptv_text('reviews_score', '4,8');
+$review_max   = iptv_text('reviews_score_max', '5');
 ?>
 <section class="reviews dv2-section">
     <div class="container">
@@ -99,23 +77,39 @@ $render_review = function ($review, $clone = false) {
             <p><?php echo esc_html($subtitle); ?></p>
         </div>
 
-    </div>
-
-    <div class="dv2-review-marquee">
-        <?php foreach ($rows as $i => $row) : ?>
-            <div class="dv2-review-row dv2-review-row--<?php echo $i === 0 ? 'rtl' : 'ltr'; ?>">
-                <div class="dv2-review-track">
-                    <?php
-                    foreach ($row as $review) {
-                        $render_review($review, false);
-                    }
-                    // Second pass is the seam that makes the loop look endless.
-                    foreach ($row as $review) {
-                        $render_review($review, true);
-                    }
-                    ?>
-                </div>
+        <div class="dv2-review-summary">
+            <div class="dv2-review-summary-score">
+                <span class="dv2-review-summary-num"><?php echo esc_html($review_score); ?></span>
+                <span class="dv2-review-summary-max">/ <?php echo esc_html($review_max); ?></span>
             </div>
-        <?php endforeach; ?>
+            <div class="dv2-review-summary-meta">
+                <span class="dv2-review-stars" aria-hidden="true">★★★★★</span>
+                <span class="dv2-review-summary-count">
+                    <?php echo esc_html(sprintf(
+                        iptv_text('reviews_count_format', 'Basierend auf %d Bewertungen'),
+                        $review_count
+                    )); ?>
+                </span>
+            </div>
+        </div>
+
+        <?php // One row, scrolled by the arrows. It used to be two rows animating
+              // in opposite directions on a loop, which meant the text a visitor
+              // was reading slid out from under them and could not be brought
+              // back. Scroll-snap keeps a card aligned after each press, and the
+              // rail is still swipeable and keyboard-scrollable on its own. ?>
+        <div class="dv2-review-rail-wrap">
+            <button type="button" class="dv2-review-arrow dv2-review-arrow--prev"
+                aria-label="<?php echo esc_attr(iptv_text('reviews_prev', 'Vorherige Bewertungen')); ?>">‹</button>
+
+            <div class="dv2-review-rail" id="review-rail" tabindex="0">
+                <?php foreach ($reviews as $review) {
+                    $render_review($review);
+                } ?>
+            </div>
+
+            <button type="button" class="dv2-review-arrow dv2-review-arrow--next"
+                aria-label="<?php echo esc_attr(iptv_text('reviews_next', 'Weitere Bewertungen')); ?>">›</button>
+        </div>
     </div>
 </section>

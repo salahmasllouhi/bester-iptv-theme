@@ -93,3 +93,42 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+// Review rail — arrow paging.
+//
+// Replaces the CSS marquee that scrolled on a loop. Scrolling by one card's
+// width plus the gap keeps the rail on a snap point, so a press always lands a
+// card flush against the edge rather than mid-card.
+(function reviewRail() {
+    const rail = document.getElementById('review-rail');
+    if (!rail) return;
+
+    const wrap = rail.closest('.dv2-review-rail-wrap');
+    if (!wrap) return;
+
+    const prev = wrap.querySelector('.dv2-review-arrow--prev');
+    const next = wrap.querySelector('.dv2-review-arrow--next');
+    if (!prev || !next) return;
+
+    function step() {
+        const card = rail.querySelector('.dv2-review-card');
+        if (!card) return rail.clientWidth;
+        const gap = parseFloat(getComputedStyle(rail).columnGap || getComputedStyle(rail).gap) || 16;
+        return card.getBoundingClientRect().width + gap;
+    }
+
+    function sync() {
+        // 2px of slack: sub-pixel widths mean scrollLeft rarely hits the exact
+        // maximum, which would otherwise leave "next" enabled at the end.
+        const max = rail.scrollWidth - rail.clientWidth - 2;
+        prev.disabled = rail.scrollLeft <= 2;
+        next.disabled = rail.scrollLeft >= max;
+    }
+
+    prev.addEventListener('click', function () { rail.scrollBy({ left: -step(), behavior: 'smooth' }); });
+    next.addEventListener('click', function () { rail.scrollBy({ left: step(), behavior: 'smooth' }); });
+
+    rail.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    sync();
+})();

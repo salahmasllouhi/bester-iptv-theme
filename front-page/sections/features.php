@@ -85,5 +85,16 @@ $allowed_svg = [
                 </div>
             <?php endforeach; ?>
         </div>
+
+        <?php // This section now sits immediately above pricing, so it closes by
+              // pointing at it rather than leaving the reader to scroll on. ?>
+        <div class="dv2-features-cta">
+            <a href="#pricing" class="dv2-btn dv2-features-cta-btn">
+                <?php echo esc_html(iptv_text('features_cta_label', 'Preise ansehen')); ?>
+            </a>
+            <span class="dv2-features-cta-note">
+                <?php echo esc_html(iptv_text('features_cta_note', 'Ohne Vertrag · Sofort aktiviert · 14 Tage Geld-zurück')); ?>
+            </span>
+        </div>
     </div>
 </section>

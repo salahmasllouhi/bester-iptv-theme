@@ -189,6 +189,25 @@
 
     if (defaultDeviceCard) chooseDevice(defaultDeviceCard, false);
 
+    // The floating header sits at z-index 60 and would cover the picker when it
+    // pins. Publish the header's real height so the picker can offset itself —
+    // measured rather than hardcoded because the bar's height changes with the
+    // breakpoint and with whether it has scrolled.
+    (function publishHeaderHeight() {
+        const header = document.getElementById('site-header');
+        if (!header) return;
+
+        const set = function () {
+            document.documentElement.style.setProperty(
+                '--dv2-header-h', Math.round(header.getBoundingClientRect().height) + 'px'
+            );
+        };
+
+        set();
+        window.addEventListener('resize', set);
+        if ('ResizeObserver' in window) new ResizeObserver(set).observe(header);
+    })();
+
     // Shadow under the sticky picker, but only once it has actually stuck —
     // otherwise it draws a line across the section on load.
     (function stickyShadow() {
