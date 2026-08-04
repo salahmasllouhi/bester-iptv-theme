@@ -1754,12 +1754,23 @@
     color: #ffffff;
 }
 
+/* Flex, not a fixed 3-column grid: with Telegram retired the two remaining
+   cards filled columns one and two and left the third empty, so the pair sat
+   left of centre. This centres whatever number of cards there are — and still
+   lays three out exactly as before, since the max-width below matches the
+   width a third of 900px minus the gaps gave them. */
 .dv2-support-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 16px;
     max-width: 900px;
     margin: 36px auto 0;
+}
+
+.dv2-support-grid .dv2-support-card {
+    flex: 1 1 240px;
+    max-width: 289px;
 }
 
 .dv2-support-card {
@@ -2057,10 +2068,16 @@
         font-size: 13px;
     }
 
-    .dv2-support-grid,
     .dv2-journey-cards,
     .trust-badges {
         grid-template-columns: 1fr;
+    }
+
+    /* .dv2-support-grid is flex now, so a grid-template-columns override would
+       do nothing — the cards take the full row instead. */
+    .dv2-support-grid .dv2-support-card {
+        flex-basis: 100%;
+        max-width: none;
     }
 
     .dv2-review-card {
