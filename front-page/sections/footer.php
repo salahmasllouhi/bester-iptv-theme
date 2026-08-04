@@ -4,8 +4,7 @@
         <div class="footer-grid">
             <div>
                 <div class="footer-brand">
-                    <img src="<?php echo get_template_directory_uri(); ?>/images/logo/dark logo 500_150.png"
-                        alt="Nordic IPTV" class="footer-logo-img">
+                    <?php iptv_brand_logo(array('class' => 'brand-logo--footer', 'link' => false)); ?>
                 </div>
                 <p class="footer-desc">
                     <?php echo esc_html(iptv_text('footer_desc', 'The leading IPTV service provider — 40,000+ live channels, 200,000+ movies and series, every sport, in 4K and 8K.')); ?>
@@ -128,7 +127,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            Nordic IPTV | <?php echo esc_html(iptv_text('footer_copyright', 'All Rights Reserved')); ?>
+            IPTV Anbieter | <?php echo esc_html(iptv_text('footer_copyright', 'All Rights Reserved')); ?>
             <?php echo date('Y'); ?>
         </div>
     </div>

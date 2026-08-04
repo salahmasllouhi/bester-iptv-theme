@@ -65,8 +65,8 @@ if (!function_exists('iptv_contact_cards')) {
                 ),
                 array(
                     'label' => iptv_text('contact_card_telegram_label', 'Telegram'),
-                    'value' => iptv_text('contact_card_telegram_value', '@NordicTV'),
-                    'link'  => 'https://t.me/NordicTV',
+                    'value' => iptv_text('contact_card_telegram_value', '@IPTV Anbieter'),
+                    'link'  => 'https://t.me/IPTV Anbieter',
                     'blank' => true,
                 ),
             );

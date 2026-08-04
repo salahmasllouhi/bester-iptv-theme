@@ -20,7 +20,7 @@ add_action('acf/init', function () {
     }
 
     acf_add_options_page(array(
-        'page_title'  => 'NordicTV Site Config',
+        'page_title'  => 'IPTV Anbieter Site Config',
         'menu_title'  => 'Site Config',
         'menu_slug'   => 'nordictv-site-config',
         'parent_slug' => 'options-general.php',

@@ -10,7 +10,7 @@
 $default_faq = [
     [
         'question' => iptv_text('offer_faq_q1', 'What devices does it work on?'),
-        'answer' => iptv_text('offer_faq_a1', 'NordicTV works on Smart TVs, Android, iPhone & iPad, Amazon Firestick, MAG boxes, Windows and macOS — basically any device with an internet connection.'),
+        'answer' => iptv_text('offer_faq_a1', 'IPTV Anbieter works on Smart TVs, Android, iPhone & iPad, Amazon Firestick, MAG boxes, Windows and macOS — basically any device with an internet connection.'),
     ],
     [
         'question' => iptv_text('offer_faq_q2', 'Is there a contract or auto-renewal?'),

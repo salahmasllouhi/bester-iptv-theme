@@ -78,7 +78,7 @@ $vod_cta_target = (!empty($vod_cta_field['target'])) ? ' target="' . esc_attr($v
 
     <div class="dv2-split-aside dv2-split-aside--image">
         <img src="https://nordictv.io/wp-content/uploads/2026/07/movies.webp"
-             alt="<?php echo esc_attr(iptv_text('vod_image_alt', 'A selection of movies and series available on NordicTV')); ?>"
+             alt="<?php echo esc_attr(iptv_text('vod_image_alt', 'A selection of movies and series available on IPTV Anbieter')); ?>"
              loading="lazy">
     </div>
 </section>

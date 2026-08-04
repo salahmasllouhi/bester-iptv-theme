@@ -31,6 +31,13 @@
     margin-bottom: 1rem;
 }
 
+/* Footer wordmark. The .brand-logo base lives in header.css, which loads
+   first on every template that loads this file. */
+.brand-logo--footer {
+    font-size: 1.35rem;
+    margin-bottom: 1rem;
+}
+
 .footer-desc {
     color: rgba(255, 255, 255, 0.6);
     font-size: 0.875rem;

@@ -49,7 +49,7 @@ $sections_dir = $front_page_dir . '/sections';
 
 <?php
 // Load all sections in order
-// Order follows the "NordicTV Light Purple" design.
+// Order follows the "IPTV Anbieter Light Purple" design.
 $sections = array(
     'header',           // Front-page header (source of truth for all headers)
     'hero',             // Split hero with Trustpilot badge
@@ -66,7 +66,7 @@ $sections = array(
     'footer'
     // Not in this list (files and styles still exist - add the slug back to
     // render them again):
-    //   'comparison'  - NordicTV vs. traditional services
+    //   'comparison'  - IPTV Anbieter vs. traditional services
     //   'dashboard'   - Member area promo
     //   'dark-cta'    - second CTA block; the journey panel closes this design
 );

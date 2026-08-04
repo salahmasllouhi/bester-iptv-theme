@@ -12,13 +12,13 @@ $post_id = 'option';
 
 $comp_tag = tpl_str('Compare');
 $comp_title = tpl_str('How We Compare');
-$comp_subtitle = tpl_str('See how NordicTV compares to cable for watching %s');
+$comp_subtitle = tpl_str('See how IPTV Anbieter compares to cable for watching %s');
 $competitor_name = tpl_str('Cable TV');
-$our_name = tpl_str('NordicTV');
+$our_name = tpl_str('IPTV Anbieter');
 $comp_rows = function_exists('get_field') ? get_field('tpl_comp_rows', $post_id) : [];
 $comp_theirs_total_lbl = tpl_str('Annual Cost');
 $comp_theirs_total = tpl_str('$1,200+');
-$comp_ours_total_lbl = tpl_str('NordicTV Annual Cost');
+$comp_ours_total_lbl = tpl_str('IPTV Anbieter Annual Cost');
 $comp_ours_total = tpl_str('$69.99');
 $comp_ours_per_month = tpl_str('Just ~$5.83/month');
 $savings_label = tpl_str('Your Annual Savings');

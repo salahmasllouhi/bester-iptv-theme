@@ -9,10 +9,7 @@ $nav_guide = function_exists('iptv_page_url')
 ?>
 <header class="site-header" id="site-header">
     <div class="container nav-container">
-        <a href="<?php echo esc_url($nav_home); ?>" class="logo">
-            <img src="<?php echo get_template_directory_uri(); ?>/images/logo/dark logo 500_150.png" alt="Nordic IPTV"
-                class="logo-img">
-        </a>
+        <?php iptv_brand_logo(); ?>
         <?php if (has_nav_menu('primary')): ?>
             <?php wp_nav_menu(array(
                 'theme_location' => 'primary',

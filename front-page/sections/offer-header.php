@@ -14,10 +14,7 @@
     <div class="container nav-container">
 
         <!-- Logo -->
-        <a href="<?php echo home_url('/'); ?>" class="logo">
-            <img src="<?php echo get_template_directory_uri(); ?>/images/logo/light logo 500_150.png" alt="Nordic IPTV"
-                class="logo-img">
-        </a>
+        <?php iptv_brand_logo(); ?>
 
         <!-- Right side: CTA -->
         <div class="nav-right">

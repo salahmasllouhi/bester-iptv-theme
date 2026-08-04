@@ -1,6 +1,6 @@
 <?php
 /**
- * Section: Hero (Design v2 — NordicTV Light Purple)
+ * Section: Hero (Design v2 — IPTV Anbieter Light Purple)
  */
 
 // Hero image, per language. `hero_image` is an ACF image field if one is ever
@@ -46,7 +46,7 @@ $secondary_url   = iptv_text('hero_secondary_cta_url', '#pricing');
         ?>
         <h1 class="dv2-hero-title">
             <span class="dv2-hero-line">
-                <?php echo esc_html(iptv_text('hero_title', 'Nordic IPTV Without Limits. Every Match. Every Channel.')); ?>
+                <?php echo esc_html(iptv_text('hero_title', 'IPTV Anbieter Without Limits. Every Match. Every Channel.')); ?>
             </span>
             <span class="dv2-hero-line">
                 <span class="dv2-hero-accent"><?php echo esc_html(iptv_text('hero_title_span', 'One Subscription.')); ?></span>
@@ -55,7 +55,7 @@ $secondary_url   = iptv_text('hero_secondary_cta_url', '#pricing');
         </h1>
 
         <p class="dv2-hero-sub">
-            <?php echo wp_kses_post(iptv_text('hero_subtitle', 'Looking for Nordic IPTV? NordicTV offers 40,000+ live channels, 200,000+ movies & series, and every sport in 4K/8K — on any device, instantly.')); ?>
+            <?php echo wp_kses_post(iptv_text('hero_subtitle', 'Looking for IPTV Anbieter? IPTV Anbieter offers 40,000+ live channels, 200,000+ movies & series, and every sport in 4K/8K — on any device, instantly.')); ?>
         </p>
 
         <div class="dv2-hero-actions">
@@ -71,7 +71,7 @@ $secondary_url   = iptv_text('hero_secondary_cta_url', '#pricing');
     <div class="dv2-hero-media">
         <div class="dv2-hero-glow" aria-hidden="true"></div>
         <img src="<?php echo esc_url($hero_image_url); ?>"
-             alt="<?php echo esc_attr(iptv_text('hero_image_alt', 'NordicTV live sports and entertainment')); ?>"
+             alt="<?php echo esc_attr(iptv_text('hero_image_alt', 'IPTV Anbieter live sports and entertainment')); ?>"
              fetchpriority="high">
     </div>
 </section>

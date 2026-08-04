@@ -16,11 +16,11 @@ $schema = [
     'name' => get_the_title(),
     'description' => has_excerpt()
         ? get_the_excerpt()
-        : 'Watch ' . get_the_title() . ' with NordicTV. All seasons and episodes available.',
+        : 'Watch ' . get_the_title() . ' with IPTV Anbieter. All seasons and episodes available.',
     'url' => get_permalink(),
     'provider' => [
         '@type' => 'Organization',
-        'name' => 'NordicTV',
+        'name' => 'IPTV Anbieter',
         'url' => home_url('/'),
         'logo' => [
             '@type' => 'ImageObject',
@@ -61,10 +61,10 @@ $schema['offers'] = [
     'priceCurrency' => 'USD',
     'availability' => 'https://schema.org/InStock',
     'url' => home_url('/subscribe/'),
-    'description' => 'NordicTV subscription including ' . get_the_title() . ' and 200,000+ movies & shows',
+    'description' => 'IPTV Anbieter subscription including ' . get_the_title() . ' and 200,000+ movies & shows',
     'seller' => [
         '@type' => 'Organization',
-        'name' => 'NordicTV',
+        'name' => 'IPTV Anbieter',
     ],
 ];
 ?>

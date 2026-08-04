@@ -5,8 +5,8 @@
  * Dynamic: $series_name
  */
 
-$feat_tag = srs_str('Why NordicTV');
-$feat_title = srs_str('Watch %s with <span class="gradient-text">NordicTV</span>');
+$feat_tag = srs_str('Why IPTV Anbieter');
+$feat_title = srs_str('Watch %s with <span class="gradient-text">IPTV Anbieter</span>');
 $feat_subtitle = srs_str('Everything you need for the ultimate %s binge experience');
 
 $feat_1_title = srs_str('200K+ Movies & Shows');

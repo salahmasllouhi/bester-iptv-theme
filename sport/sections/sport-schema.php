@@ -13,15 +13,15 @@ $sport_website = $has_acf ? get_field('sport_website') : '';
 $schema = [
     '@context' => 'https://schema.org',
     '@type' => 'SportsOrganization',
-    'name' => get_the_title() . ' on NordicTV',
+    'name' => get_the_title() . ' on IPTV Anbieter',
     'description' => has_excerpt()
         ? get_the_excerpt()
-        : 'Watch ' . get_the_title() . ' live stream with NordicTV. No cable required.',
+        : 'Watch ' . get_the_title() . ' live stream with IPTV Anbieter. No cable required.',
     'url' => get_permalink(),
     'sport' => get_the_title(),
     'broadcaster' => [
         '@type' => 'Organization',
-        'name' => 'NordicTV',
+        'name' => 'IPTV Anbieter',
         'url' => home_url('/'),
         'logo' => [
             '@type' => 'ImageObject',
@@ -70,10 +70,10 @@ $schema['offers'] = [
     'priceCurrency' => 'USD',
     'availability' => 'https://schema.org/InStock',
     'url' => home_url('/subscribe/'),
-    'description' => 'NordicTV subscription including ' . get_the_title() . ' and 40,000+ channels',
+    'description' => 'IPTV Anbieter subscription including ' . get_the_title() . ' and 40,000+ channels',
     'seller' => [
         '@type' => 'Organization',
-        'name' => 'NordicTV',
+        'name' => 'IPTV Anbieter',
     ],
 ];
 ?>

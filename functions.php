@@ -682,6 +682,9 @@ require_once get_template_directory() . '/series/inc/series-strings.php';
 // Site Config options page (checkout URLs + pricing configurator defaults)
 require_once get_template_directory() . '/inc/site-config.php';
 
+// Brand name and the wordmark the header and footer render.
+require_once get_template_directory() . '/inc/brand-logo.php';
+
 // Sticky mobile CTA bar (countdown + pricing/trial buttons) — loads after
 // site-config.php and iptv-text.php, both of which it reads through.
 require_once get_template_directory() . '/inc/sticky-cta.php';

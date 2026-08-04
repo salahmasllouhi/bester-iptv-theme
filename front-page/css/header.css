@@ -63,6 +63,49 @@
     display: block;
 }
 
+/* ── Brand wordmark ───────────────────────────────────────────────────
+   Drawn in type rather than loaded as an image — see inc/brand-logo.php.
+   "IPTV" is gold, "Anbieter" inherits from the caller, so the same markup
+   works on the light header and the dark footer. */
+.brand-logo {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.32em;
+    font-family: var(--dv2-font-display, sans-serif);
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    white-space: nowrap;
+    color: var(--dv2-ink);
+}
+
+.brand-logo-link {
+    text-decoration: none;
+}
+
+/* Two classes deep on purpose: `.logo span` and `.footer-brand span` already
+   colour every span inside the logo, and at (0,1,1) they would otherwise win
+   over a single class and make both words gold. */
+.brand-logo .brand-logo__mark {
+    color: var(--dv2-gold);
+    letter-spacing: 0.02em;
+}
+
+/* Slightly lighter and tracked out, so the two words read as one lockup
+   rather than two competing headlines. */
+.brand-logo .brand-logo__word {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--dv2-ink);
+}
+
+@media (max-width: 480px) {
+    .brand-logo {
+        font-size: 1.2rem;
+    }
+}
+
 .nav-links,
 .nav-links ul {
     display: flex;
