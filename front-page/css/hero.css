@@ -100,7 +100,7 @@
 
 .hero-badge {
     display: inline-block;
-    background: rgba(124, 58, 237, 0.1);
+    background: rgba(200, 30, 30, 0.1);
     color: var(--violet-500);
     padding: 0.5rem 1rem;
     border-radius: 2rem;

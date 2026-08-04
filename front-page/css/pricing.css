@@ -2,6 +2,11 @@
 .pricing {
     padding: var(--space-lg) 0;
     background: transparent;
+    /* The sticky picker bleeds to 100vw, which on a page with a vertical
+       scrollbar is a few pixels wider than the content box. clip, not hidden:
+       hidden makes this a scroll container and would stop the picker sticking
+       at all. */
+    overflow-x: clip;
 }
 
 /* Matches the page shell rather than the old 1100px, so four cards get the
@@ -243,7 +248,7 @@
     font-size: 1.15rem !important;
     letter-spacing: 0.02em !important;
     text-decoration: none !important;
-    box-shadow: 0 6px 32px rgba(59, 40, 204, 0.6) !important;
+    box-shadow: 0 6px 32px rgba(200, 30, 30, 0.6) !important;
     animation: none !important;
     transition: transform 0.3s ease, box-shadow 0.3s ease !important;
     margin-bottom: 1rem !important;
@@ -251,7 +256,7 @@
 
 .cta-btn:hover {
     transform: translateY(-3px) scale(1.015) !important;
-    box-shadow: 0 14px 52px rgba(59, 40, 204, 0.75) !important;
+    box-shadow: 0 14px 52px rgba(200, 30, 30, 0.75) !important;
     animation: none !important;
 }
 
@@ -346,8 +351,15 @@
     position: sticky;
     top: calc(var(--dv2-header-h, 64px) + 20px);
     z-index: 30;
-    margin: 0 0 1.75rem;
-    padding: 0.75rem 0;
+    /* Breaks out of .pricing .container to the full viewport width. Pinned
+       inside the container the bar was as wide as the text column, while the
+       four pills needed more than that — so the last one was clipped at the
+       edge. Full-bleed gives the row the whole width and its own padding. */
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    margin-bottom: 1.75rem;
+    padding: 0.75rem clamp(12px, 4vw, 40px);
     background: var(--dv2-bg, #ffffff);
     transition: box-shadow 0.2s ease, background 0.2s ease;
 }
@@ -364,6 +376,8 @@
     justify-content: center;
     flex-wrap: wrap;
     gap: 0.5rem 1rem;
+    max-width: var(--dv2-shell, 1280px);
+    margin: 0 auto;
 }
 
 /* Four across at every width. A wrapping flex row broke to 2x2 on a phone,
@@ -375,15 +389,18 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 0.4rem;
     width: 100%;
-    max-width: 640px;
+    /* Wide enough for four German labels, and it shrinks with the viewport
+       rather than holding a fixed width the text cannot fit inside. */
+    max-width: min(100%, 760px);
 }
 
 .dv2-screen-row .dv2-screen-pill {
     display: flex;
     align-items: center;
     justify-content: center;
+    min-width: 0;
     padding: 0.55rem 0.35rem;
-    font-size: clamp(0.62rem, 2.5vw, 0.9rem);
+    font-size: clamp(0.6rem, 2.2vw, 0.9rem);
     white-space: nowrap;
 }
 
@@ -613,16 +630,6 @@
     .dv2-plan-amount {
         font-size: 1.75rem;
     }
-}
-
-/* --- Scarcity line, riding with the sticky picker -------------- */
-
-.dv2-screen-sticky .dv2-scarcity {
-    margin: 0.5rem 0 0;
-    text-align: center;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--dv2-brand-700, #8e1414);
 }
 
 /* --- Payment marks inside each card --------------------------- */

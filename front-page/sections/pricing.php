@@ -190,13 +190,6 @@ $screen_plural   = iptv_text('screen_plural', 'Screens');
                             </button>
                         <?php endfor; ?>
                     </div>
-                    <?php // Rides along with the picker rather than sitting under the
-                          // cards: it is the reason to choose now, so it should stay on
-                          // screen next to the control the visitor is using. ?>
-                    <?php $slots_line = iptv_text('checkout_slots_line', '🔥 Diesen Monat nur noch 32 Zugänge frei'); ?>
-                    <?php if ($slots_line) : ?>
-                        <p class="dv2-scarcity"><?php echo esc_html($slots_line); ?></p>
-                    <?php endif; ?>
                 </div>
             </div>
 

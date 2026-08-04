@@ -145,17 +145,28 @@
     padding: 45px var(--dv2-gutter) 0;
 }
 
+/* wrap + max-width: on a phone this sat as one unbreakable inline-flex row and
+   the score span broke mid-phrase, leaving "4,9 von" above a lone "5". It now
+   wraps between its parts instead of inside them. */
 .dv2-trustpilot {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px 10px;
+    max-width: 100%;
     background: var(--dv2-surface);
     border: 1px solid var(--dv2-border-medium);
     border-radius: var(--dv2-radius-sm);
     padding: 8px 14px;
     font-size: 14px;
     color: var(--dv2-body);
-    box-shadow: 0 2px 10px rgba(76, 29, 149, 0.05);
+    box-shadow: 0 2px 10px rgba(15, 15, 16, 0.05);
+}
+
+/* Each part stays whole; the row breaks between them if it has to. */
+.dv2-trustpilot > span {
+    white-space: nowrap;
 }
 
 .dv2-trustpilot-name {
@@ -225,14 +236,14 @@
     background: #ffffff;
     color: var(--dv2-brand-700);
     border: 1px solid var(--dv2-border-strong);
-    box-shadow: 0 6px 20px rgba(76, 29, 149, 0.08);
+    box-shadow: 0 6px 20px rgba(15, 15, 16, 0.08);
 }
 
 .dv2-hero-link:hover {
     background: #ffffff;
     color: var(--dv2-brand-600);
     border-color: var(--dv2-brand);
-    box-shadow: 0 10px 26px rgba(124, 58, 237, 0.16);
+    box-shadow: 0 10px 26px rgba(200, 30, 30, 0.16);
 }
 
 .dv2-hero-media {
@@ -242,7 +253,7 @@
 .dv2-hero-glow {
     position: absolute;
     inset: -30px;
-    background: radial-gradient(ellipse 60% 55% at 50% 55%, rgba(124, 58, 237, 0.28), transparent 70%);
+    background: radial-gradient(ellipse 60% 55% at 50% 55%, rgba(200, 30, 30, 0.28), transparent 70%);
     filter: blur(20px);
     pointer-events: none;
 }
@@ -501,7 +512,7 @@
     align-items: center;
     gap: 10px;
     background: var(--dv2-surface);
-    border: 1px solid rgba(76, 29, 149, 0.08);
+    border: 1px solid rgba(15, 15, 16, 0.08);
     border-radius: var(--dv2-radius-sm);
     padding: 12px 14px;
     margin-bottom: 14px;
@@ -626,7 +637,7 @@
     text-align: center;
     padding: 34px;
     border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(124, 58, 237, 0.35);
+    box-shadow: 0 20px 60px rgba(200, 30, 30, 0.35);
 }
 
 .dv2-cta-bar:hover {
@@ -691,7 +702,7 @@
 .dv2-compare-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    border-top: 1px solid rgba(76, 29, 149, 0.08);
+    border-top: 1px solid rgba(15, 15, 16, 0.08);
 }
 
 .dv2-compare-good,
@@ -1080,15 +1091,6 @@
     display: none;
 }
 
-.dv2-scarcity {
-    text-align: center;
-    color: var(--dv2-ink);
-    font-family: var(--dv2-font-display);
-    font-weight: 700;
-    font-size: 15px;
-    margin: 4px 0 14px;
-}
-
 /* Trust row directly under the CTA */
 .dv2-checkout-trust {
     display: flex;
@@ -1306,7 +1308,7 @@
 .select-card.active {
     border-color: var(--dv2-brand);
     background: var(--dv2-surface-tint);
-    box-shadow: 0 8px 26px rgba(124, 58, 237, 0.18);
+    box-shadow: 0 8px 26px rgba(200, 30, 30, 0.18);
 }
 
 .select-card .num,
@@ -1357,13 +1359,13 @@
     display: flex;
     width: 100%;
     background: var(--dv2-brand) !important;
-    box-shadow: 0 14px 40px rgba(124, 58, 237, 0.28) !important;
+    box-shadow: 0 14px 40px rgba(200, 30, 30, 0.28) !important;
     font-family: var(--dv2-font-display) !important;
 }
 
 .cta-btn:hover {
     background: var(--dv2-brand-600) !important;
-    box-shadow: 0 18px 48px rgba(124, 58, 237, 0.38) !important;
+    box-shadow: 0 18px 48px rgba(200, 30, 30, 0.38) !important;
 }
 
 .trust-badges {
@@ -1561,7 +1563,7 @@
     position: relative;
     overflow: hidden;
     background: #ffffff;
-    border: 1px solid rgba(76, 29, 149, 0.08);
+    border: 1px solid rgba(15, 15, 16, 0.08);
     border-radius: var(--dv2-radius-md);
     padding: 18px 16px 16px;
     display: flex;
@@ -1607,7 +1609,7 @@
     font-weight: 700;
     font-size: 13px;
     color: #ffffff;
-    box-shadow: 0 4px 10px rgba(124, 58, 237, 0.35);
+    box-shadow: 0 4px 10px rgba(200, 30, 30, 0.35);
     flex-shrink: 0;
 }
 
@@ -2568,5 +2570,18 @@
 
     .dv2-review-arrow--next {
         right: 2px;
+    }
+}
+
+@media (max-width: 640px) {
+    /* Tighter, and centred with the rest of the stacked hero. */
+    .dv2-trustpilot {
+        gap: 5px 8px;
+        padding: 7px 10px;
+        font-size: 12.5px;
+    }
+
+    .dv2-trustpilot-stars span {
+        padding: 0 2px;
     }
 }

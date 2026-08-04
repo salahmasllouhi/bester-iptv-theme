@@ -651,7 +651,7 @@
 
 .btn-return-home:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+    box-shadow: 0 4px 12px rgba(200, 30, 30, 0.4);
 }
 
 /* ======================= */
@@ -821,7 +821,7 @@
     font-weight: 800;
     color: #fff;
     background: linear-gradient(180deg, var(--color-teal) 0%, var(--color-indigo-hover) 100%);
-    box-shadow: 0 4px 10px rgba(124, 58, 237, 0.25);
+    box-shadow: 0 4px 10px rgba(200, 30, 30, 0.25);
 }
 
 .payment-pay-btn {
@@ -837,14 +837,14 @@
     padding: 1rem 1.25rem;
     border-radius: 12px;
     background: linear-gradient(90deg, var(--color-teal) 0%, var(--color-indigo-hover) 100%);
-    box-shadow: 0 10px 26px rgba(124, 58, 237, 0.28);
+    box-shadow: 0 10px 26px rgba(200, 30, 30, 0.28);
     transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
 }
 
 .payment-pay-btn:hover {
     transform: translateY(-1px);
     filter: saturate(1.05);
-    box-shadow: 0 12px 30px rgba(124, 58, 237, 0.32);
+    box-shadow: 0 12px 30px rgba(200, 30, 30, 0.32);
 }
 
 .payment-brands {

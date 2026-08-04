@@ -34,7 +34,7 @@ $secondary_url   = iptv_text('hero_secondary_cta_url', '#pricing');
                 <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
             </span>
             <span>
-                <strong><?php echo esc_html(iptv_text('hero_trust_score', '4.9')); ?></strong>
+                <strong><?php echo esc_html(iptv_text('hero_trust_score', '4,9')); ?></strong>
                 <?php echo esc_html(iptv_text('hero_trust_suffix', 'out of 5')); ?>
             </span>
         </div>
