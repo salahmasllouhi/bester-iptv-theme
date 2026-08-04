@@ -50,11 +50,11 @@ if (!function_exists('iptv_plan_analysis_digest')) {
      */
     function iptv_plan_analysis_digest($post_id)
     {
-        // The site is English-only, so the copy a page renders is the copy the
-        // template ships. Kept as a closure so the call sites below read the
-        // same as the sections they mirror.
+        // Same lookup the sections use, so the digest is built from the German
+        // the visitor reads rather than from the English keys. Kept as a closure
+        // so the call sites below read the same as the sections they mirror.
         $t = function ($english) {
-            return $english;
+            return plan_str($english);
         };
 
         $months = (int) get_post_meta($post_id, 'plan_months', true);
@@ -79,16 +79,16 @@ if (!function_exists('iptv_plan_analysis_digest')) {
         // What every plan includes — shared front-page copy.
         $out[] = '<h2>' . iptv_text('plan_includes_title', 'Every plan is fully loaded') . '</h2>';
         $includes = array(
-            '40,000+ Live TV Channels',
-            '200,000+ Movies & Series (VOD)',
-            '4K, Ultra HD & HD quality',
-            'Stable, fast servers',
-            'Full TV guide (EPG)',
+            '40.000+ Live-TV-Sender',
+            '200.000+ Filme & Serien (VOD)',
+            '4K, Ultra HD & HD',
+            'Stabile, schnelle Server',
+            'Vollständige Programmzeitschrift (EPG)',
             'Anti-Buffer™ 9.8',
-            'SHL, NHL, Premier League & handball',
-            'Pay-Per-View (PPV) events',
-            'Auto-updating channels & VOD',
-            '24/7 support',
+            'Bundesliga, Champions League & Handball',
+            'Pay-per-View-Events (PPV)',
+            'Sender & VOD aktualisieren sich automatisch',
+            'Support rund um die Uhr',
         );
         $items = '';
         foreach ($includes as $i => $item) {

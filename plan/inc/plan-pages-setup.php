@@ -48,10 +48,10 @@ if (!function_exists('iptv_plan_page_definitions')) {
     function iptv_plan_page_definitions()
     {
         return array(
-            1  => array('title' => '1 Month IPTV Subscription', 'slug' => 'iptv-service-provider', 'label' => '1 Month'),
-            3  => array('title' => '3 Months IPTV Subscription', 'slug' => 'ip-tv-subscription', 'label' => '3 Months'),
-            6  => array('title' => '6 Months IPTV Subscription', 'slug' => 'iptv-service-usa', 'label' => '6 Months'),
-            12 => array('title' => '12 Months IPTV Subscription', 'slug' => 'best-iptv-providers-reddit', 'label' => '12 Months'),
+            1  => array('title' => 'IPTV Abo 1 Monat', 'slug' => 'iptv-service-provider', 'label' => '1 Monat'),
+            3  => array('title' => 'IPTV Abo 3 Monate', 'slug' => 'ip-tv-subscription', 'label' => '3 Monate'),
+            6  => array('title' => 'IPTV Abo 6 Monate', 'slug' => 'iptv-service-usa', 'label' => '6 Monate'),
+            12 => array('title' => 'IPTV Abo 12 Monate', 'slug' => 'best-iptv-providers-reddit', 'label' => '12 Monate'),
         );
     }
 }

@@ -13,16 +13,16 @@ $includes_title = iptv_plan_field(
 );
 
 $defaults = array(
-    1  => '40,000+ Live TV Channels',
-    2  => '200,000+ Movies & Series (VOD)',
-    3  => '4K, Ultra HD & HD quality',
-    4  => 'Stable, fast servers',
-    5  => 'Full TV guide (EPG)',
+    1  => '40.000+ Live-TV-Sender',
+    2  => '200.000+ Filme & Serien (VOD)',
+    3  => '4K, Ultra HD & HD',
+    4  => 'Stabile, schnelle Server',
+    5  => 'Vollständige Programmzeitschrift (EPG)',
     6  => 'Anti-Buffer™ 9.8',
-    7  => 'SHL, NHL, Premier League & handball',
-    8  => 'Pay-Per-View (PPV) events',
-    9  => 'Auto-updating channels & VOD',
-    10 => '24/7 support',
+    7  => 'Bundesliga, Champions League & Handball',
+    8  => 'Pay-per-View-Events (PPV)',
+    9  => 'Sender & VOD aktualisieren sich automatisch',
+    10 => 'Support rund um die Uhr',
 );
 
 $items = array();
