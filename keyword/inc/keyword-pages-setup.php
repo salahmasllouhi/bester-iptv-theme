@@ -26,7 +26,12 @@ if (!defined('ABSPATH')) {
 // Bump to re-run after adding a keyword to the table. Re-running is safe:
 // existing pages are matched and reused, and only the keyword stamp is
 // rewritten — never the status, the content or an edited SEO field.
-define('KEYWORD_PAGES_BUILD', 1);
+//
+// It is also the only lever in this theme that purges LiteSpeed, which caches
+// these pages for a week. A template change alone is invisible to visitors
+// until that cache expires, so bump this whenever one ships.
+//   2 — removed the body band from the landing pages.
+define('KEYWORD_PAGES_BUILD', 2);
 
 if (!function_exists('iptv_keyword_existing_pages')) {
     /**

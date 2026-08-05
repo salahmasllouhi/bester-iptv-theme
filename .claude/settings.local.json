@@ -2,7 +2,15 @@
   "permissions": {
     "allow": [
       "Bash(ls:*)",
-      "Bash(cp:*)"
+      "Bash(cp:*)",
+      "Bash(git config *)",
+      "Bash(echo \"EXIT=$?\")",
+      "Bash(claude mcp *)",
+      "Bash(curl -s -i -X POST \"https://darkgray-ape-970339.hostingersite.com/wp-json/royal-mcp/v1/mcp\" -H \"Content-Type: application/json\" -H \"Accept: application/json, text/event-stream\" -d '{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2025-06-18\",\"capabilities\":{},\"clientInfo\":{\"name\":\"probe\",\"version\":\"1.0\"}}}')",
+      "Bash(curl -s \"https://darkgray-ape-970339.hostingersite.com/.well-known/oauth-protected-resource\")",
+      "Bash(curl -s \"https://darkgray-ape-970339.hostingersite.com/.well-known/oauth-authorization-server\")",
+      "mcp__royal-mcp__wp_get_site_info",
+      "mcp__royal-mcp__royal_mcp_connection_health"
     ]
   }
 }

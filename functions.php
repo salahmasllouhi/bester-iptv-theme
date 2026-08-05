@@ -712,10 +712,6 @@ require_once get_template_directory() . '/plan/inc/plan-seo.php';
 // Rank Math digest, so the two cannot drift.
 require_once get_template_directory() . '/inc/front-page-strings.php';
 
-// Long-form copy for the front page's body band. Rendered through the keyword
-// pages' prose section, so it loads before them too.
-require_once get_template_directory() . '/front-page/inc/front-page-body.php';
-
 // Hands Rank Math the copy the front page actually renders — its post_content
 // is empty, so every content test scored against nothing. Also holds the shared
 // section-digest builder the keyword pages reuse, so it must load before them.

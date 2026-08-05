@@ -27,13 +27,12 @@
  *  14. keyword-schema    ← FAQPage JSON-LD
  *
  * These pages carried a long-form body band between steps and unlock. It was
- * removed: this is a landing page, and a 900-word read sitting above the device
- * chips and the reviews pushed the closing argument down the page for no
- * conversion benefit. The copy and its renderer are still in the repo —
- * keyword/sections/keyword-content.php and the lead/blocks entries in
- * keyword-data.php — so it can be reinstated, or lifted into real blog posts,
- * without rewriting it. What it cost in Rank Math terms is in the commit
- * message; that was the trade accepted here.
+ * removed, along with its renderer, stylesheet and copy: this is a landing
+ * page, and a 900-word read sitting above the device chips and the reviews
+ * pushed the closing argument down the page for no conversion benefit. What it
+ * cost in Rank Math terms is in the commit that removed it; that was the trade
+ * accepted here. The copy is recoverable from git if it is ever wanted as blog
+ * posts.
  */
 
 get_header();
