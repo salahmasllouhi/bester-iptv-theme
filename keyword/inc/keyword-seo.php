@@ -9,9 +9,8 @@
  * makes iptv_text() answer with that page's headlines — so the shared builder
  * in inc/front-page-seo.php produces this page's copy, not the front page's.
  *
- * Order is deliberate: hero, then the body band, then the rest. The band is
- * where the keyword is explained, and "keyword at the beginning of the content"
- * looks at the first 10%.
+ * The hero comes first, which is what "keyword at the beginning of the content"
+ * measures — every page's h1 opens with its keyword.
  *
  * @package Nordic_IPTV
  */
@@ -39,19 +38,15 @@ if (!function_exists('iptv_keyword_analysis_digest')) {
         iptv_keyword_context($slug);
 
         $blocks = iptv_front_copy_blocks();
-        $body   = iptv_prose_digest($definition, $slug);
 
         // Restore rather than clear: the digest can be built from inside a
         // rendering page (the editor preview does exactly that).
         iptv_keyword_context($previous ? $previous : false);
 
-        $hero = isset($blocks['hero']) ? $blocks['hero'] : '';
-        unset($blocks['hero']);
-
-        return implode("\n", array_merge(
-            array($hero, $body),
-            $blocks
-        ));
+        // The lead and blocks in the definition are no longer rendered — the
+        // body band was removed from the template — so they are not digested.
+        // Rank Math has to see the page, not the copy table.
+        return implode("\n", $blocks);
     }
 }
 

@@ -376,30 +376,18 @@ if (!function_exists('iptv_prose_digest')) {
 
 if (!function_exists('iptv_front_page_digest')) {
     /**
-     * The whole front page, in page order — the body band included, at the
-     * position front-page.php renders it.
+     * The whole front page, in page order.
+     *
+     * The body band that used to sit after the onboarding panel is no longer
+     * rendered — see front-page.php — so it is no longer digested either. A
+     * digest that included it would have Rank Math scoring 700 words the
+     * visitor never sees, which is the exact failure this file exists to fix.
      *
      * @return string
      */
     function iptv_front_page_digest()
     {
-        $blocks = iptv_front_copy_blocks();
-
-        $body = array();
-        if (function_exists('iptv_front_body')) {
-            $body['body'] = iptv_prose_digest(iptv_front_body(), 'home');
-        }
-
-        // Slot it after the onboarding panel, as front-page.php does.
-        $order = array();
-        foreach ($blocks as $name => $html) {
-            $order[$name] = $html;
-            if ($name === 'steps' && $body) {
-                $order += $body;
-            }
-        }
-
-        return implode("\n", $order);
+        return implode("\n", iptv_front_copy_blocks());
     }
 }
 

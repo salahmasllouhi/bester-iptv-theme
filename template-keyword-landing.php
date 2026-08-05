@@ -19,13 +19,21 @@
  *   6. features
  *   7. pricing
  *   8. steps
- *   9. keyword-content   ← the part that only exists here
- *  10. unlock
- *  11. reviews
- *  12. faq               (answers this page's questions — see faq.php)
- *  13. contact
- *  14. footer
- *  15. keyword-schema    ← FAQPage JSON-LD
+ *   9. unlock
+ *  10. reviews
+ *  11. faq               (answers this page's questions — see faq.php)
+ *  12. contact
+ *  13. footer
+ *  14. keyword-schema    ← FAQPage JSON-LD
+ *
+ * These pages carried a long-form body band between steps and unlock. It was
+ * removed: this is a landing page, and a 900-word read sitting above the device
+ * chips and the reviews pushed the closing argument down the page for no
+ * conversion benefit. The copy and its renderer are still in the repo —
+ * keyword/sections/keyword-content.php and the lead/blocks entries in
+ * keyword-data.php — so it can be reinstated, or lifted into real blog posts,
+ * without rewriting it. What it cost in Rank Math terms is in the commit
+ * message; that was the trade accepted here.
  */
 
 get_header();
@@ -54,7 +62,6 @@ $sections_dir  = $front_dir . '/sections';
         $front_dir   . '/css/activity-ticker.css',
         $front_dir   . '/css/design-v2.css',
         $front_dir   . '/css/design-v2-sections.css',
-        $keyword_dir . '/css/keyword.css',
     );
 
     foreach ($css_files as $path) {
@@ -98,7 +105,6 @@ while (have_posts()) :
     include $sections_dir  . '/features.php';
     include $sections_dir  . '/pricing.php';
     include $sections_dir  . '/steps.php';
-    include $keyword_dir   . '/sections/keyword-content.php';
     include $sections_dir  . '/unlock.php';
     include $sections_dir  . '/reviews.php';
     include $sections_dir  . '/faq.php';
